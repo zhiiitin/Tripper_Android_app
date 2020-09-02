@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">Tripper_Android_app</string>
+    <string name="app_name"> </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_search">探索</string>
+    <string name="action_group">揪團</string>
+    <string name="action_profile">個人頁面</string>
+    <string name="action_notification">通知</string>
+    <string name="action_setting">設定</string>
+    <string name="tbTrip">行程</string>
+    <string name="tbBlog">網誌</string>
+    <string name="tbGoal">成就</string>
+    <string name="create_new_trip">新增行程</string>
 </resources>
