@@ -49,35 +49,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivUserPic" />
 
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="230dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:tabRippleColor="@color/colorAccent"-->
-<!--        app:tabBackground="@color/tab_bar_selected_color"-->
-<!--        app:tabIndicatorColor="@color/colorForWhite">-->
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="230dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabRippleColor="@color/colorAccent"
+        app:tabBackground="@color/tab_bar_selected_color"
+        app:tabIndicatorColor="@color/colorForWhite">
 
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:id="@+id/tbTrip"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/tbTrip" />-->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tbTrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tbTrip" />
 
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:id="@+id/tbBlog"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/tbBlog" />-->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tbBlog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tbBlog" />
 
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:id="@+id/tbGoal"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/tbGoal" />-->
-<!--    </com.google.android.material.tabs.TabLayout>-->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tbGoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tbGoal" />
+    </com.google.android.material.tabs.TabLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
