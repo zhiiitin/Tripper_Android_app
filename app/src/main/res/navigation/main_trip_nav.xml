@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_trip_nav"
+    app:startDestination="@id/main_Trip_Fragment">
+
+    <fragment
+        android:id="@+id/main_Trip_Fragment"
+        android:name="com.example.tripper_android_app.trip.Main_Trip_Fragment"
+        android:label="fragment_main__trip_"
+        tools:layout="@layout/fragment_main_trip_" />
+</navigation>

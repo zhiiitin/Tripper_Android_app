@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">##00ACC1</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#00ACC1</color>
+    <color name="colorStatusBar">#008E8F</color>
+    <color name="colorPrimaryDark">#008E8F</color>
+    <color name="colorAccent">#60F2F2</color>
+    <color name="colorForText">#707070</color>
+    <color name="colorForBottomBar">#DEDEDE</color>
+    <color name="colorForGroupButton">#006699</color>
+    <color name="colorForDeleteButton">#FF0000</color>
+    <color name="colorForStar">#FFEA00</color>
+    <color name="colorForNormalText">#000000</color>
+    <color name="colorForWhite">#FFFFFF</color>
 </resources>

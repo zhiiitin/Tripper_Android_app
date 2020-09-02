@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_button_search_xxxhdpi"
+        android:title="@string/action_search" />
+
+    <item
+        android:id="@+id/action_group"
+        android:icon="@drawable/ic_button_group_xxxhdpi"
+        android:title="@string/action_group"
+
+        />
+
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_button_portrait_xxxhdpi"
+        android:title="@string/action_profile" />
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/ic_button_notification_xxxhdpi"
+        android:title="@string/action_notification" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@drawable/ic_button_setting_xxxhdpi"
+        android:title="@string/action_setting" />
+
+</menu>
