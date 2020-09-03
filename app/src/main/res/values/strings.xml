@@ -11,4 +11,8 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
+    <string name="Explore">探索</string>
+    <string name="textNoNetwork">沒有網路連線</string>
+    <string name="textNoSpotsFound">找不到資料</string>
+
 </resources>
