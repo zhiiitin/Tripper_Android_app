@@ -10,4 +10,9 @@
         android:name="com.example.tripper_android_app.trip.Main_Trip_Fragment"
         android:label="fragment_main__trip_"
         tools:layout="@layout/fragment_main_trip_" />
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.example.tripper_android_app.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore" />
 </navigation>
