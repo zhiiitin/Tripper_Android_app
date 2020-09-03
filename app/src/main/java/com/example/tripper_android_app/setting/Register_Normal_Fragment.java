@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 
 import com.example.tripper_android_app.R;
 
-public class Setting_Fragment extends Fragment {
+
+public class Register_Normal_Fragment extends Fragment {
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +28,7 @@ public class Setting_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_setting_, container, false);
+        return inflater.inflate(R.layout.fragment_register_normal, container, false);
     }
 
     @Override
