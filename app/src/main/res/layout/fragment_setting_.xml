@@ -20,7 +20,7 @@
         app:menu="@menu/bottom_bar_menu" />
 
     <ImageButton
-        android:id="@+id/ibcall_Setting"
+        android:id="@+id/ibContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -29,10 +29,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibTrain_Setting" />
+        app:layout_constraintTop_toBottomOf="@+id/ibTrain" />
 
     <ImageButton
-        android:id="@+id/ibRegister_Setting"
+        android:id="@+id/ibRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/ibMember_Setting"
+        android:id="@+id/ibMember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -53,10 +53,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibRegister_Setting" />
+        app:layout_constraintTop_toBottomOf="@+id/ibRegister" />
 
     <ImageButton
-        android:id="@+id/ibFriend_Setting"
+        android:id="@+id/ibFriends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -64,10 +64,10 @@
         android:src="@drawable/group_607"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibMember_Setting" />
+        app:layout_constraintTop_toBottomOf="@+id/ibMember" />
 
     <ImageButton
-        android:id="@+id/ibTrain_Setting"
+        android:id="@+id/ibTrain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
@@ -76,10 +76,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibFriend_Setting" />
+        app:layout_constraintTop_toBottomOf="@+id/ibFriends" />
 
     <ImageButton
-        android:id="@+id/ibGMspot_Setting"
+        android:id="@+id/ibCreateLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -88,10 +88,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibcall_Setting" />
+        app:layout_constraintTop_toBottomOf="@+id/ibContact" />
 
     <ImageButton
-        android:id="@+id/ibMemberspot_Setting"
+        android:id="@+id/ibAdminSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -100,6 +100,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibGMspot_Setting" />
+        app:layout_constraintTop_toBottomOf="@+id/ibCreateLocation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
