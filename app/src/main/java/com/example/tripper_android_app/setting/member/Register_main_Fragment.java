@@ -5,12 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.tripper_android_app.R;
 
@@ -22,9 +24,6 @@ public class Register_main_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-    }
-
-    private void setHasOptionsMenu() {
     }
 
     @Override
@@ -44,5 +43,21 @@ public class Register_main_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ImageButton ivRegister_hand = view.findViewById(R.id.btRegister_hand);
+        ImageButton ivRegister_login = view.findViewById(R.id.btRegister_Login);
+        ivRegister_hand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_NormalFragment);
+            }
+        });
+        ivRegister_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_Login_Fragment);
+
+            }
+        });
     }
 }
