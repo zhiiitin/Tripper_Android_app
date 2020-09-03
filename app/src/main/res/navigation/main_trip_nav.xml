@@ -18,10 +18,13 @@
         <action
             android:id="@+id/action_setting_Fragment_to_register_main_Fragment"
             app:destination="@id/register_main_Fragment" />
+        <action
+            android:id="@+id/action_setting_Fragment_to_register_Member_Fragment"
+            app:destination="@id/register_Member_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/register_main_Fragment"
-        android:name="com.example.tripper_android_app.setting.Register_main_Fragment"
+        android:name="com.example.tripper_android_app.setting.member.Register_main_Fragment"
         android:label="fragment_register_main_"
         tools:layout="@layout/fragment_register_main_" >
         <action
@@ -30,7 +33,21 @@
     </fragment>
     <fragment
         android:id="@+id/register_NormalFragment"
-        android:name="com.example.tripper_android_app.setting.Register_Normal_Fragment"
+        android:name="com.example.tripper_android_app.setting.member.Register_Normal_Fragment"
         android:label="fragment_register__normal"
-        tools:layout="@layout/fragment_register_normal" />
+        tools:layout="@layout/fragment_register_normal" >
+        <action
+            android:id="@+id/action_register_NormalFragment_to_register_Member_Fragment"
+            app:destination="@id/register_Member_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/register_Member_Fragment"
+        android:name="com.example.tripper_android_app.setting.member.Register_Member_Fragment"
+        android:label="fragment_register__member_"
+        tools:layout="@layout/fragment_register__member_" />
+    <fragment
+        android:id="@+id/register_Login_Fragment"
+        android:name="com.example.tripper_android_app.setting.member.Register_Login_Fragment"
+        android:label="fragment_register__login_"
+        tools:layout="@layout/fragment_register__login_" />
 </navigation>
