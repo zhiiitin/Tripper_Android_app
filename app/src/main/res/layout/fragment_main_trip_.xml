@@ -58,8 +58,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tabRippleColor="@color/colorAccent"
         app:tabBackground="@color/colorForBottomBar"
-        app:tabIconTint="@color/colorForBottomBar"
-        app:tabIndicatorColor="@color/colorAccent">
+        app:tabSelectedTextColor="@color/colorPrimaryDark"
+        app:tabIndicatorColor="@color/colorAccent"
+        >
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tbTrip"
