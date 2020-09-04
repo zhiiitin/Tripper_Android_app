@@ -43,14 +43,14 @@ public class Setting_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageButton ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
-        ibCreateLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_setting_Fragment_to_location_List_Fragment);
-            }
-        });
+//        ImageButton ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
+//        ibCreateLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v)
+//                        .navigate(R.id.action_setting_Fragment_to_location_List_Fragment);
+//            }
+//        });
 
         ImageButton ibRegister = view.findViewById(R.id.ibRegister);
         ibRegister.setOnClickListener(new View.OnClickListener() {
