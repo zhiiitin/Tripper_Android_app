@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.setting;
+package com.example.tripper_android_app.setting.location;
 
 import android.os.Bundle;
 
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.tripper_android_app.R;
 
-public class CreateLocationFragment extends Fragment {
+public class LocationListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,6 +20,6 @@ public class CreateLocationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_location, container, false);
+        return inflater.inflate(R.layout.fragment_location_list, container, false);
     }
 }

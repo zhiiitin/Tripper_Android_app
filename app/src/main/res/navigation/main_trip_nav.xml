@@ -25,8 +25,8 @@
             android:id="@+id/action_setting_Fragment_to_register_main_Fragment"
             app:destination="@id/register_main_Fragment" />
         <action
-            android:id="@+id/action_setting_Fragment_to_createLocationFragment"
-            app:destination="@id/createLocationFragment" />
+            android:id="@+id/action_setting_Fragment_to_location_List_Fragment"
+            app:destination="@id/location_List_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/register_main_Fragment"
@@ -34,8 +34,17 @@
         android:label="fragment_register_main_"
         tools:layout="@layout/fragment_register_main_" />
     <fragment
-        android:id="@+id/createLocationFragment"
-        android:name="com.example.tripper_android_app.setting.CreateLocationFragment"
-        android:label="fragment_create_location"
-        tools:layout="@layout/fragment_create_location" />
+        android:id="@+id/location_List_Fragment"
+        android:name="com.example.tripper_android_app.setting.location.LocationListFragment"
+        android:label="fragment_location_list"
+        tools:layout="@layout/fragment_location_list" >
+        <action
+            android:id="@+id/action_location_List_Fragment_to_insertLocationFragment"
+            app:destination="@id/insertLocationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/insertLocationFragment"
+        android:name="com.example.tripper_android_app.setting.location.InsertLocationFragment"
+        android:label="fragment_insert_location"
+        tools:layout="@layout/fragment_insert_location" />
 </navigation>

@@ -5,7 +5,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="navigationIcon">@drawable/ic_return_button</item>
+        <item name="actionMenuTextAppearance">@style/RightMenuStyle</item>
+
+
+    </style>
+
+    <style name="RightMenuStyle">
+        <item name="android:textSize">18sp</item>
     </style>
 
 
