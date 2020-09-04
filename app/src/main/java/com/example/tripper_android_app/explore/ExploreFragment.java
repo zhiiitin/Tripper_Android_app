@@ -9,6 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -22,6 +25,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -58,7 +62,10 @@ public class ExploreFragment extends Fragment {
     @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            activity.setTitle(R.string.Explore);
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.searchView);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);

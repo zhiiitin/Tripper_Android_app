@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/exploreFragment"
         android:icon="@drawable/ic_button_search_xxxhdpi"
         android:title="@string/action_search" />
 
