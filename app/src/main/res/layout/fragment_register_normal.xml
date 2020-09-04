@@ -56,7 +56,7 @@
         android:layout_height="44dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="45dp"
-        android:hint="請輸入密碼"
+        android:hint="請輸入6~12位數"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAccount" />
 

@@ -55,17 +55,27 @@ public class Register_Normal_Fragment extends Fragment {
                 String nickname = etNickName.getText().toString().trim();
 
                 if(account.isEmpty()){
-                    Common.showToast(activity,"此欄位不能為空值");
+                    etAccount.setError("此欄位不能為空值");
                     return;
                 }
 
                 if(password.isEmpty()){
-                    Common.showToast(activity,"此欄位不能為空值");
+                    etPassword.setError("此欄位不能為空值");
+                    return;
+                }
+
+                if(password.length() <6 ||password.length() > 12 ){
+                    etPassword.setError("請輸入6~12位字元");
                     return;
                 }
 
                 if(nickname.isEmpty()){
-                    Common.showToast(activity,"此欄位不能為空值");
+                    etNickName.setError("此欄位不能為空值");
+                    return;
+                }
+
+                if(nickname.length() > 10 ){
+                    etPassword.setError("暱稱限定10字元");
                     return;
                 }
 
@@ -88,7 +98,9 @@ public class Register_Normal_Fragment extends Fragment {
                     }
                     else{
                         Common.showToast(activity,"帳號創建成功！");
-                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("member", member);
+                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment , bundle);
                     }
                 }else{
                     Common.showToast(activity, "no network connection found");
