@@ -69,6 +69,7 @@ public class Main_Trip_Fragment extends Fragment {
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
     }
 
 
