@@ -11,17 +11,31 @@
         android:label="fragment_main__trip_"
         tools:layout="@layout/fragment_main_trip_" />
     <fragment
-        android:id="@+id/setting_Fragment"
+        android:id="@+id/exploreFragment"
+        android:name="com.example.tripper_android_app.explore.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore" />
+
+       <fragment
+           android:id="@+id/setting_Fragment"
         android:name="com.example.tripper_android_app.setting.Setting_Fragment"
         android:label="fragment_setting_"
         tools:layout="@layout/fragment_setting_" >
         <action
             android:id="@+id/action_setting_Fragment_to_register_main_Fragment"
             app:destination="@id/register_main_Fragment" />
+        <action
+            android:id="@+id/action_setting_Fragment_to_createLocationFragment"
+            app:destination="@id/createLocationFragment" />
     </fragment>
     <fragment
         android:id="@+id/register_main_Fragment"
         android:name="com.example.tripper_android_app.setting.Register_main_Fragment"
         android:label="fragment_register_main_"
         tools:layout="@layout/fragment_register_main_" />
+    <fragment
+        android:id="@+id/createLocationFragment"
+        android:name="com.example.tripper_android_app.setting.CreateLocationFragment"
+        android:label="fragment_create_location"
+        tools:layout="@layout/fragment_create_location" />
 </navigation>
