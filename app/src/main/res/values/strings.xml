@@ -11,6 +11,13 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
+<<<<<<< HEAD
+    <string name="Explore">探索</string>
+    <string name="textNoNetwork">沒有網路連線</string>
+    <string name="textNoSpotsFound">找不到資料</string>
+
+=======
     <string name="mUpdate">Update</string>
     <string name="mDelete">Delete</string>
+>>>>>>> 8162656ddb9c5ffe22f9e5df0673a57c8d1f33d3
 </resources>

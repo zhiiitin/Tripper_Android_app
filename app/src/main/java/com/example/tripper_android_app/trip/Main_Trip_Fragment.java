@@ -33,6 +33,10 @@ public class Main_Trip_Fragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -53,6 +57,10 @@ public class Main_Trip_Fragment extends Fragment {
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
