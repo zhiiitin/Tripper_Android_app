@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.setting.location;
+package com.example.tripper_android_app.location;
 
 import android.os.Bundle;
 

@@ -7,7 +7,7 @@
         android:id="@+id/locLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".setting.location.LocationListFragment">
+        tools:context=".location.LocationListFragment">
 
     <LinearLayout
         android:id="@+id/locLinearLayout"

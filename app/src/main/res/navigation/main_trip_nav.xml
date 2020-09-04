@@ -35,7 +35,7 @@
         tools:layout="@layout/fragment_register_main_" />
     <fragment
         android:id="@+id/location_List_Fragment"
-        android:name="com.example.tripper_android_app.setting.location.LocationListFragment"
+        android:name="com.example.tripper_android_app.location.LocationListFragment"
         android:label="fragment_location_list"
         tools:layout="@layout/fragment_location_list" >
         <action
@@ -44,7 +44,17 @@
     </fragment>
     <fragment
         android:id="@+id/insertLocationFragment"
-        android:name="com.example.tripper_android_app.setting.location.InsertLocationFragment"
+        android:name="com.example.tripper_android_app.location.InsertLocationFragment"
         android:label="fragment_insert_location"
         tools:layout="@layout/fragment_insert_location" />
+    <fragment
+        android:id="@+id/groupFragment"
+        android:name="com.example.tripper_android_app.group.GroupFragment"
+        android:label="fragment_group"
+        tools:layout="@layout/fragment_group" />
+    <fragment
+        android:id="@+id/notifyFragment"
+        android:name="com.example.tripper_android_app.notify.NotifyFragment"
+        android:label="fragment_notify"
+        tools:layout="@layout/fragment_notify" />
 </navigation>

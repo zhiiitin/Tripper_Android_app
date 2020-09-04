@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.explore;
+package com.example.tripper_android_app.util;
 
 import android.app.Activity;
 import android.content.Context;
