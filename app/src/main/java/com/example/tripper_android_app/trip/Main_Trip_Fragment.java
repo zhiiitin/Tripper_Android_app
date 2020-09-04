@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import com.example.tripper_android_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,10 +34,6 @@ public class Main_Trip_Fragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -53,14 +50,6 @@ public class Main_Trip_Fragment extends Fragment {
     }
 
 
-
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,10 +58,10 @@ public class Main_Trip_Fragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.fragment);
+        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 

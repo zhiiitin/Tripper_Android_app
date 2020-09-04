@@ -37,7 +37,7 @@ public class NotifyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.fragment);
+        NavController navController = Navigation.findNavController(activity, R.id.notifyFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 }

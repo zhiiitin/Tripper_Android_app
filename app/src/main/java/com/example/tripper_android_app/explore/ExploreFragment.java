@@ -1,26 +1,20 @@
 package com.example.tripper_android_app.explore;
 
 import android.app.Activity;
-<<<<<<< HEAD
-=======
 import android.content.Context;
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
-<<<<<<< HEAD
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-=======
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,41 +25,35 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.R;
-<<<<<<< HEAD
+import com.example.tripper_android_app.setting.member.Common;
+import com.example.tripper_android_app.setting.member.CommonTask;
+import com.example.tripper_android_app.task.ImageTask;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-
-public class ExploreFragment extends Fragment {
-    Activity activity;
-=======
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
 
 public class ExploreFragment extends Fragment {
+
+
     private Activity activity;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvExplore;
-    private CommonTask exploreGetAllTask,exploreDeleteTask;
+    private CommonTask exploreGetAllTask, exploreDeleteTask;
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
 
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
         activity = getActivity();
-=======
-        activity= getActivity();
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
     }
 
     @Override
@@ -77,9 +65,13 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
-        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            activity.setTitle(R.string.Explore);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.searchView);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);
@@ -115,7 +107,7 @@ public class ExploreFragment extends Fragment {
                             searchExplores.add(explore);
                         }
                     }
-                   showExplores(searchExplores);
+                    showExplores(searchExplores);
                 }
                 return true;
             }
@@ -129,8 +121,8 @@ public class ExploreFragment extends Fragment {
             Common.showToast(activity, R.string.textNoSpotsFound);
         }
         ExploreAdapter exploreAdapter = (ExploreAdapter) rvExplore.getAdapter();
-        if (exploreAdapter  == null) {
-            rvExplore.setAdapter(new ExploreAdapter(activity,explores));
+        if (exploreAdapter == null) {
+            rvExplore.setAdapter(new ExploreAdapter(activity, explores));
         } else {
             exploreAdapter.setExplores(explores);
             //刷新頁面
@@ -162,11 +154,12 @@ public class ExploreFragment extends Fragment {
         return explores;
     }
 
-    private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder>{
+    private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         //這是serach view 的 List 為了留查詢後的資料
         private List<Explore> explores;
         private int imageSize;
+
         ExploreAdapter(Context context, List<Explore> explores) {
             layoutInflater = LayoutInflater.from(context);
             this.explores = explores;
@@ -176,33 +169,33 @@ public class ExploreFragment extends Fragment {
 
 
         void setExplores(List<Explore> explores) {
-           this.explores = explores;
+            this.explores = explores;
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
+            View itemView = layoutInflater.inflate(R.layout.item_view_explore, parent, false);
             return new MyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
-            String url = Common.URL_SERVER+ "";
+            String url = Common.URL_SERVER + "";
             int id = explore.getId();
-             ImageTask imageTask = new ImageTask(url,id,imageSize,holder.ivBlogPic);
-             imageTask.execute();
-             imageTasks.add(imageTask);
-             holder.tvUseName.setText(explore.getUserName());
-             holder.tvBlogName.setText(explore.getBlogName());
-             holder.itemView.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     //填寫網誌路徑
+            ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
+            imageTask.execute();
+            imageTasks.add(imageTask);
+            holder.tvUseName.setText(explore.getUserName());
+            holder.tvBlogName.setText(explore.getBlogName());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //填寫網誌路徑
 
-                 }
-             });
+                }
+            });
 
 
         }
@@ -212,26 +205,19 @@ public class ExploreFragment extends Fragment {
             return explores == null ? 0 : explores.size();
         }
 
-         class MyViewHolder extends RecyclerView.ViewHolder {
-             ImageView ivBlogPic;
-             TextView tvUseName, tvBlogName;
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView ivBlogPic;
+            TextView tvUseName, tvBlogName;
 
-            MyViewHolder(View itemView){
+            MyViewHolder(View itemView) {
                 super(itemView);
                 ivBlogPic = itemView.findViewById(R.id.ivBlogPic);
                 tvBlogName = itemView.findViewById(R.id.tvBlogName);
                 tvUseName = itemView.findViewById(R.id.tvUserName);
-             }
+            }
         }
     }
-    @Override
-<<<<<<< HEAD
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-=======
+
     public void onStop() {
         super.onStop();
         if (exploreGetAllTask != null) {
@@ -246,10 +232,9 @@ public class ExploreFragment extends Fragment {
             imageTasks.clear();
         }
 
-        if (exploreGetAllTask!= null) {
+        if (exploreGetAllTask != null) {
             exploreDeleteTask.cancel(true);
             exploreDeleteTask = null;
         }
->>>>>>> 7c9505e67e7267561a28ecc38505432eb4c066c7
     }
 }
