@@ -24,7 +24,7 @@
         android:title="@string/action_notification" />
 
     <item
-        android:id="@+id/action_setting"
+        android:id="@+id/setting_Fragment"
         android:icon="@drawable/ic_button_setting_xxxhdpi"
         android:title="@string/action_setting" />
 

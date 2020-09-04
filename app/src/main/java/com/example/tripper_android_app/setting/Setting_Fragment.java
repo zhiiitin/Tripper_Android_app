@@ -39,7 +39,7 @@ public class Setting_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v)
-                        .navigate(R.id.action_setting_Fragment_to_createLocationFragment);
+                        .navigate(R.id.action_setting_Fragment_to_location_List_Fragment);
             }
         });
     }

@@ -11,4 +11,6 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
+    <string name="mUpdate">Update</string>
+    <string name="mDelete">Delete</string>
 </resources>
