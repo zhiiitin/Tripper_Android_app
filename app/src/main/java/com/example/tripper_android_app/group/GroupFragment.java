@@ -37,7 +37,7 @@ public class GroupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
+        NavController navController = Navigation.findNavController(activity, R.id.group_Fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 }

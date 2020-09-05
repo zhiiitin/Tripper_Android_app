@@ -43,7 +43,7 @@ public class Main_Trip_Fragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.btCreateTrip){
+        if (id == R.id.btCreateTrip) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -66,4 +66,7 @@ public class Main_Trip_Fragment extends Fragment {
     }
 
 
+
 }
+
+

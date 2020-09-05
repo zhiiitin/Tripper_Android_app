@@ -7,7 +7,7 @@
         android:title="@string/action_search" />
 
     <item
-        android:id="@+id/groupFragment"
+        android:id="@+id/group_Fragment"
         android:icon="@drawable/ic_button_group_xxxhdpi"
         android:title="@string/action_group"
 
@@ -19,7 +19,7 @@
         android:title="@string/action_profile" />
 
     <item
-        android:id="@+id/notifyFragment"
+        android:id="@+id/notify_Fragment"
         android:icon="@drawable/ic_button_notification_xxxhdpi"
         android:title="@string/action_notification" />
 

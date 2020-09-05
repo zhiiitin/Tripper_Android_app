@@ -46,18 +46,18 @@ public class Register_main_Fragment extends Fragment {
 
         ImageButton ivRegister_hand = view.findViewById(R.id.btRegister_hand);
         ImageButton ivRegister_login = view.findViewById(R.id.btRegister_Login);
-        ivRegister_hand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_NormalFragment);
-            }
-        });
-        ivRegister_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_Login_Fragment);
-
-            }
-        });
+//        ivRegister_hand.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_NormalFragment);
+//            }
+//        });
+//        ivRegister_login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_Login_Fragment);
+//
+//            }
+//        });
     }
 }

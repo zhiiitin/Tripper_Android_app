@@ -100,7 +100,8 @@ public class Register_Normal_Fragment extends Fragment {
                         Common.showToast(activity,"帳號創建成功！");
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("member", member);
-                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment , bundle);
+                        //action_register_NormalFragment_to_register_Member_Fragment
+                        Navigation.findNavController(ibRegister).navigate(R.id.action_setting_Fragment_to_register_Normal_Fragment , bundle);
                     }
                 }else{
                     Common.showToast(activity, "no network connection found");
