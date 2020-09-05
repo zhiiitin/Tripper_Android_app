@@ -14,11 +14,7 @@
     <string name="Explore">探索</string>
     <string name="textNoNetwork">沒有網路連線</string>
     <string name="textNoSpotsFound">找不到資料</string>
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 9ea312be79812340a5d4129735cfa8edab926f19
     <string name="mUpdate">Update</string>
     <string name="mDelete">Delete</string>
 </resources>

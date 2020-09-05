@@ -42,7 +42,7 @@ public class Setting_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-<<<<<<< HEAD
+
 //        ImageButton ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
 //        ibCreateLocation.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -51,7 +51,7 @@ public class Setting_Fragment extends Fragment {
 //                        .navigate(R.id.action_setting_Fragment_to_location_List_Fragment);
 //            }
 //        });
-=======
+
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.setting_Fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -65,7 +65,7 @@ public class Setting_Fragment extends Fragment {
                         .navigate(R.id.action_setting_Fragment_to_locationListFragment);
             }
         });
->>>>>>> 9ea312be79812340a5d4129735cfa8edab926f19
+
 
         ImageButton ibRegister = view.findViewById(R.id.ibRegister);
         ibRegister.setOnClickListener(new View.OnClickListener() {
