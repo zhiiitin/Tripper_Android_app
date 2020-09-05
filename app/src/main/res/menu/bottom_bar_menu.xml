@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/exploreFragment"
         android:icon="@drawable/ic_button_search_xxxhdpi"
         android:title="@string/action_search" />
 
     <item
-        android:id="@+id/action_group"
+        android:id="@+id/groupFragment"
         android:icon="@drawable/ic_button_group_xxxhdpi"
         android:title="@string/action_group"
 
         />
 
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/main_Trip_Fragment"
         android:icon="@drawable/ic_button_portrait_xxxhdpi"
         android:title="@string/action_profile" />
 
     <item
-        android:id="@+id/action_notification"
+        android:id="@+id/notifyFragment"
         android:icon="@drawable/ic_button_notification_xxxhdpi"
         android:title="@string/action_notification" />
 

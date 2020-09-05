@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.explore;
+package com.example.tripper_android_app.task;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
