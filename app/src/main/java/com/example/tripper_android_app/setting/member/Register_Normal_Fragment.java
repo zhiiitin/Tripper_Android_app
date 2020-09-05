@@ -94,13 +94,13 @@ public class Register_Normal_Fragment extends Fragment {
                         Log.e(TAG, e.toString());
                     }
                     if(count == 0 ){
-                        Common.showToast(activity, "帳號創建失敗");
+                        Common.showToast(activity, "此帳號已有人使用");
                     }
                     else{
                         Common.showToast(activity,"帳號創建成功！");
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("member", member);
-                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment , bundle);
+                        bundle.putSerializable("Member", member);
+                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment,bundle);
                     }
                 }else{
                     Common.showToast(activity, "no network connection found");

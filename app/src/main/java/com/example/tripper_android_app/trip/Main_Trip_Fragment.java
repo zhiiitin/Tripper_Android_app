@@ -32,10 +32,7 @@ public class Main_Trip_Fragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
-<<<<<<< HEAD
 
-
-=======
         setHasOptionsMenu(true);
     }
 
@@ -44,7 +41,7 @@ public class Main_Trip_Fragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.app_bar_button, menu);
->>>>>>> master
+
     }
 
     @Override
@@ -70,20 +67,19 @@ public class Main_Trip_Fragment extends Fragment {
     }
 
     @Override
-<<<<<<< HEAD
+
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-=======
-    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
->>>>>>> master
+//    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+//        NavController navController = Navigation.findNavController(activity, R.id.fragment);
+//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
     }
 
 
