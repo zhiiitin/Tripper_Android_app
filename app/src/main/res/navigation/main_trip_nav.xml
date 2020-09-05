@@ -59,7 +59,11 @@
         android:id="@+id/register_Member_Fragment"
         android:name="com.example.tripper_android_app.setting.member.Register_Member_Fragment"
         android:label="fragment_register__member_"
-        tools:layout="@layout/fragment_register__member_" />
+        tools:layout="@layout/fragment_register__member_" >
+        <action
+            android:id="@+id/action_register_Member_Fragment_to_register_main_Fragment"
+            app:destination="@id/register_main_Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/register_Login_Fragment"
         android:name="com.example.tripper_android_app.setting.member.Register_Login_Fragment"
@@ -93,5 +97,10 @@
             android:id="@+id/action_locationListFragment_to_insertLocationFragment"
             app:destination="@id/insertLocationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/FB_Login_Fragment"
+        android:name="com.example.tripper_android_app.setting.member.FB_Login_Fragment"
+        android:label="fragment_f_b__login_"
+        tools:layout="@layout/fragment_f_b__login_" />
 
 </navigation>

@@ -1,5 +1,7 @@
 package com.example.tripper_android_app.setting.member;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,12 +23,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class Register_Login_Fragment extends Fragment {
     private final static String TAG = "TAG_LoginFragment" ;
-    private FragmentActivity activity ;
+    private Activity activity ;
     private TextInputEditText etAccount , etPassword ;
     private ImageButton ibLogin ;
 
@@ -77,6 +80,13 @@ public class Register_Login_Fragment extends Fragment {
 
                     else{
                         Common.showToast(activity,"登入成功！");
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,MODE_PRIVATE);
+                        pref.edit()
+                                .putBoolean("login", true)
+                                .putString("account", account)
+                                .putString("password", password)
+                                .apply();
+                                              ////登入成功後，把資訊存入偏好設定檔
                         JsonObject jsonObject2 = new JsonObject();
                         jsonObject2.addProperty("action","getProfile");
                         jsonObject2.addProperty("account",account);
@@ -85,6 +95,7 @@ public class Register_Login_Fragment extends Fragment {
                             Type listtype = new TypeToken<Member>() {
                             }.getType();
                             member = new Gson().fromJson(jsonIn, listtype);
+                            member.setLoginType(1);
 
                         }catch (Exception e) {
                             Log.e(TAG, e.toString());

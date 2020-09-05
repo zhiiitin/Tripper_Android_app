@@ -18,6 +18,8 @@ import android.view.View;
 
 import com.example.tripper_android_app.setting.Setting_Fragment;
 import com.example.tripper_android_app.trip.Main_Trip_Fragment;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.zip.Inflater;
@@ -29,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        @Override
+//        public void onCreate() {
+//            super.onCreate();
+//            FacebookSdk.sdkInitialize(getApplicationContext());
+//            AppEventsLogger.activateApp(this);
+//        }
 
     }
 
