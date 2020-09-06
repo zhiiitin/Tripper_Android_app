@@ -80,6 +80,8 @@ public class Setting_Fragment extends Fragment {
         });
 
 
+
+
         ImageButton ibRegister = view.findViewById(R.id.ibRegister);
         ibRegister.setOnClickListener(new View.OnClickListener() {
             @Override

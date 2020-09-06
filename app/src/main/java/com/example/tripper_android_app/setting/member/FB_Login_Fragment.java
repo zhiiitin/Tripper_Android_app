@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,12 +29,20 @@ import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,6 +53,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class FB_Login_Fragment extends Fragment {
     private Activity activity;
     private LoginManager loginManager;
+    private FirebaseAuth auth;
     private CallbackManager callbackManager;
 
 
@@ -51,10 +61,9 @@ public class FB_Login_Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-
+        auth = FirebaseAuth.getInstance();
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        callbackManager = CallbackManager.Factory.create();
     }
 
     @Override
@@ -68,19 +77,15 @@ public class FB_Login_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // init facebook
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        // init LoginManager & CallbackManager
-        loginManager = LoginManager.getInstance();
-        callbackManager = CallbackManager.Factory.create();
 
         LoginButton loginButton = view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginFB();
+                signInFB();
             }
         });
+
 //        LoginManager.getInstance().registerCallback(callbackManager,
 //                new FacebookCallback<LoginResult>() {
 //                    @Override
@@ -119,91 +124,60 @@ public class FB_Login_Fragment extends Fragment {
 //            }
 //        });
 //
-
-
     }
 
-    private void loginFB() {
-        // 設定FB login的顯示方式 ; 預設是：NATIVE_WITH_FALLBACK
-        /**
-         * 1. NATIVE_WITH_FALLBACK
-         * 2. NATIVE_ONLY
-         * 3. KATANA_ONLY
-         * 4. WEB_ONLY
-         * 5. WEB_VIEW_ONLY
-         * 6. DEVICE_AUTH
-         */
-        loginManager.setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
-        // 設定要跟用戶取得的權限，以下3個是基本可以取得，不需要經過FB的審核
-        List<String> permissions = new ArrayList<>();
-        permissions.add("public_profile");
-        permissions.add("email");
-        permissions.add("user_friends");
-
-        // 設定要讀取的權限
-        loginManager.logInWithReadPermissions(this, permissions);
-        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+    private void signInFB() {
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(final LoginResult loginResult) {
-                // 登入成功
-        /* 可以取得相關資訊，這裡就請各位自行打印出來
-        Log.d(TAG, "Facebook getApplicationId: " + loginResult.getAccessToken().getApplicationId());
-        Log.d(TAG, "Facebook getUserId: " + loginResult.getAccessToken().getUserId());
-        Log.d(TAG, "Facebook getExpires: " + loginResult.getAccessToken().getExpires());
-        Log.d(TAG, "Facebook getLastRefresh: " + loginResult.getAccessToken().getLastRefresh());
-        Log.d(TAG, "Facebook getToken: " + loginResult.getAccessToken().getToken());
-        Log.d(TAG, "Facebook getSource: " + loginResult.getAccessToken().getSource());
-        Log.d(TAG, "Facebook getRecentlyGrantedPermissions: " + loginResult.getRecentlyGrantedPermissions());
-        Log.d(TAG, "Facebook getRecentlyDeniedPermissions: " + loginResult.getRecentlyDeniedPermissions());*/
-                // 透過GraphRequest來取得用戶的Facebook資訊
-                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        try {
-                            if (response.getConnection().getResponseCode() == 200) {
-                                long id = object.getLong("id");
-                                String name = object.getString("name");
-                                String email = object.getString("email");
-                                Log.d(TAG, "Facebook id:" + id);
-                                Log.d(TAG, "Facebook name:" + name);
-                                Log.d(TAG, "Facebook email:" + email);
-                                // 此時如果登入成功，就可以順便取得用戶大頭照
-                                Profile profile = Profile.getCurrentProfile();
-                                // 設定大頭照大小
-                                Uri userPhoto = profile.getProfilePictureUri(300, 300);
-                                      }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                // https://developers.facebook.com/docs/android/graph?locale=zh_TW
-                // 如果要取得email，需透過添加參數的方式來獲取(如下)
-                // 不添加只能取得id & name
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email");
-                graphRequest.setParameters(parameters);
-                graphRequest.executeAsync();
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                signInFirebase(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                // 用戶取消
-                Log.d(TAG, "Facebook onCancel");
+                Log.d(TAG, "facebook:onCancel");
             }
 
             @Override
             public void onError(FacebookException error) {
-                // 登入失敗
-                Log.d(TAG, "Facebook onError:" + error.toString());
+                Log.e(TAG, "facebook:onError", error);
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void signInFirebase(AccessToken token) {
+        Log.d(TAG, "signInFirebase:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // 登入成功轉至下頁；失敗則顯示錯誤訊息
+                        if (task.isSuccessful()) {
+                            ;
+                        } else {
+                            Exception exception = task.getException();
+                            String message = exception == null ? "Sign in fail." : exception.getMessage();
+                            Log.e(TAG, message);
+
+                        }
+                    }
+                });
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // 檢查user是否已經登入，是則FirebaseUser物件不為null
+        FirebaseUser user = auth.getCurrentUser();
+
     }
 }

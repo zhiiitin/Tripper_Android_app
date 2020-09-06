@@ -59,5 +59,13 @@ public class Register_main_Fragment extends Fragment {
 
             }
         });
+
+        final ImageButton ivRegister_FB = view.findViewById(R.id.btRegister_FB);
+        ivRegister_FB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(ivRegister_FB).navigate(R.id.action_register_main_Fragment_to_FB_Login_Fragment);
+            }
+        });
     }
 }
