@@ -121,9 +121,10 @@ public class Setting_Fragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Member", member);
                     Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_Member_Fragment, bundle);
-//若登入狀態為false 直接不帶bundle導入下一頁，讓memberFragment判斷
+
                 } else {
-                    Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_Member_Fragment);
+                    Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_main_Fragment);
+                    Common.showToast(activity,"請先登入會員");
                 }
             }
         });

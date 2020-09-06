@@ -105,5 +105,7 @@ public class Member implements Serializable {
         this.loginType = loginType;
     }
 
+
+
 }
 
