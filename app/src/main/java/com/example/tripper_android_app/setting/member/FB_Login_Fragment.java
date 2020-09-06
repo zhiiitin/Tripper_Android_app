@@ -25,6 +25,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -64,12 +65,14 @@ public class FB_Login_Fragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 //        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         callbackManager = CallbackManager.Factory.create();
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+
         return inflater.inflate(R.layout.fragment_f_b__login_, container, false);
     }
 
@@ -79,6 +82,9 @@ public class FB_Login_Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         LoginButton loginButton = view.findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
+        // If using in a fragment
+        loginButton.setFragment(this);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,4 +186,5 @@ public class FB_Login_Fragment extends Fragment {
         FirebaseUser user = auth.getCurrentUser();
 
     }
+
 }

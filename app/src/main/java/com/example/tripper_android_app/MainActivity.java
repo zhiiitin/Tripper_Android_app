@@ -24,19 +24,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.zip.Inflater;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-//        @Override
-//        public void onCreate() {
-//            super.onCreate();
-//            FacebookSdk.sdkInitialize(getApplicationContext());
-//            AppEventsLogger.activateApp(this);
-//        }
+        setContentView(R.layout.activity_main);
 
     }
 
