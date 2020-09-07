@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
+
+
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -25,11 +28,15 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import com.example.tripper_android_app.R;
+
+
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -47,7 +54,9 @@ public class ExploreFragment extends Fragment {
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvExplore;
+
     private CommonTask exploreGetAllTask, exploreDeleteTask;
+
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
     private List<Member> members;
@@ -57,7 +66,8 @@ public class ExploreFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activity = getActivity();
+
+        activity= getActivity();
         imageTasks = new ArrayList<>();
 
 
@@ -76,7 +86,8 @@ public class ExploreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
+
+        NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
@@ -219,9 +230,13 @@ public class ExploreFragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-            View itemView = layoutInflater.inflate(R.layout.item_view_explore, parent, false);
-            return new MyViewHolder(itemView);
+
+
+
+            View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
+            return  new MyViewHolder(itemView);
         }
+
 
 
         @Override
@@ -276,23 +291,25 @@ public class ExploreFragment extends Fragment {
         }
 
 
-        public void onStop() {
-            if (exploreGetAllTask != null) {
-                exploreGetAllTask.cancel(true);
-                exploreGetAllTask = null;
-            }
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (exploreGetAllTask != null) {
+            exploreGetAllTask.cancel(true);
+            exploreGetAllTask = null;
+        }
 
-            if (imageTasks != null && imageTasks.size() > 0) {
-                for (com.example.tripper_android_app.task.ImageTask imageTask : imageTasks) {
-                    imageTask.cancel(true);
-                }
-                imageTasks.clear();
+        if (imageTasks != null && imageTasks.size() > 0) {
+            for (ImageTask imageTask : imageTasks) {
+                imageTask.cancel(true);
             }
+            imageTasks.clear();
+        }
 
-            if (exploreGetAllTask != null) {
-                exploreDeleteTask.cancel(true);
-                exploreDeleteTask = null;
-            }
+        if (exploreDeleteTask != null) {
+            exploreDeleteTask.cancel(true);
+            exploreDeleteTask = null;
         }
     }
 }

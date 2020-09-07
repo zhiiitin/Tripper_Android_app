@@ -61,11 +61,28 @@ public class Main_Trip_Fragment extends Fragment {
 
     @Override
 
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+
+
+
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+
+
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
+
+
+//    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+//        NavController navController = Navigation.findNavController(activity, R.id.fragment);
+//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
 
     }
 
