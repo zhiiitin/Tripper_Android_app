@@ -36,6 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.task.ImageTask;
+import com.example.tripper_android_app.util.Common;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yalantis.ucrop.UCrop;
@@ -132,7 +135,7 @@ public class Register_Member_Fragment extends Fragment {
                     String Url = Common.URL_SERVER + "MemberServlet";
 //                    member.setNickName();
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "MemberUpdate");
+                    jsonObject.addProperty("action", "memberUpdate");
                     jsonObject.addProperty("member", new Gson().toJson(member));
 
                     if (photo != null) {
@@ -155,6 +158,8 @@ public class Register_Member_Fragment extends Fragment {
                 }
             }
         });
+
+        showMember();
     }
 
     private void showTypeDialog() {
@@ -197,6 +202,27 @@ public class Register_Member_Fragment extends Fragment {
         dialog.setView(view);
         dialog.show();
 
+    }
+
+    private void showMember() {
+        String Url = Common.URL_SERVER + "MemberServlet";
+        int id = member.getId();
+        int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+        Bitmap bitmap = null;
+        try {
+            bitmap = new ImageTask(Url, id, imageSize).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (bitmap != null) {
+            ivPhoto.setImageBitmap(bitmap);
+        } else {
+            ivPhoto.setImageResource(R.drawable.ic_nopicture);
+        }
+//        etIsbn.setText(book.getIsbn());
+//        etName.setText(book.getName());
+//        etPrice.setText(book.getPrice() + "");
+//        etAuthor.setText(book.getAuthor());
     }
 
     private void openAlbum() {

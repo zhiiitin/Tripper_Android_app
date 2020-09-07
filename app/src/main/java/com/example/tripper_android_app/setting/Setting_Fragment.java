@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.setting.member.Common;
-import com.example.tripper_android_app.setting.member.CommonTask;
 import com.example.tripper_android_app.setting.member.Member;
+import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
