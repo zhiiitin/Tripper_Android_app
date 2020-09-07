@@ -45,7 +45,7 @@
             android:id="@+id/action_setting_Fragment_to_register_Member_Fragment"
             app:destination="@id/register_Member_Fragment" />
         <action
-            android:id="@+id/action_setting_Fragment_to_location_List_Fragment3"
+            android:id="@+id/action_setting_Fragment_to_location_List_Fragment"
             app:destination="@id/location_List_Fragment" />
     </fragment>
     <fragment

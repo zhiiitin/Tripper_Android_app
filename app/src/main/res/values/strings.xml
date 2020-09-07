@@ -16,5 +16,7 @@
     <string name="textNoSpotsFound">找不到資料</string>
     <string name="mUpdate">Update</string>
     <string name="mDelete">Delete</string>
+    <string name="textLocName">景點名稱</string>
+    <string name="textAdress">地址</string>
 
 </resources>

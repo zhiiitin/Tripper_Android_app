@@ -23,6 +23,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     private final static String TAG = "TAG_ImageTask";
     private String url;
     private int id, imageSize;
+    private String key; // 資料表大多數PK為String型別，所另建此欄位
     /* ImageTask的屬性strong參照到SpotListFragment內的imageView不好，
         會導致SpotListFragment進入背景時imageView被參照而無法被釋放，
         而且imageView會參照到Context，也會導致Activity無法被回收。
@@ -34,10 +35,21 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         this(url, id, imageSize, null);
     }
 
+    public ImageTask(String url, String key, int imageSize) {
+        this(url, key, imageSize, null);
+    }
+
     // 取完圖片後使用傳入的ImageView顯示，適用於顯示多張圖片
     public ImageTask(String url, int id, int imageSize, ImageView imageView) {
         this.url = url;
         this.id = id;
+        this.imageSize = imageSize;
+        this.imageViewWeakReference = new WeakReference<>(imageView);
+    }
+
+    public ImageTask(String url, String key, int imageSize, ImageView imageView) {
+        this.url = url;
+        this.key = key;
         this.imageSize = imageSize;
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }
