@@ -1,5 +1,4 @@
-package com.example.tripper_android_app.setting.member;
-
+package com.example.tripper_android_app.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,17 +10,16 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.tripper_android_app.task.CommonTask;
 import com.google.gson.JsonObject;
 
 import java.util.Locale;
 
-/**
- * 定義通用屬性與方法
- */
 public class Common {
     private static final String TAG = "TAG_Common";
-    //    public static String URL_SERVER = "http://192.168.196.189:8080/Spot_MySQL_Web/";
     public static String URL_SERVER = "http://10.0.2.2:8080/Tripper_JAVA_Web/";
+    public final static String PREF_FILE = "preference";
+
 
 
 
@@ -108,5 +106,5 @@ public class Common {
             Common.showToast(context, "連線失敗");
         }
     }
-}
 
+}

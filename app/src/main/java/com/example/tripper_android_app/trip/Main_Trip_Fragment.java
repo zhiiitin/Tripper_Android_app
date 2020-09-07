@@ -25,7 +25,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Main_Trip_Fragment extends Fragment {
     Activity activity;
-    BottomNavigationView btNavigation;
 
 
     @Override
@@ -33,10 +32,12 @@ public class Main_Trip_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = getActivity();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 會員註冊功能
         setHasOptionsMenu(true);
     }
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -63,13 +64,28 @@ public class Main_Trip_Fragment extends Fragment {
     }
 
     @Override
+<<<<<<< HEAD
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+=======
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+>>>>>>> 會員註冊功能
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
+<<<<<<< HEAD
+=======
+
+//    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+//        NavController navController = Navigation.findNavController(activity, R.id.fragment);
+//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
+>>>>>>> 會員註冊功能
     }
 
 

@@ -11,13 +11,23 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 會員註冊功能
     <string name="Explore">探索</string>
     <string name="textNoNetwork">沒有網路連線</string>
     <string name="textNoSpotsFound">找不到資料</string>
 
+<<<<<<< HEAD
 
     <string name="mUpdate">Update</string>
     <string name="mDelete">Delete</string>
+=======
+    <string name="mUpdate">Update</string>
+    <string name="mDelete">Delete</string>
+    <string name="facebook_app_id">329545764829760</string>
+    <string name="fb_login_protocol_scheme">fb329545764829760</string>
+>>>>>>> 會員註冊功能
 
 </resources>

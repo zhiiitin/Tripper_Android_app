@@ -6,9 +6,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
+<<<<<<< HEAD
 import androidx.fragment.app.FragmentActivity;
+=======
+>>>>>>> 會員註冊功能
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -25,31 +27,48 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.R;
+<<<<<<< HEAD
+=======
+import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.task.ImageTask;
+import com.example.tripper_android_app.util.Common;
+>>>>>>> 會員註冊功能
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
 
 public class ExploreFragment extends Fragment {
+
+
     private Activity activity;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvExplore;
+<<<<<<< HEAD
     private CommonTask exploreGetAllTask,exploreDeleteTask;
     private List<com.example.tripper_android_app.task.ImageTask> imageTasks;
+=======
+    private CommonTask exploreGetAllTask, exploreDeleteTask;
+    private List<ImageTask> imageTasks;
+>>>>>>> 會員註冊功能
     private List<Explore> explores;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         activity= getActivity();
         imageTasks = new ArrayList<>();
+=======
+        activity = getActivity();
+>>>>>>> 會員註冊功能
     }
 
     @Override
@@ -61,11 +80,20 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
+<<<<<<< HEAD
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+=======
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+>>>>>>> 會員註冊功能
         activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.searchView);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -102,7 +130,7 @@ public class ExploreFragment extends Fragment {
                             searchExplores.add(explore);
                         }
                     }
-                   showExplores(searchExplores);
+                    showExplores(searchExplores);
                 }
                 return true;
             }
@@ -116,8 +144,8 @@ public class ExploreFragment extends Fragment {
             Common.showToast(activity, R.string.textNoSpotsFound);
         }
         ExploreAdapter exploreAdapter = (ExploreAdapter) rvExplore.getAdapter();
-        if (exploreAdapter  == null) {
-            rvExplore.setAdapter(new ExploreAdapter(activity,explores));
+        if (exploreAdapter == null) {
+            rvExplore.setAdapter(new ExploreAdapter(activity, explores));
         } else {
             exploreAdapter.setExplores(explores);
             //刷新頁面
@@ -149,12 +177,16 @@ public class ExploreFragment extends Fragment {
         return explores;
     }
 
-    private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder>{
+    private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         //這是serach view 的 List 為了留查詢後的資料
         private List<Explore> explores;
         private int imageSize;
+<<<<<<< HEAD
         private Context context;
+=======
+
+>>>>>>> 會員註冊功能
         ExploreAdapter(Context context, List<Explore> explores) {
             layoutInflater = LayoutInflater.from(context);
             this.explores = explores;
@@ -165,32 +197,59 @@ public class ExploreFragment extends Fragment {
 
 
         void setExplores(List<Explore> explores) {
-           this.explores = explores;
+            this.explores = explores;
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+<<<<<<< HEAD
             View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
             return  new MyViewHolder(itemView);
         }
 
+=======
+            View itemView = layoutInflater.inflate(R.layout.item_view_explore, parent, false);
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            final Explore explore = explores.get(position);
+            String url = Common.URL_SERVER + "";
+            int id = explore.getId();
+            ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
+            imageTask.execute();
+            imageTasks.add(imageTask);
+            holder.tvUseName.setText(explore.getUserName());
+            holder.tvBlogName.setText(explore.getBlogName());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //填寫網誌路徑
+
+                }
+            });
+
+
+        }
+>>>>>>> 會員註冊功能
 
         @Override
         public int getItemCount() {
             return explores == null ? 0 : explores.size();
         }
 
-         class MyViewHolder extends RecyclerView.ViewHolder {
-             ImageView ivBlogPic;
-             TextView tvUseName, tvBlogName;
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView ivBlogPic;
+            TextView tvUseName, tvBlogName;
 
-            MyViewHolder(View itemView){
+            MyViewHolder(View itemView) {
                 super(itemView);
                 ivBlogPic = itemView.findViewById(R.id.ivBlogPic);
                 tvBlogName = itemView.findViewById(R.id.tvBlogName);
                 tvUseName = itemView.findViewById(R.id.tvUserName);
-             }
+            }
         }
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
@@ -216,7 +275,7 @@ public class ExploreFragment extends Fragment {
         }
 
     }
-    @Override
+
     public void onStop() {
         super.onStop();
         if (exploreGetAllTask != null) {
@@ -231,7 +290,7 @@ public class ExploreFragment extends Fragment {
             imageTasks.clear();
         }
 
-        if (exploreGetAllTask!= null) {
+        if (exploreGetAllTask != null) {
             exploreDeleteTask.cancel(true);
             exploreDeleteTask = null;
         }
