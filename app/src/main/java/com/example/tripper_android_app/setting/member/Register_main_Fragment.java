@@ -2,11 +2,15 @@ package com.example.tripper_android_app.setting.member;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -38,6 +43,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class Register_main_Fragment extends Fragment {
@@ -75,13 +84,18 @@ public class Register_main_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+//ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("會員註冊");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if(upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+//BottomNavigation
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -138,6 +152,34 @@ public class Register_main_Fragment extends Fragment {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 if (account != null) {
                     firebaseAuthWithGoogle(account);
+
+                        String accountDb = account.getGivenName();
+                        String password = "password" ;
+                        String nickname = account.getDisplayName();
+
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit()
+                                .putBoolean("login", true)
+                                .putString("account", accountDb)
+                                .putString("password", password)
+                                .apply();
+
+                        String Url = Common.URL_SERVER + "MemberServlet" ;
+                        Member member = new Member();
+                        member.setAccount(accountDb);
+                        member.setNickName(nickname);
+                        member.setPassword(password);
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action","memberInsert");
+                        jsonObject.addProperty("member" ,new Gson().toJson(member));
+                        try{
+                            String result = new CommonTask(Url,jsonObject.toString()).execute().get();
+                            int count = Integer.parseInt(result);
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");
                 }
@@ -176,7 +218,7 @@ public class Register_main_Fragment extends Fragment {
         String message = "";
         switch (item.getItemId()) {
             case android.R.id.home:    //此返回鍵ID是固定的
-                Navigation.findNavController(this.getView()).popBackStack();
+                Navigation.findNavController(this.getView()).navigate(R.id.action_register_main_Fragment_to_setting_Fragment);
                 return true;
 
         }

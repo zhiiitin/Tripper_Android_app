@@ -3,13 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="600dp">
+    android:layout_height="800dp">
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".setting.member.Register_Member_Fragment">
+        tools:context=".setting.member.Register_Member_Fragment"
+        >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                app:title="Test" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <TextView
             android:id="@+id/tvLoginType_member"
@@ -74,7 +93,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
 
         <ImageButton
             android:id="@+id/ibChange"
@@ -136,9 +156,6 @@
                 android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
-        
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -9,12 +9,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -32,6 +35,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -39,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
@@ -58,25 +63,25 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Register_Member_Fragment extends Fragment {
     private final static String TAG = "TAG_MemberFragment";
-    private FragmentActivity activity;
-    private TextView tvId, tvNickName, tvLoginType ,tvUpdate;
+    private MainActivity activity;
+    private TextView tvId, tvNickName, tvLoginType, tvUpdate;
     private CardView cvUpdate;
-    private ImageButton ibLogout ;
-    private ImageView ivPhoto ;
-    private ImageButton ibChange ;
-    private byte[] photo ;
+    private ImageButton ibLogout;
+    private ImageView ivPhoto;
+    private ImageButton ibChange;
+    private byte[] photo;
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
-    private Member member ;
-    private ActionBar actionBar ;
+    private Member member;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -91,6 +96,18 @@ public class Register_Member_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         NavController navController = Navigation.findNavController(view);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("會員資料");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if (upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+
 //        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
 //        navController = Navigation.findNavController(activity, R.id.nav_fragment);
 //        NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -118,7 +135,7 @@ public class Register_Member_Fragment extends Fragment {
             String nickname = member.getNickName();
             tvId.setText(id);
             tvNickName.setText(nickname);
-            if(member.getLoginType() == 1){
+            if (member.getLoginType() == 1) {
                 tvLoginType.setText("一般登入");
             }
         }
@@ -130,7 +147,7 @@ public class Register_Member_Fragment extends Fragment {
                         MODE_PRIVATE);
                 pref.edit().putBoolean("login", false).apply();
                 Navigation.findNavController(ibLogout).navigate(R.id.action_register_Member_Fragment_to_register_main_Fragment);
-                Common.showToast(activity,"帳號已登出");
+                Common.showToast(activity, "帳號已登出");
             }
         });
 
@@ -140,7 +157,7 @@ public class Register_Member_Fragment extends Fragment {
                 showTypeDialog();
             }
         });
- //按下編輯完成，傳送更改的資料以及照片
+        //按下編輯完成，傳送更改的資料以及照片
         cvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,7 +193,6 @@ public class Register_Member_Fragment extends Fragment {
     }
 
 
-
     private void showTypeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog dialog = builder.create();
@@ -199,15 +215,14 @@ public class Register_Member_Fragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                file = new File(file,"picture.jpg");
-                contentUri = FileProvider.getUriForFile(activity,activity.getPackageName()+".provider",file);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,contentUri);
+                file = new File(file, "picture.jpg");
+                contentUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
 
-                if(intent.resolveActivity(activity.getPackageManager())!= null){
-                    startActivityForResult(intent,REQ_TAKE_PICTURE);
+                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                    startActivityForResult(intent, REQ_TAKE_PICTURE);
                     dialog.dismiss();
-                }
-                else {
+                } else {
                     Common.showToast(activity, "no camera app found");
                 }
 
@@ -241,8 +256,8 @@ public class Register_Member_Fragment extends Fragment {
     }
 
     private void openAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent,REQ_PICK_PICTURE);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_PICK_PICTURE);
     }
 
     @Override
@@ -295,40 +310,23 @@ public class Register_Member_Fragment extends Fragment {
             Log.e(TAG, e.toString());
         }
         if (bitmap != null) {
-            ivPhoto .setImageBitmap(bitmap);
+            ivPhoto.setImageBitmap(bitmap);
         } else {
-            ivPhoto .setImageResource(R.drawable.ic_nopicture);
+            ivPhoto.setImageResource(R.drawable.ic_nopicture);
         }
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (requestCode){
-//            case TAKE_PHOTO:
-//                if(resultCode==RESULT_OK){
-//                    try {
-//                        Bitmap bitmap= BitmapFactory.decodeStream(view.getContext().getContentResolver().openInputStream(imageUri));
-//                        String ans=imageUri.toString();
-//                        bean.image=ans;
-//                        muserOperator.updateImage(bean);
-//                        imageView.setImageBitmap(bitmap);
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                break;
-//            case CHOOSE_PHOTO:
-//                if(resultCode==RESULT_OK){
-//                    if(Build.VERSION.SDK_INT>=19){
-//                        handleImageOnKitKat(data);
-//                    }else{
-//                        handleImageBeforeKitKat(data);
-//                    }
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String message = "";
+        switch (item.getItemId()) {
+            case android.R.id.home:    //此返回鍵ID是固定的
+                Navigation.findNavController(this.getView()).navigate(R.id.action_register_Member_Fragment_to_setting_Fragment);
+                return true;
+
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
 }

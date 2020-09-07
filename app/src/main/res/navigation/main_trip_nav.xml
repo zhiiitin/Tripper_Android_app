@@ -74,6 +74,13 @@
             app:destination="@id/google_Login_Fragment"
             app:exitAnim="@anim/slide_out_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_setting_Fragment"
+            app:destination="@id/setting_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/register_NormalFragment"
@@ -100,19 +107,26 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_Member_Fragment_to_setting_Fragment"
+            app:destination="@id/setting_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/register_Login_Fragment"
-        android:name="com.example.tripper_android_app.setting.member.Register_Login_Fragment"
+        android:name="com.example.tripper_android_app.setting.member.Normal_Login_Fragment"
         android:label="fragment_register__login_"
         tools:layout="@layout/fragment_register__login_" >
         <action
             android:id="@+id/action_register_Login_Fragment_to_register_Member_Fragment"
             app:destination="@id/register_Member_Fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/insertLocationFragment"

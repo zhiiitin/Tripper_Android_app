@@ -2,10 +2,14 @@ package com.example.tripper_android_app.setting.member;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -15,10 +19,13 @@ import androidx.navigation.ui.NavigationUI;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
@@ -33,9 +40,9 @@ import java.lang.reflect.Type;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class Register_Login_Fragment extends Fragment {
+public class Normal_Login_Fragment extends Fragment {
     private final static String TAG = "TAG_LoginFragment" ;
-    private Activity activity ;
+    private MainActivity activity ;
     private TextInputEditText etAccount , etPassword ;
     private ImageButton ibLogin ;
 
@@ -43,7 +50,8 @@ public class Register_Login_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
 
     }
 
@@ -57,7 +65,18 @@ public class Register_Login_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+//ToolBar
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("一般登入");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if(upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+//BottomNavigation
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -124,5 +143,18 @@ public class Register_Login_Fragment extends Fragment {
             }
 
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String message = "";
+        switch (item.getItemId()) {
+            case android.R.id.home:    //此返回鍵ID是固定的
+                Navigation.findNavController(this.getView()).popBackStack();
+                return true;
+
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        return true;
     }
 }

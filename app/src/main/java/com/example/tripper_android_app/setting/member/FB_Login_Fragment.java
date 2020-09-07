@@ -2,12 +2,15 @@ package com.example.tripper_android_app.setting.member;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -73,6 +76,7 @@ public class FB_Login_Fragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 //        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         callbackManager = CallbackManager.Factory.create();
+        setHasOptionsMenu(true);
 
 
     }
@@ -88,13 +92,18 @@ public class FB_Login_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+//ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("FaceBook登入");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if(upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+//BottomNavigation
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
