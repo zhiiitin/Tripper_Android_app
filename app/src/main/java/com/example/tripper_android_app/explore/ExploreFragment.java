@@ -41,7 +41,7 @@ public class ExploreFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvExplore;
     private CommonTask exploreGetAllTask,exploreDeleteTask;
-    private List<ImageTask> imageTasks;
+    private List<com.example.tripper_android_app.task.ImageTask> imageTasks;
     private List<Explore> explores;
 
 
@@ -49,6 +49,7 @@ public class ExploreFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity= getActivity();
+        imageTasks = new ArrayList<>();
     }
 
     @Override
@@ -96,7 +97,7 @@ public class ExploreFragment extends Fragment {
                     List<Explore> searchExplores = new ArrayList<>();
                     // 搜尋原始資料內有無包含關鍵字(不區別大小寫)
                     for (Explore explore : explores) {
-                        if (explore.getBlogName().toUpperCase().contains(newText.toUpperCase())) {
+                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase())) {
 
                             searchExplores.add(explore);
                         }
@@ -129,7 +130,7 @@ public class ExploreFragment extends Fragment {
         List<Explore> explores = null;
         if (Common.networkConnected(activity)) {
             //Servlet
-            String url = Common.URL_SERVER + "";
+            String url = Common.URL_SERVER + "ExploreServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
             String jsonOut = jsonObject.toString();
@@ -153,11 +154,13 @@ public class ExploreFragment extends Fragment {
         //這是serach view 的 List 為了留查詢後的資料
         private List<Explore> explores;
         private int imageSize;
+        private Context context;
         ExploreAdapter(Context context, List<Explore> explores) {
             layoutInflater = LayoutInflater.from(context);
             this.explores = explores;
+            this.context = context;
             /* 螢幕寬度除以4當作將圖的尺寸 */
-            imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+            imageSize = 500 ;
         }
 
 
@@ -169,29 +172,9 @@ public class ExploreFragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
-            return new MyViewHolder(itemView);
+            return  new MyViewHolder(itemView);
         }
 
-        @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            final Explore explore = explores.get(position);
-            String url = Common.URL_SERVER+ "";
-            int id = explore.getId();
-             ImageTask imageTask = new ImageTask(url,id,imageSize,holder.ivBlogPic);
-             imageTask.execute();
-             imageTasks.add(imageTask);
-             holder.tvUseName.setText(explore.getUserName());
-             holder.tvBlogName.setText(explore.getBlogName());
-             holder.itemView.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     //填寫網誌路徑
-
-                 }
-             });
-
-
-        }
 
         @Override
         public int getItemCount() {
@@ -209,6 +192,29 @@ public class ExploreFragment extends Fragment {
                 tvUseName = itemView.findViewById(R.id.tvUserName);
              }
         }
+        @Override
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            final Explore explore = explores.get(position);
+            String url = Common.URL_SERVER+ "ExploreServlet";
+            int id = explore.getId();
+            com.example.tripper_android_app.task.ImageTask imageTask = new com.example.tripper_android_app.task.ImageTask(url,id,imageSize,holder.ivBlogPic);
+            imageTask.execute();
+            holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageTasks.add(imageTask);
+            holder.tvUseName.setText(explore.getUserName());
+            holder.tvBlogName.setText(explore.getTittleName());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //填寫網誌路徑
+
+                }
+            });
+
+
+        }
+
     }
     @Override
     public void onStop() {
@@ -219,7 +225,7 @@ public class ExploreFragment extends Fragment {
         }
 
         if (imageTasks != null && imageTasks.size() > 0) {
-            for (ImageTask imageTask : imageTasks) {
+            for (com.example.tripper_android_app.task.ImageTask imageTask : imageTasks) {
                 imageTask.cancel(true);
             }
             imageTasks.clear();

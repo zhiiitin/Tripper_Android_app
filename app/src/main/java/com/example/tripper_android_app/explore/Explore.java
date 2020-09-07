@@ -4,12 +4,12 @@ public class Explore {
 
     private  int id;
     private  String userName;
-    private  String blogName;
+    private  String tittleName;
 
-    public Explore(int id, String userName, String blogName) {
+    public Explore(int id, String tittleName,String userName) {
         this.id = id;
         this.userName = userName;
-        this.blogName = blogName;
+        this.tittleName = tittleName;
     }
 
     public int getId() {
@@ -28,11 +28,11 @@ public class Explore {
         this.userName = userName;
     }
 
-    public String getBlogName() {
-        return blogName;
+    public String getTittleName() {
+        return tittleName;
     }
 
-    public void setBlogName(String blogName) {
-        this.blogName = blogName;
+    public void setTittleName(String tittleName) {
+        this.tittleName = tittleName;
     }
 }
