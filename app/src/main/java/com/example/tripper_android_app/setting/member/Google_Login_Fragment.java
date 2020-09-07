@@ -7,10 +7,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +58,11 @@ public class Google_Login_Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        Menu itemMenu = bottomNavigationView.getMenu();
+        itemMenu.getItem(4).setChecked(true);
         textView = view.findViewById(R.id.textView);
         tvWelcome = view.findViewById(R.id.tvWelcome);
         tvWelcome.setText("GOOGLE登入成功  歡迎您！");

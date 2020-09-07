@@ -6,11 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -18,6 +22,7 @@ import android.widget.ImageButton;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -48,6 +53,13 @@ public class Register_Normal_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        Menu itemMenu = bottomNavigationView.getMenu();
+        itemMenu.getItem(4).setChecked(true);
+
         etAccount = view.findViewById(R.id.etAccount);
         etPassword = view.findViewById(R.id.etPassword);
         etPassword2 = view.findViewById(R.id.etPassword2);

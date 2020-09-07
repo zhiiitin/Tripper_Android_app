@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.setting.member;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,12 +23,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -39,6 +43,7 @@ import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -65,6 +70,7 @@ public class Register_Member_Fragment extends Fragment {
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
     private Member member ;
+    private ActionBar actionBar ;
 
 
     @Override
@@ -77,13 +83,20 @@ public class Register_Member_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         return inflater.inflate(R.layout.fragment_register__member_, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final NavController navController = Navigation.findNavController(view);
+        NavController navController = Navigation.findNavController(view);
+//        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+//        navController = Navigation.findNavController(activity, R.id.nav_fragment);
+//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+//        Menu itemMenu = bottomNavigationView.getMenu();
+//        itemMenu.getItem(4).setChecked(true);
+
         tvId = view.findViewById(R.id.tvId_member);
         tvNickName = view.findViewById(R.id.tvNickname_member);
         tvLoginType = view.findViewById(R.id.tvLoginType_member);
@@ -161,6 +174,8 @@ public class Register_Member_Fragment extends Fragment {
 
         showMember();
     }
+
+
 
     private void showTypeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
