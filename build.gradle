@@ -16,6 +16,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "http://oi5nqn6ce.bkt.clouddn.com/itheima/booster/code/jitpack.png" }
     }
 }
 
