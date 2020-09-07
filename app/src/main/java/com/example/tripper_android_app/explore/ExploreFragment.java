@@ -190,10 +190,10 @@ public class ExploreFragment extends Fragment {
             String jsonOut1 = jsonObject1.toString();
             exploreGetAllTask = new CommonTask(urlM, jsonOut1);
             try {
-                String josnIn1 = exploreGetAllTask.execute().get();
+//                String josnIn1 = exploreGetAllTask.execute().get();
                 Type listType1 = new TypeToken<List<Explore>>() {
                 }.getType();
-                members = new Gson().fromJson(josnIn1, listType1);
+//                members = new Gson().fromJson(josnIn1, listType1);
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());

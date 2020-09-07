@@ -46,6 +46,7 @@ import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.yalantis.ucrop.UCrop;
 
 
 import java.io.ByteArrayOutputStream;
