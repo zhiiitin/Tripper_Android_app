@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,11 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.util.Common;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,7 +43,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class Register_main_Fragment extends Fragment {
     private static final String TAG = "TAG_MainFragment";
     private static final int REQ_SIGN_IN = 101;
-    private Activity activity;
+    private MainActivity activity;
     private ImageButton ivRegister_Google ;
     private GoogleSignInClient client;
     private FirebaseAuth auth;
@@ -47,7 +51,7 @@ public class Register_main_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
         auth = FirebaseAuth.getInstance();
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 // 由google-services.json轉出
@@ -59,12 +63,7 @@ public class Register_main_Fragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.app_bar_button,menu);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +75,12 @@ public class Register_main_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("會員註冊");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
@@ -164,5 +169,18 @@ public class Register_main_Fragment extends Fragment {
 
                     }
                 });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String message = "";
+        switch (item.getItemId()) {
+            case android.R.id.home:    //此返回鍵ID是固定的
+                Navigation.findNavController(this.getView()).popBackStack();
+                return true;
+
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        return true;
     }
 }

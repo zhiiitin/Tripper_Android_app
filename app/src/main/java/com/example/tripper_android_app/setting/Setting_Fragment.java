@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
@@ -32,14 +34,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Setting_Fragment extends Fragment {
     private final static String TAG = "TAG_SettingFragment";
-    private FragmentActivity activity;
+    private MainActivity activity;
     private CommonTask loginTask;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
 
     }
 
@@ -47,7 +49,6 @@ public class Setting_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        activity.setTitle("設定");
         return inflater.inflate(R.layout.fragment_setting_, container, false);
     }
 
@@ -55,6 +56,10 @@ public class Setting_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("設定");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
 
 //        ImageButton ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
 //        ibCreateLocation.setOnClickListener(new View.OnClickListener() {
