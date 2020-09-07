@@ -20,7 +20,7 @@
         android:id="@+id/setting_Fragment"
         android:name="com.example.tripper_android_app.setting.Setting_Fragment"
         android:label="fragment_setting_"
-        tools:layout="@layout/fragment_setting_" />
+        tools:layout="@layout/fragment_setting_" >
         <action
             android:id="@+id/action_setting_Fragment_to_register_main_Fragment"
             app:destination="@id/register_main_Fragment"
@@ -32,15 +32,6 @@
 
 
             android:id="@+id/action_setting_Fragment_to_register_Member_Fragment"
-<<<<<<< HEAD
-            app:destination="@id/register_Member_Fragment" />
-
-
-<action
-            android:id="@+id/action_setting_Fragment_to_location_List_Fragment"
-            app:destination="@id/location_List_Fragment" />
-
-=======
             app:destination="@id/register_Member_Fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -52,7 +43,6 @@
             />
 
     </fragment>
->>>>>>> 會員註冊功能
     <fragment
         android:id="@+id/register_main_Fragment"
         android:name="com.example.tripper_android_app.setting.member.Register_main_Fragment"
@@ -115,14 +105,6 @@
         android:id="@+id/register_Login_Fragment"
         android:name="com.example.tripper_android_app.setting.member.Register_Login_Fragment"
         android:label="fragment_register__login_"
-<<<<<<< HEAD
-        tools:layout="@layout/fragment_register__login_" />
-
-
-    <fragment
-        android:id="@+id/location_List_Fragment"
-        android:name="com.example.tripper_android_app.setting.location.LocationListFragment"
-=======
         tools:layout="@layout/fragment_register__login_" >
         <action
             android:id="@+id/action_register_Login_Fragment_to_register_Member_Fragment"
@@ -150,21 +132,14 @@
     <fragment
         android:id="@+id/locationListFragment"
         android:name="com.example.tripper_android_app.location.LocationListFragment"
->>>>>>> 會員註冊功能
         android:label="fragment_location_list"
         tools:layout="@layout/fragment_location_list" >
         <action
             android:id="@+id/action_locationListFragment_to_insertLocationFragment"
             app:destination="@id/insertLocationFragment"
-     />
+            />
     </fragment>
     <fragment
-<<<<<<< HEAD
-        android:id="@+id/insertLocationFragment"
-        android:name="com.example.tripper_android_app.setting.location.InsertLocationFragment"
-        android:label="fragment_insert_location"
-        tools:layout="@layout/fragment_insert_location" />
-=======
         android:id="@+id/FB_Login_Fragment"
         android:name="com.example.tripper_android_app.setting.member.FB_Login_Fragment"
         android:label="fragment_f_b__login_"
@@ -174,6 +149,5 @@
         android:name="com.example.tripper_android_app.setting.member.Google_Login_Fragment"
         android:label="fragment_google__login_"
         tools:layout="@layout/fragment_google__login_" />
->>>>>>> 會員註冊功能
 
 </navigation>
