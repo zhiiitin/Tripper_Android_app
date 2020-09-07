@@ -70,7 +70,7 @@ public class Register_Member_Fragment extends Fragment {
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
     private Member member ;
-    private ActionBar actionBar ;
+
 
 
     @Override
