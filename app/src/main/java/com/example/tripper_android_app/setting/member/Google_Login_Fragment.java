@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.util.Common;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -55,6 +56,7 @@ public class Google_Login_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         textView = view.findViewById(R.id.textView);
         tvWelcome = view.findViewById(R.id.tvWelcome);
+        tvWelcome.setText("GOOGLE登入成功  歡迎您！");
         Button btSignOut = view.findViewById(R.id.btSignOutGoogle);
         btSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +80,7 @@ public class Google_Login_Fragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Navigation.findNavController(textView).popBackStack();
-                Log.d(TAG, "Signed out");
+                Common.showToast(activity,"Google帳號已登出");
             }
         });
     }
