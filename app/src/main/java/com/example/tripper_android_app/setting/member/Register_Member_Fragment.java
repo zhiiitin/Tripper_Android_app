@@ -78,12 +78,8 @@ public class Register_Member_Fragment extends Fragment {
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
-<<<<<<< HEAD
-    private Member member ;
-
-=======
     private Member member;
->>>>>>> 會員註冊功能
+
 
 
     @Override

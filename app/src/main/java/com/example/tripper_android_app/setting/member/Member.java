@@ -13,10 +13,6 @@ public class Member implements Serializable {
 //    private Timestamp createTime ;
 //    private Timestamp modifyTime ;
 //    private Timestamp lastTime ;
-    public  Member (){
-
-    }
-
 
 
     public Member(String account,String password) {

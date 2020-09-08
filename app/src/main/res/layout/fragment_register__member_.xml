@@ -157,9 +157,7 @@
                 android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
-<<<<<<< HEAD
-        
-=======
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomBar"
             android:layout_width="0dp"
@@ -172,7 +170,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_bar_menu" />
->>>>>>> 會員註冊功能
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
