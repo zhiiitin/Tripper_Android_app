@@ -155,21 +155,8 @@ public class Register_Normal_Fragment extends Fragment {
                                 .putString("password", password)
                                 .apply();       ////登入成功後，把資訊存入偏好設定檔
 
-                        JsonObject jsonObject2 = new JsonObject();
-                        jsonObject2.addProperty("action","getProfile");
-                        jsonObject2.addProperty("account",account);
-                        try {
-                            String jsonIn = new CommonTask(Url,jsonObject2.toString()).execute().get();
-                            Type listtype = new TypeToken<Member>() {
-                            }.getType();
-                            member = new Gson().fromJson(jsonIn, listtype);
 
-                        }catch (Exception e) {
-                            Log.e(TAG, e.toString());
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Member", member);
-                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment,bundle);
+                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment);
                     }
                 }else{
                     Common.showToast(activity, "no network connection found");

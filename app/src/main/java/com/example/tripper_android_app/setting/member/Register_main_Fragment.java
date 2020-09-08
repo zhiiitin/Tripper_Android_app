@@ -170,6 +170,7 @@ public class Register_main_Fragment extends Fragment {
                         member.setAccount(accountDb);
                         member.setNickName(nickname);
                         member.setPassword(password);
+                        member.setLoginType(1);
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("action","memberInsert");
                         jsonObject.addProperty("member" ,new Gson().toJson(member));

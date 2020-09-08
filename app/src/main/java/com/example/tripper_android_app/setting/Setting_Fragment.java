@@ -39,7 +39,7 @@ public class Setting_Fragment extends Fragment {
     private final static String TAG = "TAG_SettingFragment";
     private MainActivity activity;
     private CommonTask loginTask;
-    private ImageButton ibCreateLocation,ibRegister,ibMember,ibFriends;
+    private ImageButton ibCreateLocation, ibRegister, ibMember, ibFriends;
 
 
     @Override
@@ -65,11 +65,10 @@ public class Setting_Fragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
-        if(upArrow != null) {
+        if (upArrow != null) {
             upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
-
 
 
 //BottomNavigation
@@ -86,7 +85,6 @@ public class Setting_Fragment extends Fragment {
                         .navigate(R.id.action_setting_Fragment_to_locationListFragment);
             }
         });
-
 
 
 //進入註冊會員頁面
@@ -111,28 +109,12 @@ public class Setting_Fragment extends Fragment {
                         //防止舊手機在密碼修改後，卻能繼續使用
                         pref.edit().putBoolean("login", false).apply();  //立刻將登入狀態改為false
                     }
-                    String Url = Common.URL_SERVER + "MemberServlet";
-                    JsonObject jsonObject2 = new JsonObject();
-                    jsonObject2.addProperty("action", "getProfile");
-                    jsonObject2.addProperty("account", account);
-                    Member member = null;
-                    try {
-                        String jsonIn = new CommonTask(Url, jsonObject2.toString()).execute().get();
-                        Type listtype = new TypeToken<Member>() {
-                        }.getType();
-                        member = new Gson().fromJson(jsonIn, listtype);
-                        member.setLoginType(1);
 
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Member", member);
-                    Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_Member_Fragment, bundle);
+                    Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_Member_Fragment);
 
                 } else {
                     Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_main_Fragment);
-                    Common.showToast(activity,"請先登入會員");
+                    Common.showToast(activity, "請先登入會員");
                 }
             }
         });

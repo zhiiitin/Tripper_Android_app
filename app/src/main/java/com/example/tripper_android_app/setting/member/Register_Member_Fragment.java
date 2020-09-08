@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,11 +52,13 @@ import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -108,11 +111,12 @@ public class Register_Member_Fragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
-//        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-//        navController = Navigation.findNavController(activity, R.id.nav_fragment);
-//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-//        Menu itemMenu = bottomNavigationView.getMenu();
-//        itemMenu.getItem(4).setChecked(true);
+//BottomNavigation
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        navController = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        Menu itemMenu = bottomNavigationView.getMenu();
+        itemMenu.getItem(4).setChecked(true);
 
         tvId = view.findViewById(R.id.tvId_member);
         tvNickName = view.findViewById(R.id.tvNickname_member);
@@ -123,20 +127,46 @@ public class Register_Member_Fragment extends Fragment {
         tvUpdate = view.findViewById(R.id.tvUpdate);
         cvUpdate = view.findViewById(R.id.cvUpdate);
 
-        Bundle bundle = getArguments();
-        if (bundle == null || bundle.getSerializable("Member") == null) {
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        boolean login = pref.getBoolean("login", false);
+        if(!login){
             Common.showToast(activity, "尚未登入會員");
             navController.popBackStack();
             return;
-        } else {
-            member = (Member) bundle.getSerializable("Member");
+        }else{
+            //透過帳號抓取會員資料
+            if (Common.networkConnected(activity)) {
+                String Url = Common.URL_SERVER + "MemberServlet";
+                String account = pref.getString("account","");
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getProfile");
+                jsonObject.addProperty("account",account);
+                try {
+                    String jsonIn = new CommonTask(Url,jsonObject.toString()).execute().get();
+                    Type listtype = new TypeToken<Member>() {
+                    }.getType();
+                    member = new Gson().fromJson(jsonIn, listtype);
 
-            String id = member.getId() + "";
-            String nickname = member.getNickName();
-            tvId.setText(id);
-            tvNickName.setText(nickname);
-            if (member.getLoginType() == 1) {
-                tvLoginType.setText("一般登入");
+                }catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                    String id = member.getId()+"";
+                    String nickname = member.getNickName();
+                    tvId.setText(id);
+                    tvNickName.setText(nickname);
+                    pref.edit()
+                            .putString("memberId",id)
+                            .apply();
+                if (member.getLoginType() == 0) {
+                    tvLoginType.setText("一般登入");
+                }
+                else if(member.getLoginType() ==1){
+                    tvLoginType.setText("Google登入");
+                }
+            }
+            else {
+                Common.showToast(activity, "no network connection found");
             }
         }
 

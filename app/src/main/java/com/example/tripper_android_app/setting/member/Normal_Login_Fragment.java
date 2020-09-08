@@ -41,10 +41,10 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class Normal_Login_Fragment extends Fragment {
-    private final static String TAG = "TAG_LoginFragment" ;
-    private MainActivity activity ;
-    private TextInputEditText etAccount , etPassword ;
-    private ImageButton ibLogin ;
+    private final static String TAG = "TAG_LoginFragment";
+    private MainActivity activity;
+    private TextInputEditText etAccount, etPassword;
+    private ImageButton ibLogin;
 
 
     @Override
@@ -72,7 +72,7 @@ public class Normal_Login_Fragment extends Fragment {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
-        if(upArrow != null) {
+        if (upArrow != null) {
             upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
@@ -90,54 +90,38 @@ public class Normal_Login_Fragment extends Fragment {
         ibLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Common.networkConnected(activity)){
+                if (Common.networkConnected(activity)) {
                     String account = etAccount.getText().toString().trim();
                     String password = etPassword.getText().toString().trim();
-                    String Url = Common.URL_SERVER + "MemberServlet" ;
-                    Member member = new Member(account,password);
+                    String Url = Common.URL_SERVER + "MemberServlet";
+                    Member member = new Member(account, password);
+                    member.setLoginType(1);
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action","logIn");
-                    jsonObject.addProperty("member" ,new Gson().toJson(member));
-                    int count = 0 ;
-                    try{
-                        String result = new CommonTask(Url,jsonObject.toString()).execute().get();
+                    jsonObject.addProperty("action", "logIn");
+                    jsonObject.addProperty("member", new Gson().toJson(member));
+                    int count = 0;
+                    try {
+                        String result = new CommonTask(Url, jsonObject.toString()).execute().get();
                         count = Integer.parseInt(result);
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
-                    if(count == 0 ){
+                    if (count == 0) {
                         Common.showToast(activity, "帳號或密碼錯誤");
-                    }
-
-
-                    else{
-                        Common.showToast(activity,"登入成功！");
-                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,MODE_PRIVATE);
+                    } else {
+                        Common.showToast(activity, "登入成功！");
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
                         pref.edit()
                                 .putBoolean("login", true)
                                 .putString("account", account)
                                 .putString("password", password)
                                 .apply();
-                                              ////登入成功後，把資訊存入偏好設定檔
-                        JsonObject jsonObject2 = new JsonObject();
-                        jsonObject2.addProperty("action","getProfile");
-                        jsonObject2.addProperty("account",account);
-                        try {
-                            String jsonIn = new CommonTask(Url,jsonObject2.toString()).execute().get();
-                            Type listtype = new TypeToken<Member>() {
-                            }.getType();
-                            member = new Gson().fromJson(jsonIn, listtype);
-                            member.setLoginType(1);
+                        ////登入成功後，把資訊存入偏好設定檔
 
-                        }catch (Exception e) {
-                            Log.e(TAG, e.toString());
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Member", member);
-                        Navigation.findNavController(ibLogin).navigate(R.id.action_register_Login_Fragment_to_register_Member_Fragment,bundle);
+                        Navigation.findNavController(ibLogin).navigate(R.id.action_register_Login_Fragment_to_register_Member_Fragment);
 
                     }
-                }else{
+                } else {
                     Common.showToast(activity, "no network connection found");
                 }
             }
