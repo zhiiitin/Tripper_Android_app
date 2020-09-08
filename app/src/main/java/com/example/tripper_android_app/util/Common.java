@@ -10,6 +10,8 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class Common {
@@ -56,5 +58,11 @@ public class Common {
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static String getTransId(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssss");
+        String transId = dateFormat.format(System.currentTimeMillis());
+        return transId.toString();
     }
 }
