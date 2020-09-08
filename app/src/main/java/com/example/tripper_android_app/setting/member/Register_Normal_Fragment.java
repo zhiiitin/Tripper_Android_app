@@ -1,9 +1,14 @@
 package com.example.tripper_android_app.setting.member;
 
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
@@ -18,7 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
@@ -30,17 +37,19 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class Register_Normal_Fragment extends Fragment {
     private final static String TAG = "TAG_NormalFragment" ;
-    private FragmentActivity activity ;
+    private MainActivity activity ;
     private TextInputEditText etAccount , etPassword ,etNickName ,etPassword2 ;
     private ImageButton ibRegister ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
-
+        activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -53,6 +62,17 @@ public class Register_Normal_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("一般登入");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if(upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
@@ -127,26 +147,34 @@ public class Register_Normal_Fragment extends Fragment {
                     }
                     else{
                         Common.showToast(activity,"帳號創建成功！");
-                        JsonObject jsonObject2 = new JsonObject();
-                        jsonObject2.addProperty("action","getProfile");
-                        jsonObject2.addProperty("account",account);
-                        try {
-                            String jsonIn = new CommonTask(Url,jsonObject2.toString()).execute().get();
-                            Type listtype = new TypeToken<Member>() {
-                            }.getType();
-                            member = new Gson().fromJson(jsonIn, listtype);
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit()
+                                .putBoolean("login", true)
+                                .putString("account", account)
+                                .putString("password", password)
+                                .apply();       ////登入成功後，把資訊存入偏好設定檔
 
-                        }catch (Exception e) {
-                            Log.e(TAG, e.toString());
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Member", member);
-                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment,bundle);
+
+                        Navigation.findNavController(ibRegister).navigate(R.id.action_register_NormalFragment_to_register_Member_Fragment);
                     }
                 }else{
                     Common.showToast(activity, "no network connection found");
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String message = "";
+        switch (item.getItemId()) {
+            case android.R.id.home:    //此返回鍵ID是固定的
+                Navigation.findNavController(this.getView()).popBackStack();
+                return true;
+
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        return true;
     }
 }

@@ -4,7 +4,7 @@
     <item
         android:id="@+id/exploreFragment"
         android:icon="@drawable/ic_button_search_xxxhdpi"
-        android:title="@string/action_search" />
+        android:title="@string/action_Explore" />
 
     <item
         android:id="@+id/groupFragment"

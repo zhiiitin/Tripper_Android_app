@@ -3,13 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="600dp">
+    android:layout_height="wrap_content">
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".setting.member.Register_Member_Fragment">
+        tools:context=".setting.member.Register_Member_Fragment"
+        >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                app:title="Test" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <TextView
             android:id="@+id/tvLoginType_member"
@@ -35,7 +54,7 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:text="登入方式："
             android:textSize="20sp"
             android:textStyle="bold"
@@ -46,7 +65,7 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:text="暱稱："
             android:textSize="20sp"
             android:textStyle="bold"
@@ -74,7 +93,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
 
         <ImageButton
             android:id="@+id/ibChange"
@@ -104,6 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="105dp"
             android:background="#00000000"
+            android:paddingBottom="110dp"
             android:src="@drawable/ic_logout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -136,7 +157,22 @@
                 android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
+<<<<<<< HEAD
         
+=======
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomBar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:itemBackground="@color/colorForBottomBar"
+            app:itemIconTint="@color/bottom_bar_selected_color"
+            app:labelVisibilityMode="labeled"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_bar_menu" />
+>>>>>>> 會員註冊功能
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

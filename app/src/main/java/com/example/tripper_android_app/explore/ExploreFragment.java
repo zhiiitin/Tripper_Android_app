@@ -146,8 +146,13 @@ public class ExploreFragment extends Fragment {
 
 
     private void showExplores(List<Explore> explores) {
+<<<<<<< HEAD
         if (explores == null|| explores.isEmpty()) {
             Common.showToast(activity, R.string.textNoSpotsFound);
+=======
+        if (explores == null || explores.isEmpty()) {
+            Common.showToast(activity, "查無景點");
+>>>>>>> c0827ceac9e96573ccbeefcca962903f94d17894
         }
         ExploreAdapter exploreAdapter = (ExploreAdapter) rvExplore.getAdapter();
         if (exploreAdapter == null) {

@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".setting.member.Register_Normal_Fragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            app:title="Test" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etPassword2"
         android:layout_width="260dp"
@@ -50,7 +66,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <TextView
         android:id="@+id/textView2"
@@ -68,10 +84,10 @@
         android:layout_width="260dp"
         android:layout_height="44dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginEnd="40dp"
         android:hint="請輸入帳號"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etPassword"
