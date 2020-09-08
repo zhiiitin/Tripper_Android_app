@@ -21,7 +21,6 @@
         android:gravity="center_horizontal"
         android:letterSpacing="0.01"
         android:lineSpacingExtra="10sp"
-        android:textAlignment="viewStart"
         android:textColor="#000000"
         android:textSize="24sp"
         card_view:layout_constraintStart_toEndOf="@+id/ivUser"
@@ -77,6 +76,19 @@
         android:src="@drawable/ic_user_pic"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp"
+        android:text="-------------------------------------------------------------------------------------------------"
+        android:textColor="#330D0808"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/tvBlogName" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

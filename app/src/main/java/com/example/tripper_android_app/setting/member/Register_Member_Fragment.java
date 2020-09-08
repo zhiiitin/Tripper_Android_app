@@ -52,7 +52,10 @@ import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+<<<<<<< HEAD
+=======
 import com.google.gson.reflect.TypeToken;
+>>>>>>> c0827ceac9e96573ccbeefcca962903f94d17894
 import com.yalantis.ucrop.UCrop;
 
 
