@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -43,6 +44,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.security.spec.PSSParameterSpec;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class ExploreFragment extends Fragment {
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
     private List<Member> members;
+
 
 
     @Override
@@ -101,6 +104,7 @@ public class ExploreFragment extends Fragment {
         members = getMemeber();
 
         showExplores(explores);
+      ;
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -139,8 +143,10 @@ public class ExploreFragment extends Fragment {
 
     }
 
+
+
     private void showExplores(List<Explore> explores) {
-        if (explores == null || explores.isEmpty()) {
+        if (explores == null|| explores.isEmpty()) {
             Common.showToast(activity, R.string.textNoSpotsFound);
         }
         ExploreAdapter exploreAdapter = (ExploreAdapter) rvExplore.getAdapter();
@@ -148,6 +154,7 @@ public class ExploreFragment extends Fragment {
             rvExplore.setAdapter(new ExploreAdapter(activity, explores));
         } else {
             exploreAdapter.setExplores(explores);
+
             //刷新頁面
             exploreAdapter.notifyDataSetChanged();
         }
@@ -184,16 +191,16 @@ public class ExploreFragment extends Fragment {
         List<Member> members = null;
         if (Common.networkConnected(activity)) {
             //Servlet
-            String urlM = Common.URL_SERVER + "MemberServlet";
+            String urlM = Common.URL_SERVER + "ExploreServlet";
             JsonObject jsonObject1 = new JsonObject();
-            jsonObject1.addProperty("action", "getProfile");
+            jsonObject1.addProperty("action", "selectAll");
             String jsonOut1 = jsonObject1.toString();
             exploreGetAllTask = new CommonTask(urlM, jsonOut1);
             try {
-//                String josnIn1 = exploreGetAllTask.execute().get();
+                String josnIn1 = exploreGetAllTask.execute().get();
                 Type listType1 = new TypeToken<List<Explore>>() {
                 }.getType();
-//                members = new Gson().fromJson(josnIn1, listType1);
+               members = new Gson().fromJson(josnIn1, listType1);
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -209,7 +216,9 @@ public class ExploreFragment extends Fragment {
         private LayoutInflater layoutInflater;
         //這是serach view 的 List 為了留查詢後的資料
         private List<Explore> explores;
-        private List<Member> members;
+
+
+
         private int imageSize;
         private Context context;
 
@@ -217,6 +226,8 @@ public class ExploreFragment extends Fragment {
             layoutInflater = LayoutInflater.from(context);
             this.explores = explores;
             this.context = context;
+
+
             /* 螢幕寬度除以4當作將圖的尺寸 */
             imageSize = 500;
         }
@@ -224,6 +235,7 @@ public class ExploreFragment extends Fragment {
 
         void setExplores(List<Explore> explores) {
             this.explores = explores;
+
         }
 
         @NonNull
@@ -244,6 +256,9 @@ public class ExploreFragment extends Fragment {
             return explores == null ? 0 : explores.size();
         }
 
+
+
+
         class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView ivBlogPic, ivUser;
             TextView tvUseName, tvBlogName;
@@ -263,7 +278,6 @@ public class ExploreFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
-            Member member = new Member();
             String url = Common.URL_SERVER + "ExploreServlet";
             int id = explore.getBlogId();
             ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
@@ -271,12 +285,17 @@ public class ExploreFragment extends Fragment {
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
 //            holder.ivUser.setScaleType(ImageView.ScaleType.FIT_XY);
             String icoUrl = Common.URL_SERVER + "MemberServlet";
+
+            //從MEMBER資料表 娶回來的資料無法秀在上面
             ImageTask imageTask1 = new ImageTask(icoUrl, id, imageSize, holder.ivUser);
             imageTask1.execute();
             imageTasks.add(imageTask);
+            //大頭貼
             imageTasks.add(imageTask1);
+            holder.tvUseName.setText("測試");
 
-            holder.tvUseName.setText(member.getNickName());
+
+
             holder.tvBlogName.setText(explore.getTittleName());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
