@@ -3,8 +3,10 @@ package com.example.tripper_android_app.setting.member;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -56,6 +59,7 @@ public class Register_main_Fragment extends Fragment {
     private ImageButton ivRegister_Google ;
     private GoogleSignInClient client;
     private FirebaseAuth auth;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -172,7 +176,7 @@ public class Register_main_Fragment extends Fragment {
                         member.setPassword(password);
                         member.setLoginType(1);
                         JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("action","memberInsert");
+                        jsonObject.addProperty("action","memberGBInsert");
                         jsonObject.addProperty("member" ,new Gson().toJson(member));
                         try{
                             String result = new CommonTask(Url,jsonObject.toString()).execute().get();
@@ -226,4 +230,6 @@ public class Register_main_Fragment extends Fragment {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
         return true;
     }
+
+
 }

@@ -164,7 +164,7 @@ public class Register_Member_Fragment extends Fragment {
                     tvLoginType.setText("一般登入");
                 }
                 else if(member.getLoginType() ==1){
-                    tvLoginType.setText("Google登入");
+                    tvLoginType.setText("GOOGLE");
                 }
             }
             else {
