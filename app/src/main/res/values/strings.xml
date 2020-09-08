@@ -16,10 +16,6 @@
     <string name="facebook_app_id">329545764829760</string>
     <string name="fb_login_protocol_scheme">fb329545764829760</string>
     <string name="Explore">探索</string>
-<<<<<<< HEAD
     <string name="textNoSpotsFound">找不到資料</string>
-=======
->>>>>>> c0827ceac9e96573ccbeefcca962903f94d17894
-
 
 </resources>
