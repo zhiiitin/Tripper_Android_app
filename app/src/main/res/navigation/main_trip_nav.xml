@@ -157,7 +157,11 @@
         android:id="@+id/FB_Login_Fragment"
         android:name="com.example.tripper_android_app.setting.member.FB_Login_Fragment"
         android:label="fragment_f_b__login_"
-        tools:layout="@layout/fragment_f_b__login_" />
+        tools:layout="@layout/fragment_f_b__login_" >
+        <action
+            android:id="@+id/action_FB_Login_Fragment_to_register_Member_Fragment"
+            app:destination="@id/register_Member_Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/google_Login_Fragment"
         android:name="com.example.tripper_android_app.setting.member.Google_Login_Fragment"

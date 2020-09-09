@@ -77,6 +77,7 @@ public class FB_Login_Fragment extends Fragment {
     private FirebaseAuth auth;
     private CallbackManager callbackManager;
     private String name, email;
+    private LoginButton loginButton;
 
 
     @Override
@@ -84,7 +85,6 @@ public class FB_Login_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         auth = FirebaseAuth.getInstance();
-//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         callbackManager = CallbackManager.Factory.create();
         setHasOptionsMenu(true);
 
@@ -120,7 +120,7 @@ public class FB_Login_Fragment extends Fragment {
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(4).setChecked(true);
 
-        LoginButton loginButton = view.findViewById(R.id.login_button);
+        loginButton = view.findViewById(R.id.login_button);
         loginButton.setReadPermissions("email");
         loginButton.setReadPermissions(Arrays.asList("user_status"));
         // If using in a fragment
@@ -165,7 +165,7 @@ public class FB_Login_Fragment extends Fragment {
 
                     String account = email;
                     String password = "password";
-                    String nickname = name ;
+                    String nickname = name;
 
                     SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                             MODE_PRIVATE);
@@ -194,7 +194,6 @@ public class FB_Login_Fragment extends Fragment {
                 } else {
                     Log.e(TAG, "Internet is null");
                 }
-
 
             }
 
@@ -227,7 +226,7 @@ public class FB_Login_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 登入成功轉至下頁；失敗則顯示錯誤訊息
                         if (task.isSuccessful()) {
-
+                            Navigation.findNavController(loginButton).navigate(R.id.action_register_Login_Fragment_to_register_Member_Fragment);
                         } else {
                             Exception exception = task.getException();
                             String message = exception == null ? "Sign in fail." : exception.getMessage();
@@ -243,10 +242,10 @@ public class FB_Login_Fragment extends Fragment {
         super.onStart();
         // 檢查user是否已經登入，是則FirebaseUser物件不為null
         FirebaseUser user = auth.getCurrentUser();
-        if (user == null) {
-            Navigation.findNavController(this.getView()).popBackStack();
+        if (user != null) {
+            Navigation.findNavController(this.getView())
+                    .navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
         }
-
     }
 
     @Override

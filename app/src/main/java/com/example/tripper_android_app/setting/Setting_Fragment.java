@@ -171,9 +171,11 @@ public class Setting_Fragment extends Fragment {
         if (login) {
             ibRegister.setVisibility(View.GONE);
             ibFriends.setVisibility(View.VISIBLE);
+            ibMember.setVisibility(View.VISIBLE);
         } else {
             ibRegister.setVisibility(View.VISIBLE);
-            ibFriends.setVisibility(View.GONE);  //如果登入狀態為false ，登出鈕便會消失
+            ibFriends.setVisibility(View.GONE);
+            ibMember.setVisibility(View.GONE);//如果登入狀態為false ，登出鈕便會消失
         }
     }
 }

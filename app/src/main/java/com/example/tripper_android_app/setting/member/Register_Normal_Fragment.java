@@ -143,6 +143,7 @@ public class Register_Normal_Fragment extends Fragment {
                         Log.e(TAG, e.toString());
                     }
                     if(count == 0 ){
+                        etAccount.setError("此帳號已有人使用");
                         Common.showToast(activity, "此帳號已有人使用");
                     }
                     else{

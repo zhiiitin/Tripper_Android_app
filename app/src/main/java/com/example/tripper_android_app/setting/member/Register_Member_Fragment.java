@@ -38,6 +38,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -68,7 +69,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class Register_Member_Fragment extends Fragment {
     private final static String TAG = "TAG_MemberFragment";
     private MainActivity activity;
-    private TextView tvId, tvNickName, tvLoginType, tvUpdate;
+    private TextView tvId, tvLoginType, tvUpdate;
+    private EditText etNickName ;
     private CardView cvUpdate;
     private ImageButton ibLogout;
     private ImageView ivPhoto;
@@ -79,7 +81,7 @@ public class Register_Member_Fragment extends Fragment {
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
     private Member member;
-
+    private String nickName ;
 
 
     @Override
@@ -121,7 +123,7 @@ public class Register_Member_Fragment extends Fragment {
         itemMenu.getItem(4).setChecked(true);
 
         tvId = view.findViewById(R.id.tvId_member);
-        tvNickName = view.findViewById(R.id.tvNickname_member);
+        etNickName = view.findViewById(R.id.tvNickname_member);
         tvLoginType = view.findViewById(R.id.tvLoginType_member);
         ibLogout = view.findViewById(R.id.btLogout);
         ivPhoto = view.findViewById(R.id.ivPhoto);
@@ -132,42 +134,43 @@ public class Register_Member_Fragment extends Fragment {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         boolean login = pref.getBoolean("login", false);
-        if(!login){
+        if (!login) {
             Common.showToast(activity, "尚未登入會員");
             navController.popBackStack();
             return;
-        }else{
+        } else {
             //透過帳號抓取會員資料
             if (Common.networkConnected(activity)) {
                 String Url = Common.URL_SERVER + "MemberServlet";
-                String account = pref.getString("account","");
+                String account = pref.getString("account", "");
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("action", "getProfile");
-                jsonObject.addProperty("account",account);
+                jsonObject.addProperty("account", account);
                 try {
-                    String jsonIn = new CommonTask(Url,jsonObject.toString()).execute().get();
+                    String jsonIn = new CommonTask(Url, jsonObject.toString()).execute().get();
                     Type listtype = new TypeToken<Member>() {
                     }.getType();
                     member = new Gson().fromJson(jsonIn, listtype);
 
-                }catch (Exception e) {
+                } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                    String id = member.getId()+"";
-                    String nickname = member.getNickName();
-                    tvId.setText(id);
-                    tvNickName.setText(nickname);
-                    pref.edit()
-                            .putString("memberId",id)
-                            .apply();
+                String id = member.getId() + "";
+                String nickname = member.getNickName();
+                tvId.setText(id);
+                etNickName.setText(nickname);
+                pref.edit()
+                        .putString("memberId", id)
+                        .apply();
                 if (member.getLoginType() == 0) {
                     tvLoginType.setText("一般登入");
-                }
-                else if(member.getLoginType() ==1){
+                } else if (member.getLoginType() == 1) {
                     tvLoginType.setText("GOOGLE");
+                } else if (member.getLoginType() == 2) {
+                    tvLoginType.setText("FACEBOOK");
                 }
-            }
-            else {
+
+            } else {
                 Common.showToast(activity, "no network connection found");
             }
         }
@@ -194,8 +197,9 @@ public class Register_Member_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (Common.networkConnected(activity)) {
+                    nickName = etNickName.getText().toString().trim() ;
                     String Url = Common.URL_SERVER + "MemberServlet";
-//                    member.setNickName();
+                    member.setNickName(nickName);
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "memberUpdate");
                     jsonObject.addProperty("member", new Gson().toJson(member));
