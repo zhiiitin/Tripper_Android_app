@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
     <item
         android:id="@+id/exploreFragment"
         android:icon="@drawable/ic_button_search_xxxhdpi"
@@ -10,7 +13,6 @@
         android:id="@+id/groupFragment"
         android:icon="@drawable/ic_button_group_xxxhdpi"
         android:title="@string/action_group"
-
         />
 
     <item
