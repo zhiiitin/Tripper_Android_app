@@ -36,6 +36,13 @@
             android:id="@+id/action_setting_Fragment_to_locationListFragment"
             app:destination="@id/locationListFragment"
             />
+        <action
+            android:id="@+id/action_setting_Fragment_to_railwayTimeListFragment"
+            app:destination="@id/railwayTimeListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
     <fragment
@@ -176,5 +183,35 @@
             android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
             app:destination="@id/create_Trip_Fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/railwayTimeListFragment"
+        android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
+        android:label="fragment_railway_time_list"
+        tools:layout="@layout/fragment_railway_time_list" >
+        <action
+            android:id="@+id/action_railwayTimeListFragment_to_railwayTimeTableFragment"
+            app:destination="@id/railwayTimeTableFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_railwayTimeListFragment_to_hsrTimeTableFragment"
+            app:destination="@id/hsrTimeTableFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/railwayTimeTableFragment"
+        android:name="com.example.tripper_android_app.setting.railway.RailwayTimeTableFragment"
+        android:label="fragment_railway_time_table"
+        tools:layout="@layout/fragment_railway_time_table" />
+    <fragment
+        android:id="@+id/hsrTimeTableFragment"
+        android:name="com.example.tripper_android_app.setting.railway.HsrTimeTableFragment"
+        android:label="fragment_hsr_time_table"
+        tools:layout="@layout/fragment_hsr_time_table" />
 
 </navigation>

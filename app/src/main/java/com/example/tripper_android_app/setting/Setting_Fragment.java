@@ -77,12 +77,24 @@ public class Setting_Fragment extends Fragment {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
+//進入管理者景點建立頁面
         ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
         ibCreateLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v)
                         .navigate(R.id.action_setting_Fragment_to_locationListFragment);
+            }
+        });
+
+
+//進入雙鐵時刻表頁面
+        ImageButton ibTrain = view.findViewById(R.id.ibTrain);
+        ibTrain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_setting_Fragment_to_railwayTimeListFragment);
             }
         });
 
@@ -95,6 +107,8 @@ public class Setting_Fragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_main_Fragment);
             }
         });
+
+
 //進入會員資料頁面
         ibMember = view.findViewById(R.id.ibMember);
         ibMember.setOnClickListener(new View.OnClickListener() {
