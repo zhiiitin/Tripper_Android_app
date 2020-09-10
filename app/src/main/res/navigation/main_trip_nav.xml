@@ -173,7 +173,11 @@
         android:id="@+id/create_Trip_Fragment"
         android:name="com.example.tripper_android_app.trip.Create_Trip_Fragment"
         android:label="fragment_create__trip_"
-        tools:layout="@layout/fragment_create__trip_" />
+        tools:layout="@layout/fragment_create__trip_" >
+        <action
+            android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationLsit"
+            app:destination="@id/create_Trip_LocationLsit" />
+    </fragment>
     <fragment
         android:id="@+id/trip_HomePage"
         android:name="com.example.tripper_android_app.trip.Trip_HomePage"
@@ -184,6 +188,7 @@
             app:destination="@id/create_Trip_Fragment" />
     </fragment>
     <fragment
+<<<<<<< HEAD
         android:id="@+id/railwayTimeListFragment"
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
         android:label="fragment_railway_time_list"
@@ -213,5 +218,11 @@
         android:name="com.example.tripper_android_app.setting.railway.HsrTimeTableFragment"
         android:label="fragment_hsr_time_table"
         tools:layout="@layout/fragment_hsr_time_table" />
+=======
+        android:id="@+id/create_Trip_LocationLsit"
+        android:name="com.example.tripper_android_app.trip.Create_Trip_LocationList"
+        android:label="fragment_create_trip_location_lsit"
+        tools:layout="@layout/fragment_create_trip_location_lsit" />
+>>>>>>> Trip
 
 </navigation>
