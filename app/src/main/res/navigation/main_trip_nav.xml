@@ -3,13 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_trip_nav"
-    app:startDestination="@id/main_Trip_Fragment">
+    app:startDestination="@id/trip_HomePage">
 
-    <fragment
-        android:id="@+id/main_Trip_Fragment"
-        android:name="com.example.tripper_android_app.trip.Main_Trip_Fragment"
-        android:label="fragment_main__trip_"
-        tools:layout="@layout/fragment_main_trip_" />
     <fragment
         android:id="@+id/exploreFragment"
         android:name="com.example.tripper_android_app.explore.ExploreFragment"
@@ -167,5 +162,19 @@
         android:name="com.example.tripper_android_app.setting.member.Google_Login_Fragment"
         android:label="fragment_google__login_"
         tools:layout="@layout/fragment_google__login_" />
+    <fragment
+        android:id="@+id/create_Trip_Fragment"
+        android:name="com.example.tripper_android_app.trip.Create_Trip_Fragment"
+        android:label="fragment_create__trip_"
+        tools:layout="@layout/fragment_create__trip_" />
+    <fragment
+        android:id="@+id/trip_HomePage"
+        android:name="com.example.tripper_android_app.trip.Trip_HomePage"
+        android:label="fragment_trip__home_page"
+        tools:layout="@layout/fragment_trip__home_page" >
+        <action
+            android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
+            app:destination="@id/create_Trip_Fragment" />
+    </fragment>
 
 </navigation>
