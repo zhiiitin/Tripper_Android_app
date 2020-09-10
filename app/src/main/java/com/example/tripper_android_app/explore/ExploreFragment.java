@@ -181,7 +181,7 @@ public class ExploreFragment extends Fragment {
 
                 explores = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(activity, R.string.textNoNetwork);
@@ -205,7 +205,7 @@ public class ExploreFragment extends Fragment {
                members = new Gson().fromJson(josnIn1, listType1);
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(activity, R.string.textNoNetwork);

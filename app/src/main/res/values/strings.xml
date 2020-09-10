@@ -10,21 +10,15 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
-<<<<<<< HEAD
-=======
     <string name="create_trip">建立行程</string>
-
     <string name="Explore">探索</string>
->>>>>>> Trip
     <string name="textNoNetwork">沒有網路連線</string>
     <string name="mDelete">Delete</string>
     <string name="mUpdate">Update</string>
     <string name="facebook_app_id">329545764829760</string>
     <string name="fb_login_protocol_scheme">fb329545764829760</string>
-<<<<<<< HEAD
-    <string name="Explore">探索</string>
     <string name="textNoSpotsFound">找不到資料</string>
-=======
+
     <string name="trip_Title">行程標題：</string>
     <string name="enterTripTitle">請輸入標題名稱（限10字元）</string>
     <string name="TripStartDate">出發日期：</string>
@@ -35,18 +29,20 @@
     <string name="btPickTime">點擊選擇時間</string>
     <string name="daysChoose">選擇行程天數</string>
     <string name="btNext">下一步</string>
+    <string name="showDay">天</string>
+    <string name="LocName">景點名稱</string>
+    <string name="LocAdd">景點地址</string>
 
 
     <!--    定義行程選擇天數字串內容-->
     <string-array name="daysForTrip">
-        <item>1天</item>
-        <item>2天</item>
-        <item>3天</item>
-        <item>4天</item>
-        <item>5天</item>
-        <item>6天</item>
+        <item>1 </item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 </item>
+        <item>6 </item>
     </string-array>
 
->>>>>>> Trip
 
 </resources>

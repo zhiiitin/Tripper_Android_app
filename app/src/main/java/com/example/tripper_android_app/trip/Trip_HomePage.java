@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,13 @@ import android.view.ViewGroup;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+/**
+ * 行程主頁面
+ * @author cooperhsieh
+ * @version 2020.09.09
+ */
 
 
 public class Trip_HomePage extends Fragment {
@@ -29,9 +38,7 @@ public class Trip_HomePage extends Fragment {
         setHasOptionsMenu(true);
     }
 
-<<<<<<< HEAD:app/src/main/java/com/example/tripper_android_app/trip/Main_Trip_Fragment.java
-        setHasOptionsMenu(true);
-=======
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,8 +52,6 @@ public class Trip_HomePage extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
-
->>>>>>> Trip:app/src/main/java/com/example/tripper_android_app/trip/Trip_HomePage.java
     }
 
     @Override
@@ -66,31 +71,6 @@ public class Trip_HomePage extends Fragment {
     }
 
 
-<<<<<<< HEAD:app/src/main/java/com/example/tripper_android_app/trip/Main_Trip_Fragment.java
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main_trip_, container, false);
-
-    }
-
-    @Override
-
-
-
-
-
-    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-
-
-        super.onViewCreated(view, savedInstanceState);
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-
-
-
 //    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 //        super.onViewCreated(view, savedInstanceState);
 //        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
@@ -98,14 +78,9 @@ public class Trip_HomePage extends Fragment {
 //        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
-
-    }
-
-
-
 }
 
 
-=======
-}
->>>>>>> Trip:app/src/main/java/com/example/tripper_android_app/trip/Trip_HomePage.java
+
+
+
