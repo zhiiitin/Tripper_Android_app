@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -60,7 +61,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private static final String TAG = "TAG_ExploreListFragment";
     private MainActivity activity;
     private TextView textDate, textTime;
-    private RecyclerView rcDateTime;
+    private Spinner spDay;
     private static int year, month, day, hour, minute;
 
 
@@ -129,9 +130,11 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             }
         });
 
-        rcDateTime = view.findViewById(R.id.rcDateTime);
-        rcDateTime.setLayoutManager(new LinearLayoutManager(activity));
-//        rcDateTime.setAdapter(new DateAdapter());
+
+
+
+
+
     }
 
 

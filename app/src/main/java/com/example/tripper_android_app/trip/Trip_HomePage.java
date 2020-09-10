@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,6 +55,7 @@ public class Trip_HomePage extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.btCreateTrip) {
+            Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_create_Trip_Fragment);
             return true;
         }
         return super.onOptionsItemSelected(item);
