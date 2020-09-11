@@ -2,7 +2,6 @@ package com.example.tripper_android_app.explore;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -44,7 +42,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.security.spec.PSSParameterSpec;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -95,8 +92,8 @@ public class ExploreFragment extends Fragment {
 
 
         activity.setTitle(R.string.Explore);
-        SearchView searchView = view.findViewById(R.id.searchView);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        SearchView searchView = view.findViewById(R.id.svGroup);
+        swipeRefreshLayout = view.findViewById(R.id.srlGroup);
         rvExplore = view.findViewById(R.id.rvExplore);
 
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));

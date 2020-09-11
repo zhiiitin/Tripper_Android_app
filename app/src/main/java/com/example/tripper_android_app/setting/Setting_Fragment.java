@@ -192,4 +192,13 @@ public class Setting_Fragment extends Fragment {
             ibMember.setVisibility(View.GONE);//如果登入狀態為false ，登出鈕便會消失
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(loginTask != null){
+            loginTask.cancel(true);
+            loginTask = null ;
+        }
+    }
 }
