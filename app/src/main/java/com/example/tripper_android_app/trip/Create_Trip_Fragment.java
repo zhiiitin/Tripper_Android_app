@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Layout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -46,9 +48,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 建立行程頁面
@@ -58,9 +63,10 @@ import java.util.List;
  */
 
 public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private static final String TAG = "TAG_ExploreListFragment";
+    private static final String TAG = "TAG_Date";
     private MainActivity activity;
     private TextView textDate, textTime;
+    private TextInputEditText etTripTitle;
     private Spinner spDay;
     private static int year, month, day, hour, minute;
 
@@ -115,6 +121,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 datePicker.setMaxDate(calendar.getTimeInMillis());
                 // 最後要呼叫show()方能顯示
                 datePickerDialog.show();
+
+
             }
         });
         //時間選擇
@@ -130,15 +138,29 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             }
         });
 
+        spDay = view.findViewById(R.id.spDay);
+        etTripTitle = view.findViewById(R.id.etTripTitle);
 
+        Button btNext = view.findViewById(R.id.btNext);
+        btNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tripTitle = etTripTitle.getText().toString().trim();
+                String startDate = textDate.getText().toString().trim();
+                String startTime = textTime.getText().toString().trim();
+                int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
 
+                Bundle bundle = new Bundle();
+                Trip_M trip_m = new Trip_M(tripTitle, startDate, startTime, dayCount);
+                bundle.putSerializable("createTrip", trip_m);
 
+                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationLsit,bundle);
+
+            }
+        });
 
 
     }
-
-
-
 
 
     @Override
@@ -178,6 +200,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private void updateDisplay() {
         textDate.setText(new StringBuilder().append(year).append("-")
                 .append(pad(month + 1)).append("-").append(pad(day)));
+
 
         textTime.setText(new StringBuilder().append(" ").append(pad(hour)).append(":")
                 .append(pad(minute)));

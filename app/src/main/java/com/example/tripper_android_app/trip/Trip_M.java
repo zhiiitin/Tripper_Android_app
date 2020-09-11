@@ -20,9 +20,58 @@ public class Trip_M implements Serializable {
 	private String createDateTime;
 	private int pMax;
 	private int status;
+	private int mCount ;
+
+
+
+
+
+
+	public Trip_M(String tripId, int memberId, String tripTitle,String startDate, int pMax,int mCount) {
+		super();
+		this.tripId = tripId;
+		this.memberId = memberId;
+		this.startDate = startDate;
+		this.tripTitle = tripTitle;
+		this.pMax = pMax;
+		this.mCount = mCount;
+	}
+
+
+
+	public Trip_M(String tripId, int memberId, String tripTitle, int dayCount, int pMax, int status) {
+		super();
+		this.tripId = tripId;
+		this.memberId = memberId;
+		this.tripTitle = tripTitle;
+		this.dayCount = dayCount;
+		this.pMax = pMax;
+		this.status = status;
+	}
+
+
+
+
+	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount) {
+		super();
+		this.memberId = memberId;
+		this.tripTitle = tripTitle;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.dayCount = dayCount;
+	}
+
+	public Trip_M(String tripTitle, String startDate, String startTime, int dayCount) {
+		this.tripTitle = tripTitle;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.dayCount = dayCount;
+	}
+
+
 
 	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
-			String createDateTime, int pMax, int status) {
+				  String createDateTime, int pMax, int status) {
 		super();
 		this.tripId = tripId;
 		this.memberId = memberId;
@@ -34,18 +83,9 @@ public class Trip_M implements Serializable {
 		this.pMax = pMax;
 		this.status = status;
 	}
-	
-	
 
-	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax) {
-		super();
-		this.memberId = memberId;
-		this.tripTitle = tripTitle;
-		this.startDate = startDate;
-		this.startTime = startTime;
-		this.dayCount = dayCount;
-		this.pMax = pMax;
-	}
+
+
 
 
 	public String getTripId() {
@@ -119,5 +159,16 @@ public class Trip_M implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	public int getmCount() {
+		return mCount;
+	}
+
+
+
+	public void setmCount(int mCount) {
+		this.mCount = mCount;
+	}
+
 
 }
