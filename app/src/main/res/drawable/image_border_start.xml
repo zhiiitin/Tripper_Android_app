@@ -8,9 +8,10 @@
         android:bottomRightRadius="30dp" />
 
     <!--描邊-->
-    <stroke android:width="20dp"
+    <stroke android:width="16dp"
         android:color="#faf9f9"
         android:dashWidth="5dp"
         android:dashGap="0dp" />
 
 </shape>
+

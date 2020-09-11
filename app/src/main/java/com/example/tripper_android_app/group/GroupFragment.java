@@ -2,10 +2,14 @@ package com.example.tripper_android_app.group;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
@@ -40,7 +45,7 @@ public class GroupFragment extends Fragment {
     private static final String TAG = "TAG_GroupListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvGroup;
-    private Activity activity;
+    private MainActivity activity;
     private CommonTask groupGetAllTask;
     private ImageTask groupImageTask;
     private List<Trip_M> groupList;
@@ -48,7 +53,7 @@ public class GroupFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity)getActivity();
 
     }
 
@@ -62,6 +67,16 @@ public class GroupFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("揪團");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if (upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -151,7 +166,7 @@ public class GroupFragment extends Fragment {
         GroupAdapter(Context context, List<Trip_M> groupList) {
             layoutInflater = LayoutInflater.from(context);
             this.groupList = groupList;
-            imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+            imageSize = getResources().getDisplayMetrics().widthPixels / 2;
 
         }
 
@@ -194,8 +209,8 @@ public class GroupFragment extends Fragment {
             groupImageTask.execute();
 
             myViewHolder.tvTitle.setText(group.getTripTitle());
-            myViewHolder.tvDate.setText(group.getStartDate());
-            myViewHolder.tvCount.setText("已參與人數：" + group.getpMax());
+            myViewHolder.tvDate.setText("出發日："+group.getStartDate());
+            myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
 
 
         }
