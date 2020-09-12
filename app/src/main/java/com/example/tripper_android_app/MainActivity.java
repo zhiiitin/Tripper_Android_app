@@ -20,6 +20,7 @@ import com.example.tripper_android_app.setting.Setting_Fragment;
 import com.example.tripper_android_app.trip.Main_Trip_Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +32,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 }

@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -45,7 +46,6 @@ public class Setting_Fragment extends Fragment {
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.setting_Fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
 
         ImageButton ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
         ibCreateLocation.setOnClickListener(new View.OnClickListener() {

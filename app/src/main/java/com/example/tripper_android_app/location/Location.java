@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.location;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 
 /**
@@ -11,7 +12,7 @@ import java.io.Serializable;
 */
 public class Location implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private String logId;
+	private String locId;
 	private String name;
 	private String address;
 	private String locType;
@@ -21,12 +22,12 @@ public class Location implements Serializable{
 	private double latitude;
 	private int createId;
 	private int useId;
-	private String createDateTime;
+	private Timestamp createDateTime;
 	
-	public Location(String logId, String name, String address, String locType, String city, String info,
-			double longitude, double latitude, int createId, int useId, String createDateTime) {
+	public Location(String locId, String name, String address, String locType, String city, String info,
+			double longitude, double latitude, int createId, int useId, Timestamp createDateTime) {
 		super();
-		this.logId = logId;
+		this.locId = locId;
 		this.name = name;
 		this.address = address;
 		this.locType = locType;
@@ -42,7 +43,7 @@ public class Location implements Serializable{
 	
 
 	public Location(String name, String address, String locType, String city, String info, double longitude,
-			double latitude, int createId, int useId, String createDateTime) {
+			double latitude, int createId, int useId, Timestamp createDateTime) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -58,12 +59,12 @@ public class Location implements Serializable{
 
 
 
-	public String getLogId() {
-		return logId;
+	public String getLocId() {
+		return locId;
 	}
 
-	public void setLogId(String logId) {
-		this.logId = logId;
+	public void setLogId(String locId) {
+		this.locId = locId;
 	}
 
 	public String getName() {
@@ -138,11 +139,11 @@ public class Location implements Serializable{
 		this.useId = useId;
 	}
 
-	public String getCreateDateTime() {
+	public Timestamp getCreateDateTime() {
 		return createDateTime;
 	}
 
-	public void setCreateDateTime(String createDateTime) {
+	public void setCreateDateTime(Timestamp createDateTime) {
 		this.createDateTime = createDateTime;
 	}
 	

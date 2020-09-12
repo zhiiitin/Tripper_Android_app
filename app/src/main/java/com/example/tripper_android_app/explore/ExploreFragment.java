@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,9 +23,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.setting.member.Common;
-import com.example.tripper_android_app.setting.member.CommonTask;
+import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
+import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

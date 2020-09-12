@@ -14,17 +14,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
 
+
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.setting.member.Common;
-import com.example.tripper_android_app.setting.member.CommonTask;
+import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
+import com.example.tripper_android_app.util.Common;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -37,7 +44,7 @@ import java.util.List;
 
 public class LocationListFragment extends Fragment {
     private static final String TAG = "TAG_LocationListFragment";
-    private Activity activity;
+    private MainActivity activity;
     private RecyclerView rvLocation;
     private ImageView ivLocImage;
     private List<Location> locations;
@@ -50,20 +57,32 @@ public class LocationListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        activity.setTitle("景點列表");
         return inflater.inflate(R.layout.fragment_location_list, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("景點列表");
         SearchView searchView = view.findViewById(R.id.searchView);
+        // TODO: 無法跳轉
+        FloatingActionButton btAdd = view.findViewById(R.id.btAdd);
+        btAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_location_List_Fragment_to_location_Insert_Fragment);
+
+            }
+        });
         // 下拉更新元件
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvLocation = view.findViewById(R.id.rvLocation);
@@ -114,14 +133,7 @@ public class LocationListFragment extends Fragment {
 
         });
 
-        FloatingActionButton btAdd = view.findViewById(R.id.btAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_location_List_Fragment_to_location_Insert_Fragment);
-            }
-        });
+
 
     }
 
@@ -129,7 +141,7 @@ public class LocationListFragment extends Fragment {
     private List<Location> getLocations() {
         List<Location> locations = null;
         // 檢查網路狀態
-        if(Common.netWorkConnected(activity)){
+        if(Common.networkConnected(activity)){
             String url = Common.URL_SERVER + "LocationServlet";
             JsonObject jsonObject   = new JsonObject();
             jsonObject.addProperty("action", "getAll");
@@ -163,6 +175,7 @@ public class LocationListFragment extends Fragment {
             locationAdapter.setLocations(locations);
             locationAdapter.notifyDataSetChanged();
         }
+
     }
 
 
@@ -201,19 +214,73 @@ public class LocationListFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
             final Location location = locations.get(position);
             String url = Common.URL_SERVER + "LocationServlet";
-            String locId = location.getLogId();
+            String locId = location.getLocId();
             ImageTask imageTask = new ImageTask(url, locId, imageSize);
+            locImageTasks = new ArrayList<ImageTask>();
             imageTask.execute();
             locImageTasks.add(imageTask);
             myViewHolder.tvLocName.setText(location.getName());
-            myViewHolder.tvAdress.setText(location.getAddress());
+            myViewHolder.tvAddress.setText(location.getAddress());
+            // more menu
+            myViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
+                    popupMenu.inflate(R.menu.location_more_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()){
+                                case R.id.mUpdate:
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("location", location);
+                                    Navigation.findNavController(v).navigate(R.id.action_location_List_Fragment_to_location_Update_Fragment,bundle );
+                                    break;
+                                case R.id.mDelete:
+                                    if(Common.networkConnected(activity)){
+                                        String url = Common.URL_SERVER + "LocationServlet";
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "locationDelete");
+                                        jsonObject.addProperty("id", location.getLocId());
+                                        int count = 0;
+                                        try{
+                                            locDeleteTask = new CommonTask(url, jsonObject.toString());
+                                            String result = locDeleteTask.execute().get();
+                                            count = Integer.parseInt(result);
+                                        } catch (Exception e){
+                                            Log.e(TAG, e.toString());
+                                        }
+                                        if(count == 0){
+                                            Common.showToast(activity, "delete fail");
+                                        } else {
+                                            locations.remove(location);
+                                            LocationAdapter.this.notifyDataSetChanged();
+                                            LocationListFragment.this.locations.remove(location);
+                                            Common.showToast(activity, "delete success");
+                                        }
+                                    }else{
+                                        Common.showToast(activity, R.string.textNoNetwork);
+                                    }
+                            }
+                            return true;
+                        }
+                    });
+                    popupMenu.show();
+
+
+
+                }
+            });
+
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("location", location);
-//                    Navigation.findNavController(v)
-//                            .navigate(R.id.);
+                    Navigation.findNavController(v)
+                            .navigate(R.id.action_location_List_Fragment_to_location_Detail_Fragment, bundle);
                 }
             });
         }
@@ -221,15 +288,37 @@ public class LocationListFragment extends Fragment {
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView ivLocImage;
-        TextView tvLocName, tvAdress;
+        ImageView ivMore;
+        TextView tvLocName, tvAddress;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             ivLocImage = itemView.findViewById(R.id.ivLocationPic);
             tvLocName = itemView.findViewById(R.id.tvLocName);
-            tvAdress = itemView.findViewById(R.id.tvAdress);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
+            ivMore = itemView.findViewById(R.id.ivMore);
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(locGetAllTask != null){
+            locGetAllTask.cancel(true);
+            locGetAllTask = null;
 
+        }
+
+        if(locImageTasks != null && locImageTasks.size() > 0){
+            for(ImageTask imageTask : locImageTasks){
+                imageTask.cancel(true);
+            }
+            locImageTasks.clear();
+        }
+
+        if(locDeleteTask != null){
+            locDeleteTask.cancel(true);
+            locDeleteTask = null;
+        }
+    }
 }

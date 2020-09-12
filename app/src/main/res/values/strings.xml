@@ -17,6 +17,16 @@
     <string name="mUpdate">Update</string>
     <string name="mDelete">Delete</string>
     <string name="textLocName">景點名稱</string>
-    <string name="textAdress">地址</string>
+    <string name="textAddress">地址</string>
+    <string name="textLocNameLength">請輸入景點名稱(限10個字元)</string>
+    <string name="textAddressLength">請輸入景點地址</string>
+    <string name="textStartTime">開始時間</string>
+    <string name="textEndTime">結束時間</string>
+    <string name="textDesc">景點描述</string>
+    <string name="textAddImage">新增照片</string>
+    <string name="textUpdate">更新</string>
+    <string name="textDelete">刪除</string>
+    <string name="textTakePic">拍照</string>
+    <string name="textPickPic">挑選照片</string>
 
 </resources>

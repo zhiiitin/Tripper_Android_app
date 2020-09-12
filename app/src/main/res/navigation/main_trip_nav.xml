@@ -66,6 +66,12 @@
         <action
             android:id="@+id/action_location_List_Fragment_to_location_Insert_Fragment"
             app:destination="@id/location_Insert_Fragment" />
+        <action
+            android:id="@+id/action_location_List_Fragment_to_location_Update_Fragment"
+            app:destination="@id/location_Update_Fragment" />
+        <action
+            android:id="@+id/action_location_List_Fragment_to_location_Detail_Fragment"
+            app:destination="@id/location_Detail_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/notify_Fragment"
@@ -96,7 +102,16 @@
             android:id="@+id/action_register_main_Fragment_to_register_Login_Fragment2"
             app:destination="@id/register_Login_Fragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/location_Update_Fragment"
+        android:name="com.example.tripper_android_app.location.LocationUpdateFragment"
+        android:label="fragment_location_update"
+        tools:layout="@layout/fragment_location_update" />
+    <fragment
+        android:id="@+id/location_Detail_Fragment"
+        android:name="com.example.tripper_android_app.location.LocationDetailFragment"
+        android:label="fragment_location_detail"
+        tools:layout="@layout/fragment_location_detail" />
 
 
 </navigation>
