@@ -46,6 +46,7 @@ public class RailwayTimeListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // 設定toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("雙鐵時刻表");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
@@ -65,6 +66,7 @@ public class RailwayTimeListFragment extends Fragment {
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(4).setChecked(true);
 
+        // 進入台鐵時刻表頁面
         ibRailway = view.findViewById(R.id.ibRailway);
         ibRailway.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +76,7 @@ public class RailwayTimeListFragment extends Fragment {
             }
         });
 
+        // 進入高鐵時刻表頁面
         ibHighSpeedRail = view.findViewById(R.id.ibHighSpeedRail);
         ibHighSpeedRail.setOnClickListener(new View.OnClickListener() {
             @Override

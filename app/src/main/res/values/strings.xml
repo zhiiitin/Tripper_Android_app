@@ -34,7 +34,7 @@
     <string name="LocAdd">景點地址</string>
 
 
-    <!--    定義行程選擇天數字串內容-->
+
     <string-array name="daysForTrip">
         <item>1 </item>
         <item>2 </item>

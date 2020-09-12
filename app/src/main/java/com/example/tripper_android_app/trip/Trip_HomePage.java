@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import static androidx.navigation.Navigation.findNavController;
+
 /**
  * 行程主頁面
  * @author cooperhsieh
@@ -40,7 +41,6 @@ public class Trip_HomePage extends Fragment {
         setHasOptionsMenu(true);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +54,6 @@ public class Trip_HomePage extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
-
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
@@ -80,7 +79,6 @@ public class Trip_HomePage extends Fragment {
     }
 
 
-
 }
 
 //    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
@@ -88,12 +86,5 @@ public class Trip_HomePage extends Fragment {
 //        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
 //        NavController navController = Navigation.findNavController(activity, R.id.fragment);
 //        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-
-
-
-
-
-
 
 
