@@ -21,15 +21,13 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-<<<<<<< HEAD
+
 import static androidx.navigation.Navigation.findNavController;
-=======
 /**
  * 行程主頁面
  * @author cooperhsieh
  * @version 2020.09.09
  */
->>>>>>> Trip
 
 
 public class Trip_HomePage extends Fragment {
@@ -56,14 +54,13 @@ public class Trip_HomePage extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
-<<<<<<< HEAD
+
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-=======
->>>>>>> Trip
+
     }
 
     @Override
@@ -83,9 +80,9 @@ public class Trip_HomePage extends Fragment {
     }
 
 
-<<<<<<< HEAD
+
 }
-=======
+
 //    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 //        super.onViewCreated(view, savedInstanceState);
 //        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
@@ -93,9 +90,9 @@ public class Trip_HomePage extends Fragment {
 //        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
-}
 
->>>>>>> Trip
+
+
 
 
 

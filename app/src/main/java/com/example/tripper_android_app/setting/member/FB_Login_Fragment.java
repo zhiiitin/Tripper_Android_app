@@ -162,6 +162,8 @@ public class FB_Login_Fragment extends Fragment {
                         try {
                             email = object.getString("email");
                             name = object.getString("name");
+
+
                             Log.d(TAG, "email:" + email);
                             Log.d(TAG, "name:" + name);
                             ;

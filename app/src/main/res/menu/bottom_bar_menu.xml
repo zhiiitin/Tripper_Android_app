@@ -16,7 +16,7 @@
         />
 
     <item
-        android:id="@+id/main_Trip_Fragment"
+        android:id="@+id/trip_HomePage"
         android:icon="@drawable/ic_button_portrait_xxxhdpi"
         android:title="@string/action_profile" />
 

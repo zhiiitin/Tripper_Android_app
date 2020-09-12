@@ -29,6 +29,17 @@
             tools:srcCompat="@tools:sample/avatars" />
 
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="392dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="146dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvDate"
+            app:layout_constraintHorizontal_bias="0.368"
+            app:layout_constraintStart_toStartOf="@+id/tvCount"
+            app:layout_constraintTop_toTopOf="@+id/ivGroup"
+            app:srcCompat="@drawable/shadow" />
+
         <View
             android:id="@+id/view"
             android:layout_width="418dp"
@@ -43,18 +54,18 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginBottom="35dp"
             android:shadowColor="#131313"
-            android:shadowDx="4"
-            android:shadowDy="4"
+            android:shadowDx="1"
+            android:shadowDy="0"
             android:shadowRadius="1"
             android:text="台北一日遊"
             android:textColor="#FBFBFB"
-            android:textSize="27sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:typeface="normal"
-            app:layout_constraintBottom_toTopOf="@+id/tvCount"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCount"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -80,5 +91,6 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivGroup" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

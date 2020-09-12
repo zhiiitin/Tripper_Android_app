@@ -83,6 +83,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_register_Member_Fragment"
+            app:destination="@id/register_Member_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/register_NormalFragment"
@@ -188,7 +191,6 @@
             app:destination="@id/create_Trip_Fragment" />
     </fragment>
     <fragment
-<<<<<<< HEAD
         android:id="@+id/railwayTimeListFragment"
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
         android:label="fragment_railway_time_list"
@@ -218,11 +220,11 @@
         android:name="com.example.tripper_android_app.setting.railway.HsrTimeTableFragment"
         android:label="fragment_hsr_time_table"
         tools:layout="@layout/fragment_hsr_time_table" />
-=======
+    <fragment
         android:id="@+id/create_Trip_LocationLsit"
         android:name="com.example.tripper_android_app.trip.Create_Trip_LocationList"
         android:label="fragment_create_trip_location_lsit"
         tools:layout="@layout/fragment_create_trip_location_lsit" />
->>>>>>> Trip
+
 
 </navigation>

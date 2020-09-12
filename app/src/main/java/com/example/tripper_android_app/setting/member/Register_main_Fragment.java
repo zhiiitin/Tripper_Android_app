@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -48,6 +49,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -161,6 +167,7 @@ public class Register_main_Fragment extends Fragment {
                         String password = "password" ;
                         String nickname = account.getDisplayName();
 
+
                         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                                 MODE_PRIVATE);
                         pref.edit()
@@ -188,7 +195,7 @@ public class Register_main_Fragment extends Fragment {
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");
                 }
-            } catch (ApiException e) {
+            } catch (Exception e) {
                 // Google Sign In failed, update UI appropriately
                 Log.e(TAG, "Google sign in failed");
             }
@@ -206,8 +213,8 @@ public class Register_main_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 登入成功轉至下頁；失敗則顯示錯誤訊息
                         if (task.isSuccessful()) {
-                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_google_Login_Fragment);
-
+                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+                            Common.showToast(activity,"GOOGLE登入成功！");
                         } else {
                             Exception exception = task.getException();
                             String message = exception == null ? "登入失敗" : exception.getMessage();

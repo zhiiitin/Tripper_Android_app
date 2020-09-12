@@ -17,13 +17,8 @@
     <string name="mUpdate">Update</string>
     <string name="facebook_app_id">329545764829760</string>
     <string name="fb_login_protocol_scheme">fb329545764829760</string>
-<<<<<<< HEAD
-
-    <string name="textNoSpotsFound">找不到資料</string>
-=======
     <string name="textNoSpotsFound">找不到資料</string>
 
->>>>>>> Trip
     <string name="trip_Title">行程標題：</string>
     <string name="enterTripTitle">請輸入標題名稱（限10字元）</string>
     <string name="TripStartDate">出發日期：</string>
@@ -49,9 +44,5 @@
         <item>6 </item>
     </string-array>
 
-<<<<<<< HEAD
-    >>>>>>> Trip
-=======
->>>>>>> Trip
 
 </resources>
