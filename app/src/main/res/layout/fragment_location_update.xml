@@ -76,30 +76,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/etLocName" />
 
                 <EditText
-                    android:id="@+id/etStartTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:hint="@string/textStartTime"
-                    android:inputType="time"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/etAddress"
-                    app:layout_constraintTop_toBottomOf="@+id/etAddress" />
-
-                <EditText
-                    android:id="@+id/etEndTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:hint="@string/textEndTime"
-                    android:inputType="time"
-                    app:layout_constraintEnd_toEndOf="@+id/etStartTime"
-                    app:layout_constraintStart_toStartOf="@+id/etStartTime"
-                    app:layout_constraintTop_toBottomOf="@+id/etStartTime" />
-
-                <EditText
                     android:id="@+id/tvDesc"
                     android:layout_width="0dp"
                     android:layout_height="90dp"
@@ -108,9 +84,9 @@
                     android:gravity="start|top"
                     android:hint="@string/textDesc"
                     android:inputType="textMultiLine"
-                    app:layout_constraintEnd_toEndOf="@+id/etEndTime"
+                    app:layout_constraintEnd_toEndOf="@+id/etAddress"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etEndTime" />
+                    app:layout_constraintTop_toBottomOf="@+id/etAddress" />
 
                 <ImageButton
                     android:id="@+id/ibUpdate"

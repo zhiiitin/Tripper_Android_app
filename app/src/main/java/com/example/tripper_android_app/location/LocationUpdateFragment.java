@@ -49,7 +49,7 @@ public class LocationUpdateFragment extends Fragment {
     private static final String MSG = "必填欄位";
     private MainActivity activity;
     private ImageView ivLocImage;
-    private EditText etLocName, etAddress, etDesc,etStartTime, etEndTime;
+    private EditText etLocName, etAddress, etDesc;
     private Uri contentUri;
     private byte[] image;
     private Location location;
@@ -89,17 +89,11 @@ public class LocationUpdateFragment extends Fragment {
         etLocName = view.findViewById(R.id.etLocName);
         etAddress = view.findViewById(R.id.etAddress);
         etDesc = view.findViewById(R.id.tvDesc);
-        etStartTime = view.findViewById(R.id.etStartTime);
-        etEndTime = view.findViewById(R.id.etEndTime);
         location = (Location) bundle.getSerializable("location");
         // 塞回值
         showLocation();
 
-
-
-
         ImageButton ibUpdate = view.findViewById(R.id.ibUpdate);
-
         // pick pic
         ivLocImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,12 +109,11 @@ public class LocationUpdateFragment extends Fragment {
         ibUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String locId = location.getLocId().toString();
                 // 欄位檢核
                 String locName = etLocName.getText().toString().trim();
                 String address = etAddress.getText().toString().trim();
                 String desc = etDesc.getText().toString().trim();
-                String startTime = etStartTime.getText().toString().trim();
-                String endTime = etEndTime.getText().toString().trim();
                 if (locName.isEmpty()) {
                     etLocName.setError(MSG);
                     return;
@@ -133,16 +126,6 @@ public class LocationUpdateFragment extends Fragment {
 
                 if (desc.isEmpty()) {
                     etDesc.setError(MSG);
-                    return;
-                }
-
-                if (startTime.isEmpty()) {
-                    etStartTime.setError(MSG);
-                    return;
-                }
-
-                if (endTime.isEmpty()) {
-                    etEndTime.setError(MSG);
                     return;
                 }
 
@@ -162,7 +145,7 @@ public class LocationUpdateFragment extends Fragment {
                 // 檢查網路連線
                 if(Common.networkConnected(activity)){
                     String url = Common.URL_SERVER + "LocationServlet";
-                    Location location = new Location(Common.getTransId(), locName, address, "type","city", desc,
+                    Location location = new Location(locId, locName, address, "type","city", desc,
                             longitude, latitude, 1, 1, new Timestamp(System.currentTimeMillis()));
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "locationUpdate");
@@ -186,13 +169,13 @@ public class LocationUpdateFragment extends Fragment {
                 }else{
                     Common.showToast(activity, "no network connection");
                 }
-
+                Navigation.findNavController(v)
+                        .popBackStack();
 
 
             }
         });
-        Navigation.findNavController(view)
-                .popBackStack();
+
     }
 
     private void showLocation() {

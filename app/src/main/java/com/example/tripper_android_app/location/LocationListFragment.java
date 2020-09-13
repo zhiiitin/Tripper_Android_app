@@ -73,7 +73,6 @@ public class LocationListFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("景點列表");
         SearchView searchView = view.findViewById(R.id.searchView);
-        // TODO: 無法跳轉
         FloatingActionButton btAdd = view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +214,7 @@ public class LocationListFragment extends Fragment {
             final Location location = locations.get(position);
             String url = Common.URL_SERVER + "LocationServlet";
             String locId = location.getLocId();
-            ImageTask imageTask = new ImageTask(url, locId, imageSize);
+            ImageTask imageTask = new ImageTask(url, locId, imageSize, myViewHolder.ivLocImage);
             locImageTasks = new ArrayList<ImageTask>();
             imageTask.execute();
             locImageTasks.add(imageTask);
