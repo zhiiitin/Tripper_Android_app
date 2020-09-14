@@ -69,7 +69,7 @@ public class Create_Blog_Location_List extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
-        swipeRefreshLayout = view.findViewById(R.id.rvBlog_Home);
+        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvGroup = view.findViewById(R.id.rvBlog_Home);
         rvGroup.setLayoutManager(new LinearLayoutManager(activity));
 

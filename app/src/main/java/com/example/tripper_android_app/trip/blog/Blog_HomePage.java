@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.trip;
+package com.example.tripper_android_app.trip.blog;
 
 import android.os.Bundle;
 
@@ -16,27 +16,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
 import static androidx.navigation.Navigation.findNavController;
 
-/**
- * 行程主頁面
- * @author cooperhsieh
- * @version 2020.09.09
- */
 
-
-public class Trip_HomePage extends Fragment {
+public class Blog_HomePage extends Fragment {
     private MainActivity activity;
 
+
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
@@ -46,7 +40,7 @@ public class Trip_HomePage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trip__home_page, container, false);
+        return inflater.inflate(R.layout.fragment_blog__home_page, container, false);
     }
 
     @Override
@@ -60,28 +54,28 @@ public class Trip_HomePage extends Fragment {
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
+        Menu itemMenu = bottomNavigationView.getMenu();
+        itemMenu.getItem(2).setChecked(true);
 
         BottomNavigationView bottomNavigationViewTop = view.findViewById(R.id.navigation);
         NavController navControllerTop = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationViewTop, navControllerTop);
-        Menu itemMenu = bottomNavigationViewTop.getMenu();
-        itemMenu.getItem(0).setChecked(true);
+        Menu itemMenu2 = bottomNavigationViewTop.getMenu();
+        itemMenu2.getItem(1).setChecked(true);
 
 
     }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.app_bar_button, menu);
+        inflater.inflate(R.menu.app_bar_button_blog, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.btCreateTrip) {
-            findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_create_Trip_Fragment);
+        if (id == R.id.btCreateBlog) {
+            findNavController(this.getView()).navigate(R.id.action_blog_HomePage_to_create_Blog_Location_List);
             return true;
 
         }
@@ -90,11 +84,3 @@ public class Trip_HomePage extends Fragment {
 
 
 }
-
-//    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-//        NavController navController = Navigation.findNavController(activity, R.id.fragment);
-//        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-

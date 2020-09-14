@@ -6,6 +6,20 @@
     app:startDestination="@id/trip_HomePage">
 
     <fragment
+        android:id="@+id/blogHomeFragment"
+        android:name="com.example.tripper_android_app.trip.blog.BlogHomeFragment"
+        android:label="fragment_blog_home"
+        tools:layout="@layout/fragment_blog_home" />
+    <fragment
+        android:id="@+id/blog_HomePage"
+        android:name="com.example.tripper_android_app.trip.blog.Blog_HomePage"
+        android:label="fragment_blog__home_page"
+        tools:layout="@layout/fragment_blog__home_page" >
+        <action
+            android:id="@+id/action_blog_HomePage_to_create_Blog_Location_List"
+            app:destination="@id/create_Blog_Location_List" />
+    </fragment>
+    <fragment
         android:id="@+id/exploreFragment"
         android:name="com.example.tripper_android_app.explore.ExploreFragment"
         android:label="fragment_explore"
@@ -189,9 +203,6 @@
         <action
             android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
             app:destination="@id/create_Trip_Fragment" />
-        <action
-            android:id="@+id/action_trip_HomePage_to_create_Blog_Location_List"
-            app:destination="@id/create_Blog_Location_List" />
     </fragment>
     <fragment
         android:id="@+id/railwayTimeListFragment"

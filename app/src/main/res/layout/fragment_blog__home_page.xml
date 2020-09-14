@@ -121,4 +121,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_bar_menu" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="289dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+        <!--        <ScrollView-->
+        <!--            android:layout_width="414dp"-->
+        <!--            android:layout_height="293dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.5"-->
+        <!--            app:layout_constraintStart_toStartOf="parent">-->
+
+        <!--            <fragment-->
+        <!--                android:id="@+id/blogHomeFragment"-->
+        <!--                android:name="androidx.navigation.fragment.NavHostFragment"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                app:defaultNavHost="true"-->
+        <!--                app:navGraph="@navigation/homepage_nav" />-->
+        <!--        </ScrollView>-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <fragment
+                android:id="@+id/fragment"
+                android:name="com.example.tripper_android_app.trip.blog.BlogHomeFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
