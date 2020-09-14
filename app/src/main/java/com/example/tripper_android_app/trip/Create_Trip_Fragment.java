@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private static final String TAG = "TAG_Date";
     private MainActivity activity;
     private TextView textDate, textTime;
-    private TextInputEditText etTripTitle;
+    private EditText etTripTitle;
     private Spinner spDay;
     private static int year, month, day, hour, minute;
 
@@ -154,7 +155,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 Trip_M trip_m = new Trip_M(tripTitle, startDate, startTime, dayCount);
                 bundle.putSerializable("createTrip", trip_m);
 
-                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationLsit,bundle);
+
+                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationLsit, bundle);
 
             }
         });

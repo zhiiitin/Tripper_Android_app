@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,6 @@ import java.util.List;
 
 public class Create_Trip_LocationList extends Fragment {
     private final static String TAG = "TAG_Loc";
-    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvSelectLoc;
     private CommonTask locGetAllTask;
     private List<ImageTask> imageTasks;
@@ -70,56 +71,48 @@ public class Create_Trip_LocationList extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbarForLoc);
         toolbar.setTitle("選擇景點");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         textLocName = view.findViewById(R.id.textLocName);
 
+
         SearchView searchLoc = view.findViewById(R.id.searchLoc);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvSelectLoc = view.findViewById(R.id.rvSelectLoc);
-
-        rvSelectLoc.setLayoutManager(new LinearLayoutManager(activity));
-        locationList = getLocation();
-        showLocation(locationList);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                showLocation(locationList);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
         searchLoc.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String newText) {
-                // 如果搜尋條件為空字串，就顯示原始資料；否則就顯示搜尋後結果
+            public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
                     showLocation(locationList);
                 } else {
                     List<Location> searchLocation = new ArrayList<>();
-                    // 搜尋原始資料內有無包含關鍵字(不區別大小寫)
                     for (Location location : locationList) {
                         if (location.getName().toUpperCase().contains(newText.toUpperCase())) {
                             searchLocation.add(location);
+                        } else if (location.getAddress().toUpperCase().contains(newText.toUpperCase())) {
+                            searchLocation.add(location);
                         }
                     }
-                    showLocation(locationList);
+                    showLocation(searchLocation);
                 }
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextSubmit(String query) {
                 return false;
             }
         });
+
+        rvSelectLoc = view.findViewById(R.id.rvSelectLoc);
+        rvSelectLoc.setLayoutManager(new LinearLayoutManager(activity));
+        locationList = getLocation();
+        showLocation(locationList);
+
+
     }
+
 
     private List<Location> getLocation() {
         List<Location> locationList = null;
@@ -133,7 +126,8 @@ public class Create_Trip_LocationList extends Fragment {
 
             try {
                 String jsonIn = locGetAllTask.execute().get();
-                Type listType = new TypeToken<List<Location>>() {}.getType();
+                Type listType = new TypeToken<List<Location>>() {
+                }.getType();
                 locationList = new Gson().fromJson(jsonIn, listType);
 
             } catch (Exception e) {
@@ -146,9 +140,9 @@ public class Create_Trip_LocationList extends Fragment {
     }
 
     private void showLocation(List<Location> locationList) {
-        if (locationList == null || locationList.isEmpty()) ;
-        {
+        if (locationList == null || locationList.isEmpty()) {
             Common.showToast(activity, "No Locations Found");
+            return;
         }
         LocationAdapter locationAdapter = (LocationAdapter) rvSelectLoc.getAdapter();
         if (locationAdapter == null) {
@@ -193,7 +187,7 @@ public class Create_Trip_LocationList extends Fragment {
 
         @NonNull
         @Override
-        public LocationAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_select_location, parent, false);
             return new MyViewHolder(itemView);
         }
@@ -202,28 +196,27 @@ public class Create_Trip_LocationList extends Fragment {
         public void onBindViewHolder(@NonNull LocationAdapter.MyViewHolder holder, int position) {
             final Location location = locationList.get(position);
             String url = Common.URL_SERVER + "LocationServlet";
-            int logId = location.getLogId();
-            ImageTask imageTask = new ImageTask(url, logId, imageSize, holder.imageView);
+            int locId = location.getLocId();
+            ImageTask imageTask = new ImageTask(url, locId, imageSize, holder.imageView);
             imageTask.execute();
 
             imageTasks.add(imageTask);
             holder.textLocName.setText(location.getName());
             holder.textLocAdd.setText(location.getAddress());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("locationDetail", location);
+                    Navigation.findNavController(v).navigate(R.id.action_create_Trip_LocationLsit_to_createTripLocationDetail, bundle);
+                }
+            });
+
         }
 
 
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Navigation.findNavController(textLocName).popBackStack();
-                return true;
-            default:
-                break;
-        }
-        return true;
-    }
 }

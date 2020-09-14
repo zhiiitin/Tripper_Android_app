@@ -32,6 +32,12 @@
     <string name="showDay">天</string>
     <string name="LocName">景點名稱</string>
     <string name="LocAdd">景點地址</string>
+    <string name="stayTimeSelect">選擇停留時間</string>
+    <string name="hintStayTime">停留時間</string>
+    <string name="LocationName">景點名稱</string>
+    <string name="LocInfo">景點資料</string>
+    <string name="memo">請輸入給該景點的備註</string>
+    <string name="switchGroup">是否開啟揪團功能</string>
 
 
     <!--    定義行程選擇天數字串內容-->
@@ -43,6 +49,23 @@
         <item>5 </item>
         <item>6 </item>
     </string-array>
+
+<!--    選擇揪團人數-->
+    <string-array name="groupOfPeople">
+        <item>1 </item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 </item>
+        <item>6 </item>
+        <item>7 </item>
+        <item>8 </item>
+        <item>9 </item>
+        <item>10 </item>
+    </string-array>
+    
+    <string name="group_prompt">"請選擇揪團人數："</string>
+    <string name="chooseGroupPple">請選擇揪團人數：</string>
 
 
 </resources>

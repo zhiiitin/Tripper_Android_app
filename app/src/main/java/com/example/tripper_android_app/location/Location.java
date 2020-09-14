@@ -11,7 +11,7 @@ import java.io.Serializable;
 */
 public class Location implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private int logId;
+	private int locId;
 	private String name;
 	private String address;
 	private String locType;
@@ -23,10 +23,10 @@ public class Location implements Serializable{
 	private int useId;
 	private String createDateTime;
 	
-	public Location(int logId, String name, String address, String locType, String city, String info,
+	public Location(int locId, String name, String address, String locType, String city, String info,
 			double longitude, double latitude, int createId, int useId, String createDateTime) {
 		super();
-		this.logId = logId;
+		this.locId = locId;
 		this.name = name;
 		this.address = address;
 		this.locType = locType;
@@ -56,14 +56,18 @@ public class Location implements Serializable{
 		this.createDateTime = createDateTime;
 	}
 
-
-
-	public int getLogId() {
-		return logId;
+	public Location(String name, String address) {
+		this.name = name;
+		this.address = address;
 	}
 
-	public void setLogId(int logId) {
-		this.logId = logId;
+
+	public int getLocId() {
+		return locId;
+	}
+
+	public void setLocId(int locId) {
+		this.locId = locId;
 	}
 
 	public String getName() {

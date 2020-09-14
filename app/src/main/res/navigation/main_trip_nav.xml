@@ -184,6 +184,24 @@
         android:id="@+id/create_Trip_LocationLsit"
         android:name="com.example.tripper_android_app.trip.Create_Trip_LocationList"
         android:label="fragment_create_trip_location_lsit"
-        tools:layout="@layout/fragment_create_trip_location_lsit" />
+        tools:layout="@layout/fragment_create_trip_location_lsit" >
+        <action
+            android:id="@+id/action_create_Trip_LocationLsit_to_createTripLocationDetail"
+            app:destination="@id/createTripLocationDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/createTripLocationDetail"
+        android:name="com.example.tripper_android_app.trip.CreateTripLocationDetail"
+        android:label="fragment_create_trip_location_detail"
+        tools:layout="@layout/fragment_create_trip_location_detail" >
+        <action
+            android:id="@+id/action_createTripLocationDetail_to_createTripBeforeSave"
+            app:destination="@id/createTripBeforeSave" />
+    </fragment>
+    <fragment
+        android:id="@+id/createTripBeforeSave"
+        android:name="com.example.tripper_android_app.trip.CreateTripBeforeSave"
+        android:label="fragment_create_trip_before_save"
+        tools:layout="@layout/fragment_create_trip_before_save" />
 
 </navigation>
