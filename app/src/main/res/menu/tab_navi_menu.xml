@@ -5,7 +5,7 @@
         android:id="@+id/tabTrip"
         android:title="行程" />
     <item
-        android:id="@+id/tabBlog"
+        android:id="@+id/blogHomeFragment"
         android:title="網誌" />
     <item
         android:id="@+id/tabGoal"

@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.group;
+package com.example.tripper_android_app.trip.blog;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -10,9 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
@@ -30,18 +26,15 @@ import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.trip.Trip_M;
 import com.example.tripper_android_app.util.Common;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-
-public class GroupFragment extends Fragment {
-    private static final String TAG = "TAG_GroupListFragment";
+public class Create_Blog_Location_List extends Fragment {
+    private static final String TAG = "TAG_Create_Blog_Location_ListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvGroup;
     private MainActivity activity;
@@ -52,7 +45,7 @@ public class GroupFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
 
     }
 
@@ -60,14 +53,14 @@ public class GroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         activity.setTitle("行程");
-        return inflater.inflate(R.layout.fragment_group, container, false);
+        return inflater.inflate(R.layout.fragment_create_blog_trip_list, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("揪團");
+        toolbar.setTitle("選擇行程");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
@@ -76,13 +69,8 @@ public class GroupFragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-        SearchView searchView = view.findViewById(R.id.svGroup);
-        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
-        rvGroup = view.findViewById(R.id.rvGroup);
+        swipeRefreshLayout = view.findViewById(R.id.rvBlog_Home);
+        rvGroup = view.findViewById(R.id.rvBlog_Home);
         rvGroup.setLayoutManager(new LinearLayoutManager(activity));
 
         groupList = getGroups();
@@ -94,29 +82,6 @@ public class GroupFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(true);
                 showGroups(groupList);
                 swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()) {
-                    showGroups(groupList);
-                } else {
-                    List<Trip_M> searchGroup = new ArrayList<>();
-                    for (Trip_M group : groupList) {
-                        if (group.getTripTitle().toUpperCase().contains(newText.toUpperCase())) {
-                            searchGroup.add(group);
-                        }
-                    }
-                    showGroups(searchGroup);
-                }
-                return true;
             }
         });
 
@@ -194,7 +159,7 @@ public class GroupFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = layoutInflater.inflate(R.layout.item_view_group, parent, false);
+            View itemView = layoutInflater.inflate(R.layout.item_view_select_trip, parent, false);
             return new MyViewHolder(itemView);
         }
 
@@ -208,9 +173,6 @@ public class GroupFragment extends Fragment {
             groupImageTask.execute();
 
             myViewHolder.tvTitle.setText(group.getTripTitle());
-            myViewHolder.tvDate.setText("出發日："+group.getStartDate());
-            myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
-
 
         }
     }
@@ -218,13 +180,13 @@ public class GroupFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(groupGetAllTask != null){
+        if (groupGetAllTask != null) {
             groupGetAllTask.cancel(true);
-            groupGetAllTask = null ;
+            groupGetAllTask = null;
         }
-        if(groupImageTask !=null){
+        if (groupImageTask != null) {
             groupImageTask.cancel(true);
-            groupImageTask = null ;
+            groupImageTask = null;
         }
 
     }

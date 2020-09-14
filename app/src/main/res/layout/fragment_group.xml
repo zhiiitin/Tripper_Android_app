@@ -26,12 +26,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-            app:title="Test" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                app:title="Test" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <SearchView
@@ -46,7 +46,7 @@
         </SearchView>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/srlGroup"
+            android:id="@+id/srlBlog_Home"
             android:layout_width="wrap_content"
             android:layout_height="495dp"
             android:layout_margin="8dp">

@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
@@ -55,6 +56,7 @@ public class Trip_HomePage extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
 
+
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -74,6 +76,7 @@ public class Trip_HomePage extends Fragment {
         if (id == R.id.btCreateTrip) {
             findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_create_Trip_Fragment);
             return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

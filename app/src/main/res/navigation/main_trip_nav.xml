@@ -189,6 +189,9 @@
         <action
             android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
             app:destination="@id/create_Trip_Fragment" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_create_Blog_Location_List"
+            app:destination="@id/create_Blog_Location_List" />
     </fragment>
     <fragment
         android:id="@+id/railwayTimeListFragment"
@@ -225,6 +228,11 @@
         android:name="com.example.tripper_android_app.trip.Create_Trip_LocationList"
         android:label="fragment_create_trip_location_lsit"
         tools:layout="@layout/fragment_create_trip_location_lsit" />
+    <fragment
+        android:id="@+id/create_Blog_Location_List"
+        android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
+        android:label="fragment_create__blog__location__list"
+        tools:layout="@layout/fragment_create_blog_trip_list" />
 
 
 </navigation>
