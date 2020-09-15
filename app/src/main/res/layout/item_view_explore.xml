@@ -8,9 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     android:padding="6dp"
-    card_view:cardBackgroundColor="#ffdddddd"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="6dp">
+  >
 
 
     <TextView
@@ -27,67 +25,65 @@
         android:textSize="24sp"
         card_view:layout_constraintStart_toEndOf="@+id/ivUser"
         card_view:layout_constraintTop_toTopOf="parent"
-        tools:text="王大明" />
+        tools:text="王大明"
+        tools:ignore="RtlCompat" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="387dp"
-        android:layout_height="176dp"
+        android:layout_height="165dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        card_view:cardCornerRadius="20dp"
+        card_view:cardCornerRadius="30dp"
         card_view:cardElevation="10dp"
+        android:background="@color/colorForWhite"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@+id/ivUser">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <ImageView
+            android:id="@+id/ivBlog"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="188dp"
+            android:scaleType="fitXY"
+            android:background="@color/colorForBottomBar"
+            card_view:layout_constraintBottom_toTopOf="@+id/imageView_Blog"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+           android:src="@drawable/no_image" />
 
+        <ImageView
+            android:id="@+id/imageView_Blog"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="125dp"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="@id/layout"
+            app:srcCompat="@drawable/shadow"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            />
 
-            <ImageView
-                android:id="@+id/ivBlogPic"
-                android:layout_width="386dp"
-                android:layout_height="170dp"
-                android:layout_marginTop="54dp"
-                android:layout_marginEnd="1dp"
-                android:scaleType="fitXY"
-                card_view:layout_constraintBottom_toTopOf="@+id/imageView_Blog"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="0.0"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                card_view:srcCompat="@drawable/no_image" />
+        <TextView
+            android:id="@+id/tvTitle_Blog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="135dp"
+            android:shadowColor="#131313"
+            android:shadowDx="1"
+            android:shadowDy="0"
+            android:shadowRadius="1"
+            android:text="台北一日遊"
+            android:textAlignment="viewStart"
+            android:textColor="#FBFBFB"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView_Blog"
-                android:layout_width="380dp"
-                android:layout_height="55dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/tvBlogName"
-                android:layout_width="188dp"
-                android:layout_height="41dp"
-                android:layout_marginStart="240dp"
-                android:layout_marginTop="300dp"
-                android:layout_marginEnd="7dp"
-                android:letterSpacing="0.01"
-                android:lineSpacingExtra="4sp"
-                android:textColor="#F9F9F9"
-                android:textSize="35sp"
-                card_view:layout_constraintBottom_toTopOf="@+id/ivBlogPic"
-                card_view:layout_constraintEnd_toStartOf="@+id/ivBlogPic"
-                card_view:layout_constraintHorizontal_bias="0.514"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintVertical_bias="0.502"
-                tools:text="台北一日遊" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

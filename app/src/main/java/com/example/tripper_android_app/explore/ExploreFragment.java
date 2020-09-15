@@ -279,8 +279,8 @@ public class ExploreFragment extends Fragment {
 
             MyViewHolder(View itemView) {
                 super(itemView);
-                ivBlogPic = itemView.findViewById(R.id.ivBlogPic);
-                tvBlogName = itemView.findViewById(R.id.tvBlogName);
+                ivBlogPic = itemView.findViewById(R.id.ivBlog);
+                tvBlogName = itemView.findViewById(R.id.tvTitle_Blog);
                 tvUseName = itemView.findViewById(R.id.tvUserName);
                 ivUser = itemView.findViewById(R.id.ivUser);
 
