@@ -32,6 +32,7 @@
     <string name="showDay">天</string>
     <string name="LocName">景點名稱</string>
     <string name="LocAdd">景點地址</string>
+    <string name="CreateBlog">新增網誌</string>
 
 
     <string-array name="daysForTrip">

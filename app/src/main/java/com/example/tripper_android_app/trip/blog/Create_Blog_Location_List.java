@@ -10,15 +10,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
@@ -63,11 +66,13 @@ public class Create_Blog_Location_List extends Fragment {
         toolbar.setTitle("選擇行程");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
         if (upArrow != null) {
             upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
+
 
         swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvGroup = view.findViewById(R.id.rvBlog_Home);
@@ -189,5 +194,18 @@ public class Create_Blog_Location_List extends Fragment {
             groupImageTask = null;
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String message = "";
+        switch (item.getItemId()) {
+            case android.R.id.home:    //此返回鍵ID是固定的
+                Navigation.findNavController(this.getView()).popBackStack();
+                return true;
+
+        }
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        return true;
     }
 }
