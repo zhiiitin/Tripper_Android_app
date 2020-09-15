@@ -58,7 +58,6 @@ public class Location implements Serializable{
 	}
 
 
-
 	public String getLocId() {
 		return locId;
 	}

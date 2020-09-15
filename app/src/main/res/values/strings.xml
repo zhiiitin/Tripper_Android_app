@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name"> </string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="action_search">探索</string>
+    <string name="action_Explore">探索</string>
     <string name="action_group">揪團</string>
     <string name="action_profile">個人頁面</string>
     <string name="action_notification">通知</string>
@@ -11,11 +10,14 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
+    <string name="create_trip">建立行程</string>
     <string name="Explore">探索</string>
     <string name="textNoNetwork">沒有網路連線</string>
-    <string name="textNoSpotsFound">找不到資料</string>
-    <string name="mUpdate">Update</string>
     <string name="mDelete">Delete</string>
+    <string name="mUpdate">Update</string>
+    <string name="facebook_app_id">329545764829760</string>
+    <string name="fb_login_protocol_scheme">fb329545764829760</string>
+    <string name="textNoSpotsFound">找不到資料</string>
     <string name="textLocName">景點名稱</string>
     <string name="textAddress">地址</string>
     <string name="textLocNameLength">請輸入景點名稱(限10個字元)</string>
@@ -28,5 +30,31 @@
     <string name="textDelete">刪除</string>
     <string name="textTakePic">拍照</string>
     <string name="textPickPic">挑選照片</string>
+
+    <string name="trip_Title">行程標題：</string>
+    <string name="enterTripTitle">請輸入標題名稱（限10字元）</string>
+    <string name="TripStartDate">出發日期：</string>
+    <string name="enterStartDate">請選擇日期</string>
+    <string name="TripStartTime">出發時間：</string>
+    <string name="enterStartTime">請選擇時間</string>
+    <string name="btPickDate">點擊選擇日期</string>
+    <string name="btPickTime">點擊選擇時間</string>
+    <string name="daysChoose">選擇行程天數</string>
+    <string name="btNext">下一步</string>
+    <string name="showDay">天</string>
+    <string name="LocName">景點名稱</string>
+    <string name="LocAdd">景點地址</string>
+
+
+
+    <string-array name="daysForTrip">
+        <item>1 </item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 </item>
+        <item>6 </item>
+    </string-array>
+
 
 </resources>

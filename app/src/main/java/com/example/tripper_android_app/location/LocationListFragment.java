@@ -78,7 +78,7 @@ public class LocationListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v)
-                        .navigate(R.id.action_location_List_Fragment_to_location_Insert_Fragment);
+                        .navigate(R.id.action_locationListFragment_to_insertLocationFragment);
 
             }
         });
@@ -235,7 +235,7 @@ public class LocationListFragment extends Fragment {
                                 case R.id.mUpdate:
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable("location", location);
-                                    Navigation.findNavController(v).navigate(R.id.action_location_List_Fragment_to_location_Update_Fragment,bundle );
+                                    Navigation.findNavController(v).navigate(R.id.action_location_List_Fragment_to_locationUpdateFragment,bundle );
                                     break;
                                 case R.id.mDelete:
                                     if(Common.networkConnected(activity)){
@@ -279,7 +279,7 @@ public class LocationListFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("location", location);
                     Navigation.findNavController(v)
-                            .navigate(R.id.action_location_List_Fragment_to_location_Detail_Fragment, bundle);
+                            .navigate(R.id.action_location_List_Fragment_to_locationDetailFragment, bundle);
                 }
             });
         }

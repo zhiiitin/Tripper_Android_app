@@ -14,6 +14,7 @@ public class Member implements Serializable {
 //    private Timestamp modifyTime ;
 //    private Timestamp lastTime ;
 
+
     public Member(String account,String password) {
         this.account = account;
         this.password = password ;
@@ -26,6 +27,10 @@ public class Member implements Serializable {
         this.account = account;
         this.password = password ;
         this.nickName = nickname ;
+
+    }
+
+    public Member() {
 
     }
 
@@ -104,6 +109,8 @@ public class Member implements Serializable {
     public void setLoginType(int loginType) {
         this.loginType = loginType;
     }
+
+
 
 }
 

@@ -11,4 +11,5 @@
     <color name="colorForStar">#FFEA00</color>
     <color name="colorForNormalText">#000000</color>
     <color name="colorForWhite">#FFFFFF</color>
+    <color name="colorForTint">#CECCCC</color>
 </resources>
