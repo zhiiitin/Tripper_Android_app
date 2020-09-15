@@ -2,12 +2,10 @@ package com.example.tripper_android_app.explore;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import androidx.fragment.app.Fragment;
 
 
@@ -15,13 +13,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,22 +24,17 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import com.example.tripper_android_app.R;
-
-
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
-
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.security.spec.PSSParameterSpec;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -85,18 +75,15 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
-
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
 
         NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-
         activity.setTitle(R.string.Explore);
-        SearchView searchView = view.findViewById(R.id.searchView);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        SearchView searchView = view.findViewById(R.id.svGroup);
+        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvExplore = view.findViewById(R.id.rvExplore);
 
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));

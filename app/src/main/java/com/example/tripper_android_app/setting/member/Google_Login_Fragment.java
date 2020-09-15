@@ -2,6 +2,7 @@ package com.example.tripper_android_app.setting.member;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class Google_Login_Fragment extends Fragment {
@@ -83,6 +86,7 @@ public class Google_Login_Fragment extends Fragment {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(4).setChecked(true);
+
         textView = view.findViewById(R.id.textView);
         tvWelcome = view.findViewById(R.id.tvWelcome);
         tvWelcome.setText("GOOGLE登入成功  歡迎您！");
@@ -108,6 +112,9 @@ public class Google_Login_Fragment extends Fragment {
         client.signOut().addOnCompleteListener(activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                pref.edit().putBoolean("login", false).apply();
                 Navigation.findNavController(textView).popBackStack();
                 Common.showToast(activity,"Google帳號已登出");
             }

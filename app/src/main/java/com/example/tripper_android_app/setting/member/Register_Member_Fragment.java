@@ -50,7 +50,13 @@ import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -82,6 +88,7 @@ public class Register_Member_Fragment extends Fragment {
     private Uri contentUri;
     private Member member;
     private String nickName ;
+    private FirebaseAuth auth;
 
 
     @Override
@@ -89,6 +96,7 @@ public class Register_Member_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -178,6 +186,9 @@ public class Register_Member_Fragment extends Fragment {
         ibLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(member.getLoginType() ==1 ){
+                    signOut();
+                }
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
                 pref.edit().putBoolean("login", false).apply();
@@ -271,24 +282,26 @@ public class Register_Member_Fragment extends Fragment {
     }
 
     private void showMember() {
-        String Url = Common.URL_SERVER + "MemberServlet";
-        int id = member.getId();
-        int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
-        Bitmap bitmap = null;
-        try {
-            bitmap = new ImageTask(Url, id, imageSize).execute().get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (bitmap != null) {
-            ivPhoto.setImageBitmap(bitmap);
-        } else {
-            ivPhoto.setImageResource(R.drawable.ic_nopicture);
-        }
+
+            String Url = Common.URL_SERVER + "MemberServlet";
+            int id = member.getId();
+            int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+            Bitmap bitmap = null;
+            try {
+                bitmap = new ImageTask(Url, id, imageSize).execute().get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (bitmap != null) {
+                ivPhoto.setImageBitmap(bitmap);
+            } else {
+                ivPhoto.setImageResource(R.drawable.ic_nopicture);
+            }
 //        etIsbn.setText(book.getIsbn());
 //        etName.setText(book.getName());
 //        etPrice.setText(book.getPrice() + "");
 //        etAuthor.setText(book.getAuthor());
+
     }
 
     private void openAlbum() {
@@ -363,6 +376,25 @@ public class Register_Member_Fragment extends Fragment {
         }
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    private void signOut() {
+        // 登出Firebase帳號
+        auth.signOut();
+
+        // 登出Google帳號
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                // 由google-services.json轉出
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .build();
+        GoogleSignInClient client = GoogleSignIn.getClient(activity, options);
+        client.signOut().addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                Common.showToast(activity,"Google帳號已登出");
+            }
+        });
     }
 
 }

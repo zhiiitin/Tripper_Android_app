@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    android:layout_width="370dp"
+    android:layout_height="250dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="120dp"
+    android:padding="10dp"
+    card_view:cardBackgroundColor="#00BCD4"
+    card_view:cardCornerRadius="20dp"
+    card_view:cardElevation="10dp"
+    card_view:layout_constraintBottom_toBottomOf="parent"
+    card_view:layout_constraintEnd_toEndOf="parent"
+    card_view:layout_constraintStart_toStartOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp"
+        android:padding="6dp">
+
+
+        <ImageView
+            android:id="@+id/ivLocationPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:srcCompat="@drawable/no_image" />
+
+        <TextView
+            android:id="@+id/tvLocName"
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/textLocName"
+            android:textSize="30sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/ivLocationPic" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/textAddress"
+            android:textSize="30sp"
+            card_view:layout_constraintEnd_toEndOf="@+id/tvLocName"
+            card_view:layout_constraintHorizontal_bias="1.0"
+            card_view:layout_constraintStart_toStartOf="@+id/tvLocName"
+            card_view:layout_constraintTop_toBottomOf="@+id/tvLocName" />
+
+        <ImageView
+            android:id="@+id/ivMore"
+            android:layout_width="52dp"
+            android:layout_height="45dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:srcCompat="@drawable/more_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

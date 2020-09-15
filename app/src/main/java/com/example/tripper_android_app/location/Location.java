@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.location;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 
 /**
@@ -11,7 +12,11 @@ import java.io.Serializable;
 */
 public class Location implements Serializable{
 	private static final long serialVersionUID = 1L;
+<<<<<<< HEAD
 	private int locId;
+=======
+	private String locId;
+>>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 	private String name;
 	private String address;
 	private String locType;
@@ -21,10 +26,15 @@ public class Location implements Serializable{
 	private double latitude;
 	private int createId;
 	private int useId;
-	private String createDateTime;
+	private Timestamp createDateTime;
 	
+<<<<<<< HEAD
 	public Location(int locId, String name, String address, String locType, String city, String info,
 			double longitude, double latitude, int createId, int useId, String createDateTime) {
+=======
+	public Location(String locId, String name, String address, String locType, String city, String info,
+			double longitude, double latitude, int createId, int useId, Timestamp createDateTime) {
+>>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 		super();
 		this.locId = locId;
 		this.name = name;
@@ -42,7 +52,7 @@ public class Location implements Serializable{
 	
 
 	public Location(String name, String address, String locType, String city, String info, double longitude,
-			double latitude, int createId, int useId, String createDateTime) {
+			double latitude, int createId, int useId, Timestamp createDateTime) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -61,12 +71,20 @@ public class Location implements Serializable{
 		this.address = address;
 	}
 
+<<<<<<< HEAD
 
 	public int getLocId() {
 		return locId;
 	}
 
 	public void setLocId(int locId) {
+=======
+	public String getLocId() {
+		return locId;
+	}
+
+	public void setLogId(String locId) {
+>>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 		this.locId = locId;
 	}
 
@@ -142,11 +160,11 @@ public class Location implements Serializable{
 		this.useId = useId;
 	}
 
-	public String getCreateDateTime() {
+	public Timestamp getCreateDateTime() {
 		return createDateTime;
 	}
 
-	public void setCreateDateTime(String createDateTime) {
+	public void setCreateDateTime(Timestamp createDateTime) {
 		this.createDateTime = createDateTime;
 	}
 	

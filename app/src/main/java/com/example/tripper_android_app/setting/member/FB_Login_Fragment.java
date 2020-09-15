@@ -30,6 +30,7 @@ import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookActivity;
 import com.facebook.FacebookCallback;
@@ -51,29 +52,24 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.security.Policy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
-import static android.content.ContentValues.TAG;
+import java.util.Arrays;
+
+
+
 import static android.content.Context.MODE_PRIVATE;
-import static com.facebook.FacebookSdk.getApplicationContext;
+import android.content.Intent;
 
 
 public class FB_Login_Fragment extends Fragment {
     private static final String TAG = "TAG_FBFragment";
     private MainActivity activity;
-    private LoginManager loginManager;
     private FirebaseAuth auth;
     private CallbackManager callbackManager;
     private String name, email;
@@ -121,14 +117,31 @@ public class FB_Login_Fragment extends Fragment {
         itemMenu.getItem(4).setChecked(true);
 
         loginButton = view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
-        loginButton.setReadPermissions(Arrays.asList("user_status"));
+
+
         // If using in a fragment
-        loginButton.setFragment(this);
+//        loginButton.setFragment(this);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signInFB();
+            }
+        });
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Navigation.findNavController(loginButton).navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
             }
         });
 
@@ -140,6 +153,7 @@ public class FB_Login_Fragment extends Fragment {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 signInFirebase(loginResult.getAccessToken());
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -148,8 +162,11 @@ public class FB_Login_Fragment extends Fragment {
                         try {
                             email = object.getString("email");
                             name = object.getString("name");
+
+
                             Log.d(TAG, "email:" + email);
                             Log.d(TAG, "name:" + name);
+                            ;
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -161,39 +178,7 @@ public class FB_Login_Fragment extends Fragment {
                 request.setParameters(bundle);
                 request.executeAsync();
                 //將資料傳入DB
-                if (Common.networkConnected(activity)) {
 
-                    String account = email;
-                    String password = "password";
-                    String nickname = name;
-
-                    SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
-                            MODE_PRIVATE);
-                    pref.edit()
-                            .putBoolean("login", true)
-                            .putString("account", account)
-                            .putString("password", password)
-                            .apply();
-
-                    String Url = Common.URL_SERVER + "MemberServlet";
-                    Member member = new Member();
-                    member.setAccount(account);
-                    member.setNickName(nickname);
-                    member.setPassword(password);
-                    member.setLoginType(2);
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "memberGBInsert");
-                    jsonObject.addProperty("member", new Gson().toJson(member));
-                    try {
-                        String result = new CommonTask(Url, jsonObject.toString()).execute().get();
-                        int count = Integer.parseInt(result);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-
-                } else {
-                    Log.e(TAG, "Internet is null");
-                }
 
             }
 
@@ -212,12 +197,12 @@ public class FB_Login_Fragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void signInFirebase(AccessToken token) {
         Log.d(TAG, "signInFirebase:" + token);
+
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         auth.signInWithCredential(credential)
@@ -226,7 +211,40 @@ public class FB_Login_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 登入成功轉至下頁；失敗則顯示錯誤訊息
                         if (task.isSuccessful()) {
-                            Navigation.findNavController(loginButton).navigate(R.id.action_register_Login_Fragment_to_register_Member_Fragment);
+                            if (Common.networkConnected(activity)) {
+
+                                String account = email;
+                                String password = "password";
+                                String nickname = name;
+
+                                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                        MODE_PRIVATE);
+                                pref.edit()
+                                        .putBoolean("login", true)
+                                        .putString("account", account)
+                                        .putString("password", password)
+                                        .apply();
+
+                                String Url = Common.URL_SERVER + "MemberServlet";
+                                Member member = new Member();
+                                member.setAccount(account);
+                                member.setNickName(nickname);
+                                member.setPassword(password);
+                                member.setLoginType(2);
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("action", "memberGBInsert");
+                                jsonObject.addProperty("member", new Gson().toJson(member));
+                                try {
+                                    String result = new CommonTask(Url, jsonObject.toString()).execute().get();
+                                    int count = Integer.parseInt(result);
+                                } catch (Exception e) {
+                                    Log.e(TAG, e.toString());
+                                }
+
+                            } else {
+                                Log.e(TAG, "Internet is null");
+                            }
+                            Navigation.findNavController(loginButton).navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
                         } else {
                             Exception exception = task.getException();
                             String message = exception == null ? "Sign in fail." : exception.getMessage();
@@ -237,16 +255,16 @@ public class FB_Login_Fragment extends Fragment {
                 });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // 檢查user是否已經登入，是則FirebaseUser物件不為null
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            Navigation.findNavController(this.getView())
-                    .navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // 檢查user是否已經登入，是則FirebaseUser物件不為null
+//        FirebaseUser user = auth.getCurrentUser();
+//        if (user != null) {
+//            Navigation.findNavController(this.getView())
+//                    .navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

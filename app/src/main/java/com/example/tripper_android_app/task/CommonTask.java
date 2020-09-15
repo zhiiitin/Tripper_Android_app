@@ -57,7 +57,7 @@ public class CommonTask extends AsyncTask<String, Integer, String> {
                 Log.d(TAG, "response code: " + responseCode);
             }
         } catch (IOException e) {
-            Log.e(TAG, e.toString());
+            Log.e(TAG,"exception:"+e.toString());
         } finally {
             if (connection != null) {
                 connection.disconnect();

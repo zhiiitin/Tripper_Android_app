@@ -1,0 +1,17 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--圓角-->
+    <corners android:radius="25dp"
+        android:topLeftRadius="25dp"
+        android:topRightRadius="25dp"
+        android:bottomLeftRadius="25dp"
+        android:bottomRightRadius="25dp" />
+
+    <!--描邊-->
+    <stroke android:width="16dp"
+        android:color="#faf9f9"
+        android:dashWidth="5dp"
+        android:dashGap="0dp" />
+
+</shape>
+

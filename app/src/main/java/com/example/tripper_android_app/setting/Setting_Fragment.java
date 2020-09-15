@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -39,7 +40,7 @@ public class Setting_Fragment extends Fragment {
     private final static String TAG = "TAG_SettingFragment";
     private MainActivity activity;
     private CommonTask loginTask;
-    private ImageButton ibCreateLocation, ibRegister, ibMember, ibFriends;
+    private ImageButton ibRegister, ibMember, ibFriends;
 
 
     @Override
@@ -77,12 +78,24 @@ public class Setting_Fragment extends Fragment {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
-        ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
+        ImageButton ibCreateLocation = view.findViewById(R.id.ibCreateLocation);
+
         ibCreateLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v)
                         .navigate(R.id.action_setting_Fragment_to_locationListFragment);
+            }
+        });
+
+
+//進入雙鐵時刻表頁面
+        ImageButton ibTrain = view.findViewById(R.id.ibTrain);
+        ibTrain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Navigation.findNavController(v)
+//                        .navigate(R.id.action_setting_Fragment_to_railwayTimeListFragment);
             }
         });
 
@@ -95,6 +108,8 @@ public class Setting_Fragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_main_Fragment);
             }
         });
+
+
 //進入會員資料頁面
         ibMember = view.findViewById(R.id.ibMember);
         ibMember.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +191,15 @@ public class Setting_Fragment extends Fragment {
             ibRegister.setVisibility(View.VISIBLE);
             ibFriends.setVisibility(View.GONE);
             ibMember.setVisibility(View.GONE);//如果登入狀態為false ，登出鈕便會消失
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(loginTask != null){
+            loginTask.cancel(true);
+            loginTask = null ;
         }
     }
 }

@@ -196,7 +196,11 @@ public class Create_Trip_LocationList extends Fragment {
         public void onBindViewHolder(@NonNull LocationAdapter.MyViewHolder holder, int position) {
             final Location location = locationList.get(position);
             String url = Common.URL_SERVER + "LocationServlet";
+<<<<<<< HEAD
             int locId = location.getLocId();
+=======
+            String locId = location.getLocId();
+>>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
             ImageTask imageTask = new ImageTask(url, locId, imageSize, holder.imageView);
             imageTask.execute();
 

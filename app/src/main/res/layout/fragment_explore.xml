@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <SearchView
-            android:id="@+id/searchView"
+            android:id="@+id/svGroup"
             android:layout_width="372dp"
             android:layout_height="64dp"
             android:layout_marginLeft="16dp"
@@ -19,7 +19,7 @@
             android:iconifiedByDefault="false" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+            android:id="@+id/srlBlog_Home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp">
