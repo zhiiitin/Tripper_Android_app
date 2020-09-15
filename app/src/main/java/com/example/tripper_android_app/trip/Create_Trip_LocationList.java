@@ -196,11 +196,8 @@ public class Create_Trip_LocationList extends Fragment {
         public void onBindViewHolder(@NonNull LocationAdapter.MyViewHolder holder, int position) {
             final Location location = locationList.get(position);
             String url = Common.URL_SERVER + "LocationServlet";
-<<<<<<< HEAD
-            int locId = location.getLocId();
-=======
+
             String locId = location.getLocId();
->>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
             ImageTask imageTask = new ImageTask(url, locId, imageSize, holder.imageView);
             imageTask.execute();
 
@@ -213,7 +210,7 @@ public class Create_Trip_LocationList extends Fragment {
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("locationDetail", location);
-                    Navigation.findNavController(v).navigate(R.id.action_create_Trip_LocationLsit_to_createTripLocationDetail, bundle);
+                    Navigation.findNavController(v).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail, bundle);
                 }
             });
 

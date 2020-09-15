@@ -44,16 +44,13 @@
     <string name="showDay">天</string>
     <string name="LocName">景點名稱</string>
     <string name="LocAdd">景點地址</string>
-<<<<<<< HEAD
     <string name="stayTimeSelect">選擇停留時間</string>
     <string name="hintStayTime">停留時間</string>
     <string name="LocationName">景點名稱</string>
     <string name="LocInfo">景點資料</string>
     <string name="memo">請輸入給該景點的備註</string>
     <string name="switchGroup">是否開啟揪團功能</string>
-=======
     <string name="CreateBlog">新增網誌</string>
->>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 
 
     <string-array name="daysForTrip">

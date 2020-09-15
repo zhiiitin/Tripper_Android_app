@@ -52,20 +52,17 @@ public class Trip_HomePage extends Fragment {
 
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavController navController = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-<<<<<<< HEAD
-=======
 
         BottomNavigationView bottomNavigationViewTop = view.findViewById(R.id.navigation);
-        NavController navControllerTop = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavController navControllerTop = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationViewTop, navControllerTop);
         Menu itemMenu = bottomNavigationViewTop.getMenu();
         itemMenu.getItem(0).setChecked(true);
 
 
->>>>>>> 會員註冊功能
     }
 
     @Override
@@ -89,7 +86,7 @@ public class Trip_HomePage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create__trip_, container, false);
+        return inflater.inflate(R.layout.fragment_trip__home_page, container, false);
 
     }
 

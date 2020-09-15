@@ -53,13 +53,13 @@ public class Blog_HomePage extends Fragment {
 
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavController navController = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(2).setChecked(true);
 
         BottomNavigationView bottomNavigationViewTop = view.findViewById(R.id.navigation);
-        NavController navControllerTop = Navigation.findNavController(activity, R.id.nav_fragment);
+        NavController navControllerTop = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationViewTop, navControllerTop);
         Menu itemMenu2 = bottomNavigationViewTop.getMenu();
         itemMenu2.getItem(1).setChecked(true);

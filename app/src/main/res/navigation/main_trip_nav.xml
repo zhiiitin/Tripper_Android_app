@@ -189,7 +189,7 @@
         tools:layout="@layout/fragment_create__trip_" >
         <action
             android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationLsit"
-            app:destination="@id/create_Trip_LocationLsit" />
+            app:destination="@id/create_Trip_LocationList" />
     </fragment>
     <fragment
         android:id="@+id/trip_HomePage"
@@ -201,35 +201,13 @@
             app:destination="@id/create_Trip_Fragment" />
     </fragment>
     <fragment
-        android:id="@+id/create_Trip_LocationLsit"
+        android:id="@+id/create_Trip_LocationList"
         android:name="com.example.tripper_android_app.trip.Create_Trip_LocationList"
         android:label="fragment_create_trip_location_lsit"
-<<<<<<< HEAD
         tools:layout="@layout/fragment_create_trip_location_lsit" >
         <action
-            android:id="@+id/action_create_Trip_LocationLsit_to_createTripLocationDetail"
+            android:id="@+id/action_create_Trip_LocationList_to_createTripLocationDetail"
             app:destination="@id/createTripLocationDetail" />
-    </fragment>
-    <fragment
-        android:id="@+id/createTripLocationDetail"
-        android:name="com.example.tripper_android_app.trip.CreateTripLocationDetail"
-        android:label="fragment_create_trip_location_detail"
-        tools:layout="@layout/fragment_create_trip_location_detail" >
-        <action
-            android:id="@+id/action_createTripLocationDetail_to_createTripBeforeSave"
-            app:destination="@id/createTripBeforeSave" />
-    </fragment>
-    <fragment
-        android:id="@+id/createTripBeforeSave"
-        android:name="com.example.tripper_android_app.trip.CreateTripBeforeSave"
-        android:label="fragment_create_trip_before_save"
-        tools:layout="@layout/fragment_create_trip_before_save" />
-=======
-<<<<<<< HEAD
-        tools:layout="@layout/fragment_create_trip_location_lsit" >
-<!--        <action-->
-<!--            android:id="@+id/action_create_Trip_LocationLsit_to_createTripLocationDetail"-->
-<!--            app:destination="@id/createTripLocationDetail" />-->
     </fragment>
     <fragment
         android:id="@+id/location_Detail_Fragment"
@@ -239,29 +217,29 @@
         android:id="@+id/location_Update_Fragment"
         android:name="com.example.tripper_android_app.location.LocationUpdateFragment"
         android:label="LocationUpdateFragment" />
-    <!--    <fragment-->
-<!--        android:id="@+id/createTripLocationDetail"-->
-<!--        android:name="com.example.tripper_android_app.trip.CreateTripLocationDetail"-->
-<!--        android:label="fragment_create_trip_location_detail"-->
-<!--        tools:layout="@layout/fragment_create_trip_location_detail" >-->
-<!--        <action-->
-<!--            android:id="@+id/action_createTripLocationDetail_to_createTripBeforeSave"-->
-<!--            app:destination="@id/createTripBeforeSave" />-->
-<!--    </fragment>-->
-<!--    <fragment-->
-<!--        android:id="@+id/createTripBeforeSave"-->
-<!--        android:name="com.example.tripper_android_app.trip.CreateTripBeforeSave"-->
-<!--        android:label="fragment_create_trip_before_save"-->
-<!--        tools:layout="@layout/fragment_create_trip_before_save" />-->
-=======
-        tools:layout="@layout/fragment_create_trip_location_lsit" />
+        <fragment
+        android:id="@+id/createTripLocationDetail"
+        android:name="com.example.tripper_android_app.trip.CreateTripLocationDetail"
+        android:label="fragment_create_trip_location_detail"
+        tools:layout="@layout/fragment_create_trip_location_detail" >
+            <action
+                android:id="@+id/action_createTripLocationDetail_to_createTripBeforeSave"
+                app:destination="@id/createTripBeforeSave" />
+        </fragment>
+    <fragment
+        android:id="@+id/createTripBeforeSave"
+        android:name="com.example.tripper_android_app.trip.CreateTripBeforeSave"
+        android:label="fragment_create_trip_before_save"
+        tools:layout="@layout/fragment_create_trip_before_save" >
+        <action
+            android:id="@+id/action_createTripBeforeSave_to_createTripLocationDetail"
+            app:destination="@id/createTripLocationDetail" />
+    </fragment>
+        tools:layout="@layout/fragment_create_trip_location_list" >
     <fragment
         android:id="@+id/create_Blog_Location_List"
         android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
         tools:layout="@layout/fragment_create_blog_trip_list" />
-
->>>>>>> 會員註冊功能
->>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 
 </navigation>

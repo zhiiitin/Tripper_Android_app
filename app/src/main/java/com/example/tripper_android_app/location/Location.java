@@ -12,11 +12,7 @@ import java.sql.Timestamp;
 */
 public class Location implements Serializable{
 	private static final long serialVersionUID = 1L;
-<<<<<<< HEAD
-	private int locId;
-=======
 	private String locId;
->>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 	private String name;
 	private String address;
 	private String locType;
@@ -27,14 +23,9 @@ public class Location implements Serializable{
 	private int createId;
 	private int useId;
 	private Timestamp createDateTime;
-	
-<<<<<<< HEAD
-	public Location(int locId, String name, String address, String locType, String city, String info,
-			double longitude, double latitude, int createId, int useId, String createDateTime) {
-=======
+
 	public Location(String locId, String name, String address, String locType, String city, String info,
 			double longitude, double latitude, int createId, int useId, Timestamp createDateTime) {
->>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
 		super();
 		this.locId = locId;
 		this.name = name;
@@ -71,20 +62,11 @@ public class Location implements Serializable{
 		this.address = address;
 	}
 
-<<<<<<< HEAD
-
-	public int getLocId() {
-		return locId;
-	}
-
-	public void setLocId(int locId) {
-=======
 	public String getLocId() {
 		return locId;
 	}
 
-	public void setLogId(String locId) {
->>>>>>> 63b368718c503ecd262fe0d8315b6fd31b3fd106
+	public void setLocId(String locId) {
 		this.locId = locId;
 	}
 

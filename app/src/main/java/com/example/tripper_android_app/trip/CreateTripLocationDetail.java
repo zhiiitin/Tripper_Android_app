@@ -141,7 +141,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
     //顯示景點圖片
     private void showLocPic() {
         String url = Common.URL_SERVER + "LocationServlet";
-        int locId = location.getLocId();
+        String locId = location.getLocId();
         int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         Bitmap bitmap = null;
         try {
