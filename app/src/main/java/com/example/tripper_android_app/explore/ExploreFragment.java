@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,7 @@ public class ExploreFragment extends Fragment {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.svGroup);
-        swipeRefreshLayout = view.findViewById(R.id.srlGroup);
+        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvExplore = view.findViewById(R.id.rvExplore);
 
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));

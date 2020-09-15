@@ -26,8 +26,13 @@
 
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+<<<<<<< HEAD
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/locLayout"
+=======
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlBlog_Home"
+>>>>>>> 會員註冊功能
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".location.LocationListFragment">

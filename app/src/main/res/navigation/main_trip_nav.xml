@@ -6,6 +6,20 @@
     app:startDestination="@id/trip_HomePage">
 
     <fragment
+        android:id="@+id/blogHomeFragment"
+        android:name="com.example.tripper_android_app.trip.blog.BlogHomeFragment"
+        android:label="fragment_blog_home"
+        tools:layout="@layout/fragment_blog_home" />
+    <fragment
+        android:id="@+id/blog_HomePage"
+        android:name="com.example.tripper_android_app.trip.blog.Blog_HomePage"
+        android:label="fragment_blog__home_page"
+        tools:layout="@layout/fragment_blog__home_page" >
+        <action
+            android:id="@+id/action_blog_HomePage_to_create_Blog_Location_List"
+            app:destination="@id/create_Blog_Location_List" />
+    </fragment>
+    <fragment
         android:id="@+id/exploreFragment"
         android:name="com.example.tripper_android_app.explore.ExploreFragment"
         android:label="fragment_explore"
@@ -190,6 +204,7 @@
         android:id="@+id/create_Trip_LocationLsit"
         android:name="com.example.tripper_android_app.trip.Create_Trip_LocationList"
         android:label="fragment_create_trip_location_lsit"
+<<<<<<< HEAD
         tools:layout="@layout/fragment_create_trip_location_lsit" >
 <!--        <action-->
 <!--            android:id="@+id/action_create_Trip_LocationLsit_to_createTripLocationDetail"-->
@@ -217,5 +232,14 @@
 <!--        android:name="com.example.tripper_android_app.trip.CreateTripBeforeSave"-->
 <!--        android:label="fragment_create_trip_before_save"-->
 <!--        tools:layout="@layout/fragment_create_trip_before_save" />-->
+=======
+        tools:layout="@layout/fragment_create_trip_location_lsit" />
+    <fragment
+        android:id="@+id/create_Blog_Location_List"
+        android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
+        android:label="fragment_create__blog__location__list"
+        tools:layout="@layout/fragment_create_blog_trip_list" />
+
+>>>>>>> 會員註冊功能
 
 </navigation>

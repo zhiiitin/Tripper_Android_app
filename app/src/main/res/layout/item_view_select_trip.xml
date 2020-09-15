@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="240dp">
+        android:layout_height="215dp">
 
         <ImageView
             android:id="@+id/ivBlog"
@@ -31,12 +31,10 @@
 
         <ImageView
             android:id="@+id/imageView_Blog"
-            android:layout_width="392dp"
-            android:layout_height="56dp"
+            android:layout_width="403dp"
+            android:layout_height="58dp"
             android:layout_marginTop="146dp"
-            app:layout_constraintEnd_toEndOf="@+id/tvDate"
-            app:layout_constraintHorizontal_bias="0.368"
-            app:layout_constraintStart_toStartOf="@+id/tvCount"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ivBlog"
             app:srcCompat="@drawable/shadow" />
 
@@ -55,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="17dp"
             android:shadowColor="#131313"
             android:shadowDx="1"
             android:shadowDy="0"
@@ -65,32 +63,8 @@
             android:textSize="25sp"
             android:textStyle="bold"
             android:typeface="normal"
-            app:layout_constraintBottom_toBottomOf="@+id/tvCount"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tvCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="5dp"
-            android:text="已參與人數：5/8"
-            android:textColor="#454444"
-            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="20dp"
-            android:text="2020.08.16"
-            android:textColor="#454444"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivBlog" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
