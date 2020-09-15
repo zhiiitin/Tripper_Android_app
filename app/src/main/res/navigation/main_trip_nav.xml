@@ -14,7 +14,11 @@
         android:id="@+id/exploreFragment"
         android:name="com.example.tripper_android_app.explore.ExploreFragment"
         android:label="fragment_explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_exploreFragment_to_blogMainFragment"
+            app:destination="@id/blogMainFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/setting_Fragment"
@@ -163,5 +167,10 @@
         android:name="com.example.tripper_android_app.setting.member.Google_Login_Fragment"
         android:label="fragment_google__login_"
         tools:layout="@layout/fragment_google__login_" />
+    <fragment
+        android:id="@+id/blogMainFragment"
+        android:name="com.example.tripper_android_app.blog.BlogMainFragment"
+        android:label="fragment_blog_main"
+        tools:layout="@layout/fragment_blog_main" />
 
 </navigation>
