@@ -2,13 +2,15 @@ package com.example.tripper_android_app.explore;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+<<<<<<< HEAD
 
 import androidx.appcompat.widget.Toolbar;
+=======
+>>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 import androidx.fragment.app.Fragment;
 
 
@@ -16,13 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,22 +31,17 @@ import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-
-
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
-
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.security.spec.PSSParameterSpec;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -89,7 +83,6 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
-
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -102,11 +95,9 @@ public class ExploreFragment extends Fragment {
 
         NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
-
         activity.setTitle(R.string.Explore);
-        SearchView searchView = view.findViewById(R.id.searchView);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        SearchView searchView = view.findViewById(R.id.svGroup);
+        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvExplore = view.findViewById(R.id.rvExplore);
 
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));
@@ -191,7 +182,7 @@ public class ExploreFragment extends Fragment {
 
                 explores = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(activity, R.string.textNoNetwork);
@@ -199,6 +190,7 @@ public class ExploreFragment extends Fragment {
         return explores;
     }
 
+<<<<<<< HEAD
 //    private List<Member> getMemeber() {
 //        List<Member> members = null;
 //        if (Common.networkConnected(activity)) {
@@ -222,6 +214,31 @@ public class ExploreFragment extends Fragment {
 //        }
 //        return members;
 //    }
+=======
+    private List<Member> getMemeber() {
+        List<Member> members = null;
+        if (Common.networkConnected(activity)) {
+            //Servlet
+            String urlM = Common.URL_SERVER + "ExploreServlet";
+            JsonObject jsonObject1 = new JsonObject();
+            jsonObject1.addProperty("action", "selectAll");
+            String jsonOut1 = jsonObject1.toString();
+            exploreGetAllTask = new CommonTask(urlM, jsonOut1);
+            try {
+                String josnIn1 = exploreGetAllTask.execute().get();
+                Type listType1 = new TypeToken<List<Explore>>() {
+                }.getType();
+               members = new Gson().fromJson(josnIn1, listType1);
+
+            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+            }
+        } else {
+            Common.showToast(activity, R.string.textNoNetwork);
+        }
+        return members;
+    }
+>>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 
 
     private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {

@@ -9,10 +9,10 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import com.example.tripper_android_app.task.CommonTask;
 import com.google.gson.JsonObject;
-
 import java.util.Locale;
 
 public class Common {
@@ -63,6 +63,11 @@ public class Common {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    public static String getTransId(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssss");
+        String transId = dateFormat.format(System.currentTimeMillis());
+        return transId.toString();
+    }
 
     public static boolean netWorkConnected(Context context) {
         ConnectivityManager connectivityManager =

@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
     <item
         android:id="@+id/exploreFragment"
         android:icon="@drawable/ic_button_search_xxxhdpi"
         android:title="@string/action_Explore" />
 
     <item
-        android:id="@+id/groupFragment"
+        android:id="@+id/group_Fragment"
         android:icon="@drawable/ic_button_group_xxxhdpi"
         android:title="@string/action_group"
-
         />
 
     <item
-        android:id="@+id/main_Trip_Fragment"
+        android:id="@+id/trip_HomePage"
         android:icon="@drawable/ic_button_portrait_xxxhdpi"
         android:title="@string/action_profile" />
 
     <item
-        android:id="@+id/notifyFragment"
+        android:id="@+id/notify_Fragment"
         android:icon="@drawable/ic_button_notification_xxxhdpi"
         android:title="@string/action_notification" />
 

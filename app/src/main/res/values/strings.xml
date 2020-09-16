@@ -10,13 +10,15 @@
     <string name="tbBlog">網誌</string>
     <string name="tbGoal">成就</string>
     <string name="create_new_trip">新增行程</string>
+    <string name="create_trip">建立行程</string>
+    <string name="Explore">探索</string>
     <string name="textNoNetwork">沒有網路連線</string>
     <string name="mDelete">Delete</string>
     <string name="mUpdate">Update</string>
     <string name="facebook_app_id">329545764829760</string>
     <string name="fb_login_protocol_scheme">fb329545764829760</string>
-    <string name="Explore">探索</string>
     <string name="textNoSpotsFound">找不到資料</string>
+<<<<<<< HEAD
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -109,5 +111,68 @@
 
     <string name="thumbsup">按讚</string>
     <string name="triplist">行程</string>
+=======
+    <string name="textLocName">景點名稱</string>
+    <string name="textAddress">地址</string>
+    <string name="textLocNameLength">請輸入景點名稱(限10個字元)</string>
+    <string name="textAddressLength">請輸入景點地址</string>
+    <string name="textStartTime">開始時間</string>
+    <string name="textEndTime">結束時間</string>
+    <string name="textDesc">景點描述</string>
+    <string name="textAddImage">新增照片</string>
+    <string name="textUpdate">更新</string>
+    <string name="textDelete">刪除</string>
+    <string name="textTakePic">拍照</string>
+    <string name="textPickPic">挑選照片</string>
+
+    <string name="trip_Title">行程標題：</string>
+    <string name="enterTripTitle">請輸入標題名稱（限10字元）</string>
+    <string name="TripStartDate">出發日期：</string>
+    <string name="enterStartDate">請選擇日期</string>
+    <string name="TripStartTime">出發時間：</string>
+    <string name="enterStartTime">請選擇時間</string>
+    <string name="btPickDate">點擊選擇日期</string>
+    <string name="btPickTime">點擊選擇時間</string>
+    <string name="daysChoose">選擇行程天數</string>
+    <string name="btNext">下一步</string>
+    <string name="showDay">天</string>
+    <string name="LocName">景點名稱</string>
+    <string name="LocAdd">景點地址</string>
+    <string name="stayTimeSelect">選擇停留時間</string>
+    <string name="hintStayTime">停留時間</string>
+    <string name="LocationName">景點名稱</string>
+    <string name="LocInfo">景點資料</string>
+    <string name="memo">請輸入給該景點的備註</string>
+    <string name="switchGroup">是否開啟揪團功能</string>
+    <string name="CreateBlog">新增網誌</string>
+
+
+    <string-array name="daysForTrip">
+        <item>1 </item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 </item>
+        <item>6 </item>
+    </string-array>
+
+<!--    選擇揪團人數-->
+    <string-array name="groupOfPeople">
+        <item>1 </item>
+        <item>2 </item>
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 </item>
+        <item>6 </item>
+        <item>7 </item>
+        <item>8 </item>
+        <item>9 </item>
+        <item>10 </item>
+    </string-array>
+    
+    <string name="group_prompt">"請選擇揪團人數："</string>
+    <string name="chooseGroupPple">請選擇揪團人數：</string>
+
+>>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 
 </resources>

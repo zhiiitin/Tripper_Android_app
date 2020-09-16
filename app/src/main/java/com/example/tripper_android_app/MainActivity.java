@@ -17,11 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.tripper_android_app.setting.Setting_Fragment;
-import com.example.tripper_android_app.trip.Main_Trip_Fragment;
+
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.zip.Inflater;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -35,6 +36,5 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
     }
-
 
 }
