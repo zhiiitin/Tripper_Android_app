@@ -44,7 +44,11 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[5,6)'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.4'
+<<<<<<< HEAD
+    
+=======
     implementation 'androidx.cardview:cardview:1.0.0'
+>>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'

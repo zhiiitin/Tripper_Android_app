@@ -23,7 +23,11 @@
         android:id="@+id/exploreFragment"
         android:name="com.example.tripper_android_app.explore.ExploreFragment"
         android:label="fragment_explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_exploreFragment_to_blogMainFragment"
+            app:destination="@id/blogMainFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/setting_Fragment"
@@ -186,6 +190,12 @@
         android:label="fragment_google__login_"
         tools:layout="@layout/fragment_google__login_" />
     <fragment
+<<<<<<< HEAD
+        android:id="@+id/blogMainFragment"
+        android:name="com.example.tripper_android_app.blog.BlogMainFragment"
+        android:label="fragment_blog_main"
+        tools:layout="@layout/fragment_blog_main" />
+=======
         android:id="@+id/create_Trip_Fragment"
         android:name="com.example.tripper_android_app.trip.Create_Trip_Fragment"
         android:label="fragment_create__trip_"
@@ -244,5 +254,6 @@
         android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
         tools:layout="@layout/fragment_create_blog_trip_list" />
+>>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 
 </navigation>
