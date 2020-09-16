@@ -58,7 +58,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("action", "getImage");
-        if(key.isEmpty()){
+        if(key == null || key.isEmpty()){
             jsonObject.addProperty("id", id);
         }else{
             jsonObject.addProperty("id", key);
