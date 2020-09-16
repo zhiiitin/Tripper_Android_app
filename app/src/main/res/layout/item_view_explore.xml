@@ -98,21 +98,9 @@
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toTopOf="parent" />
 
-<<<<<<< HEAD
-=======
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="8dp"
-        android:text="＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿"
-        android:textColor="#330D0808"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/tvBlogName" />
 
->>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

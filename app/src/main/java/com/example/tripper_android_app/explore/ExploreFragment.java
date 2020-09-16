@@ -6,11 +6,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-<<<<<<< HEAD
+
 
 import androidx.appcompat.widget.Toolbar;
-=======
->>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
+
 import androidx.fragment.app.Fragment;
 
 
@@ -97,7 +96,7 @@ public class ExploreFragment extends Fragment {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.svGroup);
-        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);
 
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));
@@ -190,7 +189,7 @@ public class ExploreFragment extends Fragment {
         return explores;
     }
 
-<<<<<<< HEAD
+
 //    private List<Member> getMemeber() {
 //        List<Member> members = null;
 //        if (Common.networkConnected(activity)) {
@@ -214,31 +213,7 @@ public class ExploreFragment extends Fragment {
 //        }
 //        return members;
 //    }
-=======
-    private List<Member> getMemeber() {
-        List<Member> members = null;
-        if (Common.networkConnected(activity)) {
-            //Servlet
-            String urlM = Common.URL_SERVER + "ExploreServlet";
-            JsonObject jsonObject1 = new JsonObject();
-            jsonObject1.addProperty("action", "selectAll");
-            String jsonOut1 = jsonObject1.toString();
-            exploreGetAllTask = new CommonTask(urlM, jsonOut1);
-            try {
-                String josnIn1 = exploreGetAllTask.execute().get();
-                Type listType1 = new TypeToken<List<Explore>>() {
-                }.getType();
-               members = new Gson().fromJson(josnIn1, listType1);
 
-            } catch (Exception e) {
-//                Log.e(TAG, e.toString());
-            }
-        } else {
-            Common.showToast(activity, R.string.textNoNetwork);
-        }
-        return members;
-    }
->>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 
 
     private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {

@@ -18,7 +18,7 @@
     <string name="facebook_app_id">329545764829760</string>
     <string name="fb_login_protocol_scheme">fb329545764829760</string>
     <string name="textNoSpotsFound">找不到資料</string>
-<<<<<<< HEAD
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -111,7 +111,7 @@
 
     <string name="thumbsup">按讚</string>
     <string name="triplist">行程</string>
-=======
+
     <string name="textLocName">景點名稱</string>
     <string name="textAddress">地址</string>
     <string name="textLocNameLength">請輸入景點名稱(限10個字元)</string>
@@ -173,6 +173,5 @@
     <string name="group_prompt">"請選擇揪團人數："</string>
     <string name="chooseGroupPple">請選擇揪團人數：</string>
 
->>>>>>> 750c424984fd9d3b6e241b49ad80ccc5a3e09dde
 
 </resources>
