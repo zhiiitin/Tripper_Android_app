@@ -45,11 +45,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -57,6 +59,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -89,6 +92,7 @@ public class Register_Member_Fragment extends Fragment {
     private Member member;
     private String nickName ;
     private FirebaseAuth auth;
+    private FirebaseUser mUser;
 
 
     @Override
@@ -110,6 +114,7 @@ public class Register_Member_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mUser = auth.getCurrentUser();
         NavController navController = Navigation.findNavController(view);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -138,6 +143,14 @@ public class Register_Member_Fragment extends Fragment {
         ibChange = view.findViewById(R.id.ibChange);
         tvUpdate = view.findViewById(R.id.tvUpdate);
         cvUpdate = view.findViewById(R.id.cvUpdate);
+        cvUpdate.setVisibility(View.INVISIBLE);
+ //按下暱稱欄位即顯示完成修改按鈕
+        etNickName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cvUpdate.setVisibility(View.VISIBLE);
+            }
+        });
 
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
@@ -188,6 +201,9 @@ public class Register_Member_Fragment extends Fragment {
             public void onClick(View v) {
                 if(member.getLoginType() ==1 ){
                     signOut();
+                }else if(member.getLoginType() ==2){
+                    auth.signOut();
+                    LoginManager.getInstance().logOut();
                 }
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
@@ -201,6 +217,8 @@ public class Register_Member_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showTypeDialog();
+ //按下更改相片即顯示完成修改按鈕
+                cvUpdate.setVisibility(View.VISIBLE);
             }
         });
         //按下編輯完成，傳送更改的資料以及照片
@@ -282,6 +300,11 @@ public class Register_Member_Fragment extends Fragment {
     }
 
     private void showMember() {
+        if(mUser != null){
+
+            String fbPhotoURL = mUser.getPhotoUrl().toString();
+            Glide.with(this).load(fbPhotoURL).into(ivPhoto);
+        }else {
 
             String Url = Common.URL_SERVER + "MemberServlet";
             int id = member.getId();
@@ -297,11 +320,8 @@ public class Register_Member_Fragment extends Fragment {
             } else {
                 ivPhoto.setImageResource(R.drawable.ic_nopicture);
             }
-//        etIsbn.setText(book.getIsbn());
-//        etName.setText(book.getName());
-//        etPrice.setText(book.getPrice() + "");
-//        etAuthor.setText(book.getAuthor());
 
+        }
     }
 
     private void openAlbum() {

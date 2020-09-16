@@ -78,8 +78,8 @@
 
         <com.example.tripper_android_app.util.CircleImageView
             android:id="@+id/ivPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_nopicture"
             app:layout_constraintEnd_toEndOf="parent"
