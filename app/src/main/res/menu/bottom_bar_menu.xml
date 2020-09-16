@@ -10,7 +10,7 @@
         android:title="@string/action_Explore" />
 
     <item
-        android:id="@+id/group_Fragment"
+        android:id="@+id/groupFragment"
         android:icon="@drawable/ic_button_group_xxxhdpi"
         android:title="@string/action_group"
         />

@@ -77,7 +77,7 @@ public class GroupFragment extends Fragment {
         }
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.group_Fragment);
+        NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         SearchView searchView = view.findViewById(R.id.svGroup);
