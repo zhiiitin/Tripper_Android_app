@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Layout;
+import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,7 +73,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private static int year, month, day, hour, minute;
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,10 +120,9 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 // 設定可選取的結束日為一個月後，amount:可選擇的往後幾個月
                 calendar.add(Calendar.MONTH, 6);
                 datePicker.setMaxDate(calendar.getTimeInMillis());
+
                 // 最後要呼叫show()方能顯示
                 datePickerDialog.show();
-
-
             }
         });
         //時間選擇
@@ -146,22 +145,21 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         btNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
                 String tripTitle = etTripTitle.getText().toString().trim();
                 String startDate = textDate.getText().toString().trim();
                 String startTime = textTime.getText().toString().trim();
                 int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
 
-                Bundle bundle = new Bundle();
+
                 Trip_M trip_m = new Trip_M(tripTitle, startDate, startTime, dayCount);
                 bundle.putSerializable("createTrip", trip_m);
 
 
-                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationLsit, bundle);
+                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_createTripBeforeSave, bundle);
 
             }
         });
-
-
     }
 
 
