@@ -234,6 +234,9 @@
         <action
             android:id="@+id/action_createTripBeforeSave_to_createTripLocationDetail"
             app:destination="@id/createTripLocationDetail" />
+        <action
+            android:id="@+id/action_createTripBeforeSave_to_groupManergeFragment"
+            app:destination="@id/groupManergeFragment" />
     </fragment>
         tools:layout="@layout/fragment_create_trip_location_list" >
     <fragment
@@ -241,5 +244,10 @@
         android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
         tools:layout="@layout/fragment_create_blog_trip_list" />
+    <fragment
+        android:id="@+id/groupManergeFragment"
+        android:name="com.example.tripper_android_app.group.GroupManageFragment"
+        android:label="fragment_group_manerge"
+        tools:layout="@layout/fragment_group_manage" />
 
 </navigation>

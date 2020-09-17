@@ -11,16 +11,20 @@ import android.util.Log;
 import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.task.CommonTask;
 import com.google.gson.JsonObject;
+
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Common {
     private static final String TAG = "TAG_Common";
     public static String URL_SERVER = "http://10.0.2.2:8080/Tripper_JAVA_Web/";
     public final static String PREF_FILE = "preference";
-
-
 
 
     /**

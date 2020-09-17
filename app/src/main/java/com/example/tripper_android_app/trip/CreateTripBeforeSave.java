@@ -1,5 +1,6 @@
 package com.example.tripper_android_app.trip;
 
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -24,6 +25,8 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.util.Common;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * 建立行程頁面——儲存前頁面展示
  *
@@ -39,6 +42,7 @@ public class CreateTripBeforeSave extends Fragment {
     private ImageButton btManageGroupPpl;
     private TextView textChoseGroupPpl, textShowTitle, textShowSDate, textShowSTime;
     private Switch switchGroup;
+    private SharedPreferences preferences;
     private Trip_M trip_m;
 
     @Override
@@ -99,6 +103,19 @@ public class CreateTripBeforeSave extends Fragment {
                     btManageGroupPpl.setVisibility(View.GONE);
                 }
 
+            }
+        });
+
+        // 管理揪團按鈕
+        btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferences = activity.getSharedPreferences("groupSetting", MODE_PRIVATE);
+                preferences.edit()
+                        .putString("tripId", "aaa")
+                        .apply();
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_createTripBeforeSave_to_groupManergeFragment);
             }
         });
 

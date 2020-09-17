@@ -1,6 +1,5 @@
 package com.example.tripper_android_app.location;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -13,7 +12,6 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,9 +20,6 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
-import com.google.gson.JsonObject;
-
-import java.util.concurrent.ExecutionException;
 
 public class LocationDetailFragment extends Fragment {
     private static final String TAG = "LocationDetailFragment";
