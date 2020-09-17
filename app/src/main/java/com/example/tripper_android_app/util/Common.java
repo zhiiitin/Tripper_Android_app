@@ -17,6 +17,7 @@ import com.example.tripper_android_app.task.CommonTask;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -28,8 +29,6 @@ public class Common {
     public final static String PREF_FILE = "preference";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
     public static List<Location_D> locationDs1 = new ArrayList<>();
-
-
 
 
     /**

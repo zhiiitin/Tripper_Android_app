@@ -3,36 +3,26 @@ package com.example.tripper_android_app.trip;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Layout;
 import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
+
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,22 +30,8 @@ import android.widget.TimePicker;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.explore.Explore;
-import com.example.tripper_android_app.explore.ExploreFragment;
-import com.example.tripper_android_app.task.CommonTask;
-import com.example.tripper_android_app.util.Common;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * 建立行程頁面
@@ -150,8 +126,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 String startDate = textDate.getText().toString().trim();
                 String startTime = textTime.getText().toString().trim();
                 int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
-
-
                 Trip_M trip_m = new Trip_M(tripTitle, startDate, startTime, dayCount);
                 bundle.putSerializable("createTrip", trip_m);
 
