@@ -6,6 +6,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+
+import androidx.appcompat.widget.Toolbar;
+
 import androidx.fragment.app.Fragment;
 
 
@@ -23,6 +27,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
@@ -42,7 +48,7 @@ import java.util.ArrayList;
 public class ExploreFragment extends Fragment {
 
 
-    private Activity activity;
+    private MainActivity activity ;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvExplore;
@@ -60,8 +66,9 @@ public class ExploreFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        activity= getActivity();
+        activity= (MainActivity)getActivity();
         imageTasks = new ArrayList<>();
+
 
 
     }
@@ -77,18 +84,24 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("探索");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
 
         NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.svGroup);
-        swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);
 
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));
         explores = getExplores();
-        members = getMemeber();
+
 
         showExplores(explores);
       ;
@@ -116,7 +129,7 @@ public class ExploreFragment extends Fragment {
                     List<Explore> searchExplores = new ArrayList<>();
                     // 搜尋原始資料內有無包含關鍵字(不區別大小寫)
                     for (Explore explore : explores) {
-                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase())) {
+                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase())|| explore.getNickName().toUpperCase().contains(newText.toUpperCase())) {
 
                             searchExplores.add(explore);
                         }
@@ -176,29 +189,31 @@ public class ExploreFragment extends Fragment {
         return explores;
     }
 
-    private List<Member> getMemeber() {
-        List<Member> members = null;
-        if (Common.networkConnected(activity)) {
-            //Servlet
-            String urlM = Common.URL_SERVER + "ExploreServlet";
-            JsonObject jsonObject1 = new JsonObject();
-            jsonObject1.addProperty("action", "selectAll");
-            String jsonOut1 = jsonObject1.toString();
-            exploreGetAllTask = new CommonTask(urlM, jsonOut1);
-            try {
-                String josnIn1 = exploreGetAllTask.execute().get();
-                Type listType1 = new TypeToken<List<Explore>>() {
-                }.getType();
-               members = new Gson().fromJson(josnIn1, listType1);
 
-            } catch (Exception e) {
+//    private List<Member> getMemeber() {
+//        List<Member> members = null;
+//        if (Common.networkConnected(activity)) {
+//            //Servlet
+//            String urlM = Common.URL_SERVER + "ExploreServlet";
+//            JsonObject jsonObject1 = new JsonObject();
+//            jsonObject1.addProperty("action", "selectAll");
+//            String jsonOut1 = jsonObject1.toString();
+//            exploreGetAllTask = new CommonTask(urlM, jsonOut1);
+//            try {
+//                String josnIn1 = exploreGetAllTask.execute().get();
+//                Type listType1 = new TypeToken<List<Explore>>() {
+//                }.getType();
+//               members = new Gson().fromJson(josnIn1, listType1);
+//
+//            } catch (Exception e) {
 //                Log.e(TAG, e.toString());
-            }
-        } else {
-            Common.showToast(activity, R.string.textNoNetwork);
-        }
-        return members;
-    }
+//            }
+//        } else {
+//            Common.showToast(activity, R.string.textNoNetwork);
+//        }
+//        return members;
+//    }
+
 
 
     private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
@@ -256,8 +271,8 @@ public class ExploreFragment extends Fragment {
 
             MyViewHolder(View itemView) {
                 super(itemView);
-                ivBlogPic = itemView.findViewById(R.id.ivBlogPic);
-                tvBlogName = itemView.findViewById(R.id.tvBlogName);
+                ivBlogPic = itemView.findViewById(R.id.ivBlog);
+                tvBlogName = itemView.findViewById(R.id.tvTitle_Blog);
                 tvUseName = itemView.findViewById(R.id.tvUserName);
                 ivUser = itemView.findViewById(R.id.ivUser);
 
@@ -265,32 +280,26 @@ public class ExploreFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
             String url = Common.URL_SERVER + "ExploreServlet";
-            int id = explore.getBlogId();
-            ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
+            int id = explore.getUserId();
+            ImageTask imageTask = new ImageTask(url,id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
-//            holder.ivUser.setScaleType(ImageView.ScaleType.FIT_XY);
             String icoUrl = Common.URL_SERVER + "MemberServlet";
-
             //從MEMBER資料表 娶回來的資料無法秀在上面
             ImageTask imageTask1 = new ImageTask(icoUrl, id, imageSize, holder.ivUser);
             imageTask1.execute();
             imageTasks.add(imageTask);
             //大頭貼
             imageTasks.add(imageTask1);
-            holder.tvUseName.setText("測試");
-
-
-
+            holder.tvUseName.setText(explore.getNickName());
             holder.tvBlogName.setText(explore.getTittleName());
-
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //填寫網誌路徑
+                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment);
 
                 }
             });

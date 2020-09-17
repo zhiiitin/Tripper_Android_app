@@ -33,6 +33,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     // 取單張圖片
     public ImageTask(String url, int id, int imageSize) {
         this(url, id, imageSize, null);
+        key="";
     }
 
     public ImageTask(String url, String key, int imageSize) {
@@ -45,6 +46,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         this.id = id;
         this.imageSize = imageSize;
         this.imageViewWeakReference = new WeakReference<>(imageView);
+        key="";
     }
 
     public ImageTask(String url, String key, int imageSize, ImageView imageView) {
@@ -58,7 +60,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("action", "getImage");
-        if(key == null || key.isEmpty()){
+        if(key.isEmpty()|| key.equals("")){
             jsonObject.addProperty("id", id);
         }else{
             jsonObject.addProperty("id", key);
