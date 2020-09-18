@@ -66,14 +66,14 @@
         android:id="@+id/textDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="24dp"
         android:hint="年-月-日"
         android:singleLine="false"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textTripStartDate"
-        app:layout_constraintTop_toBottomOf="@+id/etTripTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textTripTitle" />
 
     <Button
         android:id="@+id/btPickDate"
@@ -105,7 +105,7 @@
         android:id="@+id/textTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="17dp"
         android:hint="HH:MM"
         android:singleLine="false"
@@ -114,7 +114,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textTripStartTime"
-        app:layout_constraintTop_toBottomOf="@+id/etTripTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textTripTitle" />
 
     <Button
         android:id="@+id/btPickTime"
@@ -148,26 +148,34 @@
 
     <Spinner
         android:id="@+id/spDay"
-        android:layout_width="98dp"
+        android:layout_width="169dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="7dp"
         android:entries="@array/daysForTrip"
-        app:layout_constraintEnd_toStartOf="@+id/textView6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <Button
+        android:id="@+id/btAddNewLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="57dp"
+        android:background="@drawable/layout_box_line"
+        android:text="@string/addNewLoc"
+        android:textColor="@color/colorForWhite"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/btPickTime" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="268dp"
         android:text="@string/showDay"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/spDay"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -175,11 +183,20 @@
         android:id="@+id/btNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/btNext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLocChosen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/spDay" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

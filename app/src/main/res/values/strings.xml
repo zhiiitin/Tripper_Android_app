@@ -156,7 +156,7 @@
         <item>6 </item>
     </string-array>
 
-<!--    選擇揪團人數-->
+    <!--    選擇揪團人數-->
     <string-array name="groupOfPeople">
         <item>1 </item>
         <item>2 </item>
@@ -169,7 +169,7 @@
         <item>9 </item>
         <item>10 </item>
     </string-array>
-    
+
     <string name="group_prompt">"請選擇揪團人數："</string>
     <string name="chooseGroupPple">請選擇揪團人數：</string>
     <string name="addNewLoc">新增景點</string>

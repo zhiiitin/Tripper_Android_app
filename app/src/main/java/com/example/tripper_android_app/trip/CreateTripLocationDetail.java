@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.location.Location;
+import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
 import com.google.android.gms.maps.CameraUpdate;
@@ -33,7 +34,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 景點詳細資訊頁面
@@ -52,6 +56,8 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
     private EditText etMemo;
     private ImageView locPic;
     private static int hour, minute;
+    private Common common;
+    private List<Location_D> locationDList;
 
 
     @Override
@@ -118,16 +124,24 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
         btConfirmLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //List<Location_D> locationDList = new ArrayList<>();
+
+
                 String name = textDetailTripTitle.getText().toString().trim();
                 String address = textDetailTripAdd.getText().toString().trim();
-                String stayTime = textStayTime.getText().toString().trim();
-                String memo = etMemo.getText().toString().trim();
+                String stayTimes = textStayTime.getText().toString().trim();
+                String memos = etMemo.getText().toString().trim();
+                Location_D locationD = new Location_D(name, address, stayTimes, memos);
+                Common.locationDs1.add(locationD);
+
 
                 Bundle bundle = new Bundle();
-                bundle.putString("name", name);
-                bundle.putString("address", address);
-                bundle.putString("stayTime", stayTime);
-                bundle.putString("memo", memo);
+                bundle.putSerializable("locationDList", locationD);
+
+//                bundle.putString("name", name);
+//                bundle.putString("address", address);
+//                bundle.putString("stayTime", stayTimes);
+//                bundle.putString("memo", memos);
 
                 Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_createTripBeforeSave, bundle);
 

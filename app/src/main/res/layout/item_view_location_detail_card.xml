@@ -38,16 +38,29 @@
                     app:srcCompat="@drawable/mark" />
 
                 <TextView
-                    android:id="@+id/textDaysChosen"
+                    android:id="@+id/textLocChosen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="22dp"
-                    android:text="第一天"
+                    android:text="景點名稱"
                     android:textColor="#000000"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/imageView3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textLocAddChosen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:inputType="textMultiLine"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
@@ -58,37 +71,61 @@
                     android:layout_marginTop="18dp"
                     android:background="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textDaysChosen"
+                    app:layout_constraintStart_toEndOf="@+id/textLocChosen"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/expand_more_24px" />
 
-                <Button
-                    android:id="@+id/btAddNewLoc"
+                <TextView
+                    android:id="@+id/textView16"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/layout_box_line"
-                    android:text="@string/addNewLoc"
-                    android:textColor="@color/colorForWhite"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/hintStayTime"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textDaysChosen" />
+                    app:layout_constraintTop_toBottomOf="@+id/textLocAddChosen" />
+
+                <TextView
+                    android:id="@+id/textLocStayTimeChosen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="HH:MM"
+                    android:textColor="@color/colorForDeleteButton"
+                    app:layout_constraintStart_toEndOf="@+id/textView16"
+                    app:layout_constraintTop_toBottomOf="@+id/textLocAddChosen" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/expandableView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvLocView"
+                <TextView
+                    android:id="@+id/textView98"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/memotitle"
+                    android:textColor="@color/colorForGroupButton"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/textShowLocMemo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:inputType="textMultiLine"
+                    android:text="TextView"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
         </LinearLayout>

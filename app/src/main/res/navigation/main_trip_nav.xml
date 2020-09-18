@@ -207,10 +207,10 @@
         android:name="com.example.tripper_android_app.trip.Create_Trip_Fragment"
         android:label="fragment_create__trip_"
         tools:layout="@layout/fragment_create__trip_" >
-        <action
-            android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationLsit"
-            app:destination="@id/create_Trip_LocationList" />
-    </fragment>
+    <action
+        android:id="@+id/action_create_Trip_Fragment_to_createTripBeforeSave"
+        app:destination="@id/createTripBeforeSave" />
+</fragment>
     <fragment
         android:id="@+id/trip_HomePage"
         android:name="com.example.tripper_android_app.trip.Trip_HomePage"
@@ -252,8 +252,15 @@
         android:label="fragment_create_trip_before_save"
         tools:layout="@layout/fragment_create_trip_before_save" >
         <action
+            android:id="@+id/action_createTripBeforeSave_to_create_Trip_LocationList"
+            app:destination="@id/create_Trip_LocationList" />
+        <action
+            android:id="@+id/action_createTripBeforeSave_to_tripHasSavedPage"
+            app:destination="@id/tripHasSavedPage" />
             android:id="@+id/action_createTripBeforeSave_to_createTripLocationDetail"
             app:destination="@id/createTripLocationDetail" />
+
+
     </fragment>
 
     <fragment
@@ -290,6 +297,24 @@
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeTableFragment"
         android:label="fragment_railway_time_table"
         tools:layout="@layout/fragment_railway_time_table" />
+    <fragment
+        android:id="@+id/tripHasSavedPage"
+        android:name="com.example.tripper_android_app.trip.TripHasSavedPage"
+        android:label="fragment_trip_has_saved_page"
+        tools:layout="@layout/fragment_trip_has_saved_page" >
+        <action
+            android:id="@+id/action_tripHasSavedPage_to_create_Trip_Fragment"
+            app:destination="@id/create_Trip_Fragment" />
+        <action
+            android:id="@+id/action_tripHasSavedPage_to_trip_HomePage"
+            app:destination="@id/trip_HomePage" />
+    </fragment>
 
+    <fragment>
+            android:id="@+id/groupManergeFragment"
+            android:name="com.example.tripper_android_app.group.GroupManageFragment"
+            android:label="fragment_group_manerge"
+        tools:layout="@layout/fragment_group_manage" />
+    </fragment>
 
 </navigation>
