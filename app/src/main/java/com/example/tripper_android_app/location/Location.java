@@ -62,7 +62,11 @@ public class Location implements Serializable{
 		this.address = address;
 	}
 
-	public String getLocId() {
+    public Location() {
+
+    }
+
+    public String getLocId() {
 		return locId;
 	}
 

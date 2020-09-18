@@ -10,14 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -30,9 +28,6 @@ import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -94,8 +89,8 @@ public class Setting_Fragment extends Fragment {
         ibTrain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Navigation.findNavController(v)
-//                        .navigate(R.id.action_setting_Fragment_to_railwayTimeListFragment);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_setting_Fragment_to_railwayTimeListFragment);
             }
         });
 

@@ -71,9 +71,8 @@ public class RailwayTimeListFragment extends Fragment {
         ibRailway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                Navigation.findNavController(v)
-//                        .navigate(R.id.action_railwayTimeListFragment_to_railwayTimeTableFragment);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_railwayTimeListFragment_to_railwayTimeTableFragment);
             }
         });
 
@@ -82,8 +81,8 @@ public class RailwayTimeListFragment extends Fragment {
         ibHighSpeedRail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Navigation.findNavController(v)
-//                        .navigate(R.id.action_railwayTimeListFragment_to_hsrTimeTableFragment);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_railwayTimeListFragment_to_hsrTimeTableFragment);
             }
         });
     }
