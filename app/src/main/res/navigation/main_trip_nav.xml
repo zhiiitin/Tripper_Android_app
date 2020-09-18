@@ -275,7 +275,11 @@
         android:id="@+id/create_Blog_Location_List"
         android:name="com.example.tripper_android_app.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
-        tools:layout="@layout/fragment_create_blog_trip_list" />
+        tools:layout="@layout/fragment_create_blog_trip_list" >
+        <action
+            android:id="@+id/action_create_Blog_Location_List_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+    </fragment>
     <fragment
 
         android:id="@+id/blogTripListFragment"

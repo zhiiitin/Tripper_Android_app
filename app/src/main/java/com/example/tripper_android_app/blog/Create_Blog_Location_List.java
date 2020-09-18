@@ -62,6 +62,7 @@ public class Create_Blog_Location_List extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("選擇行程");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
@@ -201,7 +202,7 @@ public class Create_Blog_Location_List extends Fragment {
         String message = "";
         switch (item.getItemId()) {
             case android.R.id.home:    //此返回鍵ID是固定的
-                Navigation.findNavController(this.getView()).popBackStack();
+                Navigation.findNavController(this.getView()).navigate(R.id.action_create_Blog_Location_List_to_blog_HomePage);
                 return true;
 
         }
