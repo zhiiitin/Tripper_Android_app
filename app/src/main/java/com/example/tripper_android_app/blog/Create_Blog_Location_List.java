@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.trip.blog;
+package com.example.tripper_android_app.blog;
 
 import android.content.Context;
 import android.graphics.PorterDuff;

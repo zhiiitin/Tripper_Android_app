@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/blogHomeFragment"
-        android:name="com.example.tripper_android_app.trip.blog.BlogHomeFragment"
+        android:name="com.example.tripper_android_app.blog.BlogHomeFragment"
         android:label="fragment_blog_home"
         tools:layout="@layout/fragment_blog_home" />
     <fragment
         android:id="@+id/blog_HomePage"
-        android:name="com.example.tripper_android_app.trip.blog.Blog_HomePage"
+        android:name="com.example.tripper_android_app.blog.Blog_HomePage"
         android:label="fragment_blog__home_page"
         tools:layout="@layout/fragment_blog__home_page" >
         <action
@@ -258,7 +258,7 @@
 
     <fragment
         android:id="@+id/create_Blog_Location_List"
-        android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
+        android:name="com.example.tripper_android_app.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
         tools:layout="@layout/fragment_create_blog_trip_list" />
     <fragment
