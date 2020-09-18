@@ -29,7 +29,6 @@
         android:layout_height="604dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="3dp"
-        android:background="@color/colorForBottomBar"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -107,33 +106,66 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="417dp"
             android:layout_height="44dp"
             android:layout_marginEnd="1dp"
             android:layout_marginBottom="1dp"
-            android:background="@color/colorForBottomBar"
-            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/txTirpIcon"
+                android:layout_width="61dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="295dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="3dp"
+                android:text="行程列表"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txLikeIcon" />
 
             <ImageView
                 android:id="@+id/ivThumbs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                tools:src="@drawable/iconthumbss" />
+                android:layout_width="26dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="17dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txLikeIcon"
+                app:layout_constraintStart_toEndOf="@+id/txLikeIcon"
+                tools:src="@drawable/collection" />
 
             <ImageView
                 android:id="@+id/ivTripList"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="220dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="325dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/txTirpIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivThumbs"
                 tools:src="@drawable/icontriplist" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/txLikeIcon"
+                android:layout_width="61dp"
+                android:layout_height="17dp"
+                android:text="Like"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivThumbs" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
