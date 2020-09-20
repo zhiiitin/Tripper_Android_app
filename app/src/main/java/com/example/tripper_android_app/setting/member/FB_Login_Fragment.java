@@ -240,6 +240,7 @@ public class FB_Login_Fragment extends Fragment {
                                 Log.e(TAG, "Internet is null");
                             }
                             Navigation.findNavController(loginButton).navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
+                            Common.showToast(activity,"登入成功！");
                         } else {
                             Exception exception = task.getException();
                             String message = exception == null ? "Sign in fail." : exception.getMessage();

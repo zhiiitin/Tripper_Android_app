@@ -151,9 +151,24 @@ public class Blog_HomePage extends Fragment {
 
     private void showMemberPic(){
         if(mUser != null){
+            String Url = Common.URL_SERVER + "MemberServlet";
+            int id = member.getId();
+            int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+            Bitmap bitmap = null;
+            try {
+                bitmap = new ImageTask(Url, id, imageSize).execute().get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //若此帳號之資料庫有照片，便使用資料庫的照
+            if (bitmap != null) {
+                ivUserPic.setImageBitmap(bitmap);
+            } else {
+                //否則連接到第三方大頭照
+                String fbPhotoURL = mUser.getPhotoUrl().toString();
+                Glide.with(this).load(fbPhotoURL).into(ivUserPic);
+            }
 
-            String fbPhotoURL = mUser.getPhotoUrl().toString();
-            Glide.with(this).load(fbPhotoURL).into(ivUserPic);
         }else {
 
             String Url = Common.URL_SERVER + "MemberServlet";
