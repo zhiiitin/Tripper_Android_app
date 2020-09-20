@@ -117,6 +117,18 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         spDay = view.findViewById(R.id.spDay);
         etTripTitle = view.findViewById(R.id.etTripTitle);
 
+        //景點選擇按鈕
+        Button btAddNewLoc = view.findViewById(R.id.btAddNewLoc);
+        btAddNewLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationList);
+
+            }
+        });
+
+
+
         Button btNext = view.findViewById(R.id.btNext);
         btNext.setOnClickListener(new View.OnClickListener() {
             @Override

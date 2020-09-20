@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -56,8 +60,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
     private EditText etMemo;
     private ImageView locPic;
     private static int hour, minute;
-    private Common common;
-    private List<Location_D> locationDList;
+    private Spinner spDay;
 
 
     @Override
@@ -81,6 +84,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
         super.onViewCreated(view, savedInstanceState);
         textStayTime = view.findViewById(R.id.textStayTime);
         etMemo = view.findViewById(R.id.etMemo);
+        spDay = view.findViewById(R.id.spDay);
 
         //停留時間挑選
         Button btStayTime = view.findViewById(R.id.btStayTime);
@@ -124,9 +128,6 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
         btConfirmLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //List<Location_D> locationDList = new ArrayList<>();
-
-
                 String name = textDetailTripTitle.getText().toString().trim();
                 String address = textDetailTripAdd.getText().toString().trim();
                 String stayTimes = textStayTime.getText().toString().trim();
@@ -134,23 +135,54 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 Location_D locationD = new Location_D(name, address, stayTimes, memos);
                 Common.locationDs1.add(locationD);
 
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("locationDList", locationD);
+                spDay.setOnItemClickListener((AdapterView.OnItemClickListener) listener);
 
 //                bundle.putString("name", name);
 //                bundle.putString("address", address);
 //                bundle.putString("stayTime", stayTimes);
 //                bundle.putString("memo", memos);
 
-                Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_createTripBeforeSave, bundle);
+                Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
 
             }
-
         });
-
-
     }
+
+    Spinner.OnItemSelectedListener listener = new Spinner.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String selectedDay = parent.getItemAtPosition(position).toString();
+
+            switch (selectedDay) {
+                case "1":
+                    spDay.setAdapter((SpinnerAdapter) Common.locationDs1);
+                    break;
+                case "2":
+                    spDay.setAdapter((SpinnerAdapter) Common.locationDs2);
+                    break;
+                case "3":
+                    spDay.setAdapter((SpinnerAdapter) Common.locationDs3);
+                    break;
+                case "4":
+                    spDay.setAdapter((SpinnerAdapter) Common.locationDs4);
+                    break;
+                case "5":
+                    spDay.setAdapter((SpinnerAdapter) Common.locationDs5);
+                    break;
+                case "6":
+                    spDay.setAdapter((SpinnerAdapter) Common.locationDs6);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
 
     //顯示景點圖片
     private void showLocPic() {
