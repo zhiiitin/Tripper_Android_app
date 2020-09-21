@@ -214,15 +214,12 @@
         android:name="com.example.tripper_android_app.trip.Create_Trip_Fragment"
         android:label="fragment_create__trip_"
         tools:layout="@layout/fragment_create__trip_" >
-<!--    <action-->
-<!--        android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"-->
-<!--        app:destination="@id/create_Trip_LocationList" />-->
-    <action
-        android:id="@+id/action_create_Trip_Fragment_to_createTripBeforeSave"
-        app:destination="@id/createTripBeforeSave" />
     <action
         android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
         app:destination="@id/create_Trip_LocationList" />
+    <action
+        android:id="@+id/action_create_Trip_Fragment_to_createTripBeforeSave"
+        app:destination="@id/createTripBeforeSave" />
 </fragment>
     <fragment
         android:id="@+id/trip_HomePage"

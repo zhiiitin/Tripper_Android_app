@@ -154,7 +154,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                         Common.locationDs6.add(locationD);
                         break;
                 }
-               //Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
+               Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
                 //Location_D locationD = new Location_D(name, address, stayTimes, memos);
                 Common.locationDs1.add(locationD);
 
