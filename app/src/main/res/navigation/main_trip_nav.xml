@@ -276,7 +276,7 @@
         android:label="fragment_create__blog__location__list"
         tools:layout="@layout/fragment_create_blog_trip_list" />
     <fragment
-<<<<<<< HEAD
+
         android:id="@+id/blogTripListFragment"
         android:name="com.example.tripper_android_app.blog.BlogTripListFragment"
         android:label="fragment_blog_trip_list"
@@ -286,7 +286,7 @@
         android:name="com.example.tripper_android_app.blog.BlogEditFragment"
         android:label="fragment_blog_edit"
         tools:layout="@layout/fragment_blog_edit" />
-=======
+    <fragment
         android:id="@+id/railwayTimeListFragment"
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
         android:label="RailwayTimeListFragment" >
@@ -327,13 +327,13 @@
             android:id="@+id/action_tripHasSavedPage_to_trip_HomePage"
             app:destination="@id/trip_HomePage" />
     </fragment>
->>>>>>> f1d2bee5cdeceaa172c6ea43c50da0006448d96d
 
-    <fragment>
-            android:id="@+id/groupManergeFragment"
-            android:name="com.example.tripper_android_app.group.GroupManageFragment"
-            android:label="fragment_group_manerge"
-        tools:layout="@layout/fragment_group_manage" />
+
+    <fragment
+        android:id="@+id/groupManergeFragment"
+        android:name="com.example.tripper_android_app.group.GroupManageFragment"
+        android:label="fragment_group_manerge"
+        tools:layout="@layout/fragment_group_manage" >
     </fragment>
 
 </navigation>

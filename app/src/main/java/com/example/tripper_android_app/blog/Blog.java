@@ -21,6 +21,11 @@ public class Blog implements Serializable {
         this.locID = locID;
         this.blogID = blogID;
     }
+    public Blog(String blogTitle, String blogDesc2, String blogNote2) {
+        this.blogTittle = blogTitle;
+        this.blogDesc = blogDesc2;
+        this.blogNote = blogNote2;
+    }
     public int getBlogID(){
         return blogID;
     }

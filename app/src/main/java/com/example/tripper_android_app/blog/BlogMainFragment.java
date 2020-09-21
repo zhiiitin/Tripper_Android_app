@@ -169,7 +169,7 @@ public class BlogMainFragment extends Fragment {
             //Servlet
             String url = Common.URL_SERVER + "BlogServlet";
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("action", "getAll");
             String jsonOut = jsonObject.toString();
             blogGetAllTask = new CommonTask(url, jsonOut);
 
@@ -222,7 +222,7 @@ public class BlogMainFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder holder, int position) {
             final Blog blog = blogList.get(position);
-            int id = blog.getLocId();
+            int id = blog.getBlogID();
             String url = Common.URL_SERVER+"BlogServlet";
             ImageTask imageTask = new ImageTask(url,id,imageSize,holder.ivPic1);
             imageTask.execute();
