@@ -37,11 +37,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * 景點詳細資訊頁面
@@ -132,7 +128,34 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 String address = textDetailTripAdd.getText().toString().trim();
                 String stayTimes = textStayTime.getText().toString().trim();
                 String memos = etMemo.getText().toString().trim();
-                Location_D locationD = new Location_D(name, address, stayTimes, memos);
+                String daySelected = Common.spinnerSelect;
+                if(daySelected == null || daySelected.isEmpty()) {
+                    Common.showToast(activity, "請先選擇天數");
+                    Navigation.findNavController(v).popBackStack();
+                }
+                Location_D locationD = new Location_D(name, address, memos, stayTimes);
+                switch (daySelected){
+                    case "1":
+                        Common.locationDs1.add(locationD);
+                        break;
+                    case "2":
+                        Common.locationDs2.add(locationD);
+                        break;
+                    case "3":
+                        Common.locationDs3.add(locationD);
+                        break;
+                    case "4":
+                        Common.locationDs4.add(locationD);
+                        break;
+                    case "5":
+                        Common.locationDs5.add(locationD);
+                        break;
+                    case "6":
+                        Common.locationDs6.add(locationD);
+                        break;
+                }
+               Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
+                //Location_D locationD = new Location_D(name, address, stayTimes, memos);
                 Common.locationDs1.add(locationD);
 
                 spDay.setOnItemClickListener((AdapterView.OnItemClickListener) listener);
@@ -142,7 +165,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
 //                bundle.putString("stayTime", stayTimes);
 //                bundle.putString("memo", memos);
 
-                Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
+                //Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
 
             }
         });

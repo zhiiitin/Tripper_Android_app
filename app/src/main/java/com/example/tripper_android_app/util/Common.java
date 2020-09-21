@@ -34,6 +34,7 @@ public class Common {
     public static List<Location_D> locationDs4 = new ArrayList<>();
     public static List<Location_D> locationDs5 = new ArrayList<>();
     public static List<Location_D> locationDs6 = new ArrayList<>();
+    public static String spinnerSelect = "";
 
 
     /**
@@ -79,7 +80,7 @@ public class Common {
     public static String getTransId(){
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssss");
         String transId = dateFormat.format(System.currentTimeMillis());
-        return transId.toString();
+        return transId;
     }
 
     public static boolean netWorkConnected(Context context) {
