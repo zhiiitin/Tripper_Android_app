@@ -41,7 +41,6 @@ public class CreateTripBeforeSave extends Fragment {
     private Spinner spChoosePpl;
     private ImageButton btManageGroupPpl;
     private TextView textChoseGroupPpl, textShowTitle, textShowSDate, textShowSTime;
-    private Switch switchGroup;
     private SharedPreferences preferences;
     private Trip_M trip_m;
 
