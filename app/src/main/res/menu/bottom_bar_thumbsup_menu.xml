@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/exploreFragment"
+        android:icon="@drawable/icnthumbs"
+        android:title="@string/thumbsup"
+         />
+
+    <item
+        android:id="@+id/groupFragment"
+        android:icon="@drawable/icolist"
+        android:title="@string/triplist"
+
+        />
+</menu>

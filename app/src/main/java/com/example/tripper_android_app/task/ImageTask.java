@@ -23,7 +23,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     private final static String TAG = "TAG_ImageTask";
     private String url;
     private int id, imageSize;
-    private String key; // 資料表大多數PK為String型別，所另建此欄位
+    private String key = ""; // 資料表大多數PK為String型別，所另建此欄位
     /* ImageTask的屬性strong參照到SpotListFragment內的imageView不好，
         會導致SpotListFragment進入背景時imageView被參照而無法被釋放，
         而且imageView會參照到Context，也會導致Activity無法被回收。
@@ -58,7 +58,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("action", "getImage");
-        if(key == null || key.isEmpty()){
+        if(key.isEmpty()|| key.equals("")){
             jsonObject.addProperty("id", id);
         }else{
             jsonObject.addProperty("id", key);

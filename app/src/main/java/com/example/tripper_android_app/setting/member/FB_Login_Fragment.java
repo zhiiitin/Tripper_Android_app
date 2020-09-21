@@ -31,6 +31,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
@@ -70,6 +71,9 @@ public class FB_Login_Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
+        //Initialize FaceBook SDK
+        FacebookSdk.sdkInitialize(activity);
+        //Initialize Firebase
         auth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
         setHasOptionsMenu(true);
@@ -121,6 +125,7 @@ public class FB_Login_Fragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+
                 Navigation.findNavController(loginButton).navigate(R.id.action_FB_Login_Fragment_to_register_Member_Fragment);
             }
 

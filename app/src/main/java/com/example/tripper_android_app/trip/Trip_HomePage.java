@@ -76,7 +76,6 @@ public class Trip_HomePage extends Fragment {
         if (id == R.id.btCreateTrip) {
             findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_create_Trip_Fragment);
             return true;
-
         }
         return super.onOptionsItemSelected(item);
     }

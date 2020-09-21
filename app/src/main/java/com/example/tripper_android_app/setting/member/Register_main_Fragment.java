@@ -217,7 +217,7 @@ public class Register_main_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 登入成功轉至下頁；失敗則顯示錯誤訊息
                         if (task.isSuccessful()) {
-                            //Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
                             Common.showToast(activity,"GOOGLE登入成功！");
                         } else {
                             Exception exception = task.getException();

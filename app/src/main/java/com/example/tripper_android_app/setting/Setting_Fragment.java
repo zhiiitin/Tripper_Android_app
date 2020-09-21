@@ -89,8 +89,8 @@ public class Setting_Fragment extends Fragment {
         ibTrain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Navigation.findNavController(v)
-//                        .navigate(R.id.action_setting_Fragment_to_railwayTimeListFragment);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_setting_Fragment_to_railwayTimeListFragment);
             }
         });
 

@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.location.Location;
+import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
 import com.google.android.gms.maps.CameraUpdate;
@@ -32,7 +33,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.List;
 
 /**
@@ -52,6 +52,8 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
     private EditText etMemo;
     private ImageView locPic;
     private static int hour, minute;
+    private Common common;
+    private List<Location_D> locationDList;
 
 
     @Override
@@ -120,16 +122,35 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
             public void onClick(View v) {
                 String name = textDetailTripTitle.getText().toString().trim();
                 String address = textDetailTripAdd.getText().toString().trim();
-                String stayTime = textStayTime.getText().toString().trim();
-                String memo = etMemo.getText().toString().trim();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("name", name);
-                bundle.putString("address", address);
-                bundle.putString("stayTime", stayTime);
-                bundle.putString("memo", memo);
-
-                Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_createTripBeforeSave, bundle);
+                String stayTimes = textStayTime.getText().toString().trim();
+                String memos = etMemo.getText().toString().trim();
+                String daySelected = Common.spinnerSelect;
+                if(daySelected == null || daySelected.isEmpty()) {
+                    Common.showToast(activity, "請先選擇天數");
+                    Navigation.findNavController(v).popBackStack();
+                }
+                Location_D locationD = new Location_D(name, address, memos, stayTimes);
+                switch (daySelected){
+                    case "1":
+                        Common.locationDs1.add(locationD);
+                        break;
+                    case "2":
+                        Common.locationDs2.add(locationD);
+                        break;
+                    case "3":
+                        Common.locationDs3.add(locationD);
+                        break;
+                    case "4":
+                        Common.locationDs4.add(locationD);
+                        break;
+                    case "5":
+                        Common.locationDs5.add(locationD);
+                        break;
+                    case "6":
+                        Common.locationDs6.add(locationD);
+                        break;
+                }
+               Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
 
             }
 
