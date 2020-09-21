@@ -279,6 +279,9 @@
         <action
             android:id="@+id/action_create_Blog_Location_List_to_blog_HomePage"
             app:destination="@id/blog_HomePage" />
+        <action
+            android:id="@+id/action_create_Blog_Location_List_to_createBlogFragment"
+            app:destination="@id/createBlogFragment" />
     </fragment>
     <fragment
 
@@ -338,6 +341,11 @@
             android:name="com.example.tripper_android_app.group.GroupManageFragment"
             android:label="fragment_group_manerge"
         tools:layout="@layout/fragment_group_manage" />
+    <fragment
+        android:id="@+id/createBlogFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
+        android:label="fragment_create_blog"
+        tools:layout="@layout/fragment_create_blog" />
 
 
 </navigation>

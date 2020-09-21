@@ -179,6 +179,16 @@ public class Create_Blog_Location_List extends Fragment {
             groupImageTask.execute();
 
             myViewHolder.tvTitle.setText(group.getTripTitle());
+            final Bundle bundle = new Bundle();
+            bundle.putString("tripName",group.getTripTitle());
+            bundle.putString("tripDate",group.getStartDate());
+
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v).navigate(R.id.createBlogFragment,bundle);
+                }
+            });
 
         }
     }
