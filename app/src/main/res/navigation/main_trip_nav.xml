@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/blogHomeFragment"
-        android:name="com.example.tripper_android_app.trip.blog.BlogHomeFragment"
+        android:name="com.example.tripper_android_app.blog.BlogHomeFragment"
         android:label="fragment_blog_home"
         tools:layout="@layout/fragment_blog_home" />
     <fragment
         android:id="@+id/blog_HomePage"
-        android:name="com.example.tripper_android_app.trip.blog.Blog_HomePage"
+        android:name="com.example.tripper_android_app.blog.Blog_HomePage"
         android:label="fragment_blog__home_page"
         tools:layout="@layout/fragment_blog__home_page" >
         <action
@@ -201,18 +201,28 @@
         android:id="@+id/blogMainFragment"
         android:name="com.example.tripper_android_app.blog.BlogMainFragment"
         android:label="fragment_blog_main"
-        tools:layout="@layout/fragment_blog_main" />
+        tools:layout="@layout/fragment_blog_main" >
+        <action
+            android:id="@+id/action_blogMainFragment_to_blogTripListFragment"
+            app:destination="@id/blogTripListFragment" />
+        <action
+            android:id="@+id/action_blogMainFragment_to_blogEditFragment"
+            app:destination="@id/blogEditFragment" />
+    </fragment>
 <fragment
         android:id="@+id/create_Trip_Fragment"
         android:name="com.example.tripper_android_app.trip.Create_Trip_Fragment"
         android:label="fragment_create__trip_"
         tools:layout="@layout/fragment_create__trip_" >
-    <action
-        android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
-        app:destination="@id/create_Trip_LocationList" />
+<!--    <action-->
+<!--        android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"-->
+<!--        app:destination="@id/create_Trip_LocationList" />-->
     <action
         android:id="@+id/action_create_Trip_Fragment_to_createTripBeforeSave"
         app:destination="@id/createTripBeforeSave" />
+    <action
+        android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
+        app:destination="@id/create_Trip_LocationList" />
 </fragment>
     <fragment
         android:id="@+id/trip_HomePage"
@@ -257,6 +267,7 @@
         <action
             android:id="@+id/action_createTripBeforeSave_to_tripHasSavedPage"
             app:destination="@id/tripHasSavedPage" />
+        <action
             android:id="@+id/action_createTripBeforeSave_to_createTripLocationDetail"
             app:destination="@id/createTripLocationDetail" />
 
@@ -265,9 +276,27 @@
 
     <fragment
         android:id="@+id/create_Blog_Location_List"
-        android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
+        android:name="com.example.tripper_android_app.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
-        tools:layout="@layout/fragment_create_blog_trip_list" />
+        tools:layout="@layout/fragment_create_blog_trip_list" >
+        <action
+            android:id="@+id/action_create_Blog_Location_List_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+        <action
+            android:id="@+id/action_create_Blog_Location_List_to_createBlogFragment"
+            app:destination="@id/createBlogFragment" />
+    </fragment>
+    <fragment
+
+        android:id="@+id/blogTripListFragment"
+        android:name="com.example.tripper_android_app.blog.BlogTripListFragment"
+        android:label="fragment_blog_trip_list"
+        tools:layout="@layout/fragment_blog_trip_list" />
+    <fragment
+        android:id="@+id/blogEditFragment"
+        android:name="com.example.tripper_android_app.blog.BlogEditFragment"
+        android:label="fragment_blog_edit"
+        tools:layout="@layout/fragment_blog_edit" />
     <fragment
         android:id="@+id/railwayTimeListFragment"
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
@@ -317,5 +346,12 @@
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
         android:label="GroupManageFragment" />
+        tools:layout="@layout/fragment_group_manage" />
+    <fragment
+        android:id="@+id/createBlogFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
+        android:label="fragment_create_blog"
+        tools:layout="@layout/fragment_create_blog" />
+
 
 </navigation>

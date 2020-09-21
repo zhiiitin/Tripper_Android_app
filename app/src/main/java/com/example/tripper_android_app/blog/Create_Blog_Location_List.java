@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.trip.blog;
+package com.example.tripper_android_app.blog;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -62,6 +62,7 @@ public class Create_Blog_Location_List extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("選擇行程");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
@@ -178,6 +179,16 @@ public class Create_Blog_Location_List extends Fragment {
             groupImageTask.execute();
 
             myViewHolder.tvTitle.setText(group.getTripTitle());
+            final Bundle bundle = new Bundle();
+            bundle.putString("tripName",group.getTripTitle());
+            bundle.putString("tripDate",group.getStartDate());
+
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v).navigate(R.id.createBlogFragment,bundle);
+                }
+            });
 
         }
     }
@@ -201,7 +212,7 @@ public class Create_Blog_Location_List extends Fragment {
         String message = "";
         switch (item.getItemId()) {
             case android.R.id.home:    //此返回鍵ID是固定的
-                Navigation.findNavController(this.getView()).popBackStack();
+                Navigation.findNavController(this.getView()).navigate(R.id.action_create_Blog_Location_List_to_blog_HomePage);
                 return true;
 
         }

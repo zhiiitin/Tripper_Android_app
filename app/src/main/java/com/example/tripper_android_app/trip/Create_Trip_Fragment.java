@@ -161,16 +161,23 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         spDay = view.findViewById(R.id.spDay);
         etTripTitle = view.findViewById(R.id.etTripTitle);
 
+
         // 挑選景點
-        Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
-        btSelectLoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Common.spinnerSelect = spDay.getSelectedItem().toString().trim();
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationList);
-            }
-        });
+//        Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
+//        btSelectLoc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Common.spinnerSelect = spDay.getSelectedItem().toString().trim();
+//                Navigation.findNavController(v)
+//                        .navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationList);
+        //景點選擇按鈕
+//        Button btAddNewLoc = view.findViewById(R.id.btAddNewLoc);
+//        btAddNewLoc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationList);
+//            }
+//        });
 
 
         Button btNext = view.findViewById(R.id.btNext);
@@ -191,7 +198,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                         .apply();
                 Trip_M trip_m = new Trip_M(tripTitle, startDate, startTime, dayCount);
                 bundle.putSerializable("createTrip", trip_m);
-                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_createTripBeforeSave, bundle);
+               // Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_createTripBeforeSave, bundle);
 
             }
         });
@@ -316,21 +323,21 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        String tripTitle = etTripTitle.getText().toString().trim();
-        String startDate = textDate.getText().toString().trim();
-        String startTime = textTime.getText().toString().trim();
-        //int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
-        preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
-        etTripTitle.setText(preferences.getString("tripTitle",""));
-        textDate.setText(preferences.getString("startDate",""));
-        textTime.setText(preferences.getString("startTime",""));
-
-        //spDay.setSelection(preferences.getInt("dayCount",0));
-
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        String tripTitle = etTripTitle.getText().toString().trim();
+//        String startDate = textDate.getText().toString().trim();
+//        String startTime = textTime.getText().toString().trim();
+//        //int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
+//        preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
+//        etTripTitle.setText(preferences.getString("tripTitle",""));
+//        textDate.setText(preferences.getString("startDate",""));
+//        textTime.setText(preferences.getString("startTime",""));
+//
+//        //spDay.setSelection(preferences.getInt("dayCount",0));
+//
+//    }
 
 
 }

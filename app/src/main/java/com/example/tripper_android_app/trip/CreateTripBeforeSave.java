@@ -83,7 +83,7 @@ public class CreateTripBeforeSave extends Fragment {
 
         textChoseGroupPpl = view.findViewById(R.id.textChoseGroupPpl);
         spChoosePpl = view.findViewById(R.id.spChoosePpl);
-        switchGroup = view.findViewById(R.id.switchGroup);
+       // switchGroup = view.findViewById(R.id.switchGroup);
 
         textShowTitle = view.findViewById(R.id.textShowTitle);
         textShowSDate = view.findViewById(R.id.textShowSDate);
@@ -99,19 +99,19 @@ public class CreateTripBeforeSave extends Fragment {
         textShowSTime.setText(trip_m.getStartTime());
 
         //揪團功能開關
-        switchGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    textChoseGroupPpl.setVisibility(View.VISIBLE);
-                    spChoosePpl.setVisibility(View.VISIBLE);
-                } else {
-                    textChoseGroupPpl.setVisibility(View.GONE);
-                    spChoosePpl.setVisibility(View.GONE);
-                }
-
-            }
-        });
+//        switchGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    textChoseGroupPpl.setVisibility(View.VISIBLE);
+//                    spChoosePpl.setVisibility(View.VISIBLE);
+//                } else {
+//                    textChoseGroupPpl.setVisibility(View.GONE);
+//                    spChoosePpl.setVisibility(View.GONE);
+//                }
+//
+//            }
+//        });
 
         // 儲存行程
         ImageButton btSaveTrip = view.findViewById(R.id.btSaveTrip);

@@ -45,6 +45,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.navigation.Navigation.findNavController;
+
 
 public class BlogMainFragment extends Fragment {
 
@@ -104,6 +106,12 @@ public class BlogMainFragment extends Fragment {
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
         blogList = getBlogs();
         showBlogs(blogList);
+        ivTripList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(rvBlog).navigate(R.id.action_blogMainFragment_to_blogTripListFragment);
+            }
+        });
 
 
 
@@ -111,6 +119,31 @@ public class BlogMainFragment extends Fragment {
 
 
 
+    }
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.blog_edit_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case android.R.id.home:
+                Navigation.findNavController(rvBlog).popBackStack();
+                break;
+            case R.id.blogEditFragment:
+                Navigation.findNavController(rvBlog).navigate(R.id.action_blogMainFragment_to_blogEditFragment);
+                break;
+            default:
+                break;
+        }
+
+
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void showBlogs(List<Blog> blogList) {

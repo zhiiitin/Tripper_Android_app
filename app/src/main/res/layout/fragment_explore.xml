@@ -32,13 +32,14 @@
             android:layout_height="64dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:iconifiedByDefault="false" />
+            android:iconifiedByDefault="false"
+            android:queryHint="搜尋「 網誌名稱 」" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
             android:id="@+id/swipeRefreshLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_width="match_parent"
+            android:layout_height="485dp">
 
 
             <androidx.recyclerview.widget.RecyclerView
