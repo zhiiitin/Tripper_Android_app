@@ -99,13 +99,6 @@ public class CreateTripBeforeSave extends Fragment {
         textShowSDate.setText(trip_m.getStartDate());
         textShowSTime.setText(trip_m.getStartTime());
 
-//        //recyclerView
-//        rvDay_Loc = view.findViewById(R.id.rvDay_Loc);
-//        rvDay_Loc.setLayoutManager(new LinearLayoutManager(activity));
-//        tripMList = getTripMList();
-//        showDayPick(tripMList);
-
-
         //揪團功能開關
         switchGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -121,119 +114,22 @@ public class CreateTripBeforeSave extends Fragment {
             }
         });
 
-
+        // 儲存行程
         ImageButton btSaveTrip = view.findViewById(R.id.btSaveTrip);
         btSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String tripTitle = textShowTitle.getText().toString().trim();
-//                String startDate = textShowSDate.getText().toString().trim();
-//                String startTime = textShowSTime.getText().toString().trim();
+
+                String tripTitle = textShowTitle.getText().toString().trim();
+                String startDate = textShowSDate.getText().toString().trim();
+                String startTime = textShowSTime.getText().toString().trim();
 //                int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
 //                int pMax = Integer.parseInt(spChoosePpl.getSelectedItem().toString().trim());
 //                int status = Inter 揪團狀態碼
-//                存景點ID
-//                停留時間
-//                行程備註
 
 
-                Navigation.findNavController(v).navigate(R.id.action_createTripBeforeSave_to_tripHasSavedPage);
-
-        // 管理揪團按鈕
-//        btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                preferences = activity.getSharedPreferences("groupSetting", MODE_PRIVATE);
-//                preferences.edit()
-//                        .putString("tripId", "aaa")
-//                        .apply();
-//                Navigation.findNavController(v)
-//                        .navigate(R.id.action_createTripBeforeSave_to_groupManergeFragment);
+                //Navigation.findNavController(v).navigate(R.id.action_createTripBeforeSave_to_tripHasSavedPage);
             }
         });
-
-
     }
-
-//    private List<Trip_M> getTripMList() {
-//        List<Trip_M> tripMList = null;
-//
-//        if (Common.netWorkConnected(activity)) {
-//            String url = Common.URL_SERVER + "Trip_M_Servlet";
-//            JsonObject jsonObject = new JsonObject();
-//            jsonObject.addProperty("action", "getAll");
-//            String jsonOut = jsonObject.toString();
-//            DayGetAllTask = new CommonTask(url, jsonOut);
-//
-//            try {
-//                String jsonIn = DayGetAllTask.execute().get();
-//                Type listType = new TypeToken<List<Location>>() {
-//                }.getType();
-//                tripMList = new Gson().fromJson(jsonIn, listType);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            Common.showToast(activity, "No NetWork Connection available");
-//        }
-//        return tripMList;
-//    }
-//
-//    private void showDayPick(List<Trip_M> tripMList) {
-//        DayPickAdapter dayPickAdapter = (DayPickAdapter) rvDay_Loc.getAdapter();
-//        if (dayPickAdapter == null) {
-//            rvDay_Loc.setAdapter(new DayPickAdapter(activity, tripMList));
-//        } else {
-//            dayPickAdapter.setDayPick(tripMList);
-//            dayPickAdapter.notifyDataSetChanged();
-//        }
-//    }
-//
-//    private class DayPickAdapter extends RecyclerView.Adapter<DayPickAdapter.MyViewHolder> {
-//        private LayoutInflater layoutInflater;
-//        private List<Trip_M> tripMList;
-//
-//
-//        void setDayPick(List<Trip_M> tripMList) {
-//            this.tripMList = tripMList;
-//        }
-//
-//        class MyViewHolder extends RecyclerView.ViewHolder {
-//            TextView textDaysChosen;
-//            Spinner spinner;
-//
-//            public MyViewHolder(@NonNull View itemView) {
-//                super(itemView);
-//                textDaysChosen = itemView.findViewById(R.id.textDaysChosen);
-//                spinner = itemView.findViewById(R.id.spDay);
-//            }
-//        }
-//
-//
-//        @Override
-//        public int getItemCount() {
-//            return tripMList.size();
-//        }
-//
-//        @NonNull
-//        @Override
-//        public DayPickAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            View itemView = layoutInflater.inflate(R.layout.item_view_location_detail_card, parent, false);
-//            return new MyViewHolder(itemView);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull DayPickAdapter.MyViewHolder holder, int position) {
-//            final Trip_M trip_m = tripMList.get(position);
-//            holder.textDaysChosen.setText(trip_m.getDayCount());
-//            holder.spinner.setAdapter();
-//
-//
-//        }
-//
-//
-//    }
-
-
 }

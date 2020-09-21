@@ -3,7 +3,9 @@ package com.example.tripper_android_app.location;
 import java.io.Serializable;
 
 public class Location_D extends Location implements Serializable {
-    private String memos;
+ 
+	private static final long serialVersionUID = 1L;
+	private String memos;
     private String stayTimes;
 
     public Location_D(String name, String address, String memos, String stayTimes) {
@@ -11,11 +13,6 @@ public class Location_D extends Location implements Serializable {
         this.memos = memos;
         this.stayTimes = stayTimes;
     }
-
-    public Location_D() {
-        super();
-    }
-
 
     public String getStayTimes() {
         return stayTimes;

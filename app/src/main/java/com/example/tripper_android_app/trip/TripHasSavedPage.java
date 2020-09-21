@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
@@ -50,11 +51,18 @@ public class TripHasSavedPage extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolBarTripSaved);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        ImageButton btManageGroupPpl = view.findViewById(R.id.btManageGroupPpl);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
-
+        btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment);
+            }
+        });
     }
 
     //ToolBar 右上角icon
