@@ -3,6 +3,8 @@ package com.example.tripper_android_app.trip;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Layout;
 import android.text.format.DateFormat;
@@ -23,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -30,8 +35,12 @@ import android.widget.TimePicker;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.location.Location_D;
+import com.example.tripper_android_app.util.Common;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * 建立行程頁面
@@ -47,6 +56,9 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private EditText etTripTitle;
     private Spinner spDay;
     private static int year, month, day, hour, minute;
+    private SharedPreferences preferences;
+    private RecyclerView rvLocSelectedList;
+    //private List<Location_D> day4Locations;
 
 
     @Override
@@ -71,12 +83,44 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         super.onViewCreated(view, savedInstanceState);
         textDate = view.findViewById(R.id.textDate);
         textTime = view.findViewById(R.id.textTime);
+        rvLocSelectedList = view.findViewById(R.id.rvLocChosen);
+        rvLocSelectedList.setLayoutManager(new LinearLayoutManager(activity));
+        //day4Locations = new ArrayList<>();
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("建立行程");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // 挑選景點完顯示recycleView
+        String daySelected = Common.spinnerSelect;
+        Log.d(TAG, "daySelected :: " + daySelected);
+        if(daySelected !=null && !daySelected.isEmpty()){
+            switch (daySelected) {
+                case "1":
+                    showLocList(Common.locationDs1);
+                    break;
+                case "2":
+                    showLocList(Common.locationDs2);
+                    break;
+                case "3":
+                    showLocList(Common.locationDs1);
+                    break;
+                case "4":
+                    showLocList(Common.locationDs1);
+                    break;
+                case "5":
+                    showLocList(Common.locationDs1);
+                    break;
+                case "6":
+                    showLocList(Common.locationDs1);
+                    break;
+            }
+        }
+
+        // spinner監聽器，顯示不同天的景點清單
+
 
         //日期選擇
         Button btPickDate = view.findViewById(R.id.btPickDate);
@@ -117,6 +161,21 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         spDay = view.findViewById(R.id.spDay);
         etTripTitle = view.findViewById(R.id.etTripTitle);
 
+
+        // 挑選景點
+        Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
+        btSelectLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Common.spinnerSelect = spDay.getSelectedItem().toString().trim();
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_create_Trip_Fragment_to_create_Trip_LocationList);
+            }
+
+
+        });
+
+
         Button btNext = view.findViewById(R.id.btNext);
         btNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,14 +185,84 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 String startDate = textDate.getText().toString().trim();
                 String startTime = textTime.getText().toString().trim();
                 int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
+                preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
+                preferences.edit()
+                        .putString("tripTitle", tripTitle)
+                        .putString("startDate", startDate)
+                        .putString("startTime", startTime)
+                        .putInt("dayCount", dayCount)
+                        .apply();
                 Trip_M trip_m = new Trip_M(tripTitle, startDate, startTime, dayCount);
                 bundle.putSerializable("createTrip", trip_m);
-
-
-                Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_createTripBeforeSave, bundle);
+               Navigation.findNavController(v).navigate(R.id.action_create_Trip_Fragment_to_createTripBeforeSave, bundle);
 
             }
         });
+    }
+
+    private void showLocList(List<Location_D> locations) {
+        if(locations == null || locations.isEmpty()){
+            return;
+        }
+        Log.d(TAG, "enter showLocList");
+        //day4Locations.addAll(locations);
+        SelectLocAdapter selectLocAdapter = (SelectLocAdapter) rvLocSelectedList.getAdapter();
+        if(selectLocAdapter == null ){
+            Log.d(TAG, "enter adpter is null");
+            rvLocSelectedList.setAdapter(new SelectLocAdapter(activity, locations));
+        }else {
+            Log.d(TAG, "enter adpter is not null");
+            selectLocAdapter.setLocationDs(locations);
+            selectLocAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class SelectLocAdapter extends RecyclerView.Adapter<SelectLocAdapter.MyDayViewHolder> {
+        private LayoutInflater layoutInflater;
+        private List<Location_D> locationDs;
+
+        SelectLocAdapter(Context context, List<Location_D> locationDs){
+            layoutInflater = LayoutInflater.from(context);
+            this.locationDs = locationDs;
+        }
+
+        void setLocationDs(List<Location_D> locationDs){
+            this.locationDs = locationDs;
+        }
+
+        @Override
+        public int getItemCount() {
+            return locationDs == null ? 0 : locationDs.size();
+        }
+
+        @NonNull
+        @Override
+        public MyDayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View itemView = layoutInflater.inflate(R.layout.item_view_loc_and_memo_card, parent, false);
+            return new MyDayViewHolder(itemView);
+        }
+
+        private class MyDayViewHolder extends RecyclerView.ViewHolder {
+            TextView tvStayTime, tvLocName, tvAddress, tvMemo;
+            public MyDayViewHolder(View itemView) {
+                super(itemView);
+                tvStayTime = itemView.findViewById(R.id.textShowStayTime);
+                tvLocName = itemView.findViewById(R.id.textLocName);
+                tvAddress = itemView.findViewById(R.id.textAddress);
+                tvMemo = itemView.findViewById(R.id.textShowMemo);
+            }
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyDayViewHolder myDayViewHolder, int position) {
+            Location_D locationDtail = locationDs.get(position);
+            myDayViewHolder.tvLocName.setText(locationDtail.getName());
+            myDayViewHolder.tvAddress.setText(locationDtail.getAddress());
+            myDayViewHolder.tvStayTime.setText(locationDtail.getStayTimes());
+            myDayViewHolder.tvMemo.setText(locationDtail.getMemos());
+        }
+
+
     }
 
 
@@ -159,9 +288,9 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         updateDisplay();
     }
 
-    @Override
     /* 覆寫OnTimeSetListener.onTimeSet()以處理時間挑選完成事件。
        時間挑選完成會呼叫此方法，並傳入選取的時與分 */
+    @Override
     public void onTimeSet(TimePicker view, int hour, int minute) {
         Create_Trip_Fragment.hour = hour;
         Create_Trip_Fragment.minute = minute;
@@ -189,4 +318,22 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             return "0" + number;
         }
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        String tripTitle = etTripTitle.getText().toString().trim();
+//        String startDate = textDate.getText().toString().trim();
+//        String startTime = textTime.getText().toString().trim();
+//        //int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
+//        preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
+//        etTripTitle.setText(preferences.getString("tripTitle",""));
+//        textDate.setText(preferences.getString("startDate",""));
+//        textTime.setText(preferences.getString("startTime",""));
+//
+//        //spDay.setSelection(preferences.getInt("dayCount",0));
+//
+//    }
+
+
 }

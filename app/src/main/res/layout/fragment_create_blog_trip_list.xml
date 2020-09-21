@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".trip.blog.Create_Blog_Location_List">
+    tools:context=".blog.Create_Blog_Location_List">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

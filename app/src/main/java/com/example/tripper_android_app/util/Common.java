@@ -29,6 +29,12 @@ public class Common {
     public final static String PREF_FILE = "preference";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
     public static List<Location_D> locationDs1 = new ArrayList<>();
+    public static List<Location_D> locationDs2 = new ArrayList<>();
+    public static List<Location_D> locationDs3 = new ArrayList<>();
+    public static List<Location_D> locationDs4 = new ArrayList<>();
+    public static List<Location_D> locationDs5 = new ArrayList<>();
+    public static List<Location_D> locationDs6 = new ArrayList<>();
+    public static String spinnerSelect = "";
 
 
     /**
@@ -74,7 +80,7 @@ public class Common {
     public static String getTransId(){
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssss");
         String transId = dateFormat.format(System.currentTimeMillis());
-        return transId.toString();
+        return transId;
     }
 
     public static boolean netWorkConnected(Context context) {

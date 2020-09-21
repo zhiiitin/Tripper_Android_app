@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/blogHomeFragment"
-        android:name="com.example.tripper_android_app.trip.blog.BlogHomeFragment"
+        android:name="com.example.tripper_android_app.blog.BlogHomeFragment"
         android:label="fragment_blog_home"
         tools:layout="@layout/fragment_blog_home" />
     <fragment
         android:id="@+id/blog_HomePage"
-        android:name="com.example.tripper_android_app.trip.blog.Blog_HomePage"
+        android:name="com.example.tripper_android_app.blog.Blog_HomePage"
         android:label="fragment_blog__home_page"
         tools:layout="@layout/fragment_blog__home_page" >
         <action
@@ -215,6 +215,9 @@
         android:label="fragment_create__trip_"
         tools:layout="@layout/fragment_create__trip_" >
     <action
+        android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
+        app:destination="@id/create_Trip_LocationList" />
+    <action
         android:id="@+id/action_create_Trip_Fragment_to_createTripBeforeSave"
         app:destination="@id/createTripBeforeSave" />
 </fragment>
@@ -250,8 +253,8 @@
         android:label="fragment_create_trip_location_detail"
         tools:layout="@layout/fragment_create_trip_location_detail" >
             <action
-                android:id="@+id/action_createTripLocationDetail_to_createTripBeforeSave"
-                app:destination="@id/createTripBeforeSave" />
+                android:id="@+id/action_createTripLocationDetail_to_create_Trip_Fragment"
+                app:destination="@id/create_Trip_Fragment" />
         </fragment>
     <fragment
         android:id="@+id/createTripBeforeSave"
@@ -259,11 +262,9 @@
         android:label="fragment_create_trip_before_save"
         tools:layout="@layout/fragment_create_trip_before_save" >
         <action
-            android:id="@+id/action_createTripBeforeSave_to_create_Trip_LocationList"
-            app:destination="@id/create_Trip_LocationList" />
-        <action
             android:id="@+id/action_createTripBeforeSave_to_tripHasSavedPage"
             app:destination="@id/tripHasSavedPage" />
+        <action
             android:id="@+id/action_createTripBeforeSave_to_createTripLocationDetail"
             app:destination="@id/createTripLocationDetail" />
 
@@ -272,9 +273,16 @@
 
     <fragment
         android:id="@+id/create_Blog_Location_List"
-        android:name="com.example.tripper_android_app.trip.blog.Create_Blog_Location_List"
+        android:name="com.example.tripper_android_app.blog.Create_Blog_Location_List"
         android:label="fragment_create__blog__location__list"
-        tools:layout="@layout/fragment_create_blog_trip_list" />
+        tools:layout="@layout/fragment_create_blog_trip_list" >
+        <action
+            android:id="@+id/action_create_Blog_Location_List_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+        <action
+            android:id="@+id/action_create_Blog_Location_List_to_createBlogFragment"
+            app:destination="@id/createBlogFragment" />
+    </fragment>
     <fragment
 
         android:id="@+id/blogTripListFragment"
@@ -326,8 +334,12 @@
         <action
             android:id="@+id/action_tripHasSavedPage_to_trip_HomePage"
             app:destination="@id/trip_HomePage" />
+        <action
+            android:id="@+id/action_tripHasSavedPage_to_groupManageFragment"
+            app:destination="@id/groupManageFragment" />
     </fragment>
 
+<<<<<<< HEAD
 
     <fragment
         android:id="@+id/groupManergeFragment"
@@ -335,5 +347,18 @@
         android:label="fragment_group_manerge"
         tools:layout="@layout/fragment_group_manage" >
     </fragment>
+=======
+    <fragment
+        android:id="@+id/groupManageFragment"
+        android:name="com.example.tripper_android_app.group.GroupManageFragment"
+        android:label="GroupManageFragment" />
+        tools:layout="@layout/fragment_group_manage" />
+    <fragment
+        android:id="@+id/createBlogFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
+        android:label="fragment_create_blog"
+        tools:layout="@layout/fragment_create_blog" />
+
+>>>>>>> 8cda33c445ca3778e1625498a2acdf322b0ac334
 
 </navigation>

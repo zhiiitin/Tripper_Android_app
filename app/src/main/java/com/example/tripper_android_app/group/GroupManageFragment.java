@@ -106,7 +106,8 @@ public class GroupManageFragment extends Fragment {
     private List<TripGroupMember> getGroupList() {
         List<TripGroupMember> tripGroupMembers = null;
         if(Common.networkConnected(activity)){
-            String tripId = preferences.getString("tripId", "noData");
+            //String tripId = preferences.getString("tripId", "noData");
+            String tripId= "aaa";
             if(!tripId.equals("noData")){
                 String url = Common.URL_SERVER + "Trip_Group_Servlet";
                 JsonObject jsonObject = new JsonObject();
