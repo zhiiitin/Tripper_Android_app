@@ -27,7 +27,9 @@ public class Common {
     private static final String TAG = "TAG_Common";
     public static String URL_SERVER = "http://10.0.2.2:8080/Tripper_JAVA_Web/";
     public final static String PREF_FILE = "preference";
+    public final static String DEFAULT_FILE = "trip";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
+    public static List<Location_D> locationDs0 = new ArrayList<>();
     public static List<Location_D> locationDs1 = new ArrayList<>();
     public static List<Location_D> locationDs2 = new ArrayList<>();
     public static List<Location_D> locationDs3 = new ArrayList<>();

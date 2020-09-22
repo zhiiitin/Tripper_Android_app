@@ -61,11 +61,10 @@ public class Trip_M implements Serializable {
 		this.dayCount = dayCount;
 	}
 
-	public Trip_M(String tripTitle, String startDate, String startTime, int dayCount) {
+	public Trip_M(String tripTitle, String startDate, String startTime) {
 		this.tripTitle = tripTitle;
 		this.startDate = startDate;
 		this.startTime = startTime;
-		this.dayCount = dayCount;
 	}
 
 

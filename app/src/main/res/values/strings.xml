@@ -174,6 +174,8 @@
     <string name="chooseGroupPple">請選擇揪團人數：</string>
     <string name="addNewLoc">新增景點</string>
     <string name="memotitle">備註欄位：</string>
+    <string name="textShowMore">行程備註</string>
+    <string name="deleteLoc">刪除景點</string>
 
 
 </resources>

@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:orientation="vertical"
-    android:background="@drawable/cons_box_lines">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/dayCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="@color/colorForBottomBar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                     android:id="@+id/textLocChosen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="22dp"
                     android:text="景點名稱"
                     android:textColor="#000000"
@@ -64,16 +64,16 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/btExpand"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="160dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
                     android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textLocChosen"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/expand_more_24px" />
+                    app:srcCompat="@drawable/more_vert_24px" />
 
                 <TextView
                     android:id="@+id/textView16"
@@ -105,12 +105,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView98"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="5dp"
                     android:text="@string/memotitle"
                     android:textColor="@color/colorForGroupButton"
@@ -121,6 +122,7 @@
                     android:id="@+id/textShowLocMemo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="5dp"
                     android:inputType="textMultiLine"
                     android:text="TextView"

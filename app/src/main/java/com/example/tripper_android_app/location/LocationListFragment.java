@@ -225,7 +225,6 @@ public class LocationListFragment extends Fragment {
                     final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
                     popupMenu.inflate(R.menu.location_more_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
                         @SuppressLint("LongLogTag")
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
