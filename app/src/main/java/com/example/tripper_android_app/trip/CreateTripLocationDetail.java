@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +42,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 景點詳細資訊頁面
@@ -139,32 +143,11 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 String stayTimes = textStayTime.getText().toString().trim();
                 String memos = etMemo.getText().toString().trim();
                 String daySelected = Common.spinnerSelect;
+                Log.d("###Detail daySelected", daySelected +"");
                 if (daySelected == null || daySelected.isEmpty()) {
                     Common.showToast(activity, "請先選擇天數");
                     Navigation.findNavController(v).popBackStack();
                 }
-                Location_D locationD = new Location_D(name, address, memos, stayTimes);
-                switch (daySelected) {
-                    case "1":
-                        Common.locationDs1.add(locationD);
-                        break;
-                    case "2":
-                        Common.locationDs2.add(locationD);
-                        break;
-                    case "3":
-                        Common.locationDs3.add(locationD);
-                        break;
-                    case "4":
-                        Common.locationDs4.add(locationD);
-                        break;
-                    case "5":
-                        Common.locationDs5.add(locationD);
-                        break;
-                    case "6":
-                        Common.locationDs6.add(locationD);
-                        break;
-                }
-
                 //檢查停留時間是否輸入
                 if (textStayTime.getText().toString().equals("")) {
                     textStayTime.setError("請選擇停留時間");
@@ -172,8 +155,15 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                     return;
                 }
 
+                List<Location_D> locationDs = Common.map.get(daySelected);
+                if (locationDs == null || locationDs.isEmpty()) {
+                    locationDs = new ArrayList<>();
+                }
+                Location_D locationD = new Location_D(name, address, memos, stayTimes);
+                locationDs.add(locationD);
+                Common.map.put(daySelected, locationDs);
 
-                Navigation.findNavController(v).navigate(R.id.action_createTripLocationDetail_to_create_Trip_Fragment);
+                Navigation.findNavController(v).popBackStack(R.id.create_Trip_Fragment, false);
             }
         });
     }

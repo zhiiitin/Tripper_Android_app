@@ -1,21 +1,35 @@
 package com.example.tripper_android_app.trip;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.format.DateFormat;
 import android.util.Base64;
@@ -38,6 +52,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -47,11 +62,18 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.util.Common;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.navigation.Navigation.findNavController;
 
@@ -71,7 +93,14 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private static int year, month, day, hour, minute;
     private RecyclerView rvLocSelectedList;
     private SharedPreferences preference;
-    //private List<Location_D> day4Locations;
+    //照片
+    private ImageButton ibChangeLocPic;
+    private ImageView ivLocPic;
+    private byte[] photo;
+    private static final int REQ_TAKE_PICTURE = 0;
+    private static final int REQ_PICK_PICTURE = 1;
+    private static final int REQ_CROP_PICTURE = 2;
+    private Uri contentUri;
 
 
     @Override
@@ -154,7 +183,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             }
         });
 
-
+        //暫存檔資料
         preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         loadPreferences();
 
@@ -190,23 +219,43 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             }
         });
 
+
+        //更換行程封面圖片
+        ibChangeLocPic = view.findViewById(R.id.ibChangeLocPic);
+        ivLocPic = view.findViewById(R.id.ivLocPic);
+        ibChangeLocPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTypeDialog();
+            }
+        });
+
+
+        //儲存所有資料至DB
+        ImageButton ibSaveTrip = view.findViewById(R.id.ibSaveTrip);
+        ibSaveTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
     }
 
 
     private void showLocList(List<Location_D> locations) {
-        if (locations == null || locations.isEmpty()) {
-            return;
-        }
         Log.d(TAG, "enter showLocList");
         //day4Locations.addAll(locations);
         SelectLocAdapter selectLocAdapter = (SelectLocAdapter) rvLocSelectedList.getAdapter();
         if (selectLocAdapter == null) {
-            Log.d(TAG, "enter adpter is null");
+            Log.d(TAG, "enter Adapter is null");
             rvLocSelectedList.setAdapter(new SelectLocAdapter(activity, locations));
         } else {
-            Log.d(TAG, "enter adpter is not null");
+            Log.d(TAG, "enter Adapter is not null");
             selectLocAdapter.setLocationDs(locations);
             selectLocAdapter.notifyDataSetChanged();
+
         }
     }
 
@@ -226,6 +275,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
         @Override
         public int getItemCount() {
+//            Log.d(TAG, "locationDs: " + locationDs.toString());
             return locationDs == null ? 0 : locationDs.size();
         }
 
@@ -254,6 +304,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
         @Override
         public void onBindViewHolder(@NonNull final MyDayViewHolder myDayViewHolder, final int position) {
+            Log.d(TAG, "onBindViewHolder-position: " + position);
+
             Location_D locationDetail = locationDs.get(position);
             myDayViewHolder.textLocChosen.setText(locationDetail.getName());
             myDayViewHolder.textLocAddChosen.setText(locationDetail.getAddress());
@@ -309,6 +361,9 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     Spinner.OnItemSelectedListener listener = new Spinner.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            //原本取索引所以要改成取對應的值+1
+            Log.d("###::", position + 1 + "");
+            Common.spinnerSelect = position + 1 + "";
             spinnerShowLoc();
         }
 
@@ -319,30 +374,9 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     };
 
 
-    //toolbar 右上角下一步按鈕顯示
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.app_bar_button_next_step, menu);
-    }
-
-    //toolbar 左上角返回按鈕+下一步按鈕的監聽器
+    //toolbar 左上角返回按鈕
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.btNextStep) {
-            Bundle bundle = new Bundle();
-
-            String title = etTripTitle.getText().toString().trim();
-            String sDate = textDate.getText().toString().trim();
-            String sTime = textTime.getText().toString().trim();
-
-            Trip_M tripM = new Trip_M(title, sDate, sTime);
-            bundle.putSerializable("tripM", tripM);
-
-            findNavController(this.getView()).navigate(R.id.action_create_Trip_Fragment_to_createTripBeforeSave, bundle);
-            return true;
-        }
         switch (item.getItemId()) {
             case android.R.id.home:
                 Navigation.findNavController(textDate).navigate(R.id.action_create_Trip_Fragment_to_trip_HomePage);
@@ -356,31 +390,11 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
     //Spinner 選擇天數對應的recyclerView
     public void spinnerShowLoc() {
-        String daySelected = Common.spinnerSelect;
-        Log.d(TAG, "daySelected :: " + daySelected);
-        if (daySelected != null && !daySelected.isEmpty()) {
-            switch (daySelected) {
-                case "1":
-                    showLocList(Common.locationDs1);
-                    break;
-                case "2":
-                    showLocList(Common.locationDs2);
-                    break;
-                case "3":
-                    showLocList(Common.locationDs3);
-                    break;
-                case "4":
-                    showLocList(Common.locationDs4);
-                    break;
-                case "5":
-                    showLocList(Common.locationDs5);
-                    break;
-                case "6":
-                    showLocList(Common.locationDs6);
-                    break;
-            }
-        }
+        String selected = Common.spinnerSelect;
+        Log.d(TAG, "daySelected: " + selected);
+        showLocList(Common.map.get(selected));
     }
+
 
     //暫存標題/出發時間/出發日期
     public void savePreferences() {
@@ -456,10 +470,118 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         }
     }
 
+    //開啟相機&相簿訪問請求
+    private void showTypeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog dialog = builder.create();
+        final View view = View.inflate(getActivity(), R.layout.dialog_select_photo, null);
+        TextView tv_select_gallery = (TextView) view.findViewById(R.id.tv_select_gallery);
+        TextView tv_select_camera = (TextView) view.findViewById(R.id.tv_select_camera);
+        tv_select_gallery.setOnClickListener(new View.OnClickListener() {
+            // 在相簿中選取
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+                dialog.dismiss();
+            }
+        });
+        tv_select_camera.setOnClickListener(new View.OnClickListener() {// 呼叫照相機
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                file = new File(file, "picture.jpg");
+                contentUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+
+                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                    startActivityForResult(intent, REQ_TAKE_PICTURE);
+                    dialog.dismiss();
+                } else {
+                    Common.showToast(activity, "no camera app found");
+                }
+
+            }
+        });
+        dialog.setView(view);
+        dialog.show();
+
+    }
+
+    //開啟相簿
+    private void openAlbum() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_PICK_PICTURE);
+    }
+
+    //材切相片
+    private void crop(Uri sourceImageUri) {
+        File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        file = new File(file, "picture_cropped.jpg");
+        Uri destinationUri = Uri.fromFile(file);
+        UCrop.of(sourceImageUri, destinationUri)
+//                .withAspectRatio(16, 9) // 設定裁減比例
+//                .withMaxResultSize(500, 500) // 設定結果尺寸不可超過指定寬高
+                .start(activity, this, REQ_CROP_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQ_TAKE_PICTURE:
+                    crop(contentUri);
+                    break;
+                case REQ_PICK_PICTURE:
+                    crop(intent.getData());
+                    break;
+                case REQ_CROP_PICTURE:
+                    handleCropResult(intent);
+                    break;
+            }
+        }
+    }
+
+
+    //相片材切後
+    private void handleCropResult(Intent intent) {
+        Uri resultUri = UCrop.getOutput(intent);
+        if (resultUri == null) {
+            return;
+        }
+        Bitmap bitmap = null;
+        try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                bitmap = BitmapFactory.decodeStream(
+                        activity.getContentResolver().openInputStream(resultUri));
+            } else {
+                ImageDecoder.Source source =
+                        ImageDecoder.createSource(activity.getContentResolver(), resultUri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            }
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            photo = out.toByteArray();
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
+        if (bitmap != null) {
+            ivLocPic.setImageBitmap(bitmap);
+        } else {
+            ivLocPic.setImageResource(R.drawable.default_bg_pc);
+        }
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();
-        deletePreferences();
+//        deletePreferences();
     }
 
     //    @Override

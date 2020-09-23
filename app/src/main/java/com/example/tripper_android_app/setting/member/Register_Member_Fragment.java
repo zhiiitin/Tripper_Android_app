@@ -260,7 +260,8 @@ public class Register_Member_Fragment extends Fragment {
         final View view = View.inflate(getActivity(), R.layout.dialog_select_photo, null);
         TextView tv_select_gallery = (TextView) view.findViewById(R.id.tv_select_gallery);
         TextView tv_select_camera = (TextView) view.findViewById(R.id.tv_select_camera);
-        tv_select_gallery.setOnClickListener(new View.OnClickListener() {// 在相簿中選取
+        tv_select_gallery.setOnClickListener(new View.OnClickListener() {
+            // 在相簿中選取
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -364,7 +365,7 @@ public class Register_Member_Fragment extends Fragment {
         file = new File(file, "picture_cropped.jpg");
         Uri destinationUri = Uri.fromFile(file);
         UCrop.of(sourceImageUri, destinationUri)
-//                .withAspectRatio(16, 9) // 設定裁減比例
+                .withAspectRatio(16, 9) // 設定裁減比例
 //                .withMaxResultSize(500, 500) // 設定結果尺寸不可超過指定寬高
                 .start(activity, this, REQ_CROP_PICTURE);
     }
