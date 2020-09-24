@@ -44,6 +44,10 @@ public class CreateBlogFragment extends Fragment {
     private TextView tvBlogName,tvDate,tvTime ;
     private List<String> spotList;
     private List<String> dayList;
+    private  int i=0;
+    private  int day1Num = 0 ;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,22 +154,35 @@ public class CreateBlogFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            int i = 0;
+            int day1count = spotList.size()+1;
 
-            if(holder instanceof ViewHolderSpot){
-                final String blog_spot = spotList.get(position-1);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
-            }else if(holder instanceof ViewHolderDay) {
-                final String blog_day;
-                if (position == 0) {
-                    blog_day = dayList.get(position);
-                } else{
-                    blog_day = dayList.get(position - spotList.size());
-            }
+            if(position == 0 || position == day1count ){
+                final String blog_day = dayList.get(i);
                 ViewHolderDay viewHolderDay = (ViewHolderDay) holder ;
                 viewHolderDay.tvDay.setText(blog_day);
+                i ++ ;
             }
+            else if(position > 0 && position < day1count){
+                final String blog_spot = spotList.get(day1Num);
+                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot);
+                day1Num ++ ;
+            }
+
+//            if(holder instanceof ViewHolderSpot){
+//                final String blog_spot = spotList.get(position-1);
+//                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+//                viewHolderSpot.tvLocationName.setText(blog_spot);
+//            }else if(holder instanceof ViewHolderDay) {
+//                final String blog_day;
+//                if (position == 0) {
+//                    blog_day = dayList.get(position);
+//                } else{
+//                    blog_day = dayList.get(position - spotList.size());
+//            }
+//                ViewHolderDay viewHolderDay = (ViewHolderDay) holder ;
+//                viewHolderDay.tvDay.setText(blog_day);
+//            }
 
 
         }
