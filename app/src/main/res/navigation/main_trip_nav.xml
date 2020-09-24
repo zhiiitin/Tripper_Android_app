@@ -326,42 +326,24 @@
             app:destination="@id/groupManageFragment" />
     </fragment>
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 會員註冊功能
 
     <fragment
         android:id="@+id/groupManergeFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
         android:label="fragment_group_manerge"
-<<<<<<< HEAD
         tools:layout="@layout/fragment_group_manage"></fragment>
-=======
-        tools:layout="@layout/fragment_group_manage" >
-    </fragment>
->>>>>>> 會員註冊功能
+
 
     <fragment
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
-<<<<<<< HEAD
         android:label="GroupManageFragment" />
-    tools:layout="@layout/fragment_group_manage" />
-=======
-        android:label="GroupManageFragment"
-        tools:layout="@layout/fragment_group_manage" />
->>>>>>> 會員註冊功能
+
     <fragment
         android:id="@+id/createBlogFragment"
         android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
         android:label="fragment_create_blog"
         tools:layout="@layout/fragment_create_blog" />
-
-<<<<<<< HEAD
-    >>>>>>> 8cda33c445ca3778e1625498a2acdf322b0ac334
-=======
-
->>>>>>> 會員註冊功能
 
 </navigation>
