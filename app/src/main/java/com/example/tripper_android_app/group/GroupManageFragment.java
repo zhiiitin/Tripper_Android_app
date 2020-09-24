@@ -8,11 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -72,6 +74,10 @@ public class GroupManageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.groupManageToolbar);
         toolbar.setTitle("管理揪團人數");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         rvTripGroupList = view.findViewById(R.id.rvTripGroupList);
         rvTripGroupList.setLayoutManager(new LinearLayoutManager(activity));
         tvFriendName = view.findViewById(R.id.tvFriendName);
@@ -81,9 +87,23 @@ public class GroupManageFragment extends Fragment {
         tripGroupMembers = getGroupList();
         showGroupList(tripGroupMembers);
 
-
-
     }
+
+
+    //toolbar 左上角返回按鈕
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(tvFriendName).popBackStack();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     // 呈現在管理揪團人員的資料
     private void showGroupList(List<TripGroupMember> tripGroupMembers) {
         if(tripGroupMembers == null || tripGroupMembers.isEmpty()){

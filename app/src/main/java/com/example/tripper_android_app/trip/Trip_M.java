@@ -70,7 +70,7 @@ public class Trip_M implements Serializable {
 
 
 	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
-				  String createDateTime, int pMax, int status) {
+				  int pMax, int status) {
 		super();
 		this.tripId = tripId;
 		this.memberId = memberId;
@@ -78,13 +78,16 @@ public class Trip_M implements Serializable {
 		this.startDate = startDate;
 		this.startTime = startTime;
 		this.dayCount = dayCount;
-		this.createDateTime = createDateTime;
 		this.pMax = pMax;
 		this.status = status;
 	}
 
+	public Trip_M() {
 
+	}
 
+	public Trip_M(String tripId, int id, String tripTitle, String startDate, String startTime, int dayCount, int pMax) {
+	}
 
 
 	public String getTripId() {

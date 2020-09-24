@@ -54,7 +54,6 @@ public class CreateBlogFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        activity.setTitle("編輯網誌");
         return inflater.inflate(R.layout.fragment_create_blog, container, false);
     }
 

@@ -30,9 +30,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             android:theme="@style/ToolBarStyle"
-            />
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--    <androidx.core.widget.NestedScrollView-->
@@ -58,7 +57,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <com.example.tripper_android_app.util.CircleImageView
             android:id="@+id/ivUserPic"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -85,7 +84,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="TextView"
+            android:text="訪客"
+            android:textSize="20sp"
             android:textColor="@color/colorForNormalText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -103,9 +103,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUserName"
-            app:menu="@menu/tab_navi_menu">
-
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
+            app:menu="@menu/tab_navi_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--    </androidx.core.widget.NestedScrollView>-->
@@ -121,5 +119,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_bar_menu" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="289dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTripHomePage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

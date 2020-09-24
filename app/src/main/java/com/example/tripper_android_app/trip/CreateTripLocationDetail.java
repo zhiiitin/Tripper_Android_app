@@ -159,7 +159,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 if (locationDs == null || locationDs.isEmpty()) {
                     locationDs = new ArrayList<>();
                 }
-                Location_D locationD = new Location_D(name, address, memos, stayTimes);
+                Location_D locationD = new Location_D(Common.tripId, Common.getTransId(), name, address, memos, stayTimes);
                 locationDs.add(locationD);
                 Common.map.put(daySelected, locationDs);
 

@@ -55,7 +55,6 @@ public class Create_Blog_Location_List extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        activity.setTitle("行程");
         return inflater.inflate(R.layout.fragment_create_blog_trip_list, container, false);
     }
 
