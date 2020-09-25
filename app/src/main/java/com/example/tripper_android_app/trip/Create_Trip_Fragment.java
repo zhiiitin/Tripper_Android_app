@@ -60,6 +60,7 @@ import android.widget.TimePicker;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
@@ -70,6 +71,7 @@ import com.yalantis.ucrop.UCrop;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -214,8 +216,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         //揪團功能開關
         textChoseGroupPpl = view.findViewById(R.id.textChoseGroupPpl);
         spChoosePpl = view.findViewById(R.id.spChoosePpl);
-        @SuppressLint("UseSwitchCompatOrMaterialCode")
-        Switch switchGroup = view.findViewById(R.id.switchGroup);
+
+        switchGroup = view.findViewById(R.id.switchGroup);
         switchGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -228,7 +230,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     spChoosePpl.setVisibility(View.GONE);
                     status = 3;
                 }
-
             }
         });
 
@@ -258,6 +259,24 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     String startTime = textTime.getText().toString().trim();
                     int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
                     int pMax = Integer.parseInt(spChoosePpl.getSelectedItem().toString());
+
+                    //行程標題
+                    if (tripTitle.length() > 10 || tripTitle.isEmpty()) {
+                        etTripTitle.setError("請輸入小於10字元的標題");
+                        return;
+                    }
+
+                    //出發日期
+                    if (startDate.isEmpty()) {
+                        textDate.setError("請選擇出發日期");
+                        return;
+                    }
+
+                    //出發時間
+                    if (startTime.isEmpty()) {
+                        textTime.setError("請選擇出發時間");
+                        return;
+                    }
                    // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
                     Trip_M tripMaster = new Trip_M(tripId, memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
                     // TODO 處理照片
@@ -286,8 +305,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 }
             }
         });
-
-
     }
 
 
@@ -622,7 +639,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             ivLocPic.setImageResource(R.drawable.default_bg_pc);
         }
     }
-
 
     @Override
     public void onStart() {

@@ -21,7 +21,10 @@ public class Trip_M implements Serializable {
 	private int pMax;
 	private int status;
 
-	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status) {
+
+	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
+				  int pMax, int status) {
+		super();
 		this.tripId = tripId;
 		this.memberId = memberId;
 		this.tripTitle = tripTitle;

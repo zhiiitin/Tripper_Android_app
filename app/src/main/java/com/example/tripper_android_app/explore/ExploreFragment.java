@@ -64,13 +64,8 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         activity= (MainActivity)getActivity();
         imageTasks = new ArrayList<>();
-
-
-
     }
 
     @Override
@@ -94,7 +89,6 @@ public class ExploreFragment extends Fragment {
 
         NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        activity.setTitle(R.string.Explore);
         SearchView searchView = view.findViewById(R.id.svGroup);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);

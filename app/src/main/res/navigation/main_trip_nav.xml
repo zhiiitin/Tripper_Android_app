@@ -216,9 +216,6 @@
             android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
             app:destination="@id/create_Trip_LocationList" />
         <action
-            android:id="@+id/action_create_Trip_Fragment_to_createTripBeforeSave"
-            app:destination="@id/createTripBeforeSave" />
-        <action
             android:id="@+id/action_create_Trip_Fragment_to_trip_HomePage"
             app:destination="@id/trip_HomePage" />
     </fragment>
@@ -230,6 +227,9 @@
         <action
             android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
             app:destination="@id/create_Trip_Fragment" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_tripHasSavedPage"
+            app:destination="@id/tripHasSavedPage" />
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"
@@ -256,20 +256,6 @@
         <action
             android:id="@+id/action_createTripLocationDetail_to_create_Trip_Fragment"
             app:destination="@id/create_Trip_Fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/createTripBeforeSave"
-        android:name="com.example.tripper_android_app.trip.CreateTripBeforeSave"
-        android:label="fragment_create_trip_before_save"
-        tools:layout="@layout/fragment_create_trip_before_save">
-        <action
-            android:id="@+id/action_createTripBeforeSave_to_tripHasSavedPage"
-            app:destination="@id/tripHasSavedPage" />
-        <action
-            android:id="@+id/action_createTripBeforeSave_to_createTripLocationDetail"
-            app:destination="@id/createTripLocationDetail" />
-
-
     </fragment>
 
     <fragment
@@ -341,23 +327,24 @@
     </fragment>
 
 
+
     <fragment
         android:id="@+id/groupManergeFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
         android:label="fragment_group_manerge"
-        tools:layout="@layout/fragment_group_manage"></fragment>
+        tools:layout="@layout/fragment_group_manage">
+    </fragment>
+
 
     <fragment
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
         android:label="GroupManageFragment" />
-    tools:layout="@layout/fragment_group_manage" />
+
     <fragment
         android:id="@+id/createBlogFragment"
         android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
         android:label="fragment_create_blog"
         tools:layout="@layout/fragment_create_blog" />
-
-    >>>>>>> 8cda33c445ca3778e1625498a2acdf322b0ac334
 
 </navigation>

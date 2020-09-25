@@ -16,10 +16,10 @@ public class Location_D extends Location implements Serializable {
     public Location_D(String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate) {
         super(name, address, locId);
         this.tripId = tripId;
-        this.memos = memos;
-        this.stayTimes = stayTimes;
         this.transId = transId;
         this.startDate = startDate;
+        this.memos = memos;
+        this.stayTimes = stayTimes;
     }
 
     public String getTrip() {
@@ -27,6 +27,14 @@ public class Location_D extends Location implements Serializable {
     }
 
     public void setTrip(String tripId) {
+        this.tripId = tripId;
+    }
+
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
         this.tripId = tripId;
     }
 

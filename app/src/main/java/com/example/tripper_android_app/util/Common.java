@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -73,11 +74,14 @@ public class Common {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static String getTransId(){
+    public static String getTransId() {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssss");
         String transId = dateFormat.format(System.currentTimeMillis());
         return transId;
     }
+
+
+
 
     public static boolean netWorkConnected(Context context) {
         ConnectivityManager connectivityManager =
@@ -110,14 +114,14 @@ public class Common {
 
 
     public static void sendTokenToServer(String token, Context context) {
-        if(Common.netWorkConnected(context)){
+        if (Common.netWorkConnected(context)) {
             String Url = Common.URL_SERVER + "FcmBookServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "register");
             jsonObject.addProperty("registrationToken", token);
-            CommonTask registerTask = new CommonTask(Url , jsonObject.toString());
+            CommonTask registerTask = new CommonTask(Url, jsonObject.toString());
             registerTask.execute();
-        }else {
+        } else {
             Common.showToast(context, "連線失敗");
         }
     }
