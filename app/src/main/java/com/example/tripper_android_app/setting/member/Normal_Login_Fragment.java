@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tripper_android_app.MainActivity;
@@ -81,6 +82,16 @@ public class Normal_Login_Fragment extends Fragment {
         etAccount = view.findViewById(R.id.etAccount_login);
         etPassword = view.findViewById(R.id.etPassword_login);
         ibLogin = view.findViewById(R.id.btLogin);
+
+        //神奇小按鈕
+        TextView btToFill = view.findViewById(R.id.btToFill);
+        btToFill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etAccount.setText("amber");
+                etPassword.setText("password");
+            }
+        });
 
         ibLogin.setOnClickListener(new View.OnClickListener() {
             @Override

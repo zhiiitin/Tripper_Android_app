@@ -40,7 +40,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="90dp"
         android:hint="請輸入帳號"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/btToFill"
         app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <TextView
@@ -51,11 +51,11 @@
         android:text="密碼："
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/btToFill"
+        app:layout_constraintTop_toBottomOf="@+id/btToFill" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/btToFill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"

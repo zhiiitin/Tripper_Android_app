@@ -98,6 +98,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private Switch switchGroup;
     private static int year, month, day, hour, minute;
     private RecyclerView rvLocSelectedList;
+    private int lastPosition;
     private SharedPreferences preference;
     //照片
     private ImageButton ibChangeLocPic;
@@ -491,6 +492,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         String tripDate = textDate.getText().toString();
         String tripTime = textTime.getText().toString();
 
+
         preference.edit()
                 .putString("tripTitle", tripTitle)
                 .putString("tripDate", tripDate)
@@ -513,8 +515,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     //刪除暫存檔
     public void deletePreferences() {
         preference.edit()
-                .clear()
-                .commit();
+                .remove("tripTitle")
+                .remove("tripDate")
+                .remove("tripTime")
+                .apply();
     }
 
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import android.view.LayoutInflater;
@@ -51,6 +52,7 @@ public class Create_Trip_LocationList extends Fragment {
     private List<Location> locationList;
     private TextView textLocName;
     private MainActivity activity;
+    private SwipeRefreshLayout swipe;
 
 
     @Override
@@ -76,6 +78,23 @@ public class Create_Trip_LocationList extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         textLocName = view.findViewById(R.id.textLocName);
+
+        rvSelectLoc = view.findViewById(R.id.rvSelectLoc);
+        rvSelectLoc.setLayoutManager(new LinearLayoutManager(activity));
+        locationList = getLocation();
+        showLocation(locationList);
+
+
+        //刷新景點
+        swipe = view.findViewById(R.id.swipeRefreshForLoc);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipe.setRefreshing(true);
+                showLocation(locationList);
+                swipe.setRefreshing(false);
+            }
+        });
 
 
         SearchView searchLoc = view.findViewById(R.id.searchLoc);
@@ -105,10 +124,6 @@ public class Create_Trip_LocationList extends Fragment {
             }
         });
 
-        rvSelectLoc = view.findViewById(R.id.rvSelectLoc);
-        rvSelectLoc.setLayoutManager(new LinearLayoutManager(activity));
-        locationList = getLocation();
-        showLocation(locationList);
 
 
     }
