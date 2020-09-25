@@ -113,7 +113,6 @@ public class Create_Trip_LocationList extends Fragment {
 
     }
 
-
     private List<Location> getLocation() {
         List<Location> locationList = null;
 
@@ -200,11 +199,9 @@ public class Create_Trip_LocationList extends Fragment {
             String locId = location.getLocId();
             ImageTask imageTask = new ImageTask(url, locId, imageSize, holder.imageView);
             imageTask.execute();
-
             imageTasks.add(imageTask);
             holder.textLocName.setText(location.getName());
             holder.textLocAdd.setText(location.getAddress());
-
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

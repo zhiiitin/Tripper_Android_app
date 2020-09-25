@@ -30,6 +30,7 @@ public class Common {
     public final static String DEFAULT_FILE = "";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
     public static String spinnerSelect = "";
+    public static String tripId = "";
 
 
     /**

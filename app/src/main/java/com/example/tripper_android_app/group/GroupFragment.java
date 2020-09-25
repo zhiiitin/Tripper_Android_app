@@ -209,7 +209,7 @@ public class GroupFragment extends Fragment {
 
             myViewHolder.tvTitle.setText(group.getTripTitle());
             myViewHolder.tvDate.setText("出發日："+group.getStartDate());
-            myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
+            //myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
 
 
         }
