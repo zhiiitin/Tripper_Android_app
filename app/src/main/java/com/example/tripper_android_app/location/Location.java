@@ -57,14 +57,11 @@ public class Location implements Serializable{
 		this.createDateTime = createDateTime;
 	}
 
-	public Location(String name, String address) {
+	public Location(String name, String address, String locId) {
+		this.locId = locId;
 		this.name = name;
 		this.address = address;
 	}
-
-    public Location() {
-
-    }
 
     public String getLocId() {
 		return locId;

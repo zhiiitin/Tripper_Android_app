@@ -46,6 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar">
 
         <ImageView
@@ -106,8 +108,25 @@
             app:menu="@menu/tab_navi_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--    </androidx.core.widget.NestedScrollView>-->
 
+    <LinearLayout
+        android:id="@+id/tripMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="315dp"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTripMainList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <!--    </androidx.core.widget.NestedScrollView>-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"

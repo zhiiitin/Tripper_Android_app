@@ -51,8 +51,6 @@ public class Blog_HomePage extends Fragment {
     private FirebaseAuth auth;
     private FirebaseUser mUser;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

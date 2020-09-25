@@ -33,6 +33,7 @@ import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.DateUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -143,11 +145,24 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 String stayTimes = textStayTime.getText().toString().trim();
                 String memos = etMemo.getText().toString().trim();
                 String daySelected = Common.spinnerSelect;
+                String startDate = "";
+                String locId = location.getLocId();
                 Log.d("###Detail daySelected", daySelected +"");
                 if (daySelected == null || daySelected.isEmpty()) {
                     Common.showToast(activity, "請先選擇天數");
                     Navigation.findNavController(v).popBackStack();
                 }
+                // 處理出發日期
+//                if(!daySelected.equals("1")){
+//
+//                    startDate = preference.getString("tripDate", Common.DEFAULT_FILE);
+//                    try {
+//                        startDate = DateUtil.date4day(startDate, Integer.parseInt(daySelected) );
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+
                 //檢查停留時間是否輸入
                 if (textStayTime.getText().toString().equals("")) {
                     textStayTime.setError("請選擇停留時間");
@@ -159,7 +174,10 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 if (locationDs == null || locationDs.isEmpty()) {
                     locationDs = new ArrayList<>();
                 }
-                Location_D locationD = new Location_D(Common.tripId, Common.getTransId(), name, address, memos, stayTimes);
+                // TODO 暫使hard code
+                startDate ="2020-09-20";
+                // String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate
+                Location_D locationD = new Location_D(Common.tripId, Common.getTransId(), name, address, locId, memos, stayTimes, startDate);
                 locationDs.add(locationD);
                 Common.map.put(daySelected, locationDs);
 

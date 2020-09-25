@@ -100,9 +100,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private RecyclerView rvLocSelectedList;
     private int lastPosition;
     private SharedPreferences preference;
+    private int status = 0;
     //照片
     private ImageButton ibChangeLocPic;
-    private ImageView ivLocPic;
+    private ImageView ivLocPic; // 行程封面照
     private byte[] photo;
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_PICTURE = 1;
@@ -133,9 +134,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         textDate = view.findViewById(R.id.textDate);
         textTime = view.findViewById(R.id.textTime);
         etTripTitle = view.findViewById(R.id.etTripTitle);
+        textChoseGroupPpl = view.findViewById(R.id.textChoseGroupPpl);
         rvLocSelectedList = view.findViewById(R.id.rvLocChosen);
         rvLocSelectedList.setLayoutManager(new LinearLayoutManager(activity));
-        //day4Locations = new ArrayList<>();
+
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("建立行程");
@@ -194,7 +196,11 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         loadPreferences();
 
-        Common.tripId = Common.getTransId();
+
+        if(Common.tripId.isEmpty()|| Common.tripId.equals("")){
+            Common.tripId = Common.getTransId();
+        }
+
         // 挑選景點
         Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
         btSelectLoc.setOnClickListener(new View.OnClickListener() {
@@ -216,16 +222,14 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         switchGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int off = 0;
-                int on = 1;
                 if (isChecked) {
                     textChoseGroupPpl.setVisibility(View.VISIBLE);
                     spChoosePpl.setVisibility(View.VISIBLE);
-
-
+                    status = 1;
                 } else {
                     textChoseGroupPpl.setVisibility(View.GONE);
                     spChoosePpl.setVisibility(View.GONE);
+                    status = 3;
                 }
             }
         });
@@ -247,88 +251,59 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         ibSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //行程標題
-                String tripTitle = etTripTitle.getText().toString().trim();
-                if (tripTitle.length() > 10 || tripTitle.isEmpty()) {
-                    etTripTitle.setError("請輸入小於10字元的標題");
-                    return;
-                }
-
-                //出發日期
-                String startDate = textDate.getText().toString().trim();
-                if (startDate.isEmpty()) {
-                    textDate.setError("請選擇出發日期");
-                }
-
-                //出發時間
-                String startTime = textTime.getText().toString().trim();
-                if (startTime.isEmpty()) {
-                    textTime.setError("請選擇出發時間");
-                }
-
-                //行程天數
-                int dayCount = Integer.parseInt(spDay.getSelectedItem().toString());
-
-                //揪團狀態碼
-//                int status = Integer.parseInt(switchGroup.toString());
-
-                //揪團人數
-                int pMax = Integer.parseInt(spChoosePpl.getSelectedItem().toString());
-
-                // 檢查網路連線
-                if (Common.networkConnected(activity)) {
+                if(Common.networkConnected(activity)){
                     String url = Common.URL_SERVER + "TripServlet";
-                    //取得會員ID
-                    int id = Integer.parseInt(preference.getString("memberId", ""));
+                    String tripId = Common.tripId;
+                    int memberId = 1;
+                    String tripTitle = etTripTitle.getText().toString();
+                    String startDate = textDate.getText().toString().trim();
+                    String startTime = textTime.getText().toString().trim();
+                    int dayCount = Integer.parseInt(spDay.getSelectedItem().toString().trim());
+                    int pMax = Integer.parseInt(spChoosePpl.getSelectedItem().toString());
 
-                    /*
-                    Trip_M
-                   (String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
-                    int pMax, int status)
-                    */
+                    //行程標題
+                    if (tripTitle.length() > 10 || tripTitle.isEmpty()) {
+                        etTripTitle.setError("請輸入小於10字元的標題");
+                        return;
+                    }
 
-                    Trip_M tripM = new Trip_M(Common.tripId, id, tripTitle, startDate, startTime, dayCount,
-                            pMax);
+                    //出發日期
+                    if (startDate.isEmpty()) {
+                        textDate.setError("請選擇出發日期");
+                        return;
+                    }
 
-                    //locationD_TreeMap
-//                    (String locId, String name, String address, String locType, String city, String info,
-//                    double longitude, double latitude, int createId, int useId, Timestamp createDateTime, String tripId,
-//                            String transId, String startDate, String startTime, String memos, String stayTimes) {
-//                        super(locId, name, address, locType, city, info, longitude, latitude, createId, useId, createDateTime);
-                    String selectedToJson = Common.spinnerSelect;
-                    List<Location_D> locationD = Common.map.get(selectedToJson);
-                    Map<String, List<Location_D>> map = new TreeMap<>();
-                    map.put(selectedToJson, locationD);
-
+                    //出發時間
+                    if (startTime.isEmpty()) {
+                        textTime.setError("請選擇出發時間");
+                        return;
+                    }
+                   // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
+                    Trip_M tripMaster = new Trip_M(tripId, memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
+                    // TODO 處理照片
+                    // 暫不處理
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "insert");
-                    jsonObject.addProperty("tripM", new Gson().toJson(tripM));
-
-                    jsonObject.addProperty("locationD", new Gson().toJson(map));
-
-
-                    // 有圖才上傳
-                    if (photo != null) {
-                        jsonObject.addProperty("imageBase64", Base64.encodeToString(photo, Base64.DEFAULT));
-                    }
+                    jsonObject.addProperty("tripM", new Gson().toJson(tripMaster));
+                    jsonObject.addProperty("locationD", new Gson().toJson(Common.map));
                     int count = 0;
                     try {
                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
                         count = Integer.parseInt(result);
-                        if (count == 0) {
-                            Common.showToast(activity, "insert fail");
-                        } else {
-                            Common.showToast(activity, "insert success");
+                        if(count > 0){
+                            Common.showToast(activity, "建立行程成功");
+                            Navigation.findNavController(v)
+                                    .popBackStack(R.id.trip_HomePage,false);
+                            //deletePreferences();
+                        }else {
+                            Common.showToast(activity, "建立行程失敗");
                         }
-                    } catch (Exception e) {
+                    } catch (Exception e){
                         e.printStackTrace();
                     }
-                } else {
-                    Common.showToast(activity, "no network connection");
+                }else {
+                    Common.showToast(activity, "請檢查網路連線");
                 }
-
-                deletePreferences();
-                Navigation.findNavController(v).popBackStack(R.id.trip_HomePage, false);
             }
         });
     }
@@ -365,7 +340,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
         @Override
         public int getItemCount() {
-//            Log.d(TAG, "locationDs: " + locationDs.toString());
             return locationDs == null ? 0 : locationDs.size();
         }
 
