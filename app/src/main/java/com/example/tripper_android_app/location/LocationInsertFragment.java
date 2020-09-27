@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
+
 import com.yalantis.ucrop.UCrop;
 
 import static android.app.Activity.RESULT_OK;
@@ -48,7 +49,7 @@ public class LocationInsertFragment extends Fragment {
     private static final String MSG = "必填欄位";
     private MainActivity activity;
     private ImageView ivLocImage;
-    private EditText etLocName, etAddress, etDesc;
+    private EditText etLocName, etAddress, etDesc, etCityName;
     private Location location;
     private Uri contentUri;
     private byte[] image;
@@ -73,10 +74,12 @@ public class LocationInsertFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         toolbar.setTitle("新增景點");
 
         ivLocImage = view.findViewById(R.id.ivLocImage);
         etLocName = view.findViewById(R.id.etLocName);
+        etCityName = view.findViewById(R.id.etCityName);
         etAddress = view.findViewById(R.id.etAddress);
         etDesc = view.findViewById(R.id.tvDesc);
         ImageButton ibInsert = view.findViewById(R.id.ibUpdate);
@@ -96,69 +99,75 @@ public class LocationInsertFragment extends Fragment {
         ibInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                     // 欄位檢核
-                    String locName = etLocName.getText().toString().trim();
-                    String address = etAddress.getText().toString().trim();
-                    String desc = etDesc.getText().toString().trim();
-                    Log.d(TAG, "locName :: " + locName);
-                    if (locName.isEmpty()) {
-                        etLocName.setError(MSG);
-                        return;
+                // 欄位檢核
+                String locName = etLocName.getText().toString().trim();
+                String city = etCityName.getText().toString().trim();
+                String address = etAddress.getText().toString().trim();
+                String desc = etDesc.getText().toString().trim();
+                Log.d(TAG, "locName :: " + locName);
+                if (locName.isEmpty()) {
+                    etLocName.setError(MSG);
+                    return;
+                }
+
+                if (city.isEmpty()) {
+                    etCityName.setError(MSG);
+                    return;
+                }
+
+                if (address.isEmpty()) {
+                    etAddress.setError(MSG);
+                    return;
+                }
+
+                if (desc.isEmpty()) {
+                    etDesc.setError(MSG);
+                    return;
+                }
+
+
+                List<Address> addressList;
+                double latitude = -181.0;
+                double longitude = -181.0;
+                try {
+                    addressList = new Geocoder(activity).getFromLocationName(locName, 1);
+                    if (addressList != null && addressList.size() > 0) {
+                        latitude = addressList.get(0).getLatitude();
+                        longitude = addressList.get(0).getLongitude();
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    if (address.isEmpty()) {
-                        etAddress.setError(MSG);
-                        return;
-                    }
-
-                    if (desc.isEmpty()) {
-                        etDesc.setError(MSG);
-                        return;
-                    }
-
-
-                    List<Address> addressList;
-                    double latitude = -181.0;
-                    double longitude = -181.0;
-                    try {
-                        addressList = new Geocoder(activity).getFromLocationName(locName, 1);
-                        if(addressList != null && addressList.size() > 0){
-                            latitude = addressList.get(0).getLatitude();
-                            longitude = addressList.get(0).getLongitude();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    // 檢查網路連線
-                    if(Common.networkConnected(activity)){
-                        String url = Common.URL_SERVER + "LocationServlet";
+                // 檢查網路連線
+                if (Common.networkConnected(activity)) {
+                    String url = Common.URL_SERVER + "LocationServlet";
 //                        Location(String locId, String name, String address, String locType, String city, String info,
 //                        double longitude, double latitude, int createId, int useId, String createDateTime)
-                        Location location = new Location(Common.getTransId(), locName, address, "type","city", desc,
-                                longitude, latitude, 1, 1, new Timestamp(System.currentTimeMillis()));
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("action", "locationInsert");
-                        jsonObject.addProperty("location", new Gson().toJson(location));
-                        // 有圖才上傳
-                        if (image != null) {
-                            jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
-                        }
-                        int count = 0;
-                        try {
-                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
-                            count = Integer.parseInt(result);
-                            if(count == 0){
-                                Common.showToast(activity, "insert fail");
-                            }else{
-                                Common.showToast(activity, "insert success");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        Common.showToast(activity, "no network connection");
+                    Location location = new Location(Common.getTransId(), locName, address, "type", city, desc,
+                            longitude, latitude, 1, 1, new Timestamp(System.currentTimeMillis()));
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "locationInsert");
+                    jsonObject.addProperty("location", new Gson().toJson(location));
+                    // 有圖才上傳
+                    if (image != null) {
+                        jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
                     }
+                    int count = 0;
+                    try {
+                        String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                        count = Integer.parseInt(result);
+                        if (count == 0) {
+                            Common.showToast(activity, "insert fail");
+                        } else {
+                            Common.showToast(activity, "insert success");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Common.showToast(activity, "no network connection");
+                }
 
                 Navigation.findNavController(view)
                         .popBackStack();
@@ -167,13 +176,12 @@ public class LocationInsertFragment extends Fragment {
         });
 
 
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQ_TAKE_PICTURE:
                     crop(contentUri);

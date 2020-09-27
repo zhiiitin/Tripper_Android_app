@@ -197,7 +197,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         loadPreferences();
 
 
-        if(Common.tripId.isEmpty()|| Common.tripId.equals("")){
+        if (Common.tripId.isEmpty() || Common.tripId.equals("")) {
             Common.tripId = Common.getTransId();
         }
 
@@ -251,7 +251,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         ibSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Common.networkConnected(activity)){
+                if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "TripServlet";
                     String tripId = Common.tripId;
                     int memberId = 1;
@@ -278,7 +278,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                         textTime.setError("請選擇出發時間");
                         return;
                     }
-                   // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
+                    // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
                     Trip_M tripMaster = new Trip_M(tripId, memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
                     // TODO 處理照片
                     // 暫不處理
@@ -286,22 +286,26 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     jsonObject.addProperty("action", "insert");
                     jsonObject.addProperty("tripM", new Gson().toJson(tripMaster));
                     jsonObject.addProperty("locationD", new Gson().toJson(Common.map));
+
+                    if (photo != null) {
+                        jsonObject.addProperty("imageBase64", Base64.encodeToString(photo, Base64.DEFAULT));
+                    }
                     int count = 0;
                     try {
                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
                         count = Integer.parseInt(result);
-                        if(count > 0){
-                            Common.showToast(activity, "建立行程成功");
-                            Navigation.findNavController(v)
-                                    .popBackStack(R.id.trip_HomePage,false);
-                            //deletePreferences();
-                        }else {
-                            Common.showToast(activity, "建立行程失敗");
-                        }
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                    if (count == 0) {
+                        Common.showToast(activity, "建立行程成功");
+                        Navigation.findNavController(v)
+                                .popBackStack(R.id.trip_HomePage, false);
+                        //deletePreferences();
+                    } else {
+                        Common.showToast(activity, "建立行程失敗");
+                    }
+                } else {
                     Common.showToast(activity, "請檢查網路連線");
                 }
             }

@@ -16,7 +16,10 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"></androidx.appcompat.widget.Toolbar>
+            android:layout_width="match_parent"
+            android:theme="@style/ToolBarStyle">
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -38,52 +41,61 @@
 
                 <ImageView
                     android:id="@+id/ivLocImage"
-                    android:layout_width="95.2dp"
-                    android:layout_height="95.2dp"
-                    android:layout_marginStart="148dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="148dp"
-                    android:layout_marginBottom="64dp"
+                    android:layout_width="250dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="25dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_nopicture"
-                    app:layout_constraintBottom_toTopOf="@+id/tvLocName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/etLocName"
-                    android:layout_width="409dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="216dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="10dp"
                     android:hint="@string/textLocName"
+                    android:inputType="text"
+                    android:textColor="@color/colorForNormalText"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/ivLocImage">
 
                 </EditText>
 
                 <EditText
                     android:id="@+id/etAddress"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/textAddressLength"
-                    android:inputType="textPostalAddress"
+                    android:inputType="textMultiLine|textPostalAddress"
+                    android:textColor="@color/colorForNormalText"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/etLocName"
                     app:layout_constraintTop_toBottomOf="@+id/etLocName" />
 
                 <EditText
                     android:id="@+id/tvDesc"
-                    android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:ems="10"
                     android:gravity="start|top"
                     android:hint="@string/textDesc"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/colorForNormalText"
                     app:layout_constraintEnd_toEndOf="@+id/etAddress"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/etAddress" />
@@ -92,8 +104,11 @@
                     android:id="@+id/ibUpdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/update_ui"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/ivLocImage"
                     app:layout_constraintStart_toStartOf="@+id/ivLocImage"
                     app:layout_constraintTop_toBottomOf="@+id/tvDesc" />

@@ -70,6 +70,7 @@ public class LocationListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("景點列表");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         SearchView searchView = view.findViewById(R.id.searchView);
         FloatingActionButton btAdd = view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
