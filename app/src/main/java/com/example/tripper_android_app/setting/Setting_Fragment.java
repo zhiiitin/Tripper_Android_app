@@ -174,7 +174,7 @@ public class Setting_Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // 從偏好設定檔中取得登入狀態來決定是否顯示「登出」
+        // 從偏好設定檔中取得登入狀態」
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         boolean login = pref.getBoolean("login", false);
