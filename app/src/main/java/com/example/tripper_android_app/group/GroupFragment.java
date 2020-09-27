@@ -208,9 +208,23 @@ public class GroupFragment extends Fragment {
 
             myViewHolder.tvTitle.setText(group.getTripTitle());
             myViewHolder.tvDate.setText("出發日："+group.getStartDate());
+<<<<<<< HEAD
             //myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
 
 
+=======
+            myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
+//點擊頁面傳到行程頁面
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("locName",group.getTripTitle());
+                    bundle.putString("tripId",group.getTripId());
+                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_tripHasSavedPage,bundle);
+                }
+            });
+>>>>>>> 會員註冊功能
         }
     }
 

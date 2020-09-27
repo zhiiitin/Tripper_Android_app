@@ -207,15 +207,16 @@ public class Create_Blog_Location_List extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String message = "";
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:    //此返回鍵ID是固定的
-                Navigation.findNavController(this.getView()).navigate(R.id.action_create_Blog_Location_List_to_blog_HomePage);
+            case android.R.id.home:
+                Navigation.findNavController(rvGroup).navigate(R.id.action_create_Blog_Location_List_to_blog_HomePage);
                 return true;
-
+            default:
+                break;
         }
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-        return true;
+        return super.onOptionsItemSelected(item);
     }
+
+
 }
