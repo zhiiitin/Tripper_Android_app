@@ -159,7 +159,11 @@
         android:id="@+id/groupFragment"
         android:name="com.example.tripper_android_app.group.GroupFragment"
         android:label="fragment_group"
-        tools:layout="@layout/fragment_group" />
+        tools:layout="@layout/fragment_group" >
+        <action
+            android:id="@+id/action_groupFragment_to_tripHasSavedPage"
+            app:destination="@id/tripHasSavedPage" />
+    </fragment>
     <fragment
         android:id="@+id/notifyFragment"
         android:name="com.example.tripper_android_app.notify.NotifyFragment"
@@ -345,6 +349,10 @@
         android:id="@+id/createBlogFragment"
         android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
         android:label="fragment_create_blog"
-        tools:layout="@layout/fragment_create_blog" />
+        tools:layout="@layout/fragment_create_blog" >
+        <action
+            android:id="@+id/action_createBlogFragment_to_create_Blog_Location_List"
+            app:destination="@id/create_Blog_Location_List" />
+    </fragment>
 
 </navigation>
