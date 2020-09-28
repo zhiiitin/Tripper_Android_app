@@ -189,12 +189,14 @@ public class Register_main_Fragment extends Fragment {
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("action","memberGBInsert");
                         jsonObject.addProperty("member" ,new Gson().toJson(member));
+
                         try{
                             String result = new CommonTask(Url,jsonObject.toString()).execute().get();
                             int count = Integer.parseInt(result);
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
                         }
+                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
 
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");
@@ -217,7 +219,6 @@ public class Register_main_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 登入成功轉至下頁；失敗則顯示錯誤訊息
                         if (task.isSuccessful()) {
-                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
                             Common.showToast(activity,"GOOGLE登入成功！");
                         } else {
                             Exception exception = task.getException();
