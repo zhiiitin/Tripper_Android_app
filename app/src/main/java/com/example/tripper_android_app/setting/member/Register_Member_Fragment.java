@@ -171,14 +171,16 @@ public class Register_Member_Fragment extends Fragment {
 
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
+                }if(member.getId()!=0) {
+                    String id = member.getId() + "";
+                    tvId.setText(id);
+                    pref.edit()
+                            .putString("memberId", id)
+                            .apply();
                 }
-                String id = member.getId() + "";
                 String nickname = member.getNickName();
-                tvId.setText(id);
                 etNickName.setText(nickname);
-                pref.edit()
-                        .putString("memberId", id)
-                        .apply();
+
                 if (member.getLoginType() == 0) {
                     tvLoginType.setText("一般登入");
                 } else if (member.getLoginType() == 1) {
