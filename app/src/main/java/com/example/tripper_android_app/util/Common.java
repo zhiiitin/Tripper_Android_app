@@ -36,7 +36,7 @@ public class Common {
     public static Map<String, List<Location_D>> map = new TreeMap<>();
     public static String spinnerSelect = "";
     public static String tripId = "";
-    private static MainActivity activity ;
+    private  MainActivity activity ;
 
 
 
@@ -133,8 +133,7 @@ public class Common {
         }
     }
 //判斷是否有登入帳號
-
-    public static boolean login(){
+    public static boolean isLogin(Activity activity){
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         boolean login = pref.getBoolean("login", false);
