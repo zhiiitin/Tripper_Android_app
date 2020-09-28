@@ -1,32 +1,26 @@
 package com.example.tripper_android_app.explore;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-
-import androidx.appcompat.widget.Toolbar;
-
-import androidx.fragment.app.Fragment;
-
-
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
@@ -41,9 +35,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
+import static android.content.Context.MODE_PRIVATE;
 
 public class ExploreFragment extends Fragment {
 
@@ -58,6 +53,7 @@ public class ExploreFragment extends Fragment {
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
     private List<Member> members;
+
 
 
 
@@ -279,6 +275,7 @@ public class ExploreFragment extends Fragment {
             }
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
@@ -299,10 +296,16 @@ public class ExploreFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt( "UserId",explore.getUserId());
+                    bundle.putInt("BlogId",explore.getBlogId());
+                    bundle.putString("BlogTitle",explore.getTittleName());
+                    bundle.putString("BlogDesc",explore.getBlogDesc());
+                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment,bundle);
 
                 }
-            });
+            });;
+
 
 
         }

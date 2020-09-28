@@ -82,7 +82,7 @@ public class LocationListFragment extends Fragment {
         });
         // 下拉更新元件
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        rvLocation = view.findViewById(R.id.rvLocation);
+        rvLocation = view.findViewById(R.id.rvloca0);
         rvLocation.setLayoutManager(new LinearLayoutManager(activity));
 
         // 圖片另外處理，此部份是未帶圖片
