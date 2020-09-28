@@ -196,10 +196,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         loadPreferences();
 
 
-        if(Common.tripId.isEmpty()|| Common.tripId.equals("")){
-            Common.tripId = Common.getTransId();
-        }
-
         // 挑選景點
         Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
         btSelectLoc.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +248,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             public void onClick(View v) {
                 if(Common.networkConnected(activity)){
                     String url = Common.URL_SERVER + "TripServlet";
-                    String tripId = Common.tripId;
                     int memberId = 1;
                     String tripTitle = etTripTitle.getText().toString();
                     String startDate = textDate.getText().toString().trim();
@@ -278,7 +273,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                         return;
                     }
                    // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
-                    Trip_M tripMaster = new Trip_M(tripId, memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
+                    Trip_M tripMaster = new Trip_M(memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
                     // TODO 處理照片
                     // 暫不處理
                     JsonObject jsonObject = new JsonObject();

@@ -13,10 +13,8 @@ public class Location_D extends Location implements Serializable {
     private String startDate;
     private String startTime;
 
-    public Location_D(String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate) {
+    public Location_D(String name, String address, String locId,  String memos, String stayTimes,  String startDate) {
         super(name, address, locId);
-        this.tripId = tripId;
-        this.transId = transId;
         this.startDate = startDate;
         this.memos = memos;
         this.stayTimes = stayTimes;

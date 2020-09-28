@@ -269,10 +269,10 @@ public class Trip_HomePage extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        boolean login = pref.getBoolean("login", false);
-        if (login) {
+//        boolean login = pref.getBoolean("login", false);
+//        if (login) {
             inflater.inflate(R.menu.app_bar_button, menu);
-        }
+//        }
     }
 
     @Override

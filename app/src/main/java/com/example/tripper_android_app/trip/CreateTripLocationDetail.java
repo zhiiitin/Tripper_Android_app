@@ -177,7 +177,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 // TODO 暫使hard code
                 startDate ="2020-09-20";
                 // String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate
-                Location_D locationD = new Location_D(Common.tripId, Common.getTransId(), name, address, locId, memos, stayTimes, startDate);
+                Location_D locationD = new Location_D(name, address, locId, memos, stayTimes, startDate);
                 locationDs.add(locationD);
                 Common.map.put(daySelected, locationDs);
 
