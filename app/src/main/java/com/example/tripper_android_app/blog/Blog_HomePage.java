@@ -73,6 +73,7 @@ public class Blog_HomePage extends Fragment {
         mUser = auth.getCurrentUser();
         //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("個人頁面");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
 

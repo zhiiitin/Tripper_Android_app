@@ -3,31 +3,28 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
-    android:layout_width="370dp"
-    android:layout_height="250dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="120dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:padding="10dp"
-    card_view:cardBackgroundColor="#00BCD4"
-    card_view:cardCornerRadius="20dp"
-    card_view:cardElevation="10dp"
+    card_view:cardBackgroundColor="@color/colorForBottomBar"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="6dp"
     card_view:layout_constraintBottom_toBottomOf="parent"
     card_view:layout_constraintEnd_toEndOf="parent"
     card_view:layout_constraintStart_toStartOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="6dp"
-        android:padding="6dp">
+        android:layout_height="match_parent">
 
 
         <ImageView
             android:id="@+id/ivLocationPic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
@@ -35,34 +32,38 @@
 
         <TextView
             android:id="@+id/tvLocName"
-            android:layout_width="340dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:text="@string/textLocName"
-            android:textSize="30sp"
-            card_view:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorForNormalText"
+            android:textSize="20sp"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/ivLocationPic" />
 
         <TextView
             android:id="@+id/tvAddress"
-            android:layout_width="340dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/textAddress"
-            android:textSize="30sp"
-            card_view:layout_constraintEnd_toEndOf="@+id/tvLocName"
-            card_view:layout_constraintHorizontal_bias="1.0"
+            android:textColor="@color/colorForText"
+            android:textSize="18sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="@+id/tvLocName"
             card_view:layout_constraintTop_toBottomOf="@+id/tvLocName" />
 
         <ImageView
             android:id="@+id/ivMore"
-            android:layout_width="52dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/more_icon" />
+            card_view:srcCompat="@drawable/more_vert_24px" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

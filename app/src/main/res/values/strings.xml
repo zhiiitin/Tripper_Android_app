@@ -176,6 +176,7 @@
     <string name="memotitle">備註欄位：</string>
     <string name="textShowMore">行程備註</string>
     <string name="deleteLoc">刪除景點</string>
+    <string name="cityname">請輸入城市名</string>
 
 
 </resources>

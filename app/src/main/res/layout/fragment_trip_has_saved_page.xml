@@ -177,13 +177,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="20dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_delete_trip"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btManageGroupPpl" />
+
+                <ImageButton
+                    android:id="@+id/btJoinGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_join_group"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+
+                    app:layout_constraintTop_toBottomOf="@+id/btDeleteTrip" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

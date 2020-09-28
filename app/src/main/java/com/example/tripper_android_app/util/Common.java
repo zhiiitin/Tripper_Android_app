@@ -2,6 +2,7 @@ package com.example.tripper_android_app.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.CommonTask;
 import com.google.gson.JsonObject;
@@ -24,6 +26,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class Common {
     private static final String TAG = "TAG_Common";
     public static String URL_SERVER = "http://10.0.2.2:8080/Tripper_JAVA_Web/";
@@ -32,6 +36,9 @@ public class Common {
     public static Map<String, List<Location_D>> map = new TreeMap<>();
     public static String spinnerSelect = "";
     public static String tripId = "";
+    private static MainActivity activity ;
+
+
 
 
     /**
@@ -123,6 +130,19 @@ public class Common {
             registerTask.execute();
         } else {
             Common.showToast(context, "連線失敗");
+        }
+    }
+//判斷是否有登入帳號
+
+    public static boolean login(){
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        boolean login = pref.getBoolean("login", false);
+        if(login){
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

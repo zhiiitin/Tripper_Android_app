@@ -47,6 +47,7 @@ public class LocationDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("景點資訊");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         Bundle bundle = getArguments();
         if(bundle == null || bundle.getSerializable("location") == null){
             Navigation.findNavController(view)

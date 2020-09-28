@@ -98,6 +98,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private Switch switchGroup;
     private static int year, month, day, hour, minute;
     private RecyclerView rvLocSelectedList;
+    private int lastPosition;
     private SharedPreferences preference;
     private int status = 0;
     //照片
@@ -195,7 +196,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         loadPreferences();
 
-
         // 挑選景點
         Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
         btSelectLoc.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +246,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         ibSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Common.networkConnected(activity)){
+                if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "TripServlet";
                     int memberId = 1;
                     String tripTitle = etTripTitle.getText().toString();
@@ -280,22 +280,26 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     jsonObject.addProperty("action", "insert");
                     jsonObject.addProperty("tripM", new Gson().toJson(tripMaster));
                     jsonObject.addProperty("locationD", new Gson().toJson(Common.map));
+
+                    if (photo != null) {
+                        jsonObject.addProperty("imageBase64", Base64.encodeToString(photo, Base64.DEFAULT));
+                    }
                     int count = 0;
                     try {
                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
                         count = Integer.parseInt(result);
-                        if(count > 0){
-                            Common.showToast(activity, "建立行程成功");
-                            Navigation.findNavController(v)
-                                    .popBackStack(R.id.trip_HomePage,false);
-                            //deletePreferences();
-                        }else {
-                            Common.showToast(activity, "建立行程失敗");
-                        }
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                    if (count == 0) {
+                        Common.showToast(activity, "建立行程成功");
+                        Navigation.findNavController(v)
+                                .popBackStack(R.id.trip_HomePage, false);
+                        //deletePreferences();
+                    } else {
+                        Common.showToast(activity, "建立行程失敗");
+                    }
+                } else {
                     Common.showToast(activity, "請檢查網路連線");
                 }
             }
@@ -460,6 +464,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         String tripDate = textDate.getText().toString();
         String tripTime = textTime.getText().toString();
 
+
         preference.edit()
                 .putString("tripTitle", tripTitle)
                 .putString("tripDate", tripDate)
@@ -482,8 +487,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     //刪除暫存檔
     public void deletePreferences() {
         preference.edit()
-                .clear()
-                .commit();
+                .remove("tripTitle")
+                .remove("tripDate")
+                .remove("tripTime")
+                .apply();
     }
 
 

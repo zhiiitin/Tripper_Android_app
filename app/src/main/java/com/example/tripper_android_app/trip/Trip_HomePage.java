@@ -16,13 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -92,6 +95,7 @@ public class Trip_HomePage extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("個人頁面");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         rvTripMainList = view.findViewById(R.id.rvTripMainList);
         rvTripMainList.setLayoutManager(new LinearLayoutManager(activity));
@@ -217,17 +221,6 @@ public class Trip_HomePage extends Fragment {
             this.tripList = tripList;
         }
 
-        class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView;
-            TextView tvTripName;
-
-            MyViewHolder(@NonNull View itemView) {
-                super(itemView);
-                tvTripName = itemView.findViewById(R.id.textLocName);
-                imageView = itemView.findViewById(R.id.ivLocPic2);
-            }
-        }
-
         @Override
         public int getItemCount() {
             return tripList == null ? 0 : tripList.size();
@@ -240,8 +233,21 @@ public class Trip_HomePage extends Fragment {
             return new TripAdapter.MyViewHolder(itemView);
         }
 
+        private class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView imageView;
+            TextView tvTripName;
+            ImageButton ibEditTrip;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                tvTripName = itemView.findViewById(R.id.textLocName);
+                imageView = itemView.findViewById(R.id.ivLocPic2);
+                ibEditTrip = itemView.findViewById(R.id.ibMoreForTripHome);
+            }
+        }
+
         @Override
-        public void onBindViewHolder(@NonNull TripAdapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
             final Trip_M trips = tripList.get(position);
             String Url = Common.URL_SERVER + "Trip_M_Servlet";
             int id = trips.getMemberId();
@@ -260,6 +266,32 @@ public class Trip_HomePage extends Fragment {
                     Navigation.findNavController(v).navigate(R.id.tripHasSavedPage, bundle);
                 }
             });
+
+            //card上面的編輯按鈕
+            holder.ibEditTrip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
+                    popupMenu.inflate(R.menu.trip_homepage_more_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()){
+                                case R.id.tripHomepageEdit:
+                                    //查詢TripID 帶資料過去
+                                    Navigation.findNavController(v).navigate(R.id.create_Trip_Fragment);
+                                            break;
+                                case R.id.tripHomepageDelete:
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
+
+
 
         }
     }

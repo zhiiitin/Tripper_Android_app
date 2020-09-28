@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/colorForBottomBar"
+    android:layout_margin="10dp"
     android:foreground="?selectableItemBackground"
+    app:cardBackgroundColor="@color/colorForBottomBar"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp">
 
@@ -48,6 +48,7 @@
             android:layout_height="60dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/ic_nopicture"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
