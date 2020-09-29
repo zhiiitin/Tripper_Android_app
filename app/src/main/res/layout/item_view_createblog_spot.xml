@@ -70,19 +70,19 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etBlog"
             android:layout_width="369dp"
-            android:layout_height="34dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/colorForWhite"
             android:hint="請輸入文字：限500字"
-            android:textSize="12sp"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvInput" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPhoto"
-            android:layout_width="385dp"
-            android:layout_height="65dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/ibInsertPic"

@@ -181,6 +181,7 @@ public class Create_Blog_Location_List extends Fragment {
             final Bundle bundle = new Bundle();
             bundle.putString("tripName",group.getTripTitle());
             bundle.putString("tripDate",group.getStartDate());
+            bundle.putString("tripId",group.getTripId());
 
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
