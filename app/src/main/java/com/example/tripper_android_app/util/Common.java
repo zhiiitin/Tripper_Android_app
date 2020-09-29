@@ -36,6 +36,7 @@ public class Common {
     public static Map<String, List<Location_D>> map = new TreeMap<>();
     public static String spinnerSelect = "";
     public static String tripId = "";
+    public static int memberId;
     private  MainActivity activity ;
 
 

@@ -62,20 +62,24 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.location.Location_D;
+import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import static android.app.Activity.RESULT_OK;
@@ -96,6 +100,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private EditText etTripTitle;
     private Spinner spDay, spChoosePpl;
     private Switch switchGroup;
+    private List<Location_D> locations;
     private static int year, month, day, hour, minute;
     private RecyclerView rvLocSelectedList;
     private int lastPosition;
@@ -104,7 +109,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     //照片
     private ImageButton ibChangeLocPic;
     private ImageView ivLocPic; // 行程封面照
-    private byte[] photo;
+    private byte[] b_photo;
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
@@ -248,6 +253,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             public void onClick(View v) {
                 if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "TripServlet";
+                    Member member = new Member();
                     int memberId = 1;
                     String tripTitle = etTripTitle.getText().toString();
                     String startDate = textDate.getText().toString().trim();
@@ -272,17 +278,18 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                         textTime.setError("請選擇出發時間");
                         return;
                     }
-                   // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
+                    // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
                     Trip_M tripMaster = new Trip_M(memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
-                    // TODO 處理照片
-                    // 暫不處理
+
+
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "insert");
                     jsonObject.addProperty("tripM", new Gson().toJson(tripMaster));
                     jsonObject.addProperty("locationD", new Gson().toJson(Common.map));
 
-                    if (photo != null) {
-                        jsonObject.addProperty("imageBase64", Base64.encodeToString(photo, Base64.DEFAULT));
+                    // TODO 處理照片 = 成功
+                    if (b_photo != null) {
+                        jsonObject.addProperty("imageBase64", Base64.encodeToString(b_photo, Base64.DEFAULT));
                     }
                     int count = 0;
                     try {
@@ -291,13 +298,14 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (count == 0) {
+                    if (count > 0) {
                         Common.showToast(activity, "建立行程成功");
                         Navigation.findNavController(v)
                                 .popBackStack(R.id.trip_HomePage, false);
                         //deletePreferences();
                     } else {
                         Common.showToast(activity, "建立行程失敗");
+                        Log.d(TAG, "Trip Fail: " + count );
                     }
                 } else {
                     Common.showToast(activity, "請檢查網路連線");
@@ -441,7 +449,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(textDate).navigate(R.id.action_create_Trip_Fragment_to_trip_HomePage);
+                Navigation.findNavController(textDate).popBackStack(R.id.trip_HomePage, false);
                 return true;
             default:
                 break;
@@ -463,8 +471,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         String tripTitle = etTripTitle.getText().toString();
         String tripDate = textDate.getText().toString();
         String tripTime = textTime.getText().toString();
-
-
         preference.edit()
                 .putString("tripTitle", tripTitle)
                 .putString("tripDate", tripDate)
@@ -482,6 +488,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         etTripTitle.setText(tripTitle);
         textDate.setText(tripDate);
         textTime.setText(tripTime);
+
+
     }
 
     //刪除暫存檔
@@ -490,6 +498,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 .remove("tripTitle")
                 .remove("tripDate")
                 .remove("tripTime")
+                .remove("rvTripView")
                 .apply();
     }
 
@@ -631,7 +640,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            photo = out.toByteArray();
+            b_photo = out.toByteArray();
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         }

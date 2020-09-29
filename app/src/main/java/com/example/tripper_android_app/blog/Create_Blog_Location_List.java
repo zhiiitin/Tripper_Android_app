@@ -49,6 +49,7 @@ public class Create_Blog_Location_List extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
 
     }
 
@@ -67,11 +68,7 @@ public class Create_Blog_Location_List extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
-        if (upArrow != null) {
-            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
-            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
+
 
 
         swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
@@ -210,7 +207,8 @@ public class Create_Blog_Location_List extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(rvGroup).navigate(R.id.action_create_Blog_Location_List_to_blog_HomePage);
+                Navigation.findNavController(rvGroup).popBackStack(R.id.blog_HomePage, false);
+
                 return true;
             default:
                 break;

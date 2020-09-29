@@ -18,7 +18,7 @@
         android:layout_height="240dp">
 
         <ImageView
-            android:id="@+id/ivBlog"
+            android:id="@+id/groupTripPic"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="9dp"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tvDate"
             app:layout_constraintHorizontal_bias="0.368"
             app:layout_constraintStart_toStartOf="@+id/tvCount"
-            app:layout_constraintTop_toTopOf="@+id/ivBlog"
+            app:layout_constraintTop_toTopOf="@+id/groupTripPic"
             app:srcCompat="@drawable/shadow" />
 
         <View
@@ -90,7 +90,7 @@
             android:textColor="#454444"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivBlog" />
+            app:layout_constraintTop_toBottomOf="@+id/groupTripPic" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

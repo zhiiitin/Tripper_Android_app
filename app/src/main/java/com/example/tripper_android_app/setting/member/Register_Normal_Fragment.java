@@ -103,7 +103,7 @@ public class Register_Normal_Fragment extends Fragment {
                     return;
                 }
 
-                if(password.length() <6 ||password.length() > 12 ){
+                if(password.length() < 6 ||password.length() > 12 ){
                     etPassword.setError("請輸入6~12位字元");
                     return;
                 }
