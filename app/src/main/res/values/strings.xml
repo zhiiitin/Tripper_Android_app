@@ -177,6 +177,8 @@
     <string name="textShowMore">行程備註</string>
     <string name="deleteLoc">刪除景點</string>
     <string name="cityname">請輸入城市名</string>
+    <string name="homepageEdit">編輯行程</string>
+    <string name="homepageDelete">刪除行程</string>
 
 
 </resources>

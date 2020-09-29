@@ -22,6 +22,7 @@ public class Trip_M implements Serializable {
 	private int status;
 
 
+
 	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount,
 				  int pMax, int status) {
 		super();

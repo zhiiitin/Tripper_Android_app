@@ -120,19 +120,19 @@ public class Blog_HomePage extends Fragment {
 
         showMember();
 
-        ImageButton btChangepic = view.findViewById(R.id.btChangePic);
-
-
-        if (Common.isLogin(activity)) {
-            btChangepic.setVisibility(View.VISIBLE);
-        }
-
-        btChangepic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTypeDialog();
-            }
-        });
+//        ImageButton btChangepic = view.findViewById(R.id.btChangePic);
+//
+//
+//        if (Common.isLogin(activity)) {
+//            btChangepic.setVisibility(View.VISIBLE);
+//        }
+//
+//        btChangepic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showTypeDialog();
+//            }
+//        });
 
     }
 

@@ -178,7 +178,7 @@ public class GroupFragment extends Fragment {
 
             MyViewHolder(View itemView) {
                 super(itemView);
-                imageView = itemView.findViewById(R.id.ivBlog);
+                imageView = itemView.findViewById(R.id.groupTripPic);
                 tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvCount = itemView.findViewById(R.id.tvCount);
@@ -202,10 +202,10 @@ public class GroupFragment extends Fragment {
 
             final Trip_M group = groupList.get(position);
             String Url = Common.URL_SERVER + "Trip_M_Servlet";
-            int id = group.getMemberId();
-            groupImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
+            String tripId = group.getTripId();
+//            int id = group.getMemberId();
+            groupImageTask = new ImageTask(Url, tripId, imageSize, myViewHolder.imageView);
             groupImageTask.execute();
-
             myViewHolder.tvTitle.setText(group.getTripTitle());
             myViewHolder.tvDate.setText("出發日："+group.getStartDate());
             myViewHolder.tvCount.setText("已參與人數：" +"/"+ group.getpMax());
