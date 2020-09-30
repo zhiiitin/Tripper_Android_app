@@ -1,23 +1,39 @@
 package com.example.tripper_android_app.blog;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,22 +44,40 @@ import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.trip.Trip_M;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.DateUtil;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class CreateBlogFragment extends Fragment {
     private static final String TAG = "TAG_Create_Blog_Fragment";
     private RecyclerView rvBlog, rvPhoto;
     private MainActivity activity;
-    private CommonTask groupGetAllTask;
+    private CommonTask groupGet1Task;
     private TextView tvBlogName, tvDate, tvTime;
+    private String startDate, tripId;
+    private Button btDay1, btDay2, btDay3, btDay4, btDay5, btDay6;
+    private int num_columns = 4;
+    private byte[] photo;
+    private static final int REQ_TAKE_PICTURE = 0;
+    private static final int REQ_PICK_PICTURE = 1;
+    private static final int REQ_CROP_PICTURE = 2;
+    private Uri contentUri;
+    private Bitmap bitmap ;
 
 
     @Override
@@ -76,6 +110,7 @@ public class CreateBlogFragment extends Fragment {
         tvBlogName = view.findViewById(R.id.tvBlogName);
         tvDate = view.findViewById(R.id.tvDate);
         tvTime = view.findViewById(R.id.tvTime);
+
 //RecyclerView
         rvBlog = view.findViewById(R.id.rvBlog);
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
@@ -84,33 +119,125 @@ public class CreateBlogFragment extends Fragment {
 //取得前頁bungle
         Bundle bundle = getArguments();
         String blogName = bundle.getString("tripName");
-        String startDate = bundle.getString("tripDate");
+        startDate = bundle.getString("tripDate");
+        tripId = bundle.getString("tripId");
         tvBlogName.setText(blogName);
         tvDate.setText("出發日期：" + startDate);
 //取得List
 
         //第一天景點
-        List<String> spotList1 = getSpots();
+        final List<Blog_SpotInfo> spotList1 = getSpots();
         showSpots(spotList1);
         //第二天景點
-        List<String> spotList2 = getSpots2();
+        List<Blog_SpotInfo> spotList2 = null;
+        try {
+            spotList2 = getSpots2();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showSpots2(spotList2);
         //第三天景點
-        List<String> spotList3 = getSpots3();
+        List<Blog_SpotInfo> spotList3 = null;
+        try {
+            spotList3 = getSpots3();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showSpots3(spotList3);
         //第四天景點
-        List<String> spotList4 = getSpots4();
+        List<Blog_SpotInfo> spotList4 = null;
+        try {
+            spotList4 = getSpots4();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showSpots4(spotList4);
         //第五天景點
-        List<String> spotList5 = getSpots5();
+        List<Blog_SpotInfo> spotList5 = null;
+        try {
+            spotList5 = getSpots5();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showSpots5(spotList5);
         //第六天景點
-        List<String> spotList6 = getSpots6();
+        List<Blog_SpotInfo> spotList6 = null;
+        try {
+            spotList6 = getSpots6();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showSpots6(spotList6);
 
         List<String> dayList = getDays();
         showdays(dayList);
 
+        final List<Blog_SpotInfo> finalSpotList2 = spotList2;
+        final List<Blog_SpotInfo> finalSpotList3 = spotList3;
+        final List<Blog_SpotInfo> finalSpotList4 = spotList4;
+        final List<Blog_SpotInfo> finalSpotList5 = spotList5;
+        final List<Blog_SpotInfo> finalSpotList6 = spotList6;
+
+//實作按下天數按鈕，跳轉到position
+        btDay1 = view.findViewById(R.id.btDay1);
+        btDay1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rvBlog.smoothScrollToPosition(0);
+            }
+        });
+        btDay2 = view.findViewById(R.id.btDay2);
+        if (finalSpotList2.size() == 0) {
+            btDay2.setVisibility(View.GONE);
+        }
+        btDay2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rvBlog.smoothScrollToPosition(spotList1.size() + 1 + 1);
+            }
+        });
+        btDay3 = view.findViewById(R.id.btDay3);
+        if (finalSpotList3.size() == 0) {
+            btDay3.setVisibility(View.GONE);
+        }
+
+        btDay3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rvBlog.smoothScrollToPosition(spotList1.size() + 1 + finalSpotList2.size() + 1 + 1);
+            }
+        });
+        btDay4 = view.findViewById(R.id.btDay4);
+        if (finalSpotList4.size() == 0) {
+            btDay4.setVisibility(View.GONE);
+        }
+        btDay4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rvBlog.smoothScrollToPosition(spotList1.size() + 1 + finalSpotList2.size() + 1 + finalSpotList3.size() + 1 + 1);
+            }
+        });
+        btDay5 = view.findViewById(R.id.btDay5);
+        if (finalSpotList5.size() == 0) {
+            btDay5.setVisibility(View.GONE);
+        }
+        btDay5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rvBlog.smoothScrollToPosition(spotList1.size() + 1 + 1 + finalSpotList2.size() + 1 + finalSpotList3.size() + 1 + finalSpotList4.size() + 1);
+            }
+        });
+        btDay6 = view.findViewById(R.id.btDay6);
+        if (finalSpotList6.size() == 0) {
+            btDay6.setVisibility(View.GONE);
+        }
+        btDay6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rvBlog.smoothScrollToPosition(spotList1.size() + 1 + 1 + finalSpotList2.size() + 1 + finalSpotList3.size() + 1 + finalSpotList4.size() + 1 + finalSpotList5.size() + 1);
+
+            }
+        });
     }
 
     //創建Adapter
@@ -118,14 +245,14 @@ public class CreateBlogFragment extends Fragment {
         private LayoutInflater layoutInflater;
         private int imageSize;
         private List<String> dayList;
-        private List<String> spotList1;
-        private List<String> spotList2;
-        private List<String> spotList3;
-        private List<String> spotList4;
-        private List<String> spotList5;
-        private List<String> spotList6;
+        private List<Blog_SpotInfo> spotList1;
+        private List<Blog_SpotInfo> spotList2;
+        private List<Blog_SpotInfo> spotList3;
+        private List<Blog_SpotInfo> spotList4;
+        private List<Blog_SpotInfo> spotList5;
+        private List<Blog_SpotInfo> spotList6;
 
-        BlogSpotAdapter(Context context, List<String> spotList) {
+        BlogSpotAdapter(Context context, List<Blog_SpotInfo> spotList) {
             layoutInflater = LayoutInflater.from(context);
             this.spotList1 = spotList;
             this.spotList2 = spotList;
@@ -153,14 +280,14 @@ public class CreateBlogFragment extends Fragment {
                 return 1;
             } else if (position > day1count + day2count + day3count + day4count && position < day1count + day2count + day3count + day4count + day5count) {
                 return 1;
-            } else if (position > day1count + day2count + day3count + day4count + day5count ) {
+            } else if (position > day1count + day2count + day3count + day4count + day5count) {
                 return 1;
             } else {
                 return 0;
             }
         }
 
-        void setSpots(List<String> spotList) {
+        void setSpots(List<Blog_SpotInfo> spotList) {
             this.spotList1 = spotList;
         }
 
@@ -168,23 +295,23 @@ public class CreateBlogFragment extends Fragment {
             this.dayList = dayList;
         }
 
-        void setSpots2(List<String> spotList2) {
+        void setSpots2(List<Blog_SpotInfo> spotList2) {
             this.spotList2 = spotList2;
         }
 
-        void setSpots3(List<String> spotList3) {
+        void setSpots3(List<Blog_SpotInfo> spotList3) {
             this.spotList3 = spotList3;
         }
 
-        void setSpots4(List<String> spotList4) {
+        void setSpots4(List<Blog_SpotInfo> spotList4) {
             this.spotList4 = spotList4;
         }
 
-        void setSpots5(List<String> spotList5) {
+        void setSpots5(List<Blog_SpotInfo> spotList5) {
             this.spotList5 = spotList5;
         }
 
-        void setSpots6(List<String> spotList6) {
+        void setSpots6(List<Blog_SpotInfo> spotList6) {
             this.spotList6 = spotList6;
         }
 
@@ -216,39 +343,47 @@ public class CreateBlogFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            int day1count = spotList1.size() + 1;
-            int day2count = day1count + spotList2.size() + 1;
-            int day3count = day2count + spotList3.size() + 1;
-            int day4count = day3count + spotList4.size() + 1;
-            int day5count = day4count + spotList5.size() + 1;
-            int day6count = day5count + spotList6.size() + 1;
+            int spotNum1 = spotList1 == null ? 0 : spotList1.size();
+            int spotNum2 = spotList2 == null ? 0 : spotList2.size();
+            int spotNum3 = spotList3 == null ? 0 : spotList3.size();
+            int spotNum4 = spotList4 == null ? 0 : spotList4.size();
+            int spotNum5 = spotList5 == null ? 0 : spotList5.size();
+            int spotNum6 = spotList6 == null ? 0 : spotList6.size();
+
+            int day1count = spotNum1 + 1;
+            int day2count = day1count + spotNum2 + 1;
+            int day3count = day2count + spotNum3 + 1;
+            int day4count = day3count + spotNum4 + 1;
+            int day5count = day4count + spotNum5 + 1;
+            int day6count = day5count + spotNum6 + 1;
 
 
             if (position == 0 || position == day1count || position == day2count || position == day3count || position == day4count || position == day5count || position == day6count) {
                 String blog_day = "";
+
                 if (position == 0) {
                     blog_day = dayList.get(position);
                 }
-                if (position == day1count) {
-                    blog_day = dayList.get(position - spotList1.size());
+                if (position == day1count && spotNum2 != 0) {
+                    blog_day = dayList.get(position - spotNum1);
                 }
-                if (position == day2count) {
-                    blog_day = dayList.get(position - spotList1.size() - spotList2.size());
-                }
-
-                if (position == day3count) {
-                    blog_day = dayList.get(position - spotList1.size() - spotList2.size() - spotList3.size());
+                if (position == day2count && spotNum3 != 0) {
+                    blog_day = dayList.get(position - spotNum1 - spotNum2);
                 }
 
-                if (position == day4count) {
-                    blog_day = dayList.get(position - spotList1.size() - spotList2.size() - spotList3.size() - spotList4.size());
+                if (position == day3count && spotNum4 != 0) {
+                    blog_day = dayList.get(position - spotNum1 - spotNum2 - spotNum3);
                 }
-                if (position == day5count) {
-                    blog_day = dayList.get(position - spotList1.size() - spotList2.size() - spotList3.size() - spotList4.size() - spotList5.size());
+
+                if (position == day4count && spotNum5 != 0) {
+                    blog_day = dayList.get(position - spotNum1 - spotNum2 - spotNum3 - spotNum4);
+                }
+                if (position == day5count && spotNum6 != 0) {
+                    blog_day = dayList.get(position - spotNum1 - spotNum2 - spotNum3 - spotNum4 - spotNum5);
                 }
 
                 if (position == day6count) {
-                    blog_day = dayList.get(position - spotList1.size() - spotList2.size() - spotList3.size() - spotList4.size() - spotList5.size() - spotList6.size());
+                    blog_day = dayList.get(position - spotNum1 - spotNum2 - spotNum3 - spotNum4 - spotNum5 - spotNum6);
                 }
 
                 ViewHolderDay viewHolderDay = (ViewHolderDay) holder;
@@ -258,53 +393,102 @@ public class CreateBlogFragment extends Fragment {
 
 
             if (position > 0 && position < day1count) {
-                String blog_spot = spotList1.get(position - 1);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
+                Blog_SpotInfo blog_spot = spotList1.get(position - 1);
+                final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot.getName());
+                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
+                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
-            if (position > day1count && position <  day2count) {
-                String blog_spot = spotList2.get(position - 1 - day1count);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
+            if (position > day1count && position < day2count) {
+                Blog_SpotInfo blog_spot = spotList2.get(position - 1 - day1count);
+                final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot.getName());
+                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
+                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
-            if (position > day2count && position <  day3count) {
-                String blog_spot = spotList3.get(position - 1 -  day2count);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
+            if (position > day2count && position < day3count) {
+                Blog_SpotInfo blog_spot = spotList3.get(position - 1 - day2count);
+                final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot.getName());
+                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
+                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
 
             if (position > day3count && position < day4count) {
-                String blog_spot = spotList4.get(position - 1 -  day3count);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
+                Blog_SpotInfo blog_spot = spotList4.get(position - 1 - day3count);
+                final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot.getName());
+                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
+                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
-            if (position >  day4count && position <  day5count) {
-                String blog_spot = spotList5.get(position - 1  - day4count);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
+            if (position > day4count && position < day5count) {
+                Blog_SpotInfo blog_spot = spotList5.get(position - 1 - day4count);
+                final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot.getName());
+                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
+                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
 
             }
 
-            if (position >  day5count && position <  day6count ) {
-                String blog_spot = spotList6.get(position - 1  - day5count);
-                ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
-                viewHolderSpot.tvLocationName.setText(blog_spot);
+            if (position > day5count && position < day6count) {
+                Blog_SpotInfo blog_spot = spotList6.get(position - 1 - day5count);
+                final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
+                viewHolderSpot.tvLocationName.setText(blog_spot.getName());
+                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
+                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                    }
+                });
 
             }
 
 
         }
 
-        //秀景點的Adapter
+        //秀景點的ViewHolder
         class ViewHolderSpot extends RecyclerView.ViewHolder {
             ImageView ivPoint, ivTextForm;
             TextView tvLocationName, tvInput;
             TextInputEditText etBlog;
             ImageButton ibInsertPic;
+            RecyclerView rvPhoto;
 
 
             ViewHolderSpot(View itemView) {
@@ -315,6 +499,7 @@ public class CreateBlogFragment extends Fragment {
                 tvInput = itemView.findViewById(R.id.tvInput);
                 etBlog = itemView.findViewById(R.id.etBlog);
                 ibInsertPic = itemView.findViewById(R.id.ibInsertPic);
+                rvPhoto = itemView.findViewById(R.id.rvPhoto);
             }
         }
 
@@ -334,17 +519,32 @@ public class CreateBlogFragment extends Fragment {
 
 
     //第一天----------------------------------------
-    private List<String> getSpots() {
-        List<String> spotList = new ArrayList<>();
-        spotList.add("軍艦岩");
-        spotList.add("東北角");
-        spotList.add("淡水");
-        spotList.add("台北101");
+    private List<Blog_SpotInfo> getSpots() {
+        List<Blog_SpotInfo> spotList = new ArrayList<>();
+        if (Common.networkConnected(activity)) {
+            String Url = Common.URL_SERVER + "Trip_D_Servlet";
+            DateAndId dateAndId = new DateAndId(startDate, tripId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotName");
+            jsonObject.addProperty("dateAndId", new Gson().toJson(dateAndId));
+            String jsonOut = jsonObject.toString();
+            groupGet1Task = new CommonTask(Url, jsonOut);
+            try {
+                String jsonIn = groupGet1Task.execute().get();
+                Type listtype = new TypeToken<List<Blog_SpotInfo>>() {
+                }.getType();
+                spotList = new Gson().fromJson(jsonIn, listtype);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "No Internet");
+        }
 
         return spotList;
     }
 
-    private void showSpots(List<String> spotList) {
+    private void showSpots(List<Blog_SpotInfo> spotList) {
         if (spotList == null || spotList.isEmpty()) {
             Common.showToast(activity, "搜尋不到行程");
         }
@@ -358,19 +558,36 @@ public class CreateBlogFragment extends Fragment {
     }
 
     //第二天----------------------------------------
-    private List<String> getSpots2() {
-        List<String> spotList = new ArrayList<>();
-        spotList.add("鹽寮");
-        spotList.add("水源地");
-        spotList.add("七星潭");
+    private List<Blog_SpotInfo> getSpots2() throws ParseException {
+        String date2 = DateUtil.date4day(startDate, 1);
+        List<Blog_SpotInfo> spotList = new ArrayList<>();
+        if (Common.networkConnected(activity)) {
+            String Url = Common.URL_SERVER + "Trip_D_Servlet";
+            DateAndId dateAndId = new DateAndId(date2, tripId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotName");
+            jsonObject.addProperty("dateAndId", new Gson().toJson(dateAndId));
+            String jsonOut = jsonObject.toString();
+            groupGet1Task = new CommonTask(Url, jsonOut);
+            try {
+                String jsonIn = groupGet1Task.execute().get();
+                Type listtype = new TypeToken<List<Blog_SpotInfo>>() {
+                }.getType();
+                spotList = new Gson().fromJson(jsonIn, listtype);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "No Internet");
+        }
 
         return spotList;
     }
 
-    private void showSpots2(List<String> spotList) {
-        if (spotList == null || spotList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
-        }
+    private void showSpots2(List<Blog_SpotInfo> spotList) {
+//        if (spotList == null || spotList.isEmpty()) {
+//            Common.showToast(activity, "搜尋不到行程");
+//        }
         BlogSpotAdapter blogSpotAdapter = (BlogSpotAdapter) rvBlog.getAdapter();
         if (blogSpotAdapter == null) {
             rvBlog.setAdapter(new BlogSpotAdapter(activity, spotList));
@@ -381,20 +598,36 @@ public class CreateBlogFragment extends Fragment {
     }
 
     //第三天----------------------------------------
-    private List<String> getSpots3() {
-        List<String> spotList = new ArrayList<>();
-        spotList.add("台南");
-        spotList.add("億載金城");
-        spotList.add("大東夜市");
-
+    private List<Blog_SpotInfo> getSpots3() throws ParseException {
+        String date3 = DateUtil.date4day(startDate, 2);
+        List<Blog_SpotInfo> spotList = new ArrayList<>();
+        if (Common.networkConnected(activity)) {
+            String Url = Common.URL_SERVER + "Trip_D_Servlet";
+            DateAndId dateAndId = new DateAndId(date3, tripId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotName");
+            jsonObject.addProperty("dateAndId", new Gson().toJson(dateAndId));
+            String jsonOut = jsonObject.toString();
+            groupGet1Task = new CommonTask(Url, jsonOut);
+            try {
+                String jsonIn = groupGet1Task.execute().get();
+                Type listtype = new TypeToken<List<Blog_SpotInfo>>() {
+                }.getType();
+                spotList = new Gson().fromJson(jsonIn, listtype);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "No Internet");
+        }
 
         return spotList;
     }
 
-    private void showSpots3(List<String> spotList) {
-        if (spotList == null || spotList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
-        }
+    private void showSpots3(List<Blog_SpotInfo> spotList) {
+//        if (spotList == null || spotList.isEmpty()) {
+//            Common.showToast(activity, "搜尋不到行程");
+//        }
         BlogSpotAdapter blogSpotAdapter = (BlogSpotAdapter) rvBlog.getAdapter();
         if (blogSpotAdapter == null) {
             rvBlog.setAdapter(new BlogSpotAdapter(activity, spotList));
@@ -405,18 +638,36 @@ public class CreateBlogFragment extends Fragment {
     }
 
     //第四天----------------------------------------
-    private List<String> getSpots4() {
-        List<String> spotList = new ArrayList<>();
-        spotList.add("桃園機場");
-        spotList.add("合興車站");
+    private List<Blog_SpotInfo> getSpots4() throws ParseException {
+        String date4 = DateUtil.date4day(startDate, 3);
+        List<Blog_SpotInfo> spotList = new ArrayList<>();
+        if (Common.networkConnected(activity)) {
+            String Url = Common.URL_SERVER + "Trip_D_Servlet";
+            DateAndId dateAndId = new DateAndId(date4, tripId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotName");
+            jsonObject.addProperty("dateAndId", new Gson().toJson(dateAndId));
+            String jsonOut = jsonObject.toString();
+            groupGet1Task = new CommonTask(Url, jsonOut);
+            try {
+                String jsonIn = groupGet1Task.execute().get();
+                Type listtype = new TypeToken<List<Blog_SpotInfo>>() {
+                }.getType();
+                spotList = new Gson().fromJson(jsonIn, listtype);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "No Internet");
+        }
 
         return spotList;
     }
 
-    private void showSpots4(List<String> spotList) {
-        if (spotList == null || spotList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
-        }
+    private void showSpots4(List<Blog_SpotInfo> spotList) {
+//        if (spotList == null || spotList.isEmpty()) {
+//            Common.showToast(activity, "搜尋不到行程");
+//        }
         BlogSpotAdapter blogSpotAdapter = (BlogSpotAdapter) rvBlog.getAdapter();
         if (blogSpotAdapter == null) {
             rvBlog.setAdapter(new BlogSpotAdapter(activity, spotList));
@@ -427,18 +678,36 @@ public class CreateBlogFragment extends Fragment {
     }
 
     //第五天----------------------------------------
-    private List<String> getSpots5() {
-        List<String> spotList = new ArrayList<>();
-        spotList.add("星星部落");
-
+    private List<Blog_SpotInfo> getSpots5() throws ParseException {
+        String date5 = DateUtil.date4day(startDate, 4);
+        List<Blog_SpotInfo> spotList = new ArrayList<>();
+        if (Common.networkConnected(activity)) {
+            String Url = Common.URL_SERVER + "Trip_D_Servlet";
+            DateAndId dateAndId = new DateAndId(date5, tripId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotName");
+            jsonObject.addProperty("dateAndId", new Gson().toJson(dateAndId));
+            String jsonOut = jsonObject.toString();
+            groupGet1Task = new CommonTask(Url, jsonOut);
+            try {
+                String jsonIn = groupGet1Task.execute().get();
+                Type listtype = new TypeToken<List<Blog_SpotInfo>>() {
+                }.getType();
+                spotList = new Gson().fromJson(jsonIn, listtype);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "No Internet");
+        }
 
         return spotList;
     }
 
-    private void showSpots5(List<String> spotList) {
-        if (spotList == null || spotList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
-        }
+    private void showSpots5(List<Blog_SpotInfo> spotList) {
+//        if (spotList == null || spotList.isEmpty()) {
+//            Common.showToast(activity, "搜尋不到行程");
+//        }
         BlogSpotAdapter blogSpotAdapter = (BlogSpotAdapter) rvBlog.getAdapter();
         if (blogSpotAdapter == null) {
             rvBlog.setAdapter(new BlogSpotAdapter(activity, spotList));
@@ -449,20 +718,36 @@ public class CreateBlogFragment extends Fragment {
     }
 
     //第六天----------------------------------------
-    private List<String> getSpots6() {
-        List<String> spotList = new ArrayList<>();
-        spotList.add("中正紀念堂");
-        spotList.add("陽明山");
-        spotList.add("東北角");
-        spotList.add("女王頭");
+    private List<Blog_SpotInfo> getSpots6() throws ParseException {
+        String date6 = DateUtil.date4day(startDate, 5);
+        List<Blog_SpotInfo> spotList = new ArrayList<>();
+        if (Common.networkConnected(activity)) {
+            String Url = Common.URL_SERVER + "Trip_D_Servlet";
+            DateAndId dateAndId = new DateAndId(date6, tripId);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotName");
+            jsonObject.addProperty("dateAndId", new Gson().toJson(dateAndId));
+            String jsonOut = jsonObject.toString();
+            groupGet1Task = new CommonTask(Url, jsonOut);
+            try {
+                String jsonIn = groupGet1Task.execute().get();
+                Type listtype = new TypeToken<List<Blog_SpotInfo>>() {
+                }.getType();
+                spotList = new Gson().fromJson(jsonIn, listtype);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "No Internet");
+        }
 
         return spotList;
     }
 
-    private void showSpots6(List<String> spotList) {
-        if (spotList == null || spotList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
-        }
+    private void showSpots6(List<Blog_SpotInfo> spotList) {
+//        if (spotList == null || spotList.isEmpty()) {
+//            Common.showToast(activity, "搜尋不到行程");
+//        }
         BlogSpotAdapter blogSpotAdapter = (BlogSpotAdapter) rvBlog.getAdapter();
         if (blogSpotAdapter == null) {
             rvBlog.setAdapter(new BlogSpotAdapter(activity, spotList));
@@ -492,7 +777,7 @@ public class CreateBlogFragment extends Fragment {
         }
         BlogSpotAdapter blogSpotAdapter = (BlogSpotAdapter) rvBlog.getAdapter();
         if (blogSpotAdapter == null) {
-            rvBlog.setAdapter(new BlogSpotAdapter(activity, dayList));
+//            rvBlog.setAdapter(new BlogSpotAdapter(activity, dayList));
         } else {
             blogSpotAdapter.setDays(dayList);
             blogSpotAdapter.notifyDataSetChanged();
@@ -511,5 +796,176 @@ public class CreateBlogFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
+    // rvPhoto Adapter
+    private class PhotoAdapter extends RecyclerView.Adapter {
+        private LayoutInflater layoutInflater;
+        private int imageSize;
+
+        public PhotoAdapter(Context context) {
+            layoutInflater = LayoutInflater.from(context);
+            imageSize = getResources().getDisplayMetrics().widthPixels / 2;
+        }
+
+        class ViewHolderPhoto extends RecyclerView.ViewHolder {
+            ImageView ivPhoto;
+
+            public ViewHolderPhoto(@NonNull View itemView) {
+                super(itemView);
+                ivPhoto = itemView.findViewById(R.id.ivPhoto);
+            }
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
+            return new ViewHolderPhoto(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            final PhotoAdapter.ViewHolderPhoto viewHolder = (PhotoAdapter.ViewHolderPhoto) holder;
+            viewHolder.ivPhoto.setImageResource(R.drawable.ic_nopicture);
+            viewHolder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+ //按下挑選照片
+                @Override
+                public void onClick(View v) {
+                    showTypeDialog();
+                    if (bitmap != null) {
+                        viewHolder.ivPhoto.setImageBitmap(bitmap);
+                    } else {
+                       viewHolder.ivPhoto.setImageResource(R.drawable.ic_nopicture);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return 8;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //對話視窗 挑選照片
+    private void showTypeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog dialog = builder.create();
+        final View view = View.inflate(getActivity(), R.layout.dialog_select_photo, null);
+        TextView tv_select_gallery = (TextView) view.findViewById(R.id.tv_select_gallery);
+        TextView tv_select_camera = (TextView) view.findViewById(R.id.tv_select_camera);
+        tv_select_gallery.setOnClickListener(new View.OnClickListener() {
+            // 在相簿中選取
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+                dialog.dismiss();
+            }
+        });
+        tv_select_camera.setOnClickListener(new View.OnClickListener() {// 呼叫照相機
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                file = new File(file, "picture.jpg");
+                contentUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+
+                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                    startActivityForResult(intent, REQ_TAKE_PICTURE);
+                    dialog.dismiss();
+                } else {
+                    Common.showToast(activity, "no camera app found");
+                }
+
+            }
+        });
+
+        dialog.setView(view);
+        dialog.show();
+
+    }
+
+    private void openAlbum() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_PICK_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQ_TAKE_PICTURE:
+                    crop(contentUri);
+                    break;
+                case REQ_PICK_PICTURE:
+                    crop(intent.getData());
+                    break;
+                case REQ_CROP_PICTURE:
+                    handleCropResult(intent);
+                    break;
+            }
+        }
+    }
+
+    private void crop(Uri sourceImageUri) {
+        File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        file = new File(file, "picture_cropped.jpg");
+        Uri destinationUri = Uri.fromFile(file);
+        UCrop.of(sourceImageUri, destinationUri)
+                .withAspectRatio(16, 9) // 設定裁減比例
+//                .withMaxResultSize(500, 500) // 設定結果尺寸不可超過指定寬高
+                .start(activity, this, REQ_CROP_PICTURE);
+    }
+
+    private void handleCropResult(Intent intent) {
+        Uri resultUri = UCrop.getOutput(intent);
+        if (resultUri == null) {
+            return;
+        }
+        bitmap = null;
+        try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                bitmap = BitmapFactory.decodeStream(
+                        activity.getContentResolver().openInputStream(resultUri));
+            } else {
+                ImageDecoder.Source source =
+                        ImageDecoder.createSource(activity.getContentResolver(), resultUri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            }
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            photo = out.toByteArray();
+        } catch (IOException e) {
+            Log.e("TAG", e.toString());
+        }
+
+    }
 
 }

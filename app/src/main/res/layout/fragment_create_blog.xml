@@ -7,14 +7,81 @@
     android:background="#F6F5F5"
     tools:context=".blog.CreateBlogFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvBlog"
-        android:layout_width="409dp"
-        android:layout_height="494dp"
+    <Button
+        android:id="@+id/btDay5"
+        android:layout_width="62dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/button"
+        android:text="第五天"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/btDay4"
+        app:layout_constraintStart_toEndOf="@+id/btDay4" />
+
+    <Button
+        android:id="@+id/btDay2"
+        android:layout_width="62dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/button"
+        android:text="第二天"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/btDay1"
+        app:layout_constraintStart_toEndOf="@+id/btDay1" />
+
+    <Button
+        android:id="@+id/btDay4"
+        android:layout_width="62dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/button"
+        android:text="第四天"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/btDay3"
+        app:layout_constraintStart_toEndOf="@+id/btDay3" />
+
+    <Button
+        android:id="@+id/btDay1"
+        android:layout_width="62dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/button"
+        android:text="第一天"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+    <Button
+        android:id="@+id/btDay3"
+        android:layout_width="62dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/button"
+        android:text="第三天"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/btDay2"
+        app:layout_constraintStart_toEndOf="@+id/btDay2" />
+
+    <Button
+        android:id="@+id/btDay6"
+        android:layout_width="62dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/button"
+        android:text="第六天"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/btDay5"
+        app:layout_constraintStart_toEndOf="@+id/btDay5" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBlog"
+        android:layout_width="405dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btDay1" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
