@@ -298,14 +298,15 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (count > 0) {
+                    if (count == 0) {
                         Common.showToast(activity, "建立行程成功");
                         Navigation.findNavController(v)
                                 .popBackStack(R.id.trip_HomePage, false);
-                        //deletePreferences();
+                        deletePreferences();
+                        Common.map.clear();
                     } else {
                         Common.showToast(activity, "建立行程失敗");
-                        Log.d(TAG, "Trip Fail: " + count );
+                        Log.d(TAG, "Trip Fail: " + count);
                     }
                 } else {
                     Common.showToast(activity, "請檢查網路連線");
@@ -424,6 +425,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 }
             });
         }
+
+
 
     }
 
