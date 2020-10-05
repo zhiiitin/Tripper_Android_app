@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
     tools:context=".trip.TripHasSavedPage">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,7 +24,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,7 +37,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textSavedShowTitle"
@@ -46,9 +45,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="70dp"
-                    android:background="@drawable/trip_title_box_line"
                     android:text="TextView"
-                    android:textColor="@color/colorForWhite"
+                    android:textColor="@color/colorForGroupButton"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,39 +104,79 @@
                     app:layout_constraintStart_toEndOf="@+id/textView20"
                     app:layout_constraintTop_toBottomOf="@+id/textSavedShowTitle" />
 
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="30dp"
-                    android:text="行程天數"
-                    android:textColor="@color/colorForText"
-                    android:textSize="16sp"
+                <Button
+                    android:id="@+id/btDay1"
+                    android:layout_width="62dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/button"
+                    android:text="第一天"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
-                <Spinner
-                    android:id="@+id/spShowDays"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="28dp"
-                    android:entries="@array/daysForTrip"
-                    app:layout_constraintStart_toEndOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                <Button
+                    android:id="@+id/btDay2"
+                    android:layout_width="62dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/button"
+                    android:text="第二天"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btDay1"
+                    app:layout_constraintStart_toEndOf="@+id/btDay1" />
 
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="30dp"
-                    android:text="@string/showDay"
-                    android:textColor="@color/colorForText"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@+id/spShowDays"
-                    app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                <Button
+                    android:id="@+id/btDay3"
+                    android:layout_width="62dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/button"
+                    android:text="第三天"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btDay2"
+                    app:layout_constraintStart_toEndOf="@+id/btDay2" />
+
+                <Button
+                    android:id="@+id/btDay4"
+                    android:layout_width="62dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/button"
+                    android:text="第四天"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btDay3"
+                    app:layout_constraintStart_toEndOf="@+id/btDay3" />
+
+                <Button
+                    android:id="@+id/btDay5"
+                    android:layout_width="62dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/button"
+                    android:text="第五天"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btDay4"
+                    app:layout_constraintStart_toEndOf="@+id/btDay4" />
+
+                <Button
+                    android:id="@+id/btDay6"
+                    android:layout_width="62dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/button"
+                    android:text="第六天"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/btDay5"
+                    app:layout_constraintStart_toEndOf="@+id/btDay5" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -158,13 +196,12 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ImageButton
                     android:id="@+id/btManageGroupPpl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_manage_group"
                     android:visibility="visible"
@@ -173,27 +210,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/btDeleteTrip"
+                    android:id="@+id/btJoinGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_delete_trip"
+                    android:src="@drawable/ic_join_group"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btManageGroupPpl" />
 
-                <ImageButton
-                    android:id="@+id/btJoinGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_join_group"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-
-                    app:layout_constraintTop_toBottomOf="@+id/btDeleteTrip" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
