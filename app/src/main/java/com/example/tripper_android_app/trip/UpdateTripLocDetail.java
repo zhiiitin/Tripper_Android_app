@@ -1,31 +1,26 @@
 package com.example.tripper_android_app.trip;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
@@ -33,7 +28,6 @@ import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
-import com.example.tripper_android_app.util.DateUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,35 +37,26 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
- * 景點詳細資訊頁面
- *
  * @author cooperhsieh
- * @version 2020.09.13
+ * 2020/10/03
+ * 景點詳細資料for update行程
  */
+public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.OnTimeSetListener {
 
-
-public class CreateTripLocationDetail extends Fragment implements TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "TAG_LocConfirm";
     private MainActivity activity;
     private GoogleMap map;
     private Location location;
     private TextView textStayTime, etTripTitle, textDate, textTime;
-    private String startDate;
     private EditText etMemo;
     private ImageView locPic;
     private static int hour, minute;
     private Spinner spDay;
     private SharedPreferences preference;
-    private Trip_M trip_m;
 
 
     @Override
@@ -108,8 +93,8 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
             @Override
             public void onClick(View v) {
                 new TimePickerDialog(
-                        activity, CreateTripLocationDetail.this,
-                        CreateTripLocationDetail.hour, CreateTripLocationDetail.minute, false).show();
+                        activity, UpdateTripLocDetail.this,
+                        UpdateTripLocDetail.hour, UpdateTripLocDetail.minute, false).show();
             }
         });
 
@@ -136,7 +121,6 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
             textDetailTripTitle.setText(location.getName());
             textDetailTripAdd.setText(location.getAddress());
             textLocInfo.setText(location.getInfo());
-
             showLocPic();
         }
 
@@ -150,6 +134,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 String stayTimes = textStayTime.getText().toString().trim();
                 String memos = etMemo.getText().toString().trim();
                 String daySelected = Common.spinnerSelect;
+                String startDate = "";
                 String locId = location.getLocId();
                 Log.d("###Detail daySelected", daySelected + "");
                 if (daySelected == null || daySelected.isEmpty()) {
@@ -178,15 +163,14 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 if (locationDs == null || locationDs.isEmpty()) {
                     locationDs = new ArrayList<>();
                 }
-                // TODO 讀取出發日期 抓取成功
-                preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-                startDate = preference.getString("tripDate", Common.DEFAULT_FILE);
+                // TODO 暫使hard code
+                startDate = "2020-09-20";
                 // String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate
                 Location_D locationD = new Location_D(name, address, locId, memos, stayTimes, startDate);
                 locationDs.add(locationD);
                 Common.map.put(daySelected, locationDs);
 
-                Navigation.findNavController(v).popBackStack(R.id.create_Trip_Fragment, false);
+                Navigation.findNavController(v).popBackStack(R.id.updateTripFragment, false);
             }
         });
     }
@@ -245,8 +229,8 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
     /* 覆寫OnTimeSetListener.onTimeSet()以處理時間挑選完成事件。
        時間挑選完成會呼叫此方法，並傳入選取的時與分 */
     public void onTimeSet(TimePicker view, int hour, int minute) {
-        CreateTripLocationDetail.hour = hour;
-        CreateTripLocationDetail.minute = minute;
+        UpdateTripLocDetail.hour = hour;
+        UpdateTripLocDetail.minute = minute;
         updateDisplay();
     }
 
@@ -264,6 +248,4 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
             return "0" + number;
         }
     }
-
-
 }

@@ -12,11 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -38,13 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 建立行程2-景點選擇
- *
  * @author cooperhsieh
- * @version 2020.09.10
+ * 2020/10/03
+ * Update 行程頁面跳到選擇景點頁面
  */
 
-public class Create_Trip_LocationList extends Fragment {
+public class UpdateTripLocList extends Fragment {
     private final static String TAG = "TAG_Loc";
     private RecyclerView rvSelectLoc;
     private CommonTask locGetAllTask;
@@ -68,7 +63,7 @@ public class Create_Trip_LocationList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_trip_location_lsit, container, false);
+        return inflater.inflate(R.layout.fragment_update_trip_loc_list, container, false);
     }
 
     @Override
@@ -124,7 +119,6 @@ public class Create_Trip_LocationList extends Fragment {
                 return false;
             }
         });
-
 
 
     }
@@ -202,9 +196,9 @@ public class Create_Trip_LocationList extends Fragment {
 
         @NonNull
         @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public LocationAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_select_location, parent, false);
-            return new MyViewHolder(itemView);
+            return new LocationAdapter.MyViewHolder(itemView);
         }
 
         @Override
@@ -223,7 +217,7 @@ public class Create_Trip_LocationList extends Fragment {
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("locationDetail", location);
-                    Navigation.findNavController(v).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail, bundle);
+                    Navigation.findNavController(v).navigate(R.id.action_updateTripLocList_to_updateTripLocDetail, bundle);
                 }
             });
 

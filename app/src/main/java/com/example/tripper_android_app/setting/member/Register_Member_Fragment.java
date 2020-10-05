@@ -323,7 +323,7 @@ public class Register_Member_Fragment extends Fragment {
 
             String Url = Common.URL_SERVER + "MemberServlet";
             int id = member.getId();
-            int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+            int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
             Bitmap bitmap = null;
             try {
                 bitmap = new ImageTask(Url, id, imageSize).execute().get();
@@ -367,7 +367,7 @@ public class Register_Member_Fragment extends Fragment {
         file = new File(file, "picture_cropped.jpg");
         Uri destinationUri = Uri.fromFile(file);
         UCrop.of(sourceImageUri, destinationUri)
-                .withAspectRatio(16, 9) // 設定裁減比例
+//                .withAspectRatio(16, 9) // 設定裁減比例
 //                .withMaxResultSize(500, 500) // 設定結果尺寸不可超過指定寬高
                 .start(activity, this, REQ_CROP_PICTURE);
     }

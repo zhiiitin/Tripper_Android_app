@@ -238,6 +238,9 @@
         <action
             android:id="@+id/action_trip_HomePage_to_tripHasSavedPage"
             app:destination="@id/tripHasSavedPage" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_updateTripFragment"
+            app:destination="@id/updateTripFragment" />
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"
@@ -357,6 +360,33 @@
         <action
             android:id="@+id/action_createBlogFragment_to_create_Blog_Location_List"
             app:destination="@id/create_Blog_Location_List" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateTripFragment"
+        android:name="com.example.tripper_android_app.trip.updateTripFragment"
+        android:label="fragment_update_trip"
+        tools:layout="@layout/fragment_update_trip" >
+        <action
+            android:id="@+id/action_updateTripFragment_to_updateTripLocList"
+            app:destination="@id/updateTripLocList" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateTripLocList"
+        android:name="com.example.tripper_android_app.trip.UpdateTripLocList"
+        android:label="fragment_update_trip_loc_list"
+        tools:layout="@layout/fragment_update_trip_loc_list" >
+        <action
+            android:id="@+id/action_updateTripLocList_to_updateTripLocDetail"
+            app:destination="@id/updateTripLocDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateTripLocDetail"
+        android:name="com.example.tripper_android_app.trip.UpdateTripLocDetail"
+        android:label="fragment_update_trip_loc_detail"
+        tools:layout="@layout/fragment_update_trip_loc_detail" >
+        <action
+            android:id="@+id/action_updateTripLocDetail_to_updateTripFragment"
+            app:destination="@id/updateTripFragment" />
     </fragment>
 
 </navigation>

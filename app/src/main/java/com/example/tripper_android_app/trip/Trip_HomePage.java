@@ -2,6 +2,7 @@ package com.example.tripper_android_app.trip;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +116,7 @@ public class Trip_HomePage extends Fragment {
         textUserName = view.findViewById(R.id.textUserName);
 
         //顯示會員資料
-//        showMember();
+        showMember();
 
         tripMs = new ArrayList<>();
         tripMs = getTripMs();
@@ -238,24 +240,42 @@ public class Trip_HomePage extends Fragment {
             final Trip_M tripM = tripMs.get(position);
             String url = Common.URL_SERVER + "TripServlet";
             final String tripId = tripM.getTripId();
-                    ImageTask imageTask = new ImageTask(url, tripId, imageSize, tripListViewHolder.ivLocPic2);
+            ImageTask imageTask = new ImageTask(url, tripId, imageSize, tripListViewHolder.ivLocPic2);
             imageTasks = new ArrayList<>();
             imageTask.execute();
             imageTasks.add(imageTask);
             Log.d("tripTitle", tripM.getTripTitle());
             tripListViewHolder.tvTitle.setText(tripM.getTripTitle());
 
-            tripListViewHolder.editMore.setOnClickListener(new View.OnClickListener() {
+            final Bundle bundle = new Bundle();
+            bundle.putString("tripId", tripM.getTripId());
+            bundle.putString("tripTitle", tripM.getTripTitle());
+            bundle.putString("startDate", tripM.getStartDate());
+            bundle.putString("startTime", tripM.getStartTime());
+
+            //點擊整張卡片，帶到行程完整資訊頁面
+            tripListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
+                    Navigation.findNavController(v).navigate(R.id.action_trip_HomePage_to_tripHasSavedPage, bundle);
+                }
+            });
+
+
+            //卡片上的more button for 修改行程 & 刪除行程
+            tripListViewHolder.editMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    PopupMenu popupMenu = new PopupMenu(activity, view, Gravity.END);
                     popupMenu.inflate(R.menu.trip_homepage_more_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.tripHomepageEdit:
-                                    Common.showToast(activity, "hi");
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("tripM", tripM);
+                                    Navigation.findNavController(view).navigate(R.id.action_trip_HomePage_to_updateTripFragment, bundle);
                                     break;
 
                                 case R.id.tripHomepageDelete:
@@ -290,16 +310,13 @@ public class Trip_HomePage extends Fragment {
                     popupMenu.show();
                 }
             });
-
-
         }
-
-
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        //TODO 判斷是否為會員
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         boolean login = pref.getBoolean("login", false);
         if (login) {
@@ -340,7 +357,7 @@ public class Trip_HomePage extends Fragment {
                     Log.e(TAG, e.toString());
                 }
                 String nickname = member.getNickName();
-                textUserName.setText(nickname);
+                textUserName.setText(" " + nickname + " ");
 
             } else {
                 Common.showToast(activity, "no network connection found");

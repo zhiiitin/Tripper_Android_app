@@ -178,7 +178,7 @@ public class Blog_HomePage extends Fragment {
                     Log.e(TAG, e.toString());
                 }
                 String nickname = member.getNickName();
-                tvUserName.setText(nickname);
+                tvUserName.setText(" " + nickname + " ");
 
             } else {
                 Common.showToast(activity, "no network connection found");

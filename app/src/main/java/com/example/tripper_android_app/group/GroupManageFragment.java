@@ -95,7 +95,7 @@ public class GroupManageFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(tvFriendName).popBackStack();
+                Navigation.findNavController(tvFriendName).popBackStack(R.id.tripHasSavedPage, false);
                 return true;
             default:
                 break;

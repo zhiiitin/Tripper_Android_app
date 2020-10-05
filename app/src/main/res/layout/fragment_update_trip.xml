@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".trip.Create_Trip_Fragment">
+    tools:context=".trip.updateTripFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -14,13 +14,14 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolBarStyle" />
+            android:theme="@style/ToolBarStyle"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -44,12 +45,12 @@
                     android:id="@+id/ivLocPic"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:layout_marginTop="56dp"
-                    android:background="@drawable/default_bg_pc"
                     android:scaleType="centerCrop"
+                    android:layout_marginTop="56dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@drawable/default_bg_pc" />
 
                 <ImageButton
                     android:id="@+id/ibChangeLocPic"
@@ -73,12 +74,12 @@
                     android:textColor="@color/colorForText"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/etTripTitle"
+                    app:layout_constraintEnd_toStartOf="@+id/showTripTitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ivLocPic" />
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTripTitle"
+                    android:id="@+id/showTripTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -103,7 +104,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textTripTitle" />
 
                 <TextView
-                    android:id="@+id/textDate"
+                    android:id="@+id/showDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -116,7 +117,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/textTripStartTime"
                     app:layout_constraintStart_toEndOf="@+id/textTripStartDate"
-                    app:layout_constraintTop_toBottomOf="@+id/etTripTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/showTripTitle" />
 
                 <Button
                     android:id="@+id/btPickDate"
@@ -140,11 +141,11 @@
                     android:text="@string/TripStartTime"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/textDate"
+                    app:layout_constraintStart_toEndOf="@+id/showDate"
                     app:layout_constraintTop_toBottomOf="@+id/textTripTitle" />
 
                 <TextView
-                    android:id="@+id/textTime"
+                    android:id="@+id/showTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -157,7 +158,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textTripStartTime"
-                    app:layout_constraintTop_toBottomOf="@+id/etTripTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/showTripTitle" />
 
                 <Button
                     android:id="@+id/btPickTime"
@@ -170,7 +171,7 @@
                     android:textColor="@color/colorForWhite"
                     android:textSize="12sp"
                     android:textStyle="normal"
-                    app:layout_constraintEnd_toEndOf="@+id/textTime"
+                    app:layout_constraintEnd_toEndOf="@+id/showTime"
                     app:layout_constraintStart_toEndOf="@+id/btPickDate"
                     app:layout_constraintTop_toBottomOf="@+id/textTripStartTime" />
 
@@ -276,19 +277,19 @@
                     app:layout_constraintStart_toEndOf="@+id/textChoseGroupPpl"
                     app:layout_constraintTop_toBottomOf="@+id/switchGroup" />
 
+
                 <ImageButton
-                    android:id="@+id/ibSaveTrip"
+                    android:id="@+id/ibUpdateTrip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="20dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_save_trip"
+                    android:src="@drawable/ic_trip_update"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spChoosePpl" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
