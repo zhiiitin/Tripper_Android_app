@@ -50,13 +50,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="6dp"
             android:fontFamily="@font/noto_sans"
             android:text="輸入網誌內容："
             android:textColor="#0C0C0C"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvPhoto" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <ImageView
             android:id="@+id/ivTextForm"
@@ -79,14 +79,71 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvInput" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPhoto"
+        <ImageButton
+            android:id="@+id/ibSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:background="#ffffff"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/ibInsertPic"
-            app:layout_constraintTop_toBottomOf="@+id/ibInsertPic" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivTextForm"
+            app:srcCompat="@drawable/savebutton" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="398dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/ivPoint"
+            app:layout_constraintTop_toBottomOf="@+id/ibInsertPic">
+
+            <ImageView
+                android:id="@+id/ivSpot1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="2dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_nopicture" />
+
+            <ImageView
+                android:id="@+id/ivSpot2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="2dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_nopicture" />
+
+            <ImageView
+                android:id="@+id/ivSpot3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="2dp"
+                android:visibility="gone"
+
+                app:srcCompat="@drawable/ic_nopicture" />
+
+            <ImageView
+                android:id="@+id/ivSpot4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="2dp"
+                android:visibility="gone"
+
+                app:srcCompat="@drawable/ic_nopicture" />
+
+            <ImageButton
+                android:id="@+id/ibAdd"
+                android:layout_width="83dp"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:visibility="gone"
+
+                app:srcCompat="@drawable/ic_addbutton" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

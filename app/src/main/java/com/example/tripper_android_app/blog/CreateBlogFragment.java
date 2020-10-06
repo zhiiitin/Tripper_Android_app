@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
@@ -64,10 +65,10 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class CreateBlogFragment extends Fragment {
-    private static final String TAG = "TAG_Create_Blog_Fragment";
+    private static final String TAG = "TAG_Create_BlogFragment";
     private RecyclerView rvBlog, rvPhoto;
     private MainActivity activity;
-    private CommonTask groupGet1Task;
+    private CommonTask groupGet1Task, InsertNoteTask;
     private TextView tvBlogName, tvDate, tvTime;
     private String startDate, tripId;
     private Button btDay1, btDay2, btDay3, btDay4, btDay5, btDay6;
@@ -77,7 +78,7 @@ public class CreateBlogFragment extends Fragment {
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
-    private Bitmap bitmap ;
+    private Bitmap bitmap;
 
 
     @Override
@@ -114,8 +115,6 @@ public class CreateBlogFragment extends Fragment {
 //RecyclerView
         rvBlog = view.findViewById(R.id.rvBlog);
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
-
-        rvPhoto = view.findViewById(R.id.rvPhoto);
 //取得前頁bungle
         Bundle bundle = getArguments();
         String blogName = bundle.getString("tripName");
@@ -180,6 +179,7 @@ public class CreateBlogFragment extends Fragment {
 
 //實作按下天數按鈕，跳轉到position
         btDay1 = view.findViewById(R.id.btDay1);
+
         btDay1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,6 +225,7 @@ public class CreateBlogFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 rvBlog.smoothScrollToPosition(spotList1.size() + 1 + 1 + finalSpotList2.size() + 1 + finalSpotList3.size() + 1 + finalSpotList4.size() + 1);
+
             }
         });
         btDay6 = view.findViewById(R.id.btDay6);
@@ -391,89 +392,435 @@ public class CreateBlogFragment extends Fragment {
 
             }
 
-
+//第一天景點列表-------------------------------------------------------------------------------
             if (position > 0 && position < day1count) {
-                Blog_SpotInfo blog_spot = spotList1.get(position - 1);
+                final Blog_SpotInfo blog_spot = spotList1.get(position - 1);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
-                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
-                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+//點擊新增照片顯示imageView以及Add按鈕
                 viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
                     @Override
                     public void onClick(View v) {
-                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
                     }
                 });
-            }
+                viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTypeDialog();
+                    }
+                });
+                //點擊按鈕新增imageView
+                viewHolderSpot.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
+                        if (viewHolderSpot.ivSpot2.getVisibility() == View.VISIBLE) {
+                            if (viewHolderSpot.ivSpot3.getVisibility() == View.VISIBLE) {
+                                viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                                viewHolderSpot.ibAdd.setVisibility(View.GONE);
+                            }
+                            viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        }
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        //將note回傳至後端
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "儲存成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
+                    }
+                });
+
+            }
+//第二天景點列表-------------------------------------------------------------------------------
             if (position > day1count && position < day2count) {
-                Blog_SpotInfo blog_spot = spotList2.get(position - 1 - day1count);
+                final Blog_SpotInfo blog_spot = spotList2.get(position - 1 - day1count);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
-                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
-                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
+
                 viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
+                    }
+                });
+//點擊新增照片顯示imageView以及Add按鈕
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTypeDialog();
+                    }
+                });
+                //點擊按鈕新增imageView
+                viewHolderSpot.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (viewHolderSpot.ivSpot2.getVisibility() == View.VISIBLE) {
+                            if (viewHolderSpot.ivSpot3.getVisibility() == View.VISIBLE) {
+                                viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                                viewHolderSpot.ibAdd.setVisibility(View.GONE);
+                            }
+                            viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        }
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        //將note回傳至後端
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "儲存成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
                     }
                 });
             }
-
+//第三天景點列表-------------------------------------------------------------------------------
             if (position > day2count && position < day3count) {
-                Blog_SpotInfo blog_spot = spotList3.get(position - 1 - day2count);
+                final Blog_SpotInfo blog_spot = spotList3.get(position - 1 - day2count);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
-                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
-                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+//點擊新增照片顯示imageView以及Add按鈕
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
                     @Override
                     public void onClick(View v) {
-                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTypeDialog();
+                    }
+                });
+                //點擊按鈕新增imageView
+                viewHolderSpot.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (viewHolderSpot.ivSpot2.getVisibility() == View.VISIBLE) {
+                            if (viewHolderSpot.ivSpot3.getVisibility() == View.VISIBLE) {
+                                viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                                viewHolderSpot.ibAdd.setVisibility(View.GONE);
+                            }
+                            viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        }
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        //將note回傳至後端
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "儲存成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
                     }
                 });
             }
 
-
+//第四天景點列表-------------------------------------------------------------------------------
             if (position > day3count && position < day4count) {
-                Blog_SpotInfo blog_spot = spotList4.get(position - 1 - day3count);
+                final Blog_SpotInfo blog_spot = spotList4.get(position - 1 - day3count);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
-                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
-                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+//點擊新增照片顯示imageView以及Add按鈕
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
                     @Override
                     public void onClick(View v) {
-                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTypeDialog();
+                    }
+                });
+                //點擊按鈕新增imageView
+                viewHolderSpot.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (viewHolderSpot.ivSpot2.getVisibility() == View.VISIBLE) {
+                            if (viewHolderSpot.ivSpot3.getVisibility() == View.VISIBLE) {
+                                viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                                viewHolderSpot.ibAdd.setVisibility(View.GONE);
+                            }
+                            viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        }
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        //將note回傳至後端
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "儲存成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
                     }
                 });
             }
-
+//第五天景點列表-------------------------------------------------------------------------------
             if (position > day4count && position < day5count) {
-                Blog_SpotInfo blog_spot = spotList5.get(position - 1 - day4count);
+                final Blog_SpotInfo blog_spot = spotList5.get(position - 1 - day4count);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
-                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
-                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                //點擊新增照片顯示imageView以及Add按鈕
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
                     @Override
                     public void onClick(View v) {
-                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.GONE);
+                    }
+                });
+                viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTypeDialog();
+                    }
+                });
+                //點擊按鈕新增imageView
+                viewHolderSpot.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (viewHolderSpot.ivSpot2.getVisibility() == View.VISIBLE) {
+                            if (viewHolderSpot.ivSpot3.getVisibility() == View.VISIBLE) {
+                                viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                            }
+                            viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        }
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        //將note回傳至後端
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "儲存成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
                     }
                 });
 
             }
-
+//第六天景點列表-------------------------------------------------------------------------------
             if (position > day5count && position < day6count) {
-                Blog_SpotInfo blog_spot = spotList6.get(position - 1 - day5count);
+                final Blog_SpotInfo blog_spot = spotList6.get(position - 1 - day5count);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
-                viewHolderSpot.rvPhoto.setLayoutManager(new GridLayoutManager(activity, num_columns));
-                viewHolderSpot.rvPhoto.setAdapter(new PhotoAdapter(activity));
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {
+                //點擊新增照片顯示imageView以及Add按鈕
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
                     @Override
                     public void onClick(View v) {
-                        viewHolderSpot.rvPhoto.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ibAdd.setVisibility(View.GONE);
+                    }
+                });
+                viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTypeDialog();
+                    }
+                });
+                //點擊按鈕新增imageView
+                viewHolderSpot.ibAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (viewHolderSpot.ivSpot2.getVisibility() == View.VISIBLE) {
+                            if (viewHolderSpot.ivSpot3.getVisibility() == View.VISIBLE) {
+                                viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                            }
+                            viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        }
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                    }
+                });
+                viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        //將note回傳至後端
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "儲存成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
                     }
                 });
 
@@ -484,12 +831,10 @@ public class CreateBlogFragment extends Fragment {
 
         //秀景點的ViewHolder
         class ViewHolderSpot extends RecyclerView.ViewHolder {
-            ImageView ivPoint, ivTextForm;
+            ImageView ivPoint, ivTextForm, ivSpot1, ivSpot2, ivSpot3, ivSpot4;
             TextView tvLocationName, tvInput;
             TextInputEditText etBlog;
-            ImageButton ibInsertPic;
-            RecyclerView rvPhoto;
-
+            ImageButton ibInsertPic, ibSave, ibAdd;
 
             ViewHolderSpot(View itemView) {
                 super(itemView);
@@ -499,11 +844,16 @@ public class CreateBlogFragment extends Fragment {
                 tvInput = itemView.findViewById(R.id.tvInput);
                 etBlog = itemView.findViewById(R.id.etBlog);
                 ibInsertPic = itemView.findViewById(R.id.ibInsertPic);
-                rvPhoto = itemView.findViewById(R.id.rvPhoto);
+                ivSpot1 = itemView.findViewById(R.id.ivSpot1);
+                ivSpot2 = itemView.findViewById(R.id.ivSpot2);
+                ivSpot3 = itemView.findViewById(R.id.ivSpot3);
+                ivSpot4 = itemView.findViewById(R.id.ivSpot4);
+                ibAdd = itemView.findViewById(R.id.ibAdd);
+                ibSave = itemView.findViewById(R.id.ibSave);
             }
         }
 
-        //秀第幾天的Adapter
+        //秀第幾天的ViewHolder
         class ViewHolderDay extends RecyclerView.ViewHolder {
             TextView tvDay;
 
@@ -795,77 +1145,6 @@ public class CreateBlogFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    // rvPhoto Adapter
-    private class PhotoAdapter extends RecyclerView.Adapter {
-        private LayoutInflater layoutInflater;
-        private int imageSize;
-
-        public PhotoAdapter(Context context) {
-            layoutInflater = LayoutInflater.from(context);
-            imageSize = getResources().getDisplayMetrics().widthPixels / 2;
-        }
-
-        class ViewHolderPhoto extends RecyclerView.ViewHolder {
-            ImageView ivPhoto;
-
-            public ViewHolderPhoto(@NonNull View itemView) {
-                super(itemView);
-                ivPhoto = itemView.findViewById(R.id.ivPhoto);
-            }
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
-            return new ViewHolderPhoto(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            final PhotoAdapter.ViewHolderPhoto viewHolder = (PhotoAdapter.ViewHolderPhoto) holder;
-            viewHolder.ivPhoto.setImageResource(R.drawable.ic_nopicture);
-            viewHolder.ivPhoto.setOnClickListener(new View.OnClickListener() {
- //按下挑選照片
-                @Override
-                public void onClick(View v) {
-                    showTypeDialog();
-                    if (bitmap != null) {
-                        viewHolder.ivPhoto.setImageBitmap(bitmap);
-                    } else {
-                       viewHolder.ivPhoto.setImageResource(R.drawable.ic_nopicture);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return 8;
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //對話視窗 挑選照片
