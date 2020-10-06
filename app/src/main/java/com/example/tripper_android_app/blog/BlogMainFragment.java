@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -172,9 +173,8 @@ public class BlogMainFragment extends Fragment {
             rvBlog.setAdapter(new BlogMainFragment.BlogAdapter(activity, blogList));
         } else {
             blogAdapter.setBlogs(blogList);
-
             //刷新頁面
-            blogAdapter.notifyDataSetChanged();
+//            blogAdapter.notifyDataSetChanged();
         }
     }
 
@@ -253,6 +253,7 @@ public class BlogMainFragment extends Fragment {
             holder.tvLocation.setText(blogD.getLocationName());
             holder.tvBlogDescription.setText(blogD.getBlogNote());
             holder.tvDays.setText(blogD.getS_Date());
+            holder.imDays.setImageResource(R.drawable.layout_box_line);
             preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
             preferences.edit()
                     .putInt("TripListId",blogD.getBlogId())
@@ -270,6 +271,7 @@ public class BlogMainFragment extends Fragment {
         private class MyViewHolder extends RecyclerView.ViewHolder {
             private ImageView ivPic1,ivPic2,ivPic3;
             private TextView tvLocation,tvDays,tvBlogDescription;
+            private ImageButton imDays;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
@@ -279,6 +281,7 @@ public class BlogMainFragment extends Fragment {
                 ivPic1 = itemView.findViewById(R.id.ivPic1);
                 ivPic2 = itemView.findViewById(R.id.ivPic2);
                 ivPic3 = itemView.findViewById(R.id.ivPic3);
+                imDays = itemView.findViewById(R.id.imDays2);
 
 
             }
