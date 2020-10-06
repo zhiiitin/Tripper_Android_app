@@ -130,15 +130,12 @@ public class BlogMainFragment extends Fragment {
         });
 
 
-<<<<<<< HEAD
-=======
 
 
 
 
 
-
->>>>>>> Test
+        
     }
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
