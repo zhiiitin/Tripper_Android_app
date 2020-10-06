@@ -2,6 +2,7 @@ package com.example.tripper_android_app.blog;
 
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,10 +43,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.navigation.Navigation.findNavController;
 
 
@@ -53,15 +62,13 @@ public class BlogMainFragment extends Fragment {
     private ImageView ivBackground,ivThumbs,ivTripList;
     private MainActivity activity;
     private TextView tvDescription, textDescription;
-    ;
     private static final String TAG = "TAG_Blog_Main_Fragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvBlog;
-
     private CommonTask blogGetAllTask, blogDeleteTask;
-
     private List<ImageTask> imageTasks;
-    private List<Blog> blogList;
+    private List<BlogD> blogList;
+    private SharedPreferences preferences;
 
 
     @Override
@@ -77,6 +84,7 @@ public class BlogMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_blog_main, container, false);
     }
 
@@ -85,7 +93,10 @@ public class BlogMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("我的旅遊日誌");
+        final Bundle bundle = getArguments();
+        String blogTitle  = bundle.getString("BlogTitle");
+        String blogDesc = bundle.getString("BlogDesc");
+        toolbar.setTitle(blogTitle);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -97,23 +108,37 @@ public class BlogMainFragment extends Fragment {
         ivTripList = view.findViewById(R.id.ivTripList);
         ivThumbs.setImageResource(R.drawable.icnthumbs);
         ivTripList.setImageResource(R.drawable.icontriplist);
-
-
         tvDescription.setText("網誌描述：");
-        textDescription.setText("九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！");
+        textDescription.setText(" "+" "+blogDesc);
         rvBlog = view.findViewById(R.id.rvBlog);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
         blogList = getBlogs();
         showBlogs(blogList);
+        String url = Common.URL_SERVER+"ExploreServlet";
+        int userId = bundle.getInt("UserId");
+        int imageSize = 500;
+        ImageTask imageTask = new ImageTask(url,userId,imageSize,ivBackground);
+        imageTask.execute();
+        imageTasks.add(imageTask);
         ivTripList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Navigation.findNavController(rvBlog).navigate(R.id.action_blogMainFragment_to_blogTripListFragment);
             }
         });
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+>>>>>>> Test
     }
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -141,7 +166,7 @@ public class BlogMainFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showBlogs(List<Blog> blogList) {
+    private void showBlogs(List<BlogD> blogList) {
         if (blogList == null|| blogList.isEmpty()) {
             Common.showToast(activity, R.string.textNoSpotsFound);
 
@@ -151,47 +176,50 @@ public class BlogMainFragment extends Fragment {
             rvBlog.setAdapter(new BlogMainFragment.BlogAdapter(activity, blogList));
         } else {
             blogAdapter.setBlogs(blogList);
-
             //刷新頁面
-            blogAdapter.notifyDataSetChanged();
+//            blogAdapter.notifyDataSetChanged();
         }
     }
 
-    private List<Blog> getBlogs() {
-        List<Blog> blogs= null;
+    private List<BlogD> getBlogs() {
+        List<BlogD> blogDList= null;
+        Bundle bundle = getArguments();
+        int blogId = bundle.getInt("BlogId");
+
 
         if (Common.networkConnected(activity)) {
             //Servlet
             String url = Common.URL_SERVER + "BlogServlet";
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
+            jsonObject.addProperty("action", "findById");
+            jsonObject.addProperty("id",blogId);
             String jsonOut = jsonObject.toString();
             blogGetAllTask = new CommonTask(url, jsonOut);
 
             try {
                 String jsonIn = blogGetAllTask.execute().get();
-                Type listType = new TypeToken<List<Blog>>() {
+                Type listType = new TypeToken<List<BlogD>>() {
                 }.getType();
 
-                blogs = new Gson().fromJson(jsonIn, listType);
+                blogDList= new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(activity, R.string.textNoNetwork);
         }
-        return blogs;
+        return blogDList;
     }
 
 
     private class BlogAdapter  extends RecyclerView.Adapter<BlogAdapter.MyViewHolder> {
 
         private LayoutInflater layoutInflater;
-        private List<Blog> blogList;
+        private List<BlogD> blogList;
         private Context context;
         private int imageSize;
 
-        BlogAdapter(Context context, List<Blog> blogList) {
+        BlogAdapter(Context context, List<BlogD> blogList) {
              layoutInflater = LayoutInflater.from(context);
             this.blogList = blogList;
             this.context = context;
@@ -203,7 +231,7 @@ public class BlogMainFragment extends Fragment {
         }
 
 
-        void setBlogs(List<Blog> blogList) {
+        void setBlogs(List<BlogD> blogList) {
             this.blogList = blogList;
 
         }
@@ -216,14 +244,24 @@ public class BlogMainFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder holder, int position) {
-            final Blog blog = blogList.get(position);
-            int id = blog.getBlogID();
-            String url = Common.URL_SERVER+"BlogServlet";
-            ImageTask imageTask = new ImageTask(url,id,imageSize,holder.ivPic1);
-            imageTask.execute();
-            holder.tvLocation.setText(blog.getLocName());
-            holder.tvDays.setText("第"+blog.getDayCount()+"天");
-            holder.tvBlogDescription.setText(blog.getBlogDesc());
+            final BlogD blogD = blogList.get(position);
+            String dateTime = blogD.getS_Date();
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd");
+            try {
+                Date date = format.parse(dateTime);
+                System.out.println(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            holder.tvLocation.setText(blogD.getLocationName());
+            holder.tvBlogDescription.setText(blogD.getBlogNote());
+            holder.tvDays.setText(blogD.getS_Date());
+            holder.imDays.setImageResource(R.drawable.layout_box_line);
+            preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            preferences.edit()
+                    .putInt("TripListId",blogD.getBlogId())
+                    .apply();
+
 
 
         }
@@ -234,8 +272,9 @@ public class BlogMainFragment extends Fragment {
         }
 
         private class MyViewHolder extends RecyclerView.ViewHolder {
-            private ImageView ivPic1,ivPic2,ivPic3,ivPic4,ivPic5,ivPic6,ivPic7,ivPic8;
+            private ImageView ivPic1,ivPic2,ivPic3;
             private TextView tvLocation,tvDays,tvBlogDescription;
+            private ImageButton imDays;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
@@ -245,11 +284,8 @@ public class BlogMainFragment extends Fragment {
                 ivPic1 = itemView.findViewById(R.id.ivPic1);
                 ivPic2 = itemView.findViewById(R.id.ivPic2);
                 ivPic3 = itemView.findViewById(R.id.ivPic3);
-                ivPic4 = itemView.findViewById(R.id.ivPic4);
-                ivPic5 = itemView.findViewById(R.id.ivPic5);
-                ivPic6 = itemView.findViewById(R.id.ivPic6);
-                ivPic7 = itemView.findViewById(R.id.ivPic7);
-                ivPic8 = itemView.findViewById(R.id.ivPic8);
+                imDays = itemView.findViewById(R.id.imDays2);
+
 
             }
         }
@@ -268,11 +304,11 @@ public class BlogMainFragment extends Fragment {
             }
             imageTasks.clear();
         }
-
         if (blogDeleteTask != null) {
             blogDeleteTask.cancel(true);
             blogDeleteTask = null;
         }
     }
+
 
 }
