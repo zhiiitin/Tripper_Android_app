@@ -8,6 +8,19 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/ivPic3"
+        android:layout_width="181dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="216dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/no_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
         android:id="@+id/imageView"
         android:layout_width="24dp"
         android:layout_height="36dp"
@@ -24,100 +37,27 @@
 
     <ImageView
         android:id="@+id/ivPic2"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/ivPic6"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic3"
-        app:layout_constraintStart_toEndOf="@+id/ivPic1"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPic5"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="181dp"
+        android:layout_height="95dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="208dp"
+        android:layout_marginBottom="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/no_image"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic6"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPic8"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="208dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/ivPic3"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPic6"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="208dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic7"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ivPic1"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/ivPic1"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="381dp"
+        android:layout_height="106dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="14dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/ivPic5"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic2"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPic7"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="208dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic8"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ivPic2"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPic3"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/ivPic7"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic4"
-        app:layout_constraintStart_toEndOf="@+id/ivPic2"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPic4"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/ivPic8"
+        android:scaleType="fitXY"
+        android:src="@drawable/no_image"
+        app:layout_constraintBottom_toTopOf="@+id/ivPic2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivPic3"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvLocation"
@@ -139,13 +79,13 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="19dp"
         android:layout_marginBottom="10dp"
+        android:background="@color/colorForBottomBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPic5"
+        app:layout_constraintTop_toBottomOf="@+id/ivPic2"
         app:layout_constraintVertical_bias="0.39"
         card_view:cardCornerRadius="10dp"
-        android:background="@color/colorForBottomBar"
         card_view:cardElevation="10dp">
 
         <TextView
@@ -160,15 +100,28 @@
             tools:text="九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！" />
     </androidx.cardview.widget.CardView>
 
+    <ImageButton
+        android:id="@+id/imDays2"
+        android:layout_width="94dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorForWhite"
+        app:layout_constraintHorizontal_bias="0.954"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:srcCompat="@drawable/layout_box_line" />
+
     <TextView
         android:id="@+id/tvDays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="69dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvLocation"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -339,6 +339,7 @@
 
 
 
+
     <fragment
         android:id="@+id/groupManergeFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
