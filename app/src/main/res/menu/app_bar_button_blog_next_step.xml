@@ -4,6 +4,6 @@
 
     <item
         android:id="@+id/btNextStep"
-        android:title="@string/CreateBlog"
+        android:title="@string/btNextStep"
         app:showAsAction="always" />
 </menu>

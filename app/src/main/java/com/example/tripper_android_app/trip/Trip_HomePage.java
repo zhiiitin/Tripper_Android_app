@@ -409,6 +409,13 @@ public class Trip_HomePage extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!Common.isLogin(activity)){
+            Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+        }
+    }
 }
 
 
