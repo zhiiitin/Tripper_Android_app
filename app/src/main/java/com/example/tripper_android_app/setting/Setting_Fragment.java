@@ -69,7 +69,7 @@ public class Setting_Fragment extends Fragment {
 
 //BottomNavigation
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.setting_Fragment);
+        final NavController navController = Navigation.findNavController(activity, R.id.setting_Fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
@@ -130,7 +130,12 @@ public class Setting_Fragment extends Fragment {
         });
 
         ibFriends = view.findViewById(R.id.ibFriends);
-
+        ibFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_setting_Fragment_to_friendsListFragment);
+            }
+        });
     }
 
 

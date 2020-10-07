@@ -60,6 +60,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_setting_Fragment_to_friendsListFragment"
+            app:destination="@id/friendsListFragment" />
 
     </fragment>
     <fragment
@@ -354,5 +357,19 @@
             android:id="@+id/action_createBlogFragment_to_create_Blog_Location_List"
             app:destination="@id/create_Blog_Location_List" />
     </fragment>
+    <fragment
+        android:id="@+id/friendsListFragment"
+        android:name="com.example.tripper_android_app.friends.FriendsListFragment"
+        android:label="fragment_friends_list"
+        tools:layout="@layout/fragment_friends_list" >
+        <action
+            android:id="@+id/action_friendsListFragment_to_friendsAddFragment"
+            app:destination="@id/friendsAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsAddFragment"
+        android:name="com.example.tripper_android_app.friends.FriendsAddFragment"
+        android:label="fragment_friends_add"
+        tools:layout="@layout/fragment_friends_add" />
 
 </navigation>

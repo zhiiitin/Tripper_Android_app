@@ -14,22 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NotifyFragment extends Fragment {
-    Activity activity;
+    MainActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_notify, container, false);
     }
 
@@ -39,5 +40,8 @@ public class NotifyFragment extends Fragment {
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.notify_Fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
+
     }
 }

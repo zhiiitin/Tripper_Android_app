@@ -110,12 +110,16 @@ public class Trip_HomePage extends Fragment {
         NavController navController = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-
         BottomNavigationView bottomNavigationViewTop = view.findViewById(R.id.navigation);
         NavController navControllerTop = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationViewTop, navControllerTop);
         Menu itemMenu = bottomNavigationViewTop.getMenu();
         itemMenu.getItem(0).setChecked(true);
+        // 每次進到畫面都先更新token
+        if(Common.isLogin(activity)){
+            Common.getTokenSendServer(activity);
+        }
+
 
         tripMs = new ArrayList<>();
         tripMs = getTripMs();
