@@ -23,7 +23,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,9 +52,8 @@ import android.widget.TimePicker;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.location.Location;
+import com.example.tripper_android_app.blog.DateAndId;
 import com.example.tripper_android_app.location.Location_D;
-import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
@@ -71,6 +69,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
@@ -89,9 +89,12 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
     private EditText etTripTitle;
     private Spinner spDay, spChoosePpl;
     private Switch switchGroup;
-    private List<Location_D> locations;
     private static int year, month, day, hour, minute;
-    private RecyclerView rvLocSelectedList;
+    private RecyclerView rvLocChosen;
+    private Map<String, List<Trip_LocInfo>> tripLocInfoList;
+
+
+
     private int lastPosition;
     private SharedPreferences preference;
     private int status = 0;
@@ -134,8 +137,10 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         ibUpdateTrip = view.findViewById(R.id.ibUpdateTrip);
         ivLocPic = view.findViewById(R.id.ivLocPic);
         spDay = view.findViewById(R.id.spDay);
-        rvLocSelectedList = view.findViewById(R.id.rvLocChosen);
-        rvLocSelectedList.setLayoutManager(new LinearLayoutManager(activity));
+
+        //recyclerview
+        rvLocChosen = view.findViewById(R.id.rvLocChosen);
+        rvLocChosen.setLayoutManager(new LinearLayoutManager(activity));
 
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -153,6 +158,15 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         }
         tripM = (Trip_M) bundle.getSerializable("tripM");
         showTripPic();
+
+
+        tripLocInfoList = new TreeMap<>();
+        tripLocInfoList = getLocInfo();
+        showLocList(tripLocInfoList);
+
+
+
+
 
 
         // 挑選景點完顯示recycleView
@@ -218,20 +232,23 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         textChoseGroupPpl = view.findViewById(R.id.textChoseGroupPpl);
         spChoosePpl = view.findViewById(R.id.spChoosePpl);
 
-        Log.d("####",tripM.getStatus()+"");
+        Log.d("####", tripM.getStatus() + "");
 
         switchGroup = view.findViewById(R.id.switchGroup);
         switchGroup.setChecked(tripM.getStatus() == 0 ? false : true);
-        //
-        {
+        //如果有開啟，會顯示已存的揪團人數
+        if (switchGroup.isChecked()) {
+            textChoseGroupPpl.setVisibility(View.VISIBLE);
+            spChoosePpl.setVisibility(View.VISIBLE);
+//            String selectedItem = bundle.getString(Integer.parseInt(tripM.getpMax()));
+//            spChoosePpl.getSelectedItem();
+//            Spinner sp = sdgdfgdfgdfg
 
 
-
-
-
+        } else {
+            textChoseGroupPpl.setVisibility(View.GONE);
+            spChoosePpl.setVisibility(View.GONE);
         }
-
-
 
         switchGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -245,7 +262,6 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
                     spChoosePpl.setVisibility(View.GONE);
                     status = 3;
                 }
-
             }
         });
 
@@ -264,7 +280,6 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
 
 
-
 //        //修改所有資料至DB
         ibUpdateTrip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,8 +287,10 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
 
                 if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "TripServlet";
-                    Member member = new Member();
-                    int memberId = 1;
+
+                    int memberId = Integer.parseInt(preference.getString("memberId", ""));
+                    Log.e(TAG, "show MemberId when Update: " + memberId);
+
                     String tripId = tripM.getTripId();
                     String tripTitle = etTripTitle.getText().toString();
                     String startDate = textDate.getText().toString().trim();
@@ -336,53 +353,81 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
     }
 
 
-    private void showLocList(List<Location_D> locations) {
+    private void showLocList(Map<String, List<Trip_LocInfo>> tripDs) {
         Log.d(TAG, "enter showLocList");
-        //day4Locations.addAll(locations);
-        SelectLocAdapter selectLocAdapter = (SelectLocAdapter) rvLocSelectedList.getAdapter();
-        if (selectLocAdapter == null) {
+        ShowTripLocAdapter showTripLocAdapter = (ShowTripLocAdapter) rvLocChosen.getAdapter();
+        if (showTripLocAdapter == null) {
             Log.d(TAG, "enter Adapter is null");
-            rvLocSelectedList.setAdapter(new SelectLocAdapter(activity, locations));
+            rvLocChosen.setAdapter(new ShowTripLocAdapter(activity, tripDs));
         } else {
             Log.d(TAG, "enter Adapter is not null");
-            selectLocAdapter.setLocationDs(locations);
-            selectLocAdapter.notifyDataSetChanged();
+            showTripLocAdapter.setLocationDs(tripDs);
+            showTripLocAdapter.notifyDataSetChanged();
 
         }
     }
 
-    class SelectLocAdapter extends RecyclerView.Adapter<SelectLocAdapter.DayViewHolder> {
+    private Map<String, List<Trip_LocInfo>> getLocInfo() {
+
+        Map<String, List<Trip_LocInfo>> showLocNames = new TreeMap<>();
+
+        if (Common.networkConnected(activity)) {
+            String url = Common.URL_SERVER + "Trip_D_Servlet";
+            Trip_M tripM = (Trip_M) bundle.getSerializable("tripM");
+            String tripId = tripM.getTripId();
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "showLocName");
+            jsonObject.addProperty("tripId", tripId);
+            String jsonOut = jsonObject.toString();
+            tripGetAllTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = tripGetAllTask.execute().get();
+                Type type = new TypeToken<Map<String, List<Trip_LocInfo>>>() {
+                }.getType();
+                Common.map2 = new Gson().fromJson(jsonIn, type);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "請確認網路連線");
+        }
+        return showLocNames;
+
+    }
+
+    private class ShowTripLocAdapter extends RecyclerView.Adapter<ShowTripLocAdapter.TripLocVH> {
         private LayoutInflater layoutInflater;
-        private List<Location_D> locationDs;
+        private Map<String, List<Trip_LocInfo>> tripList;
         private View visibleView;
 
-        SelectLocAdapter(Context context, List<Location_D> locationDs) {
+        ShowTripLocAdapter(Context context, Map<String, List<Trip_LocInfo>> tripList) {
             layoutInflater = LayoutInflater.from(context);
-            this.locationDs = locationDs;
+            this.tripList = tripList;
         }
 
-        void setLocationDs(List<Location_D> locationDs) {
-            this.locationDs = locationDs;
+        void setLocationDs(Map<String, List<Trip_LocInfo>> tripList) {
+            this.tripList = tripList;
         }
 
         @Override
         public int getItemCount() {
-            return locationDs == null ? 0 : locationDs.size();
+            return tripList == null ? 0 : tripList.size();
         }
 
         @NonNull
         @Override
-        public SelectLocAdapter.DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public TripLocVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_location_detail_card, parent, false);
-            return new SelectLocAdapter.DayViewHolder(itemView);
+            return new TripLocVH(itemView);
         }
 
-        public class DayViewHolder extends RecyclerView.ViewHolder {
+        class TripLocVH extends RecyclerView.ViewHolder {
             TextView textLocChosen, textLocAddChosen, textLocStayTimeChosen, textShowLocMemo;
             ImageButton btExpand;
             LinearLayout expandableView;
 
-            public DayViewHolder(View itemView) {
+            public TripLocVH(@NonNull View itemView) {
                 super(itemView);
                 textLocChosen = itemView.findViewById(R.id.textLocChosen);
                 textLocAddChosen = itemView.findViewById(R.id.textLocAddChosen);
@@ -394,49 +439,42 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final SelectLocAdapter.DayViewHolder myDayViewHolder, final int position) {
+        public void onBindViewHolder(@NonNull final TripLocVH tripLocVH, final int position) {
+            final Trip_LocInfo tripLocInfo = (Trip_LocInfo) tripList.get(position);
+
             Log.d(TAG, "onBindViewHolder-position: " + position);
 
-            Location_D locationDetail = locationDs.get(position);
-            myDayViewHolder.textLocChosen.setText(locationDetail.getName());
-            myDayViewHolder.textLocAddChosen.setText(locationDetail.getAddress());
-            myDayViewHolder.textLocStayTimeChosen.setText(locationDetail.getStayTimes());
-            myDayViewHolder.textShowLocMemo.setText(locationDetail.getMemos());
-
+            tripLocVH.textLocChosen.setText(tripLocInfo.getName());
+            tripLocVH.textLocAddChosen.setText(tripLocInfo.getAddress());
+            tripLocVH.textLocStayTimeChosen.setText(tripLocInfo.getStaytime());
+            tripLocVH.textShowLocMemo.setText(tripLocInfo.getMemo());
 
             //CardView上面的More Button功能
-            myDayViewHolder.btExpand.setOnClickListener(new View.OnClickListener() {
+            tripLocVH.btExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                    popupMenu.inflate(R.menu.location_more_card_list);
+                    popupMenu.inflate(R.menu.trip_memo_card_list);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @SuppressLint("LongLogTag")
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.mShowmore:
-                                    switch (myDayViewHolder.expandableView.getVisibility()) {
+                                    switch (tripLocVH.expandableView.getVisibility()) {
                                         case View.VISIBLE:
-                                            myDayViewHolder.expandableView.setVisibility(View.GONE);
+                                            tripLocVH.expandableView.setVisibility(View.GONE);
                                             break;
                                         case View.GONE:
                                             if (visibleView != null) {
                                                 visibleView.setVisibility(View.GONE);
                                             }
-                                            myDayViewHolder.expandableView.setVisibility(View.VISIBLE);
-                                            visibleView = myDayViewHolder.expandableView;
+                                            tripLocVH.expandableView.setVisibility(View.VISIBLE);
+                                            visibleView = tripLocVH.expandableView;
                                             break;
                                         case View.INVISIBLE:
                                             break;
                                     }
-                                    break;
-                                case R.id.mDeleteLoc:
-                                    int newPosition = myDayViewHolder.getAdapterPosition();
-                                    locationDs.remove(newPosition);
-                                    notifyItemRemoved(newPosition);
-                                    notifyItemChanged(newPosition, locationDs.size());
-                                    break;
                             }
                             return true;
                         }
@@ -445,9 +483,8 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
                 }
             });
         }
-
-
     }
+
 
     //Spinner 選擇天數跳景點
     Spinner.OnItemSelectedListener listener = new Spinner.OnItemSelectedListener() {
@@ -484,7 +521,7 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
     public void spinnerShowLoc() {
         String selected = Common.spinnerSelect;
         Log.d(TAG, "daySelected: " + selected);
-        showLocList(Common.map.get(selected));
+//        showLocList(Common.map.get(selected));
     }
 
 
@@ -636,12 +673,12 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         }
     }
 
-    //TODO
-    //顯示行程照片
+
+    //TODO 從首頁帶行程過來
     private void showTripPic() {
         String url = Common.URL_SERVER + "TripServlet";
         String tripId = tripM.getTripId();
-        boolean isCheck = false;
+
         int imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         Bitmap bitmap = null;
         try {
@@ -654,14 +691,11 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         } else {
             ivLocPic.setImageResource(R.drawable.ic_nopicture);
         }
-        if(tripM.getStatus() > 0){
-            isCheck = true;
-        }
-        //switchGroup.setChecked(isCheck);
+
         etTripTitle.setText(tripM.getTripTitle());
         textDate.setText(tripM.getStartDate());
         textTime.setText(tripM.getStartTime());
-        spinnerShowLoc();
+
     }
 
     //暫存標題/出發時間/出發日期

@@ -37,6 +37,7 @@ import com.example.tripper_android_app.blog.Blog_SpotInfo;
 import com.example.tripper_android_app.blog.CreateBlogFragment;
 import com.example.tripper_android_app.blog.DateAndId;
 import com.example.tripper_android_app.location.Location;
+import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.DateUtil;
@@ -68,6 +69,8 @@ public class TripHasSavedPage extends Fragment {
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
     private String startDate, tripId;
+    private ImageButton btManageGroupPpl, btJoinGroup;
+
     private int num_columns = 4;
     private byte[] photo;
     private static final int REQ_TAKE_PICTURE = 0;
@@ -107,6 +110,7 @@ public class TripHasSavedPage extends Fragment {
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
         textShowSDate = view.findViewById(R.id.textShowSDate);
         textShowSTime = view.findViewById(R.id.textShowSTime);
+//        btJoinGroup = view.findViewById(R.id.btJoinGroup);
 
         //recyclerview
         rvShowTripD = view.findViewById(R.id.rvShowTripD);
@@ -126,7 +130,27 @@ public class TripHasSavedPage extends Fragment {
 
 
         //揪團人數按鈕
-        ImageButton btManageGroupPpl = view.findViewById(R.id.btManageGroupPpl);
+        btManageGroupPpl = view.findViewById(R.id.btManageGroupPpl);
+        //判斷是否為主揪人所建的行程，true = 顯示按鈕
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        int status = bundle.getInt("status");
+        String mId = pref.getString("memberId", Common.PREF_FILE + "");
+        Log.e(TAG, "STAUS## " + status + " and " + "memberId " + mId);
+
+        if (mId.equals(pref.getString("memberId", Common.PREF_FILE + "")) && status == 1) {
+            btManageGroupPpl.setVisibility(View.VISIBLE);
+            btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v)
+                            .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment);
+                }
+            });
+        } else {
+            btManageGroupPpl.setVisibility(View.GONE);
+        }
+
+
         btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +201,7 @@ public class TripHasSavedPage extends Fragment {
         }
         showLocList5(locList5);
 
-        //第五天景點
+        //第六天景點
         List<Trip_LocInfo> locList6 = null;
         try {
             locList6 = getLoc6();
@@ -186,7 +210,12 @@ public class TripHasSavedPage extends Fragment {
         }
         showLocList6(locList6);
 
-        List<String> dayList = getDays();
+        List<String> dayList = null;
+        try {
+            dayList = getDays();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showDays(dayList);
 
         final List<Trip_LocInfo> finalLocList2 = locList2;
@@ -211,7 +240,7 @@ public class TripHasSavedPage extends Fragment {
         btDay2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rvShowTripD.smoothScrollToPosition(locList1.size() + 1 + 1);
+                rvShowTripD.smoothScrollToPosition(locList1.size() + 1 + 1 + 2);
             }
         });
 
@@ -222,7 +251,7 @@ public class TripHasSavedPage extends Fragment {
         btDay3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rvShowTripD.smoothScrollToPosition(locList1.size() + 1 + finalLocList2.size() + 1 + 1);
+                rvShowTripD.smoothScrollToPosition(locList1.size() + 1 + finalLocList2.size() + 1 + 1 + 2);
             }
         });
 
@@ -233,7 +262,7 @@ public class TripHasSavedPage extends Fragment {
         btDay4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rvShowTripD.smoothScrollToPosition(locList1.size() + 1 + finalLocList2.size() + 1 + finalLocList3.size() + 1 + 1);
+                rvShowTripD.smoothScrollToPosition(locList1.size() + 1 + finalLocList2.size() + 1 + finalLocList3.size() + 1 + 1 + 2);
             }
         });
 
@@ -493,7 +522,7 @@ public class TripHasSavedPage extends Fragment {
             }
 
             if (position > day1count && position < day2count) {
-                Trip_LocInfo trip_locInfo = tripList1.get(position - 1);
+                Trip_LocInfo trip_locInfo = tripList2.get(position - 1 - day1count);
                 final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
@@ -535,7 +564,7 @@ public class TripHasSavedPage extends Fragment {
             }
 
             if (position > day2count && position < day3count) {
-                Trip_LocInfo trip_locInfo = tripList1.get(position - 1);
+                Trip_LocInfo trip_locInfo = tripList3.get(position - 1 - day2count);
                 final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
@@ -577,7 +606,7 @@ public class TripHasSavedPage extends Fragment {
             }
 
             if (position > day3count && position < day4count) {
-                Trip_LocInfo trip_locInfo = tripList1.get(position - 1);
+                Trip_LocInfo trip_locInfo = tripList4.get(position - 1 - day3count);
                 final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
@@ -619,7 +648,7 @@ public class TripHasSavedPage extends Fragment {
             }
 
             if (position > day4count && position < day5count) {
-                Trip_LocInfo trip_locInfo = tripList1.get(position - 1);
+                Trip_LocInfo trip_locInfo = tripList5.get(position - 1 - day4count);
                 final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
@@ -661,7 +690,7 @@ public class TripHasSavedPage extends Fragment {
             }
 
             if (position > day5count && position < day6count) {
-                Trip_LocInfo trip_locInfo = tripList1.get(position - 1);
+                Trip_LocInfo trip_locInfo = tripList6.get(position - 1 - day5count);
                 final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
@@ -900,7 +929,7 @@ public class TripHasSavedPage extends Fragment {
 
     //Day 6
     private List<Trip_LocInfo> getLoc6() throws ParseException {
-        String date6 = DateUtil.date4day(startDate, 6);
+        String date6 = DateUtil.date4day(startDate, 5);
         List<Trip_LocInfo> locList = new ArrayList<>();
         if (Common.networkConnected(activity)) {
             String Url = Common.URL_SERVER + "Trip_D_Servlet";
@@ -937,15 +966,15 @@ public class TripHasSavedPage extends Fragment {
 
     //----------------取得天數List並放入Adapter--------------------
 
-    private List<String> getDays() {
+    private List<String> getDays() throws ParseException {
         List<String> dayList = new ArrayList<>();
 
-        dayList.add("Day-1");
-        dayList.add("Day-2");
-        dayList.add("Day-3");
-        dayList.add("Day-4");
-        dayList.add("Day-5");
-        dayList.add("Day-6");
+        dayList.add(startDate);
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
         return dayList;
     }
 

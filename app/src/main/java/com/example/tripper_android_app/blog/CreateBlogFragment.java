@@ -169,7 +169,12 @@ public class CreateBlogFragment extends Fragment {
         }
         showSpots6(spotList6);
 
-        List<String> dayList = getDays();
+        List<String> dayList = null;
+        try {
+            dayList = getDays();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showdays(dayList);
 
         final List<Blog_SpotInfo> finalSpotList2 = spotList2;
@@ -759,15 +764,15 @@ public class CreateBlogFragment extends Fragment {
 
     //----------------取得天數List並放入Adapter--------------------
 
-    private List<String> getDays() {
+    private List<String> getDays() throws ParseException {
         List<String> dayList = new ArrayList<>();
 
-        dayList.add("Day-1");
-        dayList.add("Day-2");
-        dayList.add("Day-3");
-        dayList.add("Day-4");
-        dayList.add("Day-5");
-        dayList.add("Day-6");
+        dayList.add(startDate);
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
+        dayList.add(startDate = DateUtil.date4day(startDate, 1));
         return dayList;
     }
 

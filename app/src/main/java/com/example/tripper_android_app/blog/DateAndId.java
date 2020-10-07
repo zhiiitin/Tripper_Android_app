@@ -10,6 +10,11 @@ public class DateAndId {
         this.trip_Id = trip_Id;
     }
 
+    public DateAndId(String trip_Id) {
+        super();
+        this.trip_Id = trip_Id;
+    }
+
     public String getS_Date() {
         return s_Date;
     }

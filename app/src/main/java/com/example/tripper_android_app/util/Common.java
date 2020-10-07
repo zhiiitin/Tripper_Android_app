@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.trip.Trip_LocInfo;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class Common {
     public final static String PREF_FILE = "preference";
     public final static String DEFAULT_FILE = "";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
+    public static Map<String, List<Trip_LocInfo>> map2 = new TreeMap<>();
     public static String spinnerSelect = "";
     public static String tripId = "";
     public static int memberId;

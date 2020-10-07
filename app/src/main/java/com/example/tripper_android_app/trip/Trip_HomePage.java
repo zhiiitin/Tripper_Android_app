@@ -252,6 +252,7 @@ public class Trip_HomePage extends Fragment {
             bundle.putString("tripTitle", tripM.getTripTitle());
             bundle.putString("startDate", tripM.getStartDate());
             bundle.putString("startTime", tripM.getStartTime());
+            bundle.putInt("status", tripM.getStatus());
 
             //點擊整張卡片，帶到行程完整資訊頁面
             tripListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
