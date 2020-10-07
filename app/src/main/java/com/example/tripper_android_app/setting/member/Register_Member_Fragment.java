@@ -24,14 +24,12 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +51,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
@@ -124,18 +121,13 @@ public class Register_Member_Fragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
-//BottomNavigation
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        navController = Navigation.findNavController(activity, R.id.nav_fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        Menu itemMenu = bottomNavigationView.getMenu();
-        itemMenu.getItem(4).setChecked(true);
+
 
         tvId = view.findViewById(R.id.tvId_member);
         etNickName = view.findViewById(R.id.tvNickname_member);
         tvLoginType = view.findViewById(R.id.tvLoginType_member);
         ibLogout = view.findViewById(R.id.btLogout);
-        ivPhoto = view.findViewById(R.id.ivPhoto);
+        ivPhoto = view.findViewById(R.id.ivPhotoI);
         ibChange = view.findViewById(R.id.ibChange);
         tvUpdate = view.findViewById(R.id.tvUpdate);
         cvUpdate = view.findViewById(R.id.cvUpdate);

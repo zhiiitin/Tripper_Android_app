@@ -241,6 +241,9 @@
         <action
             android:id="@+id/action_trip_HomePage_to_updateTripFragment"
             app:destination="@id/updateTripFragment" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
+            app:destination="@id/register_main_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"
@@ -361,6 +364,9 @@
         <action
             android:id="@+id/action_createBlogFragment_to_create_Blog_Location_List"
             app:destination="@id/create_Blog_Location_List" />
+        <action
+            android:id="@+id/action_createBlogFragment_to_createBlogPicFragment"
+            app:destination="@id/createBlogPicFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateTripFragment"
@@ -389,5 +395,10 @@
             android:id="@+id/action_updateTripLocDetail_to_updateTripFragment"
             app:destination="@id/updateTripFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/createBlogPicFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogPicFragment"
+        android:label="fragment_create_blog_pic"
+        tools:layout="@layout/fragment_create_blog_pic" />
 
 </navigation>

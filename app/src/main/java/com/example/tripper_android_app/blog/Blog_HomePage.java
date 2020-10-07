@@ -32,7 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -120,20 +119,6 @@ public class Blog_HomePage extends Fragment {
 
         showMember();
 
-//        ImageButton btChangepic = view.findViewById(R.id.btChangePic);
-//
-//
-//        if (Common.isLogin(activity)) {
-//            btChangepic.setVisibility(View.VISIBLE);
-//        }
-//
-//        btChangepic.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showTypeDialog();
-//            }
-//        });
-
     }
 
     @Override
@@ -149,7 +134,7 @@ public class Blog_HomePage extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.btCreateBlog) {
+        if (id == R.id.btNextStep) {
             findNavController(this.getView()).navigate(R.id.action_blog_HomePage_to_create_Blog_Location_List);
             return true;
 
