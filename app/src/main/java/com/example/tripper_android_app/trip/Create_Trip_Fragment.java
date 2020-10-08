@@ -85,7 +85,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     private static final String TAG = "TAG_Date";
 
     private MainActivity activity;
-    private TextView textDate, textTime, textChoseGroupPpl;
+    private TextView textDate, textTime, textChoseGroupPpl, textTripTitle;
     private EditText etTripTitle;
     private Spinner spDay, spChoosePpl;
     private Switch switchGroup;
@@ -136,6 +136,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         rvLocSelectedList = view.findViewById(R.id.rvLocChosen);
         rvLocSelectedList.setLayoutManager(new LinearLayoutManager(activity));
 
+        textTripTitle = view.findViewById(R.id.textTripTitle);
+
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("建立行程");
@@ -146,6 +148,17 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
         // 挑選景點完顯示recycleView
         spinnerShowLoc();
+
+        //小按鈕
+        textTripTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etTripTitle.setText("南台灣四天三夜遊");
+                textDate.setText("2020-10-10");
+                textTime.setText("10:00");
+
+            }
+        });
 
 
         // spinner監聽器，顯示不同天的景點清單
