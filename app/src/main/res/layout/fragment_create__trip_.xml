@@ -14,14 +14,13 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolBarStyle"/>
+            android:theme="@style/ToolBarStyle" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -45,12 +44,12 @@
                     android:id="@+id/ivLocPic"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:scaleType="centerCrop"
                     android:layout_marginTop="56dp"
+                    android:background="@drawable/default_bg_pc"
+                    android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:background="@drawable/default_bg_pc" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/ibChangeLocPic"
@@ -289,6 +288,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spChoosePpl" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

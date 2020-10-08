@@ -28,6 +28,15 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,10 +47,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -54,6 +69,8 @@ public class Register_main_Fragment extends Fragment {
     private GoogleSignInClient client;
     private FirebaseAuth auth;
 
+    private CallbackManager callbackManager;
+    private String name, email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +85,10 @@ public class Register_main_Fragment extends Fragment {
                 .build();
         client = GoogleSignIn.getClient(activity, options);
         setHasOptionsMenu(true);
+
+        FacebookSdk.sdkInitialize(activity);
+        callbackManager = CallbackManager.Factory.create();
+
     }
 
 
@@ -133,11 +154,11 @@ public class Register_main_Fragment extends Fragment {
             }
         });
 //進入FB登入頁面
-        ImageButton ivRegister_FB = view.findViewById(R.id.btRegister_FB);
+        final ImageButton ivRegister_FB = view.findViewById(R.id.btRegister_FB);
         ivRegister_FB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_FB_Login_Fragment);
+                signInFB();
             }
         });
 //進入Google登入頁面
@@ -189,12 +210,14 @@ public class Register_main_Fragment extends Fragment {
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("action","memberGBInsert");
                         jsonObject.addProperty("member" ,new Gson().toJson(member));
+
                         try{
                             String result = new CommonTask(Url,jsonObject.toString()).execute().get();
                             int count = Integer.parseInt(result);
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
                         }
+                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
 
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");
@@ -203,6 +226,11 @@ public class Register_main_Fragment extends Fragment {
                 // Google Sign In failed, update UI appropriately
                 Log.e(TAG, "Google sign in failed");
             }
+        }
+        else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
+
         }
     }
 
@@ -217,7 +245,6 @@ public class Register_main_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 登入成功轉至下頁；失敗則顯示錯誤訊息
                         if (task.isSuccessful()) {
-                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
                             Common.showToast(activity,"GOOGLE登入成功！");
                         } else {
                             Exception exception = task.getException();
@@ -240,6 +267,108 @@ public class Register_main_Fragment extends Fragment {
         }
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    private void signInFB() {
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                signInFirebase(loginResult.getAccessToken());
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            email = object.getString("email");
+                            name = object.getString("name");
+
+
+                            Log.d(TAG, "email:" + email);
+                            Log.d(TAG, "name:" + name);
+                            ;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                Bundle bundle = new Bundle();
+                bundle.putString("fields", "id,name,email,gender");
+                request.setParameters(bundle);
+                request.executeAsync();
+                //將資料傳入DB
+
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e(TAG, "facebook:onError", error);
+            }
+        });
+    }
+
+    private void signInFirebase(AccessToken token) {
+        Log.d(TAG, "signInFirebase:" + token);
+
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // 登入成功轉至下頁；失敗則顯示錯誤訊息
+                        if (task.isSuccessful()) {
+                            if (Common.networkConnected(activity)) {
+
+                                String account = email;
+                                String password = "password";
+                                String nickname = name;
+
+                                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                        MODE_PRIVATE);
+                                pref.edit()
+                                        .putBoolean("login", true)
+                                        .putString("account", account)
+                                        .putString("password", password)
+                                        .apply();
+
+                                String Url = Common.URL_SERVER + "MemberServlet";
+                                Member member = new Member();
+                                member.setAccount(account);
+                                member.setNickName(nickname);
+                                member.setPassword(password);
+                                member.setLoginType(2);
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("action", "memberGBInsert");
+                                jsonObject.addProperty("member", new Gson().toJson(member));
+                                try {
+                                    String result = new CommonTask(Url, jsonObject.toString()).execute().get();
+                                    int count = Integer.parseInt(result);
+                                } catch (Exception e) {
+                                    Log.e(TAG, e.toString());
+                                }
+
+                            } else {
+                                Log.e(TAG, "Internet is null");
+                            }
+                            Common.showToast(activity,"登入成功！");
+                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+
+                        } else {
+                            Exception exception = task.getException();
+                            String message = exception == null ? "Sign in fail." : exception.getMessage();
+                            Log.e(TAG, message);
+
+                        }
+                    }
+                });
     }
 
 

@@ -45,15 +45,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/appbar">
 
         <ImageView
             android:id="@+id/ivBGPic"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@drawable/default_bg_pc"
+            android:layout_height="190dp"
+            android:background="@drawable/map1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,23 +62,11 @@
             android:id="@+id/ivUserPic"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/ic_user_pic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/btChangePic"
-            android:layout_width="24dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="#00000000"
-            android:src="@drawable/ic_camera"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -86,16 +74,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="訪客"
-            android:textColor="@color/colorForNormalText"
-            android:textSize="20sp"
+            android:background="@drawable/trip_title_box_line"
+            android:text=" 訪客 "
+            android:textColor="@color/colorForGroupButton"
+            android:textSize="22sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivUserPic" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
-            android:layout_width="410dp"
+            android:layout_width="match_parent"
             android:layout_height="51dp"
             android:layout_marginTop="4dp"
             android:background="?android:attr/windowBackground"
@@ -126,8 +116,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="289dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
@@ -149,7 +139,7 @@
         <!--        </ScrollView>-->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="330dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

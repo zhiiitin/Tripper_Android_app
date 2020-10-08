@@ -30,15 +30,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.Layout;
-import android.text.format.DateFormat;
 import android.util.Base64;
 import android.util.Log;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +48,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -60,10 +55,11 @@ import android.widget.TimePicker;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.location.Location_D;
+import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
+import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yalantis.ucrop.UCrop;
@@ -71,12 +67,8 @@ import com.yalantis.ucrop.UCrop;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -91,24 +83,28 @@ import static androidx.navigation.Navigation.findNavController;
 
 public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "TAG_Date";
+
     private MainActivity activity;
     private TextView textDate, textTime, textChoseGroupPpl;
     private EditText etTripTitle;
     private Spinner spDay, spChoosePpl;
     private Switch switchGroup;
+    private List<Location_D> locations;
     private static int year, month, day, hour, minute;
     private RecyclerView rvLocSelectedList;
     private int lastPosition;
     private SharedPreferences preference;
+    private boolean isCheckedValue;
     private int status = 0;
     //照片
-    private ImageButton ibChangeLocPic;
+    private ImageButton ibChangeLocPic, ibSaveTrip;
     private ImageView ivLocPic; // 行程封面照
-    private byte[] photo;
+    private byte[] b_photo;
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
+    private Trip_M tripMs;
 
 
     @Override
@@ -116,14 +112,15 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create__trip_, container, false);
+
 
     }
 
@@ -135,6 +132,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         textTime = view.findViewById(R.id.textTime);
         etTripTitle = view.findViewById(R.id.etTripTitle);
         textChoseGroupPpl = view.findViewById(R.id.textChoseGroupPpl);
+        ibSaveTrip = view.findViewById(R.id.ibSaveTrip);
         rvLocSelectedList = view.findViewById(R.id.rvLocChosen);
         rvLocSelectedList.setLayoutManager(new LinearLayoutManager(activity));
 
@@ -242,13 +240,13 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
 
         //儲存所有資料至DB
-        ImageButton ibSaveTrip = view.findViewById(R.id.ibSaveTrip);
         ibSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "TripServlet";
-                    int memberId = 1;
+                    //TODO Member ID 抓取ok
+                    int memberId = Integer.parseInt(preference.getString("memberId", ""));
                     String tripTitle = etTripTitle.getText().toString();
                     String startDate = textDate.getText().toString().trim();
                     String startTime = textTime.getText().toString().trim();
@@ -256,8 +254,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     int pMax = Integer.parseInt(spChoosePpl.getSelectedItem().toString());
 
                     //行程標題
-                    if (tripTitle.length() > 10 || tripTitle.isEmpty()) {
-                        etTripTitle.setError("請輸入小於10字元的標題");
+                    if (tripTitle.length() > 15 || tripTitle.isEmpty()) {
+                        etTripTitle.setError("行程標題請勿超過15字");
                         return;
                     }
 
@@ -272,17 +270,18 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                         textTime.setError("請選擇出發時間");
                         return;
                     }
-                   // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
+                    // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
                     Trip_M tripMaster = new Trip_M(memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
-                    // TODO 處理照片
-                    // 暫不處理
+
+
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "insert");
                     jsonObject.addProperty("tripM", new Gson().toJson(tripMaster));
                     jsonObject.addProperty("locationD", new Gson().toJson(Common.map));
 
-                    if (photo != null) {
-                        jsonObject.addProperty("imageBase64", Base64.encodeToString(photo, Base64.DEFAULT));
+                    // TODO 處理照片 = 成功
+                    if (b_photo != null) {
+                        jsonObject.addProperty("imageBase64", Base64.encodeToString(b_photo, Base64.DEFAULT));
                     }
                     int count = 0;
                     try {
@@ -295,9 +294,11 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                         Common.showToast(activity, "建立行程成功");
                         Navigation.findNavController(v)
                                 .popBackStack(R.id.trip_HomePage, false);
-                        //deletePreferences();
+                        deletePreferences();
+                        Common.map.clear();
                     } else {
                         Common.showToast(activity, "建立行程失敗");
+                        Log.d(TAG, "Trip Fail: " + count);
                     }
                 } else {
                     Common.showToast(activity, "請檢查網路連線");
@@ -348,7 +349,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             return new MyDayViewHolder(itemView);
         }
 
-        private class MyDayViewHolder extends RecyclerView.ViewHolder {
+        public class MyDayViewHolder extends RecyclerView.ViewHolder {
             TextView textLocChosen, textLocAddChosen, textLocStayTimeChosen, textShowLocMemo;
             ImageButton btExpand;
             LinearLayout expandableView;
@@ -417,6 +418,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             });
         }
 
+
     }
 
     //Spinner 選擇天數跳景點
@@ -441,7 +443,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(textDate).navigate(R.id.action_create_Trip_Fragment_to_trip_HomePage);
+                Navigation.findNavController(textDate).popBackStack(R.id.trip_HomePage, false);
                 return true;
             default:
                 break;
@@ -464,7 +466,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         String tripDate = textDate.getText().toString();
         String tripTime = textTime.getText().toString();
 
-
         preference.edit()
                 .putString("tripTitle", tripTitle)
                 .putString("tripDate", tripDate)
@@ -482,6 +483,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         etTripTitle.setText(tripTitle);
         textDate.setText(tripDate);
         textTime.setText(tripTime);
+
+
     }
 
     //刪除暫存檔
@@ -631,7 +634,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            photo = out.toByteArray();
+            b_photo = out.toByteArray();
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         }
@@ -641,6 +644,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             ivLocPic.setImageResource(R.drawable.default_bg_pc);
         }
     }
+
 
     @Override
     public void onStart() {

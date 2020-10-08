@@ -4,106 +4,119 @@ import java.io.Serializable;
 
 /**
  * 類別說明：行程主檔_Master
+ *
  * @author Cooper Hsieh
  * @version 建立時間:Sep 3, 2020
- * 
  */
 
 public class Trip_M implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private String tripId;
-	private int memberId;
-	private String tripTitle;
-	private String startDate;
-	private String startTime;
-	private int dayCount;
-	private String createDateTime;
-	private int pMax;
-	private int status;
+    private static final long serialVersionUID = 1L;
+    private String tripId;
+    private int memberId;
+    private String tripTitle;
+    private String startDate;
+    private String startTime;
+    private int dayCount;
+    private String createDateTime;
+    private int pMax;
+    private int status;
 
 
-	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount,
-				  int pMax, int status) {
-		super();
-		this.memberId = memberId;
-		this.tripTitle = tripTitle;
-		this.startDate = startDate;
-		this.startTime = startTime;
-		this.dayCount = dayCount;
-		this.pMax = pMax;
-		this.status = status;
-	}
+    public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
+                  int pMax, int status) {
+        super();
+        this.tripId = tripId;
+        this.memberId = memberId;
+        this.tripTitle = tripTitle;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.dayCount = dayCount;
+        this.pMax = pMax;
+        this.status = status;
+    }
 
-	public String getTripId() {
-		return tripId;
-	}
+    public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status) {
+        super();
+        this.memberId = memberId;
+        this.tripTitle = tripTitle;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.dayCount = dayCount;
+        this.pMax = pMax;
+        this.status = status;
+    }
 
-	public void setTripId(String tripId) {
-		this.tripId = tripId;
-	}
 
-	public int getMemberId() {
-		return memberId;
-	}
+    public String getTripId() {
+        return tripId;
+    }
 
-	public void setMemberId(int memberId) {
-		this.memberId = memberId;
-	}
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
+    }
 
-	public String getTripTitle() {
-		return tripTitle;
-	}
+    public int getMemberId() {
+        return memberId;
+    }
 
-	public void setTripTitle(String tripTitle) {
-		this.tripTitle = tripTitle;
-	}
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
+    }
 
-	public String getStartDate() {
-		return startDate;
-	}
+    public String getTripTitle() {
+        return tripTitle;
+    }
 
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
+    public void setTripTitle(String tripTitle) {
+        this.tripTitle = tripTitle;
+    }
 
-	public String getStartTime() {
-		return startTime;
-	}
+    public String getStartDate() {
+        return startDate;
+    }
 
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 
-	public int getDayCount() {
-		return dayCount;
-	}
+    public String getStartTime() {
+        return startTime;
+    }
 
-	public void setDayCount(int dayCount) {
-		this.dayCount = dayCount;
-	}
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 
-	public String getCreateDateTime() {
-		return createDateTime;
-	}
+    public int getDayCount() {
+        return dayCount;
+    }
 
-	public void setCreateDateTime(String createDateTime) {
-		this.createDateTime = createDateTime;
-	}
+    public void setDayCount(int dayCount) {
+        this.dayCount = dayCount;
+    }
 
-	public int getpMax() {
-		return pMax;
-	}
+    public String getCreateDateTime() {
+        return createDateTime;
+    }
 
-	public void setpMax(int pMax) {
-		this.pMax = pMax;
-	}
+    public void setCreateDateTime(String createDateTime) {
+        this.createDateTime = createDateTime;
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public int getpMax() {
+        return pMax;
+    }
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
+    public void setpMax(int pMax) {
+        this.pMax = pMax;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
 }

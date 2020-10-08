@@ -44,7 +44,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,8 +53,9 @@
         <ImageView
             android:id="@+id/ivBGPic"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@drawable/default_bg_pc"
+            android:layout_height="190dp"
+            android:background="@drawable/map1"
+            android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -63,39 +64,30 @@
             android:id="@+id/ivUserPic"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/ic_user_pic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btChangePic"
-            android:layout_width="24dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="#00000000"
-            android:src="@drawable/ic_camera"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
-            android:id="@+id/tvUserName"
+            android:id="@+id/textUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="訪客"
-            android:textSize="20sp"
-            android:textColor="@color/colorForNormalText"
+            android:background="@drawable/trip_title_box_line"
+            android:text=" 訪客 "
+            android:textColor="@color/colorForGroupButton"
+            android:textSize="22sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivUserPic" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
-            android:layout_width="410dp"
+            android:layout_width="match_parent"
             android:layout_height="51dp"
             android:layout_marginTop="4dp"
             android:background="?android:attr/windowBackground"
@@ -104,7 +96,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@+id/textUserName"
             app:menu="@menu/tab_navi_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,7 +105,7 @@
         android:id="@+id/tripMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="315dp"
+        android:layout_marginTop="280dp"
         android:layout_marginBottom="50dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -121,10 +113,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTripMainList"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeHomePage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content">>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTripMainList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     </LinearLayout>
     <!--    </androidx.core.widget.NestedScrollView>-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -138,21 +137,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_bar_menu" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="289dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTripHomePage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

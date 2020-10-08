@@ -7,13 +7,10 @@
     tools:context=".blog.BlogHomeFragment">
 
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srlBlog_Home"
-        android:layout_width="393dp"
+        android:layout_width="match_parent"
         android:layout_height="650dp"
-        android:layout_margin="8dp"
-        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar"
@@ -21,9 +18,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBlog_Home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appbar" />

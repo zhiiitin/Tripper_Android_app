@@ -32,6 +32,7 @@ public class Member implements Serializable {
     }
 
 
+
     public Member(int id, String account ,String password , String nickname) {
         super();
         this.id = id;

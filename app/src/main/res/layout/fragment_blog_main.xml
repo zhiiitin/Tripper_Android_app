@@ -41,7 +41,7 @@
             android:layout_width="423dp"
             android:layout_height="173dp"
             android:scaleType="fitXY"
-            android:src="@drawable/default_bg_pc"
+            android:src="@drawable/no_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.466"
             app:layout_constraintStart_toStartOf="parent"

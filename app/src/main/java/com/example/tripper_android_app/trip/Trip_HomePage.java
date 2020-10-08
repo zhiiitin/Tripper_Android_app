@@ -1,6 +1,8 @@
 package com.example.tripper_android_app.trip;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -27,11 +30,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.group.GroupFragment;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
@@ -44,6 +49,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,16 +72,20 @@ public class Trip_HomePage extends Fragment {
     private RecyclerView rvTripMainList;
     private List<Trip_M> tripMs;
     private CommonTask tripGetAllTask;
+    private CommonTask tripDeleteTask;
     private List<ImageTask> imageTasks;
-    private TextView tvUserName;
+    private TextView textUserName;
     private ImageView ivUserPic;
     private RecyclerView rvTripHome;
     private ImageTask tripImageTask;
     private List<Trip_M> tripList;
+    private SwipeRefreshLayout swipes;
+    private ImageButton editTrip;
     //show member
     private Member member;
     private FirebaseAuth auth;
     private FirebaseUser mUser;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +113,25 @@ public class Trip_HomePage extends Fragment {
 
         mUser = auth.getCurrentUser();
         ivUserPic = view.findViewById(R.id.ivUserPic);
-        tvUserName = view.findViewById(R.id.tvUserName);
+        textUserName = view.findViewById(R.id.textUserName);
+
+        //顯示會員資料
+        showMember();
+
+        tripMs = new ArrayList<>();
+        tripMs = getTripMs();
+        showTripList(tripMs);
+
+        //刷新頁面
+        swipes = view.findViewById(R.id.swipeHomePage);
+        swipes.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipes.setRefreshing(true);
+                showTripList(tripMs);
+                swipes.setRefreshing(false);
+            }
+        });
 
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
@@ -121,171 +149,164 @@ public class Trip_HomePage extends Fragment {
         }
 
 
-        tripMs = new ArrayList<>();
-        tripMs = getTripMs();
-        showTripList(tripMs);
 
     }
 
     private void showTripList(List<Trip_M> tripMs) {
-        if(tripMs == null || tripMs.isEmpty()){
+        if (tripMs == null || tripMs.isEmpty()) {
             Common.showToast(activity, "尚未建立任何行程");
             return;
         }
         TripListAdapter tripListAdapter = (TripListAdapter) rvTripMainList.getAdapter();
-        if(tripListAdapter == null){
+        if (tripListAdapter == null) {
             rvTripMainList.setAdapter(new TripListAdapter(activity, tripMs));
-        }else{
+        } else {
             tripListAdapter.setTripMs(tripMs);
             tripListAdapter.notifyDataSetChanged();
         }
     }
 
     private List<Trip_M> getTripMs() {
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         List<Trip_M> tripMs = new ArrayList<>();
-        if(Common.networkConnected(activity)){
+        if (Common.networkConnected(activity)) {
             String url = Common.URL_SERVER + "TripServlet";
+            String id = pref.getString("memberId", Common.PREF_FILE + "");
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
-            // TODO 暫時用hardcode, 正常需要讀prefile
-            jsonObject.addProperty("memberId", 1);
+            // 抓取會員ID
+            jsonObject.addProperty("memberId", id);
             String jsonOut = jsonObject.toString();
             tripGetAllTask = new CommonTask(url, jsonOut);
             try {
                 String jsonIn = tripGetAllTask.execute().get();
-                Type type = new TypeToken<List<Trip_M>>(){}.getType();
+                Type type = new TypeToken<List<Trip_M>>() {
+                }.getType();
                 tripMs = new Gson().fromJson(jsonIn, type);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             Common.showToast(activity, "請確認網路連線");
         }
         return tripMs;
-        //顯示會員資料
-       // showMember();
+
 
         //行程recyclerview
 //        rvTripHome = view.findViewById(R.id.rvTripHomePage);
 //        rvTripHome.setLayoutManager(new LinearLayoutManager(activity));
 //        tripList = getTrip();
 //        showTrip(tripList);
-
-
     }
 
-
-    private List<Trip_M> getTrip() {
-        List<Trip_M> tripList = null;
-        if (Common.networkConnected(activity)) {
-            String Url = Common.URL_SERVER + "Trip_M_Servlet"; /////////
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
-            String jsonOut = jsonObject.toString();
-            tripGetAllTask = new CommonTask(Url, jsonOut);
-            try {
-                String jsonIn = tripGetAllTask.execute().get();
-                Type listtype = new TypeToken<List<Trip_M>>() {  /////
-                }.getType();
-                tripList = new Gson().fromJson(jsonIn, listtype);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            Common.showToast(activity, "No Internet");
-        }
-        return tripList;
-    }
-
-    private void showTrip(List<Trip_M> tripMList) {
-        if (tripMList == null || tripMList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
-        }
-        TripAdapter tripAdapter = (TripAdapter) rvTripHome.getAdapter();
-        if (tripAdapter == null) {
-            rvTripHome.setAdapter(new TripAdapter(activity, tripList));
-        } else {
-            tripAdapter.setTrips(tripList);
-            tripAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> {
+    private class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripListViewHolder> {
         private LayoutInflater layoutInflater;
-        private List<Trip_M> tripList;
+        private List<Trip_M> tripMs;
         private int imageSize;
 
-        TripAdapter(Context context, List<Trip_M> tripList) {
+        TripListAdapter(Context context, List<Trip_M> tripMs) {
             layoutInflater = LayoutInflater.from(context);
-            this.tripList = tripList;
-            imageSize = getResources().getDisplayMetrics().widthPixels / 2;
+            this.tripMs = tripMs;
+            imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         }
 
-        void setTrips(List<Trip_M> tripList) {
-            this.tripList = tripList;
+        void setTripMs(List<Trip_M> tripMs) {
+            this.tripMs = tripMs;
         }
 
         @Override
         public int getItemCount() {
-            return tripList == null ? 0 : tripList.size();
+            return tripMs == null ? 0 : tripMs.size();
         }
 
         @NonNull
         @Override
-        public TripAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public TripListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_trip_home, parent, false);
-            return new TripAdapter.MyViewHolder(itemView);
+            return new TripListViewHolder(itemView);
         }
 
-        private class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView;
-            TextView tvTripName;
-            ImageButton ibEditTrip;
+        private class TripListViewHolder extends RecyclerView.ViewHolder {
+            ImageView ivLocPic2;
+            TextView tvTitle;
+            ImageButton editMore;
 
-            public MyViewHolder(View itemView) {
+            public TripListViewHolder(View itemView) {
                 super(itemView);
-                tvTripName = itemView.findViewById(R.id.textLocName);
-                imageView = itemView.findViewById(R.id.ivLocPic2);
-                ibEditTrip = itemView.findViewById(R.id.ibMoreForTripHome);
+                ivLocPic2 = itemView.findViewById(R.id.ivLocPic2);
+                tvTitle = itemView.findViewById(R.id.textLocName);
+                editMore = itemView.findViewById(R.id.ibEditTrip);
             }
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-            final Trip_M trips = tripList.get(position);
-            String Url = Common.URL_SERVER + "Trip_M_Servlet";
-            int id = trips.getMemberId();
+        public void onBindViewHolder(@NonNull TripListViewHolder tripListViewHolder, final int position) {
+            final Trip_M tripM = tripMs.get(position);
+            String url = Common.URL_SERVER + "TripServlet";
+            final String tripId = tripM.getTripId();
+            ImageTask imageTask = new ImageTask(url, tripId, imageSize, tripListViewHolder.ivLocPic2);
+            imageTasks = new ArrayList<>();
+            imageTask.execute();
+            imageTasks.add(imageTask);
+            Log.d("tripTitle", tripM.getTripTitle());
+            tripListViewHolder.tvTitle.setText(tripM.getTripTitle());
 
-            tripImageTask = new ImageTask(Url, id, imageSize, holder.imageView);
-            tripImageTask.execute();
+            final Bundle bundle = new Bundle();
+            bundle.putString("tripId", tripM.getTripId());
+            bundle.putString("tripTitle", tripM.getTripTitle());
+            bundle.putString("startDate", tripM.getStartDate());
+            bundle.putString("startTime", tripM.getStartTime());
+            bundle.putInt("status", tripM.getStatus());
 
-            holder.tvTripName.setText(trips.getTripTitle());
-            String tripId = trips.getTripId();
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            //點擊整張卡片，帶到行程完整資訊頁面
+            tripListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("tripDetail", trips);
-                    Navigation.findNavController(v).navigate(R.id.tripHasSavedPage, bundle);
+                    Navigation.findNavController(v).navigate(R.id.action_trip_HomePage_to_tripHasSavedPage, bundle);
                 }
             });
 
-            //card上面的編輯按鈕
-            holder.ibEditTrip.setOnClickListener(new View.OnClickListener() {
+
+            //卡片上的more button for 修改行程 & 刪除行程
+            tripListViewHolder.editMore.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(final View v) {
-                    final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
+                public void onClick(final View view) {
+                    PopupMenu popupMenu = new PopupMenu(activity, view, Gravity.END);
                     popupMenu.inflate(R.menu.trip_homepage_more_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()){
+                            switch (item.getItemId()) {
                                 case R.id.tripHomepageEdit:
-                                    //查詢TripID 帶資料過去
-                                    Navigation.findNavController(v).navigate(R.id.create_Trip_Fragment);
-                                            break;
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("tripM", tripM);
+                                    Navigation.findNavController(view).navigate(R.id.action_trip_HomePage_to_updateTripFragment, bundle);
+                                    break;
+
                                 case R.id.tripHomepageDelete:
+                                    if (Common.netWorkConnected(activity)) {
+                                        String Url = Common.URL_SERVER + "TripServlet";
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "delete");
+                                        jsonObject.addProperty("tripId", tripM.getTripId());
+                                        int count = 0;
+                                        try {
+                                            tripDeleteTask = new CommonTask(Url, jsonObject.toString());
+                                            String result = tripDeleteTask.execute().get();
+                                            count = Integer.parseInt(result);
+                                        } catch (Exception e) {
+                                            Log.e(TAG, e.toString());
+                                        }
+                                        if (count > 0) {
+                                            Common.showToast(activity, "刪除失敗");
+                                        } else {
+                                            tripMs.remove(position);
+                                            showTripList(tripMs);
+                                            Common.showToast(activity, "刪除成功");
+                                        }
+                                    } else {
+                                        Common.showToast(activity, R.string.textNoNetwork);
+                                    }
                                     break;
                             }
                             return true;
@@ -294,22 +315,21 @@ public class Trip_HomePage extends Fragment {
                     popupMenu.show();
                 }
             });
-
-
-
         }
     }
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        //TODO 判斷是否為會員
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-//        boolean login = pref.getBoolean("login", false);
-//        if (login) {
+        boolean login = pref.getBoolean("login", false);
+        if (login) {
             inflater.inflate(R.menu.app_bar_button, menu);
-//        }
+        }
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -342,7 +362,7 @@ public class Trip_HomePage extends Fragment {
                     Log.e(TAG, e.toString());
                 }
                 String nickname = member.getNickName();
-                tvUserName.setText(nickname);
+                textUserName.setText(" " + nickname + " ");
 
             } else {
                 Common.showToast(activity, "no network connection found");
@@ -352,57 +372,7 @@ public class Trip_HomePage extends Fragment {
         }
     }
 
-    private class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripListViewHolder> {
-        private LayoutInflater layoutInflater;
-        private List<Trip_M> tripMs;
-        private int imageSize;
 
-        TripListAdapter(Context context, List<Trip_M> tripMs){
-            layoutInflater = LayoutInflater.from(context);
-            this.tripMs = tripMs;
-            imageSize = getResources().getDisplayMetrics().widthPixels / 4;
-        }
-
-        void setTripMs(List<Trip_M> tripMs){
-            this.tripMs = tripMs;
-        }
-
-        @Override
-        public int getItemCount() {
-            return tripMs == null ? 0 : tripMs.size();
-        }
-
-        @NonNull
-        @Override
-        public TripListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = layoutInflater.inflate(R.layout.item_view_blog_home,parent,false);
-            return new TripListViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull TripListViewHolder tripListViewHolder, int position) {
-            Trip_M tripM = tripMs.get(position);
-            String url = Common.URL_SERVER + "TripServlet";
-            String tripId = tripM.getTripId();
-            ImageTask imageTask = new ImageTask(url, tripId, imageSize, tripListViewHolder.ivBlog);
-            imageTasks = new ArrayList<>();
-            imageTask.execute();
-            imageTasks.add(imageTask);
-            Log.d("tripTitle", tripM.getTripTitle());
-            tripListViewHolder.tvTitle.setText(tripM.getTripTitle());
-
-        }
-
-        private class TripListViewHolder extends RecyclerView.ViewHolder {
-            ImageView ivBlog;
-            TextView tvTitle;
-            public TripListViewHolder(View itemView) {
-                super(itemView);
-                ivBlog = itemView.findViewById(R.id.ivBlog);
-                tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
-            }
-        }
-    }
     //show UserPic
     private void showMemberPic() {
         if (mUser != null) {
@@ -443,6 +413,13 @@ public class Trip_HomePage extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!Common.isLogin(activity)){
+            Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+        }
+    }
 }
 
 

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.example.tripper_android_app.trip.Trip_LocInfo;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -41,9 +42,11 @@ public class Common {
     public final static String PREF_FILE = "preference";
     public final static String DEFAULT_FILE = "";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
+    public static Map<String, List<Trip_LocInfo>> map2 = new TreeMap<>();
     public static String spinnerSelect = "";
     public static String tripId = "";
-    private static MainActivity activity ;
+    public static int memberId;
+    private  MainActivity activity ;
 
 
 
@@ -140,7 +143,7 @@ public class Common {
             Common.showToast(context, "連線失敗");
         }
     }
-    //判斷是否有登入帳號
+//判斷是否有登入帳號
     public static boolean isLogin(Activity activity){
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);

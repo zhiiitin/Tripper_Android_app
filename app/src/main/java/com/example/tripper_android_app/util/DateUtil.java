@@ -9,11 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
-    /*
-     *
-     *
-     *
-     */
+
+    private static final String TAG = "TAG_DateUtil";
     public static String date4day(String dateStr, int number) throws ParseException {
         String transDate = "";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");

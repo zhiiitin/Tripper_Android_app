@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -52,8 +53,7 @@ public class GroupFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActivity)getActivity();
-
+        activity = (MainActivity) getActivity();
     }
 
     @Override
@@ -69,11 +69,8 @@ public class GroupFragment extends Fragment {
         toolbar.setTitle("揪團");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
-        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
-        if (upArrow != null) {
-            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
-            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
+
+
 
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
@@ -178,7 +175,7 @@ public class GroupFragment extends Fragment {
 
             MyViewHolder(View itemView) {
                 super(itemView);
-                imageView = itemView.findViewById(R.id.ivBlog);
+                imageView = itemView.findViewById(R.id.groupTripPic);
                 tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvCount = itemView.findViewById(R.id.tvCount);
@@ -202,14 +199,13 @@ public class GroupFragment extends Fragment {
 
             final Trip_M group = groupList.get(position);
             String Url = Common.URL_SERVER + "Trip_M_Servlet";
-            int id = group.getMemberId();
-            groupImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
+            String tripId = group.getTripId();
+//            int id = group.getMemberId();
+            groupImageTask = new ImageTask(Url, tripId, imageSize, myViewHolder.imageView);
             groupImageTask.execute();
-
             myViewHolder.tvTitle.setText(group.getTripTitle());
-            myViewHolder.tvDate.setText("出發日："+group.getStartDate());
-            //myViewHolder.tvCount.setText("已參與人數：" + group.getmCount() +"/"+ group.getpMax());
-
+            myViewHolder.tvDate.setText("出發日：" + group.getStartDate());
+            myViewHolder.tvCount.setText("已參與人數：" + "/" + group.getpMax());
 
 
 //            myViewHolder.tvCount.setText("已參與人數：" + group.get +"/"+ group.getpMax());
@@ -218,25 +214,26 @@ public class GroupFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("locName",group.getTripTitle());
-                    bundle.putString("tripId",group.getTripId());
-                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_tripHasSavedPage,bundle);
+                    bundle.putString("locName", group.getTripTitle());
+                    bundle.putString("tripId", group.getTripId());
+                    Navigation.findNavController(v).navigate(R.id.tripHasSavedPage, bundle);
                 }
             });
 
         }
     }
 
+
     @Override
     public void onStop() {
         super.onStop();
-        if(groupGetAllTask != null){
+        if (groupGetAllTask != null) {
             groupGetAllTask.cancel(true);
-            groupGetAllTask = null ;
+            groupGetAllTask = null;
         }
-        if(groupImageTask !=null){
+        if (groupImageTask != null) {
             groupImageTask.cancel(true);
-            groupImageTask = null ;
+            groupImageTask = null;
         }
 
     }

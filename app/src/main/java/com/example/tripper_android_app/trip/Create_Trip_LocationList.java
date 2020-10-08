@@ -61,6 +61,7 @@ public class Create_Trip_LocationList extends Fragment {
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
         imageTasks = new ArrayList<>();
+
     }
 
     @Override

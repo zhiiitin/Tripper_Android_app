@@ -105,7 +105,11 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_register_main_Fragment_to_register_Member_Fragment"
-            app:destination="@id/register_Member_Fragment" />
+            app:destination="@id/register_Member_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/register_NormalFragment"
@@ -237,6 +241,12 @@
         <action
             android:id="@+id/action_trip_HomePage_to_tripHasSavedPage"
             app:destination="@id/tripHasSavedPage" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_updateTripFragment"
+            app:destination="@id/updateTripFragment" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
+            app:destination="@id/register_main_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"
@@ -335,6 +345,7 @@
 
 
 
+
     <fragment
         android:id="@+id/groupManergeFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
@@ -356,6 +367,9 @@
         <action
             android:id="@+id/action_createBlogFragment_to_create_Blog_Location_List"
             app:destination="@id/create_Blog_Location_List" />
+        <action
+            android:id="@+id/action_createBlogFragment_to_createBlogPicFragment"
+            app:destination="@id/createBlogPicFragment" />
     </fragment>
     <fragment
         android:id="@+id/friendsListFragment"
@@ -371,5 +385,33 @@
         android:name="com.example.tripper_android_app.friends.FriendsAddFragment"
         android:label="fragment_friends_add"
         tools:layout="@layout/fragment_friends_add" />
+    <fragment
+        android:id="@+id/updateTripFragment"
+        android:name="com.example.tripper_android_app.trip.updateTripFragment"
+        android:label="fragment_update_trip"
+        tools:layout="@layout/fragment_update_trip" >
+        <action
+            android:id="@+id/action_updateTripFragment_to_updateTripLocList"
+            app:destination="@id/updateTripLocList" />
+    </fragment>
+    <fragment
+        android:id="@+id/createBlogPicFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogPicFragment"
+        android:label="fragment_create_blog_pic"
+        tools:layout="@layout/fragment_create_blog_pic" />
+    <fragment
+        android:id="@+id/updateTripLocDetail"
+        android:name="com.example.tripper_android_app.trip.UpdateTripLocDetail"
+        android:label="fragment_update_trip_loc_detail"
+        tools:layout="@layout/fragment_update_trip_loc_detail" />
+    <fragment
+        android:id="@+id/updateTripLocList"
+        android:name="com.example.tripper_android_app.trip.UpdateTripLocList"
+        android:label="UpdateTripLocList" >
+        <action
+            android:id="@+id/action_updateTripLocList_to_updateTripLocDetail"
+            app:destination="@id/updateTripLocDetail" />
+    </fragment>
+
 
 </navigation>

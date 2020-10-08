@@ -8,6 +8,24 @@ public class Explore implements Serializable {
     private int userId;
     private String nickName;
     private String tittleName;
+    private String blogDesc;
+
+    public String getBlogDesc() {
+        return blogDesc;
+    }
+
+    public void setBlogDesc(String blogDesc) {
+        this.blogDesc = blogDesc;
+    }
+
+    public Explore(int blogId, int userId, String nickName, String tittleName, String blogDesc) {
+        this.blogId = blogId;
+        this.userId = userId;
+        this.nickName = nickName;
+        this.tittleName = tittleName;
+        this.blogDesc = blogDesc;
+    }
+
     public Explore(int blogId, int userId, String nickName, String tittleName) {
         super();
         this.blogId = blogId;
