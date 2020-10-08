@@ -1,13 +1,22 @@
 package com.example.tripper_android_app.blog;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,21 +42,28 @@ import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.DateUtil;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static androidx.navigation.Navigation.findNavController;
 
 public class BlogTripListFragment extends Fragment {
+
+
+
     private MainActivity activity;
     private RecyclerView rvDays,rvLocation;
     private CommonTask getDaysCommonTask, deleteCommonTask;
     private List<Blog_Day> blog_days;
+    private List<Blog_SpotInformation> blog_location;
     private static final String TAG = "TAG_TripList_Fragment";
     private SharedPreferences preferences;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -83,6 +100,11 @@ public class BlogTripListFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         blog_days = getDays();
         showDays(blog_days);
+        try {
+            blog_location = getBlog_location();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -93,8 +115,6 @@ public class BlogTripListFragment extends Fragment {
         List<Blog_Day> blog_days = null;
         preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
         int id = preferences.getInt("TripListId", 0);
-        String date = preferences.getString("DATE", "");
-
         if (Common.networkConnected(activity)) {
             //Servlet
             String url = Common.URL_SERVER + "BlogServlet";
@@ -120,24 +140,24 @@ public class BlogTripListFragment extends Fragment {
         return blog_days;
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.bottom_bar_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Navigation.findNavController(rvDays).popBackStack();
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+////    @Override
+////    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+////        super.onCreateOptionsMenu(menu, inflater);
+////        inflater.inflate(R.menu.bottom_bar_menu, menu);
+////    }
+////
+////    @Override
+////    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+////
+////        switch (item.getItemId()) {
+////            case android.R.id.home:
+////                Navigation.findNavController(rvDays).popBackStack();
+////                break;
+////            default:
+////                break;
+////        }
+////        return super.onOptionsItemSelected(item);
+////    }
 
     private void showDays(List<Blog_Day> blog_days) {
         if (blog_days == null || blog_days.isEmpty()) {
@@ -153,6 +173,56 @@ public class BlogTripListFragment extends Fragment {
             daysAdapter.notifyDataSetChanged();
         }
     }
+    private List<Blog_SpotInformation> getBlog_location() throws ParseException {
+        List<Blog_SpotInformation> blog_location = null;
+        String date,date1 ;
+        int number;
+        preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
+        int id = preferences.getInt("TripListId", 0);
+        date = preferences.getString("DATEE","");
+
+        for(number= 0 ; number <blog_days.size();number++ ){
+
+
+            date1 = DateUtil.date4day(date ,number);
+
+            if (Common.networkConnected(activity)) {
+                //Servlet
+//
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getSpotName");
+                jsonObject.addProperty("id", id);
+                jsonObject.addProperty("dateD", date1);
+                String jsonOut = jsonObject.toString();
+                CommonTask commonTask = new CommonTask(url, jsonOut);
+                Log.d("####1", "test");
+                try {
+                    String jsonIn = commonTask.execute().get();
+                    Type listType = new TypeToken<List<Blog_SpotInformation>>() {
+                    }.getType();
+
+                    blog_location = new Gson().fromJson(jsonIn, listType);
+                    System.out.println(blog_location);
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            } else {
+                Common.showToast(activity, R.string.textNoNetwork);
+
+
+            }
+
+
+
+
+
+        }
+        return blog_location;
+
+    }
+
 
 
 
@@ -164,6 +234,7 @@ public class BlogTripListFragment extends Fragment {
     public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.MyDaysViewHolder> {
         private Context context;
         private List<Blog_Day> blog_days;
+        ;
 
 
         DaysAdapter(Context context, List<Blog_Day> blog_days) {
@@ -185,7 +256,28 @@ public class BlogTripListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyDaysViewHolder holder, int position) {
             final Blog_Day  blog_day= blog_days.get(position);
-            holder.tvDays.setText(blog_day.getDayTitle());
+            if(position ==0){
+                holder.tvDays.setText("第一天");
+                holder.tvDate.setText(blog_day.getDayTitle());
+            }else if(position==1 ){
+                holder.tvDays.setText("第二天");
+                holder.tvDate.setText(blog_day.getDayTitle());
+            }else if(position == 2){
+                holder.tvDays.setText("第三天");
+                holder.tvDate.setText(blog_day.getDayTitle());
+            }else if(position == 3) {
+                holder.tvDays.setText("第四天");
+                holder.tvDate.setText(blog_day.getDayTitle());
+            }else if(position == 4) {
+                holder.tvDays.setText("第五天");
+                holder.tvDate.setText(blog_day.getDayTitle());
+            }else if(position == 5) {
+                holder.tvDays.setText("第六天");
+                holder.tvDate.setText(blog_day.getDayTitle());
+            }
+
+            holder.showLocations(blog_location);
+
             holder.imDays.setImageResource(R.drawable.layout_box_line);
 
 
@@ -193,7 +285,9 @@ public class BlogTripListFragment extends Fragment {
         }
 
 
-            @Override
+
+
+        @Override
             public int getItemCount() {
                 return blog_days == null ? 0 : blog_days.size();
             }
@@ -205,31 +299,12 @@ public class BlogTripListFragment extends Fragment {
 
             public class MyDaysViewHolder extends RecyclerView.ViewHolder {
                 private ImageButton imDays;
-                private List<Blog_SpotInformation> blog_location,blog_location2;
-                private TextView tvDays;
+                private List<Blog_SpotInformation> blog_location;
+                private TextView tvDays,tvDate;
 //              private RecyclerView rvLocation;
 //              private LocationAdapter locationAdapter;
 
 
-
-
-
-                public MyDaysViewHolder(@NonNull View itemView) {
-                    super(itemView);
-
-                    imDays = itemView.findViewById(R.id.imDays);
-                    rvLocation = itemView.findViewById(R.id.rvloca0);
-                    rvLocation.setLayoutManager(new LinearLayoutManager(activity));
-                    try {
-                        blog_location = getBlog_location();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    showLocations(blog_location);
-                    tvDays = itemView.findViewById(R.id.tvDays);
-
-
-                }
                 private void showLocations( List<Blog_SpotInformation> blog_location) {
                     if (blog_location == null || blog_location.isEmpty()) {
                         Common.showToast(activity, R.string.textNoSpotsFound);
@@ -240,73 +315,56 @@ public class BlogTripListFragment extends Fragment {
                     if (locationAdapter == null) {
                         rvLocation.setAdapter(new LocationAdapter(activity, blog_location));
                     } else {
-                        locationAdapter.set_locations1(blog_location);
+                        locationAdapter.set_locations(blog_location);
 
                     }
                 }
 
 
-                private List<Blog_SpotInformation> getBlog_location() throws ParseException {
-                    List<Blog_SpotInformation> blog_location = null;
+                public MyDaysViewHolder(@NonNull View itemView) {
+                    super(itemView);
 
-                    preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
-                    int id = preferences.getInt("TripListId", 0);
-                    String date = preferences.getString("DATE", "");
+                    imDays = itemView.findViewById(R.id.imDays);
+                    rvLocation = itemView.findViewById(R.id.rvloca0);
+                    rvLocation.setLayoutManager(new LinearLayoutManager(activity));
 
-                        String date2 = DateUtil.date4day(date, 0);
-                        if (Common.networkConnected(activity)) {
-                            //Servlet
-                            String url = Common.URL_SERVER + "BlogServlet";
-                            JsonObject jsonObject = new JsonObject();
-                            jsonObject.addProperty("action", "getSpotName");
-                            jsonObject.addProperty("id", id);
-                            jsonObject.addProperty("dateD", date2);
-                            String jsonOut = jsonObject.toString();
-                            getDaysCommonTask = new CommonTask(url, jsonOut);
-                            Log.d("####1" , "test");
-                            try {
-                                String jsonIn = getDaysCommonTask.execute().get();
-                                Type listType = new TypeToken<List<Blog_SpotInformation>>() {
-                                }.getType();
-
-                                blog_location = new Gson().fromJson(jsonIn, listType);
-
-                            } catch (Exception e) {
-                                Log.e(TAG, e.toString());
-                            }
-                        } else {
-                            Common.showToast(activity, R.string.textNoNetwork);
+                    showLocations(blog_location);
+                    tvDays = itemView.findViewById(R.id.tvDays);
+                    tvDate = itemView.findViewById(R.id.tvDate);
 
 
-
-                        }
-
-
-                    return blog_location;
                 }
-            }
-        }
 
-        public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyLocationViewHolder> {
-            private Context context;
-            private  List<Blog_SpotInformation> blog_location,blog_location2;
+
+
+            }
+    }
+
+
+
+
+    public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyLocationViewHolder> {
+            private  Context context;
+
             private int lastPosition = -1;
 
 
             LocationAdapter(Context context, List<Blog_SpotInformation> blog_location) {
-                this.context = context;
-                this.blog_location = blog_location;
+               this.context = context;
+               BlogTripListFragment.this.blog_location = blog_location;
             }
 
-            public void set_locations1( List<Blog_SpotInformation> blog_location) {
-                this.blog_location = blog_location;
+            public void set_locations( List<Blog_SpotInformation> blog_location) {
+                BlogTripListFragment.this.blog_location = blog_location;
             }
 
             @Override
             public int getItemCount() {
 
                 return blog_location == null ? 0 : blog_location.size();
+
             }
+
 
 
 
@@ -319,18 +377,24 @@ public class BlogTripListFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull MyLocationViewHolder holder, int position) {
-                final Blog_SpotInformation blog_spotInformation = blog_location.get(position);
 
-                holder.tvLocation.setText(blog_spotInformation.getSpotName());
+                    final Blog_SpotInformation blog_spotInformation = blog_location.get(position);
 
-                holder.tvStayTime.setText("一小時");
-                holder.ivMark.setImageResource(R.drawable.mark);
-                holder.ivLine.setImageResource(R.drawable.line);
+                    holder.tvLocation.setText(blog_spotInformation.getSpotName());
+                    System.out.println(getItemCount());
+
+
+                    holder.tvStayTime.setText("一小時");
+                    holder.ivMark.setImageResource(R.drawable.mark);
+                    holder.ivLine.setImageResource(R.drawable.line);
+
+
+
                 lastPosition = getItemCount()-1 ;
-                    if (position == lastPosition) {
-                        holder.tvStayTime.setVisibility(View.GONE);
-                        holder.ivLine.setVisibility(View.GONE);
-                    }
+                if (position == lastPosition) {
+                    holder.tvStayTime.setVisibility(View.GONE);
+                    holder.ivLine.setVisibility(View.GONE);
+                }
 
             }
 
@@ -375,16 +439,16 @@ public class BlogTripListFragment extends Fragment {
 
         }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (getDaysCommonTask != null) {
-//            getDaysCommonTask .cancel(true);
-//            getDaysCommonTask  = null;
-//        }
-//        if (deleteCommonTask != null) {
-//            deleteCommonTask.cancel(true);
-//            deleteCommonTask = null;
-//        }
-//    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (getDaysCommonTask != null) {
+            getDaysCommonTask .cancel(true);
+            getDaysCommonTask  = null;
+        }
+        if (deleteCommonTask != null) {
+            deleteCommonTask.cancel(true);
+            deleteCommonTask = null;
+        }
     }
+        }

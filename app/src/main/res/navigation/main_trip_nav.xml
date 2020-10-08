@@ -352,10 +352,7 @@
         android:label="fragment_group_manerge"
         tools:layout="@layout/fragment_group_manage">
     </fragment>
-<<<<<<< HEAD
 
-=======
->>>>>>> ee3ba20f8fa405d6f82926657511f366a2bab5d7
 
 
     <fragment
@@ -416,12 +413,6 @@
             android:id="@+id/action_updateTripLocList_to_updateTripLocDetail"
             app:destination="@id/updateTripLocDetail" />
     </fragment>
-<<<<<<< HEAD
 
-
-
-=======
-
->>>>>>> ee3ba20f8fa405d6f82926657511f366a2bab5d7
 
 </navigation>

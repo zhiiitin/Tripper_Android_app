@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -12,9 +12,14 @@
         android:layout_width="181dp"
         android:layout_height="95dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="318dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="350dp"
         android:scaleType="fitXY"
         android:src="@drawable/no_image"
+        app:layout_constraintEnd_toStartOf="@+id/ivPic1"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintTop_toTopOf="parent"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toStartOf="parent" />
 
@@ -22,12 +27,10 @@
         android:id="@+id/ivPic3"
         android:layout_width="181dp"
         android:layout_height="95dp"
-        android:layout_marginStart="216dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginBottom="236dp"
         android:scaleType="fitXY"
         android:src="@drawable/no_image"
-        app:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintStart_toStartOf="parent" />
 
@@ -35,15 +38,10 @@
         android:id="@+id/imageView"
         android:layout_width="24dp"
         android:layout_height="36dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="11dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/ivPic1"
-        app:layout_constraintEnd_toStartOf="@+id/tvLocation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39"
         app:srcCompat="@drawable/mark" />
 
     <ImageView
@@ -51,52 +49,89 @@
         android:layout_width="181dp"
         android:layout_height="95dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
         android:scaleType="fitXY"
         android:src="@drawable/no_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/ivPic3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPic" />
 
     <ImageView
         android:id="@+id/ivPic1"
         android:layout_width="181dp"
         android:layout_height="95dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginTop="52dp"
         android:scaleType="fitXY"
         android:src="@drawable/no_image"
-        app:layout_constraintBottom_toTopOf="@+id/ivPic2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.99"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imDays2" />
+
+    <TextView
+        android:id="@+id/tvPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="337dp"
+        android:text="TextView"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="219dp"
         android:layout_height="29dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="152dp"
         android:text="TextView"
         android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imDays2"
+        android:layout_width="101dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorForWhite"
+        app:layout_constraintHorizontal_bias="0.949"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:srcCompat="@drawable/layout_box_line" />
+
+    <TextView
+        android:id="@+id/tvDays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintStart_toEndOf="@+id/tvLocation"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="391dp"
         android:layout_height="139dp"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="19dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginBottom="50dp"
         android:background="@color/colorForBottomBar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPic2"
-        app:layout_constraintVertical_bias="0.39"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="10dp">
 
@@ -112,29 +147,19 @@
             tools:text="九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！" />
     </androidx.cardview.widget.CardView>
 
-    <ImageButton
-        android:id="@+id/imDays2"
-        android:layout_width="94dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorForWhite"
-        app:layout_constraintHorizontal_bias="0.954"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent"
-        card_view:srcCompat="@drawable/layout_box_line" />
-
     <TextView
-        android:id="@+id/tvDays"
+        android:id="@+id/tvSpotName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="341dp"
         android:text="TextView"
+        android:textSize="16dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tvLocation"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPic2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
