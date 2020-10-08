@@ -170,7 +170,7 @@ public class BlogHomeFragment extends Fragment {
 
                 final Trip_M blog = blogList.get(position);
                 String Url = Common.URL_SERVER + "Trip_M_Servlet";
-                int id = blog.getMemberId();
+                String id = blog.getTripId();
                 blogImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
                 blogImageTask.execute();
 

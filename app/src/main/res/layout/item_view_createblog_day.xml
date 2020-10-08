@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="30dp"
-    app:cardBackgroundColor="#7f7f7f">
+    app:cardBackgroundColor="#ffffff">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:text="Day - 1"
-            android:textColor="#fffeea"
+            android:textColor="#0BC6B5"
             android:textSize="25sp"
             android:textStyle="bold"
             android:typeface="monospace"

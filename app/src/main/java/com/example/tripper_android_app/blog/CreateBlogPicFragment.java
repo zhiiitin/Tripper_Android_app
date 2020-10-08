@@ -22,6 +22,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -89,6 +92,7 @@ public class CreateBlogPicFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final NavController navController = Navigation.findNavController(view);
 
 //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -118,11 +122,13 @@ public class CreateBlogPicFragment extends Fragment {
 
 //RecyclerView
         rvPhoto = view.findViewById(R.id.rvPhoto);
-        rvPhoto.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
+//        rvPhoto.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+        rvPhoto.setLayoutManager(new GridLayoutManager(activity,2));
         rvPhoto.setAdapter(new ImgAdpter(activity, bitmapList));
-        rvPhoto.setOnFlingListener(null);
-        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
-        pagerSnapHelper.attachToRecyclerView(rvPhoto);
+//        rvPhoto.setOnFlingListener(null);
+//        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+//        pagerSnapHelper.attachToRecyclerView(rvPhoto);
+
 
         ibUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +147,8 @@ public class CreateBlogPicFragment extends Fragment {
                     }if (count == 0) {
                         Common.showToast(activity, "新增失敗");
                     } else {
-                        Common.showToast(activity, "新增成功");
+                        Common.showToast(activity, "上傳成功");
+                        navController.popBackStack();
                     }
                 } else {
                     showToast(activity, R.string.textNoNetwork);
@@ -214,7 +221,7 @@ public class CreateBlogPicFragment extends Fragment {
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
-                ivArticleImageInsert = itemView.findViewById(R.id.ivPhoto111);
+                ivArticleImageInsert = itemView.findViewById(R.id.ivPhoto);
             }
         }
 
@@ -224,7 +231,7 @@ public class CreateBlogPicFragment extends Fragment {
 
             public PickViewHolder(@NonNull View itemView) {
                 super(itemView);
-                ivArticleImagePick = itemView.findViewById(R.id.ivPhoto111);
+                ivArticleImagePick = itemView.findViewById(R.id.ivPhoto);
             }
         }
 
@@ -261,6 +268,7 @@ public class CreateBlogPicFragment extends Fragment {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
             if (holder instanceof PickViewHolder) {
+
                 PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
                 pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
                 pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -269,7 +277,12 @@ public class CreateBlogPicFragment extends Fragment {
                        showTypeDialog();
                     }
                 });
+
+                if(bitmapList.size() ==4){
+                    pickViewHolder.itemView.setVisibility(View.GONE);
+                }
             } else if (holder instanceof MyViewHolder) {
+
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
                 // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
                 // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟

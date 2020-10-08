@@ -138,9 +138,7 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         ivLocPic = view.findViewById(R.id.ivLocPic);
         spDay = view.findViewById(R.id.spDay);
 
-        //recyclerview
-        rvLocChosen = view.findViewById(R.id.rvLocChosen);
-        rvLocChosen.setLayoutManager(new LinearLayoutManager(activity));
+
 
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -160,9 +158,21 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         showTripPic();
 
 
+        //recyclerview
+        rvLocChosen = view.findViewById(R.id.rvLocChosen);
+        rvLocChosen.setLayoutManager(new LinearLayoutManager(activity));
         tripLocInfoList = new TreeMap<>();
-        tripLocInfoList = getLocInfo();
-        showLocList(tripLocInfoList);
+        getLocInfo();
+        // spinner select by day
+        List<Trip_LocInfo> locInfoList = new ArrayList<>();
+        locInfoList = Common.map2.get("1");
+        if(locInfoList == null ){
+            Log.d("###", "enter null");
+        }else {
+            Log.d("###", "enter not null");
+        }
+        Log.d("###TEST :: " ,locInfoList.get(1).getTrip_Id()+"");
+        showLocList(locInfoList);
 
 
 
@@ -353,7 +363,7 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
     }
 
 
-    private void showLocList(Map<String, List<Trip_LocInfo>> tripDs) {
+    private void showLocList(List<Trip_LocInfo> tripDs) {
         Log.d(TAG, "enter showLocList");
         ShowTripLocAdapter showTripLocAdapter = (ShowTripLocAdapter) rvLocChosen.getAdapter();
         if (showTripLocAdapter == null) {
@@ -367,9 +377,9 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         }
     }
 
-    private Map<String, List<Trip_LocInfo>> getLocInfo() {
+    private void getLocInfo() {
 
-        Map<String, List<Trip_LocInfo>> showLocNames = new TreeMap<>();
+       // Map<String, List<Trip_LocInfo>> showLocNames = new TreeMap<>();
 
         if (Common.networkConnected(activity)) {
             String url = Common.URL_SERVER + "Trip_D_Servlet";
@@ -386,27 +396,32 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
                 Type type = new TypeToken<Map<String, List<Trip_LocInfo>>>() {
                 }.getType();
                 Common.map2 = new Gson().fromJson(jsonIn, type);
+                if(Common.map2 == null ){
+                    Log.d("###", "enter Common.map2 null");
+                }else {
+                    Log.d("###", "enter Common.map2 not null");
+                }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
             Common.showToast(activity, "請確認網路連線");
         }
-        return showLocNames;
+
 
     }
 
     private class ShowTripLocAdapter extends RecyclerView.Adapter<ShowTripLocAdapter.TripLocVH> {
         private LayoutInflater layoutInflater;
-        private Map<String, List<Trip_LocInfo>> tripList;
+        private List<Trip_LocInfo> tripList ;    //.map2.get(1); // 1 = spinner 天數
         private View visibleView;
 
-        ShowTripLocAdapter(Context context, Map<String, List<Trip_LocInfo>> tripList) {
+        ShowTripLocAdapter(Context context, List<Trip_LocInfo> tripList) {
             layoutInflater = LayoutInflater.from(context);
             this.tripList = tripList;
         }
 
-        void setLocationDs(Map<String, List<Trip_LocInfo>> tripList) {
+        void setLocationDs( List<Trip_LocInfo> tripList) {
             this.tripList = tripList;
         }
 

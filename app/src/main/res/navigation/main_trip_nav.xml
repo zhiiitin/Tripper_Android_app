@@ -63,6 +63,13 @@
         <action
             android:id="@+id/action_setting_Fragment_to_friendsListFragment"
             app:destination="@id/friendsListFragment" />
+        <action
+            android:id="@+id/action_setting_Fragment_to_contactUsFragment"
+            app:destination="@id/contactUsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
     <fragment
@@ -353,7 +360,6 @@
         tools:layout="@layout/fragment_group_manage">
     </fragment>
 
-
     <fragment
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
@@ -413,5 +419,27 @@
             app:destination="@id/updateTripLocDetail" />
     </fragment>
 
-
+    <fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.example.tripper_android_app.setting.contact.ContactUsFragment"
+        android:label="fragment_contact_us"
+        tools:layout="@layout/fragment_contact_us" />
+    <fragment
+        android:id="@+id/goal_HomePage"
+        android:name="com.example.tripper_android_app.goal.Goal_HomePage"
+        android:label="fragment_goal__home_page"
+        tools:layout="@layout/fragment_goal__home_page" >
+        <action
+            android:id="@+id/action_goal_HomePage_to_goalListFragment"
+            app:destination="@id/goalListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/goalListFragment"
+        android:name="com.example.tripper_android_app.goal.GoalListFragment"
+        android:label="fragment_goal_list"
+        tools:layout="@layout/fragment_goal_list" />
 </navigation>

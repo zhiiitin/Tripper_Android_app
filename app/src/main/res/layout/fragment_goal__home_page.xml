@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--        android:id="@+id/appbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
+
+    <!--        <androidx.appcompat.widget.Toolbar-->
+    <!--            android:id="@+id/toolbar"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="?attr/actionBarSize"-->
+    <!--            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"-->
+    <!--            android:theme="@style/ToolBarStyle" />-->
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ToolBarStyle"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!--    <androidx.core.widget.NestedScrollView-->
+    <!--        android:id="@+id/nestedScrollView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <ImageView
+            android:id="@+id/ivBGPic"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:background="@drawable/map1"
+            android:scaleType="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.example.tripper_android_app.util.CircleImageView
+            android:id="@+id/ivUserPic"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_user_pic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text=" 訪客 "
+            android:background="@drawable/trip_title_box_line"
+            android:textColor="@color/colorForWhite"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivUserPic" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/windowBackground"
+            android:textAlignment="center"
+            app:itemBackground="@color/colorForBottomBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textUserName"
+            app:menu="@menu/tab_navi_menu" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    </androidx.core.widget.NestedScrollView>-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:itemBackground="@color/colorForBottomBar"
+        app:itemIconTint="@color/bottom_bar_selected_color"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_bar_menu" />
+
+    <TextView
+        android:id="@+id/tvBG1"
+        android:layout_width="380dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edit_bg_original"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+
+    <TextView
+        android:id="@+id/tvBG2"
+        android:layout_width="380dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edit_bg_original"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBG1" />
+
+    <TextView
+        android:id="@+id/tvBG3"
+        android:layout_width="380dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edit_bg_original"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBG2" />
+
+    <ImageView
+        android:id="@+id/ivMapMarker"
+        android:layout_width="24dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/tvBG1"
+        app:layout_constraintTop_toTopOf="@+id/tvBG1"
+        app:srcCompat="@drawable/ic_mapmarker" />
+
+    <TextView
+        android:id="@+id/tvLocDone"
+        android:layout_width="131dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="14dp"
+        android:text="去過的景點："
+        android:textColor="@color/colorForNormalText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivMapMarker"
+        app:layout_constraintTop_toTopOf="@+id/tvBG1" />
+
+    <TextView
+        android:id="@+id/tvLocCount"
+        android:layout_width="175dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="11dp"
+        android:text="0"
+        android:textColor="@color/colorForNormalText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvBG1"
+        app:layout_constraintStart_toEndOf="@+id/tvLocDone"
+        app:layout_constraintTop_toTopOf="@+id/tvBG1" />
+
+    <ImageView
+        android:id="@+id/ivCreate"
+        android:layout_width="24dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/tvBG2"
+        app:layout_constraintTop_toTopOf="@+id/tvBG2"
+        app:srcCompat="@drawable/ic_create" />
+
+    <TextView
+        android:id="@+id/tvTripDone"
+        android:layout_width="153dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="14dp"
+        android:text="已建立的行程："
+        android:textColor="@color/colorForNormalText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivCreate"
+        app:layout_constraintTop_toTopOf="@+id/tvBG2" />
+
+    <TextView
+        android:id="@+id/tvTripCount"
+        android:layout_width="152dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="11dp"
+        android:text="0"
+        android:textColor="@color/colorForNormalText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvBG2"
+        app:layout_constraintStart_toEndOf="@+id/tvTripDone"
+        app:layout_constraintTop_toTopOf="@+id/tvBG2" />
+
+    <ImageView
+        android:id="@+id/ivStar"
+        android:layout_width="24dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/tvBG3"
+        app:layout_constraintTop_toTopOf="@+id/tvBG3"
+        app:srcCompat="@drawable/ic_star" />
+
+    <TextView
+        android:id="@+id/tvGoalDone"
+        android:layout_width="131dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="14dp"
+        android:text="解鎖的成就："
+        android:textColor="@color/colorForNormalText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivStar"
+        app:layout_constraintTop_toTopOf="@+id/tvBG3" />
+
+    <TextView
+        android:id="@+id/tvGoalCount"
+        android:layout_width="175dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="11dp"
+        android:text="0"
+        android:textColor="@color/colorForNormalText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvBG3"
+        app:layout_constraintStart_toEndOf="@+id/tvGoalDone"
+        app:layout_constraintTop_toTopOf="@+id/tvBG3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
