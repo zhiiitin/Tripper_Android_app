@@ -24,6 +24,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -121,11 +122,12 @@ public class CreateBlogPicFragment extends Fragment {
 
 //RecyclerView
         rvPhoto = view.findViewById(R.id.rvPhoto);
-        rvPhoto.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
+//        rvPhoto.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
+        rvPhoto.setLayoutManager(new GridLayoutManager(activity,2));
         rvPhoto.setAdapter(new ImgAdpter(activity, bitmapList));
-        rvPhoto.setOnFlingListener(null);
-        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
-        pagerSnapHelper.attachToRecyclerView(rvPhoto);
+//        rvPhoto.setOnFlingListener(null);
+//        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+//        pagerSnapHelper.attachToRecyclerView(rvPhoto);
 
 
         ibUpdate.setOnClickListener(new View.OnClickListener() {
@@ -275,6 +277,10 @@ public class CreateBlogPicFragment extends Fragment {
                        showTypeDialog();
                     }
                 });
+
+                if(bitmapList.size() ==4){
+                    pickViewHolder.itemView.setVisibility(View.GONE);
+                }
             } else if (holder instanceof MyViewHolder) {
 
                 MyViewHolder myViewHolder = (MyViewHolder) holder;

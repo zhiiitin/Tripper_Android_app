@@ -170,7 +170,7 @@ public class Create_Blog_Location_List extends Fragment {
 
             final Trip_M group = groupList.get(position);
             String Url = Common.URL_SERVER + "Trip_M_Servlet";
-            int id = group.getMemberId();
+            String id = group.getTripId();
             groupImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
             groupImageTask.execute();
 
