@@ -20,6 +20,17 @@ public class Member implements Serializable {
         this.password = password ;
     }
 
+    // for 加好友功能
+    public Member(int id, String account, String mail, String nickName, int loginType, String token) {
+        super();
+        this.id = id;
+        this.account = account;
+        this.mail = mail;
+        this.nickName = nickName;
+        this.token = token;
+        this.loginType = loginType;
+    }
+
 
 
     public Member(int id, String account ,String password , String nickname) {

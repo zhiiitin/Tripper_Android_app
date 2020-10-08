@@ -11,12 +11,19 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.CommonTask;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.example.tripper_android_app.trip.Trip_LocInfo;
 import com.google.gson.JsonObject;
 
@@ -123,12 +130,13 @@ public class Common {
     }
 
 
-    public static void sendTokenToServer(String token, Context context) {
+    public static void sendTokenToServer(int memberId, String token, Context context) {
         if (Common.netWorkConnected(context)) {
-            String Url = Common.URL_SERVER + "FcmBookServlet";
+            String Url = Common.URL_SERVER + "FCMServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "register");
-            jsonObject.addProperty("registrationToken", token);
+            jsonObject.addProperty("userToken", token);
+            jsonObject.addProperty("memberId", memberId);
             CommonTask registerTask = new CommonTask(Url, jsonObject.toString());
             registerTask.execute();
         } else {
@@ -147,5 +155,30 @@ public class Common {
             return false;
         }
     }
+
+    // 取得token，每次都更新user的手機token
+    public static void getTokenSendServer(final Activity activity) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult() != null) {
+                                // 取得手機ID
+                                String token = task.getResult().getToken();
+                                String url = Common.URL_SERVER + "MemberServlet";
+                                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                        MODE_PRIVATE);
+                                int memberId = Integer.parseInt(pref.getString("memberId","0"));
+                                Common.sendTokenToServer(memberId, token, activity);
+                                Log.d(TAG, "token::" + token);
+                            }
+                        } else {
+                            Log.d(TAG, "token fail");
+                        }
+                    }
+                });
+    }
+
 
 }

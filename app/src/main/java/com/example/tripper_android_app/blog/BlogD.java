@@ -8,7 +8,33 @@ public class BlogD {
         private String blogNote;
         private String s_Date;
         private int blogId;
-        public BlogD(int dayCount, int locationId, String locationName, String blogNote) {
+        private int tripId;
+    public BlogD(int blogId,int locationId, String locationName, String blogNote,String s_Date,int tripId) {
+        super();
+        this.blogId = blogId;
+        this.locationId = locationId;
+        this.locationName = locationName;
+        this.blogNote = blogNote;
+        this.s_Date = s_Date;
+        this.tripId = tripId;
+    }
+    public BlogD(String s_Date){
+        this.s_Date= s_Date;
+    }
+
+    public void setBlogId(int blogId) {
+        this.blogId = blogId;
+    }
+
+    public int getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(int tripId) {
+        this.tripId = tripId;
+    }
+
+    public BlogD(int dayCount, int locationId, String locationName, String blogNote) {
             super();
             this.dayCount = dayCount;
             this.locationId = locationId;

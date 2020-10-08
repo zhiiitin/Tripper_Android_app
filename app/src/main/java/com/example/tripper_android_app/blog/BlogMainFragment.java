@@ -78,6 +78,7 @@ public class BlogMainFragment extends Fragment {
         activity = (MainActivity) getActivity();
         imageTasks =new ArrayList<>();
 
+
     }
 
     @Override
@@ -106,7 +107,7 @@ public class BlogMainFragment extends Fragment {
         textDescription = view.findViewById(R.id.textDescription);
         ivThumbs = view.findViewById(R.id.ivThumbs);
         ivTripList = view.findViewById(R.id.ivTripList);
-        ivThumbs.setImageResource(R.drawable.icnthumbs);
+        ivThumbs.setImageResource(R.drawable.iconthumbss);
         ivTripList.setImageResource(R.drawable.icontriplist);
         tvDescription.setText("網誌描述：");
         textDescription.setText(" "+" "+blogDesc);
@@ -121,6 +122,7 @@ public class BlogMainFragment extends Fragment {
         ImageTask imageTask = new ImageTask(url,userId,imageSize,ivBackground);
         imageTask.execute();
         imageTasks.add(imageTask);
+
         ivTripList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,14 +131,25 @@ public class BlogMainFragment extends Fragment {
             }
         });
 
+        ivThumbs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
+                 ivThumbs.setColorFilter(Color.RED);
+
+            }
+        });
 
 
+    }
 
+<<<<<<< HEAD
 
+=======
         
     }
+>>>>>>> ee3ba20f8fa405d6f82926657511f366a2bab5d7
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -255,9 +268,13 @@ public class BlogMainFragment extends Fragment {
             holder.tvDays.setText(blogD.getS_Date());
             holder.imDays.setImageResource(R.drawable.layout_box_line);
             preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-            preferences.edit()
-                    .putInt("TripListId",blogD.getBlogId())
-                    .apply();
+            if(position == 0 ){
+                preferences.edit()
+                        .putInt("TripListId",blogD.getBlogId())
+                        .putString("DATE",blogD.getS_Date())
+                        .apply();
+            }
+
 
 
 
@@ -269,7 +286,7 @@ public class BlogMainFragment extends Fragment {
         }
 
         private class MyViewHolder extends RecyclerView.ViewHolder {
-            private ImageView ivPic1,ivPic2,ivPic3;
+            private ImageView ivPic1,ivPic2,ivPic3,ivPic;
             private TextView tvLocation,tvDays,tvBlogDescription;
             private ImageButton imDays;
             public MyViewHolder(@NonNull View itemView) {
@@ -281,6 +298,7 @@ public class BlogMainFragment extends Fragment {
                 ivPic1 = itemView.findViewById(R.id.ivPic1);
                 ivPic2 = itemView.findViewById(R.id.ivPic2);
                 ivPic3 = itemView.findViewById(R.id.ivPic3);
+                ivPic= itemView.findViewById(R.id.ivPic);
                 imDays = itemView.findViewById(R.id.imDays2);
 
 
