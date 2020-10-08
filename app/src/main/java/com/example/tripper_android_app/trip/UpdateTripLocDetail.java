@@ -51,7 +51,7 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
     private MainActivity activity;
     private GoogleMap map;
     private Location location;
-    private TextView textStayTime, etTripTitle, textDate, textTime;
+    private TextView textStayTime, etTripTitle, textDate, textTime, textView11;
     private EditText etMemo;
     private ImageView locPic;
     private static int hour, minute;

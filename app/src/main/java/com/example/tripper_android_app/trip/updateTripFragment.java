@@ -138,9 +138,7 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         ivLocPic = view.findViewById(R.id.ivLocPic);
         spDay = view.findViewById(R.id.spDay);
 
-        //recyclerview
-        rvLocChosen = view.findViewById(R.id.rvLocChosen);
-        rvLocChosen.setLayoutManager(new LinearLayoutManager(activity));
+
 
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -160,6 +158,9 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         showTripPic();
 
 
+        //recyclerview
+        rvLocChosen = view.findViewById(R.id.rvLocChosen);
+        rvLocChosen.setLayoutManager(new LinearLayoutManager(activity));
         tripLocInfoList = new TreeMap<>();
         tripLocInfoList = getLocInfo();
         showLocList(tripLocInfoList);

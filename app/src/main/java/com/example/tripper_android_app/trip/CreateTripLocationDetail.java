@@ -65,7 +65,7 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
     private MainActivity activity;
     private GoogleMap map;
     private Location location;
-    private TextView textStayTime, etTripTitle, textDate, textTime;
+    private TextView textStayTime, etTripTitle, textDate, textTime,textView11;
     private String startDate;
     private EditText etMemo;
     private ImageView locPic;
@@ -101,6 +101,16 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
         etTripTitle = view.findViewById(R.id.etTripTitle);
         textDate = view.findViewById(R.id.textDate);
         textTime = view.findViewById(R.id.textTime);
+
+        textView11 = view.findViewById(R.id.textView11);
+
+        textView11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textStayTime.setText("01:00");
+                etMemo.setText("1. 記得買門票\n" + "2. 要帶防曬\n" + "3. 買紀念品唷");
+            }
+        });
 
 
         //停留時間挑選
