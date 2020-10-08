@@ -127,7 +127,7 @@ public class Register_Member_Fragment extends Fragment {
         etNickName = view.findViewById(R.id.tvNickname_member);
         tvLoginType = view.findViewById(R.id.tvLoginType_member);
         ibLogout = view.findViewById(R.id.btLogout);
-        ivPhoto = view.findViewById(R.id.ivPhotoI);
+        ivPhoto = view.findViewById(R.id.ivPhoto111);
         ibChange = view.findViewById(R.id.ibChange);
         tvUpdate = view.findViewById(R.id.tvUpdate);
         cvUpdate = view.findViewById(R.id.cvUpdate);
@@ -325,7 +325,8 @@ public class Register_Member_Fragment extends Fragment {
             if (bitmap != null) {
                 ivPhoto.setImageBitmap(bitmap);
             } else {
-                ivPhoto.setImageResource(R.drawable.ic_nopicture);
+                Log.d("image", R.drawable.ic_nopicture + "");
+                //ivPhoto.setImageResource(R.drawable.ic_nopicture);
             }
 
         }

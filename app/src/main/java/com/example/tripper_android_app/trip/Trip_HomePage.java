@@ -357,17 +357,16 @@ public class Trip_HomePage extends Fragment {
                     Type listtype = new TypeToken<Member>() {
                     }.getType();
                     member = new Gson().fromJson(jsonIn, listtype);
-
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                String nickname = member.getNickName();
-                textUserName.setText(" " + nickname + " ");
+//                String nickname = member.getNickName();
+//                textUserName.setText(" " + nickname + " ");
 
             } else {
                 Common.showToast(activity, "no network connection found");
             }
-            showMemberPic();
+//            showMemberPic();
 
         }
     }
