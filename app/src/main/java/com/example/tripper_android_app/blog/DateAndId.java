@@ -12,6 +12,10 @@ public class DateAndId {
     }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 695acc7e1692e93c4b661490e51271a0a43b33fb
     public DateAndId(String trip_Id) {
         super();
         this.trip_Id = trip_Id;
