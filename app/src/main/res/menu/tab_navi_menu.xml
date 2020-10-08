@@ -8,6 +8,6 @@
         android:id="@+id/blog_HomePage"
         android:title="網誌" />
     <item
-        android:id="@+id/tabGoal"
+        android:id="@+id/goal_HomePage"
         android:title="成就" />
 </menu>

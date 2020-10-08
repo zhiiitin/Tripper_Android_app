@@ -35,7 +35,7 @@ public class Setting_Fragment extends Fragment {
     private final static String TAG = "TAG_SettingFragment";
     private MainActivity activity;
     private CommonTask loginTask;
-    private ImageButton ibRegister, ibMember, ibFriends;
+    private ImageButton ibRegister, ibMember, ibFriends, ibContact;
 
 
     @Override
@@ -101,6 +101,16 @@ public class Setting_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_register_main_Fragment);
+            }
+        });
+
+
+//進入聯繫我們頁面
+        ibContact = view.findViewById(R.id.ibContact);
+        ibContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_setting_Fragment_to_contactUsFragment);
             }
         });
 
