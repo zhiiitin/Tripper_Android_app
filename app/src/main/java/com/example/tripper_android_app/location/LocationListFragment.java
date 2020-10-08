@@ -163,6 +163,7 @@ public class LocationListFragment extends Fragment {
     private void showLocations(List<Location> locations) {
         if(locations == null || locations.isEmpty()){
             Common.showToast(activity, "目前尚未有景點資料");
+            return;
         }
         // 景點資訊不一定是全路，也有可能是過濾條件
         LocationAdapter locationAdapter = (LocationAdapter)rvLocation.getAdapter();

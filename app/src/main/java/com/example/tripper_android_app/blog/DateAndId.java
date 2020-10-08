@@ -11,7 +11,14 @@ public class DateAndId {
         this.trip_Id = trip_Id;
     }
 
+<<<<<<< HEAD
 
+=======
+    public DateAndId(String trip_Id) {
+        super();
+        this.trip_Id = trip_Id;
+    }
+>>>>>>> ee3ba20f8fa405d6f82926657511f366a2bab5d7
 
     public String getS_Date() {
         return s_Date;

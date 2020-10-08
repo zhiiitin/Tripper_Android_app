@@ -219,19 +219,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     textChoseGroupPpl.setVisibility(View.VISIBLE);
                     spChoosePpl.setVisibility(View.VISIBLE);
                     status = 1;
-                    preference.edit()
-                            .putBoolean("statusOn", true)
-                            .apply();
-                    switchGroup.setChecked(true);
                 } else {
                     textChoseGroupPpl.setVisibility(View.GONE);
                     spChoosePpl.setVisibility(View.GONE);
                     status = 3;
-                    preference.edit()
-                            .putBoolean("statusOff", false)
-                            .apply();
-                    switchGroup.setChecked(false);
-
                 }
             }
         });

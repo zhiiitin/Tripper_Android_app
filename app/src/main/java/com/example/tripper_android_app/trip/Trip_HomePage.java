@@ -138,12 +138,16 @@ public class Trip_HomePage extends Fragment {
         NavController navController = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-
         BottomNavigationView bottomNavigationViewTop = view.findViewById(R.id.navigation);
         NavController navControllerTop = Navigation.findNavController(activity, R.id.trip_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationViewTop, navControllerTop);
         Menu itemMenu = bottomNavigationViewTop.getMenu();
         itemMenu.getItem(0).setChecked(true);
+        // 每次進到畫面都先更新token
+        if(Common.isLogin(activity)){
+            Common.getTokenSendServer(activity);
+        }
+
 
 
     }
@@ -252,6 +256,7 @@ public class Trip_HomePage extends Fragment {
             bundle.putString("tripTitle", tripM.getTripTitle());
             bundle.putString("startDate", tripM.getStartDate());
             bundle.putString("startTime", tripM.getStartTime());
+            bundle.putInt("status", tripM.getStatus());
 
             //點擊整張卡片，帶到行程完整資訊頁面
             tripListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -408,6 +413,13 @@ public class Trip_HomePage extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!Common.isLogin(activity)){
+            Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+        }
+    }
 }
 
 
