@@ -22,7 +22,7 @@
         android:padding="6dp">
 
         <ImageView
-            android:id="@+id/ivPhoto111"
+            android:id="@+id/ivPhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_imageinsert" />
