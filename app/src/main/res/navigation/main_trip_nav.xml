@@ -419,8 +419,7 @@
             android:id="@+id/action_updateTripLocList_to_updateTripLocDetail"
             app:destination="@id/updateTripLocDetail" />
     </fragment>
-<<<<<<< HEAD
-=======
+
     <fragment
         android:id="@+id/contactUsFragment"
         android:name="com.example.tripper_android_app.setting.contact.ContactUsFragment"
@@ -444,7 +443,7 @@
         android:name="com.example.tripper_android_app.goal.GoalListFragment"
         android:label="fragment_goal_list"
         tools:layout="@layout/fragment_goal_list" />
->>>>>>> 0bf104e4554f03e2ac370963ea913fb728fa82e5
+
 
 
 </navigation>
