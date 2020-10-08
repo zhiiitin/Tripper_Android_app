@@ -144,12 +144,7 @@ public class BlogMainFragment extends Fragment {
 
     }
 
-<<<<<<< HEAD
 
-=======
-        
-    }
->>>>>>> ee3ba20f8fa405d6f82926657511f366a2bab5d7
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
