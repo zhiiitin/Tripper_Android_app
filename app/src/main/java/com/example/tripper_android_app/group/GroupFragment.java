@@ -205,7 +205,7 @@ public class GroupFragment extends Fragment {
             groupImageTask.execute();
             myViewHolder.tvTitle.setText(group.getTripTitle());
             myViewHolder.tvDate.setText("出發日：" + group.getStartDate());
-            myViewHolder.tvCount.setText("已參與人數：" + "/" + group.getpMax());
+            myViewHolder.tvCount.setText("已參與人數：1" + "/" + group.getpMax());
 
 
 //            myViewHolder.tvCount.setText("已參與人數：" + group.get +"/"+ group.getpMax());
