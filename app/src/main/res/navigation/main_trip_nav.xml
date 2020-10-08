@@ -337,7 +337,7 @@
             app:destination="@id/groupManageFragment" />
     </fragment>
 
-<<<<<<< HEAD
+
 
 
     <fragment
@@ -346,9 +346,7 @@
         android:label="fragment_group_manerge"
         tools:layout="@layout/fragment_group_manage">
     </fragment>
-=======
 
->>>>>>> Test
 
 
     <fragment
@@ -360,7 +358,6 @@
         android:id="@+id/createBlogFragment"
         android:name="com.example.tripper_android_app.blog.CreateBlogFragment"
         android:label="fragment_create_blog"
-<<<<<<< HEAD
         tools:layout="@layout/fragment_create_blog" >
         <action
             android:id="@+id/action_createBlogFragment_to_create_Blog_Location_List"
@@ -393,10 +390,8 @@
             android:id="@+id/action_updateTripLocDetail_to_updateTripFragment"
             app:destination="@id/updateTripFragment" />
     </fragment>
-=======
-        tools:layout="@layout/fragment_create_blog" />
 
 
->>>>>>> Test
+
 
 </navigation>

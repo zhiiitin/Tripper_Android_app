@@ -4,11 +4,14 @@ public class DateAndId {
     String s_Date;
     String trip_Id;
 
+
     public DateAndId(String s_Date, String trip_Id) {
         super();
         this.s_Date = s_Date;
         this.trip_Id = trip_Id;
     }
+
+
 
     public String getS_Date() {
         return s_Date;
