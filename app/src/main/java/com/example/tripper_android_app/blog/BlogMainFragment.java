@@ -144,7 +144,6 @@ public class BlogMainFragment extends Fragment {
 
     }
 
-        
 
 
     @Override
