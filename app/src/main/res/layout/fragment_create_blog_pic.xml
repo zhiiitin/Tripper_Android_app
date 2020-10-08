@@ -37,7 +37,7 @@
         android:id="@+id/tvSpotName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/noto_sans"
         android:text="故宮博物院"
         android:textColor="#686868"
@@ -56,24 +56,26 @@
         app:layout_constraintEnd_toStartOf="@+id/tvSpotName"
         app:layout_constraintTop_toTopOf="@+id/tvSpotName" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPhoto"
-        android:layout_width="369dp"
-        android:layout_height="233dp"
-        android:layout_marginTop="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSpotName" />
-
     <ImageButton
         android:id="@+id/ibUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="40dp"
         android:background="#ffffff"
         android:src="@drawable/ic_add_friend"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPhoto"
+        android:layout_width="369dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSpotName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
