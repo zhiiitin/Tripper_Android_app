@@ -42,8 +42,8 @@ public class Common {
     public final static String PREF_FILE = "preference";
     public final static String DEFAULT_FILE = "";
     public static Map<String, List<Location_D>> map = new TreeMap<>();
-    public static Map<String, List<Trip_LocInfo>> map2 = new TreeMap<>();
     public static String spinnerSelect = "";
+    public static String spinnerSelect2 = "";
     public static String tripId = "";
     public static int memberId;
     private  MainActivity activity ;

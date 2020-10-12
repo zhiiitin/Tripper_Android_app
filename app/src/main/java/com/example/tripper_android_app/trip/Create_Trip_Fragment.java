@@ -450,6 +450,13 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         }
     };
 
+    //Spinner 選擇天數對應的recyclerView
+    public void spinnerShowLoc() {
+        String selected = Common.spinnerSelect;
+        Log.d(TAG, "daySelected: " + selected);
+        showLocList(Common.map.get(selected));
+    }
+
 
     //toolbar 左上角返回按鈕
     @Override
@@ -465,12 +472,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     }
 
 
-    //Spinner 選擇天數對應的recyclerView
-    public void spinnerShowLoc() {
-        String selected = Common.spinnerSelect;
-        Log.d(TAG, "daySelected: " + selected);
-        showLocList(Common.map.get(selected));
-    }
+
 
 
     //暫存標題/出發時間/出發日期

@@ -28,6 +28,7 @@ import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.DateUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,8 +38,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author cooperhsieh
@@ -53,6 +57,7 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
     private Location location;
     private TextView textStayTime, etTripTitle, textDate, textTime, textView11;
     private EditText etMemo;
+    private String startDate;
     private ImageView locPic;
     private static int hour, minute;
     private Spinner spDay;
@@ -134,7 +139,6 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
                 String stayTimes = textStayTime.getText().toString().trim();
                 String memos = etMemo.getText().toString().trim();
                 String daySelected = Common.spinnerSelect;
-                String startDate = "";
                 String locId = location.getLocId();
                 Log.d("###Detail daySelected", daySelected + "");
                 if (daySelected == null || daySelected.isEmpty()) {
@@ -163,8 +167,45 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
                 if (locationDs == null || locationDs.isEmpty()) {
                     locationDs = new ArrayList<>();
                 }
-                // TODO 暫使hard code
-                startDate = "2020-09-20";
+                // TODO 讀取出發日期 根據Spinner存入不同的天數
+                preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                startDate = preference.getString("tripDate", Common.DEFAULT_FILE);
+                if ("2".equals(daySelected)) {
+                    try {
+                        startDate = DateUtil.date4day(startDate, 1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if ("3".equals(daySelected)) {
+                    try {
+                        startDate = DateUtil.date4day(startDate, 2);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if ("4".equals(daySelected)) {
+                    try {
+                        startDate = DateUtil.date4day(startDate, 3);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if ("5".equals(daySelected)) {
+                    try {
+                        startDate = DateUtil.date4day(startDate, 4);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if ("6".equals(daySelected)) {
+                    try {
+                        startDate = DateUtil.date4day(startDate, 5);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Log.e(TAG, "StartDate::" + daySelected);
+
+
+
                 // String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate
                 Location_D locationD = new Location_D(name, address, locId, memos, stayTimes, startDate);
                 locationDs.add(locationD);
