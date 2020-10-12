@@ -145,7 +145,6 @@ public class BlogMainFragment extends Fragment {
     }
 
 
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -267,9 +266,11 @@ public class BlogMainFragment extends Fragment {
             if(position == 0 ){
                 preferences.edit()
                         .putInt("TripListId",blogD.getBlogId())
-                        .putString("DATE",blogD.getS_Date())
+                        .putString("DATEE",blogD.getS_Date())
                         .apply();
             }
+            holder.tvSpotName.setText("景點描述:");
+            holder.tvPic.setText("景點照片:");
 
 
 
@@ -283,7 +284,7 @@ public class BlogMainFragment extends Fragment {
 
         private class MyViewHolder extends RecyclerView.ViewHolder {
             private ImageView ivPic1,ivPic2,ivPic3,ivPic;
-            private TextView tvLocation,tvDays,tvBlogDescription;
+            private TextView tvLocation,tvDays,tvBlogDescription,tvSpotName,tvPic;
             private ImageButton imDays;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -296,6 +297,8 @@ public class BlogMainFragment extends Fragment {
                 ivPic3 = itemView.findViewById(R.id.ivPic3);
                 ivPic= itemView.findViewById(R.id.ivPic);
                 imDays = itemView.findViewById(R.id.imDays2);
+                tvPic = itemView.findViewById(R.id.tvPic);
+                tvSpotName= itemView.findViewById(R.id.tvSpotName);
 
 
             }
