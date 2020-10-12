@@ -97,7 +97,7 @@ public class CreateBlogFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("編輯網誌");
+        toolbar.setTitle("建立網誌");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -259,7 +259,9 @@ public class CreateBlogFragment extends Fragment {
                 Navigation.findNavController(tvBlogName).navigate(R.id.action_createBlogFragment_to_create_Blog_Location_List);
                 return true;
             case R.id.btNextStep:
-                findNavController(tvBlogName).navigate(R.id.action_blog_HomePage_to_create_Blog_Location_List);
+                Bundle bundle = new Bundle();
+                bundle.putString("tripId",tripId);
+                findNavController(tvBlogName).navigate(R.id.action_createBlogFragment_to_createBlogFinishFragment,bundle);
                 return true;
 
             default:
@@ -1064,7 +1066,7 @@ public class CreateBlogFragment extends Fragment {
     }
 
 
-    //對話視窗 挑選照片
+//對話視窗 挑選照片
     private void showTypeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog dialog = builder.create();

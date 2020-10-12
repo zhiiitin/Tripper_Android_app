@@ -239,7 +239,11 @@ public class CreateBlogPicFragment extends Fragment {
         public int getItemViewType(int position) {
             if (position == 0) {
                 return 1;   //選擇圖片
-            } else {
+            }
+            if (imgList.size() == 4){
+                return 2;
+            }
+            else {
                 return 2;
             }
         }
@@ -276,11 +280,7 @@ public class CreateBlogPicFragment extends Fragment {
                        showTypeDialog();
                     }
                 });
-                if(bitmapList.size() ==4){
 
-                    notifyItemRemoved(0);
-                    notifyItemChanged(0,imgList.size());
-                }
             } else if (holder instanceof MyViewHolder) {
 
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
