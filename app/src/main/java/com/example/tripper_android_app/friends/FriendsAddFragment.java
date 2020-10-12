@@ -103,7 +103,7 @@ public class FriendsAddFragment extends Fragment {
                                 String jsonIn = getSearchDataTask.execute().get();
                                 friend = new Gson().fromJson(jsonIn, Friends.class);
                                 if(friend == null){
-                                    Common.showToast(activity, "搜尋不到相關帳號資訊");
+                                    Common.showToast(activity, "搜尋不到該帳號資訊");
                                     cardView.setVisibility(View.INVISIBLE);
                                     break;
                                 }

@@ -170,7 +170,7 @@ public class FriendsListFragment extends Fragment {
 
     private void showFriendsList(List<Member> friends) {
         if(friends == null || friends.isEmpty()){
-            Common.showToast(activity, "目前未有好友");
+            //Common.showToast(activity, "目前尚未有好友");
             return;
         }
         FriendsAdapter friendsAdapter = (FriendsAdapter)rvFriendsList.getAdapter();
