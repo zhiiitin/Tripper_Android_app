@@ -4,6 +4,9 @@
 
     <solid android:color="#fffef2" />
 
+
+<!--    "#fffef2"-->
+
     <stroke
 
         android:color="@color/colorForBottomBar"
