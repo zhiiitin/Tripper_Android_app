@@ -107,7 +107,6 @@ public class CreateBlogPicFragment extends Fragment {
         }
         ivPoint = view.findViewById(R.id.ivPoint);
         tvSpotName = view.findViewById(R.id.tvSpotName);
-        tvSlipe = view.findViewById(R.id.tvSlipe);
         ibUpdate = view.findViewById(R.id.ibUpdate);
 
 
@@ -277,9 +276,10 @@ public class CreateBlogPicFragment extends Fragment {
                        showTypeDialog();
                     }
                 });
-
                 if(bitmapList.size() ==4){
-                    pickViewHolder.itemView.setVisibility(View.GONE);
+
+                    notifyItemRemoved(0);
+                    notifyItemChanged(0,imgList.size());
                 }
             } else if (holder instanceof MyViewHolder) {
 
@@ -385,7 +385,7 @@ public class CreateBlogPicFragment extends Fragment {
                 bitmap = ImageDecoder.decodeBitmap(source);
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
             photo = out.toByteArray();
         } catch (IOException e) {
             Log.e(TAG, e.toString());
