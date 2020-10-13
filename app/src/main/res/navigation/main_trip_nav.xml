@@ -462,8 +462,7 @@
         android:name="com.example.tripper_android_app.goal.GoalListFragment"
         android:label="fragment_goal_list"
         tools:layout="@layout/fragment_goal_list" />
-<<<<<<< HEAD
-=======
+
     <fragment
         android:id="@+id/createBlogFinishFragment"
         android:name="com.example.tripper_android_app.blog.CreateBlogFinishFragment"
@@ -475,5 +474,5 @@
     </fragment>
 
 
->>>>>>> 會員註冊功能
+
 </navigation>
