@@ -17,7 +17,11 @@
         tools:layout="@layout/fragment_blog__home_page">
         <action
             android:id="@+id/action_blog_HomePage_to_create_Blog_Location_List"
-            app:destination="@id/create_Blog_Location_List" />
+            app:destination="@id/create_Blog_Location_List"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/exploreFragment"
@@ -292,7 +296,12 @@
             app:destination="@id/blog_HomePage" />
         <action
             android:id="@+id/action_create_Blog_Location_List_to_createBlogFragment"
-            app:destination="@id/createBlogFragment" />
+            app:destination="@id/createBlogFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
 
@@ -375,7 +384,18 @@
             app:destination="@id/create_Blog_Location_List" />
         <action
             android:id="@+id/action_createBlogFragment_to_createBlogPicFragment"
-            app:destination="@id/createBlogPicFragment" />
+            app:destination="@id/createBlogPicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_createBlogFragment_to_createBlogFinishFragment"
+            app:destination="@id/createBlogFinishFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/friendsListFragment"
@@ -442,4 +462,18 @@
         android:name="com.example.tripper_android_app.goal.GoalListFragment"
         android:label="fragment_goal_list"
         tools:layout="@layout/fragment_goal_list" />
+<<<<<<< HEAD
+=======
+    <fragment
+        android:id="@+id/createBlogFinishFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogFinishFragment"
+        android:label="fragment_create_blog_finish"
+        tools:layout="@layout/fragment_create_blog_finish" >
+        <action
+            android:id="@+id/action_createBlogFinishFragment_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+    </fragment>
+
+
+>>>>>>> 會員註冊功能
 </navigation>
