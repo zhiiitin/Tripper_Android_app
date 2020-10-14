@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.blog;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -35,6 +36,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Create_Blog_Location_List extends Fragment {
     private static final String TAG = "TAG_Create_Blog_Location_ListFragment";
@@ -90,11 +93,15 @@ public class Create_Blog_Location_List extends Fragment {
     }
 
     private List<Trip_M> getGroups() {
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+        String memberId = pref.getString("memberId",null);
         List<Trip_M> groupList = null;
         if (Common.networkConnected(activity)) {
             String Url = Common.URL_SERVER + "Trip_M_Servlet";
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
+            jsonObject.addProperty("action", "getMyTrip");
+            jsonObject.addProperty("memberId", memberId);
             String jsonOut = jsonObject.toString();
             groupGetAllTask = new CommonTask(Url, jsonOut);
             try {

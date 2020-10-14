@@ -178,7 +178,7 @@ public class BlogHomeFragment extends Fragment {
             public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder myViewHolder, int position) {
 
                 final BlogFinish blogFinish = blogList.get(position);
-                String Url = Common.URL_SERVER + "Trip_M_Servlet";
+                String Url = Common.URL_SERVER + "BlogServlet";
                 String id = blogFinish.getTrip_Id();
                 blogImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
                 blogImageTask.execute();
