@@ -368,11 +368,6 @@
         android:label="fragment_group_manerge"
         tools:layout="@layout/fragment_group_manage">
     </fragment>
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 0548612df02974a081832286ab0b600b12f16e84
 
     <fragment
         android:id="@+id/groupManageFragment"
@@ -442,11 +437,7 @@
         <action
             android:id="@+id/action_updateTripLocList_to_updateTripLocDetail"
             app:destination="@id/updateTripLocDetail" />
-<<<<<<< HEAD
 
-=======
-    </fragment>
->>>>>>> 0548612df02974a081832286ab0b600b12f16e84
 
     <fragment
         android:id="@+id/contactUsFragment"
@@ -484,8 +475,4 @@
 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0548612df02974a081832286ab0b600b12f16e84
 </navigation>
