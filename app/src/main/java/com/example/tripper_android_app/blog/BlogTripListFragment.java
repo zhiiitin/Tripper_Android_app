@@ -100,11 +100,7 @@ public class BlogTripListFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         blog_days = getDays();
         showDays(blog_days);
-        try {
-            blog_location = getBlog_location();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
 
 
 
@@ -114,7 +110,7 @@ public class BlogTripListFragment extends Fragment {
     private List<Blog_Day> getDays() {
         List<Blog_Day> blog_days = null;
         preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
-        int id = preferences.getInt("TripListId", 0);
+        String id = preferences.getString("TripListId", null);
         if (Common.networkConnected(activity)) {
             //Servlet
             String url = Common.URL_SERVER + "BlogServlet";
@@ -178,7 +174,7 @@ public class BlogTripListFragment extends Fragment {
         String date,date1 ;
         int number;
         preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
-        int id = preferences.getInt("TripListId", 0);
+        String id = preferences.getString("TripListId", "");
         date = preferences.getString("DATEE","");
 
         for(number= 0 ; number <blog_days.size();number++ ){
@@ -276,10 +272,15 @@ public class BlogTripListFragment extends Fragment {
                 holder.tvDate.setText(blog_day.getDayTitle());
             }
 
-            holder.showLocations(blog_location);
+            try {
+                blog_location = getBlog_location();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             holder.imDays.setImageResource(R.drawable.layout_box_line);
-
+            rvLocation.setLayoutManager(new LinearLayoutManager(activity));
+            holder.showLocations(blog_location);
 
 
         }
@@ -326,9 +327,6 @@ public class BlogTripListFragment extends Fragment {
 
                     imDays = itemView.findViewById(R.id.imDays);
                     rvLocation = itemView.findViewById(R.id.rvloca0);
-                    rvLocation.setLayoutManager(new LinearLayoutManager(activity));
-
-                    showLocations(blog_location);
                     tvDays = itemView.findViewById(R.id.tvDays);
                     tvDate = itemView.findViewById(R.id.tvDate);
 
@@ -381,9 +379,6 @@ public class BlogTripListFragment extends Fragment {
                     final Blog_SpotInformation blog_spotInformation = blog_location.get(position);
 
                     holder.tvLocation.setText(blog_spotInformation.getSpotName());
-                    System.out.println(getItemCount());
-
-
                     holder.tvStayTime.setText("一小時");
                     holder.ivMark.setImageResource(R.drawable.mark);
                     holder.ivLine.setImageResource(R.drawable.line);

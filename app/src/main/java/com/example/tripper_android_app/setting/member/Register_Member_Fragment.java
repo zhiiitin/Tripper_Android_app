@@ -244,7 +244,6 @@ public class Register_Member_Fragment extends Fragment {
             }
         });
 
-        showMember();
     }
 
 
@@ -425,4 +424,9 @@ public class Register_Member_Fragment extends Fragment {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        showMember();
+    }
 }
