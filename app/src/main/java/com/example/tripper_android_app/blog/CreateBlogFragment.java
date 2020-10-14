@@ -66,7 +66,7 @@ public class CreateBlogFragment extends Fragment {
     private static final String TAG = "TAG_Create_BlogFragment";
     private RecyclerView rvBlog, rvPhoto;
     private MainActivity activity;
-    private CommonTask groupGet1Task, InsertNoteTask;
+    private CommonTask groupGet1Task, InsertNoteTask ,getImageTask;
     private TextView tvBlogName, tvDate, tvTime;
     private String startDate, tripId;
     private Button btDay1, btDay2, btDay3, btDay4, btDay5, btDay6;
@@ -441,17 +441,31 @@ public class CreateBlogFragment extends Fragment {
                         Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
                     }
                 });
+//---------------------------------------------------------------------
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action","getSpotImage");
+                jsonObject.addProperty("blog_Id",blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_id",blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url,jsonObject.toString());
+
+
+
+
+//---------------------------------------------------------------------
+
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
                     }
                 });
+//將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-//將備註心得傳回資料庫
+
                         String url = Common.URL_SERVER + "BlogServlet";
                         Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
                         JsonObject jsonObject = new JsonObject();
@@ -496,12 +510,11 @@ public class CreateBlogFragment extends Fragment {
                         Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
                     }
                 });
-
+//將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        //將note回傳至後端
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -554,11 +567,12 @@ public class CreateBlogFragment extends Fragment {
                         viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
                     }
                 });
+//將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        //將note回傳至後端
+
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -611,11 +625,11 @@ public class CreateBlogFragment extends Fragment {
                         viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
                     }
                 });
+//將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        //將note回傳至後端
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -668,12 +682,11 @@ public class CreateBlogFragment extends Fragment {
                         viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
                     }
                 });
-
+//將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        //將note回傳至後端
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -727,11 +740,11 @@ public class CreateBlogFragment extends Fragment {
                         viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
                     }
                 });
+//將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        //將note回傳至後端
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);

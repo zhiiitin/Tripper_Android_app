@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.blog;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class BlogHomeFragment extends Fragment {
 
@@ -50,7 +53,8 @@ public class BlogHomeFragment extends Fragment {
         private MainActivity activity;
         private CommonTask blogGetAllTask;
         private ImageTask blogImageTask;
-        private List<Trip_M> blogList;
+        private List<BlogFinish> blogList;
+        private String memberId ;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,10 @@ public class BlogHomeFragment extends Fragment {
             rvBlog = view.findViewById(R.id.rvBlog_Home);
             rvBlog.setLayoutManager(new LinearLayoutManager(activity));
 
+            SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                    MODE_PRIVATE);
+            memberId = pref.getString("memberId",null);
+
             blogList = getBlogs();
             showBlogs(blogList);
 
@@ -89,17 +97,18 @@ public class BlogHomeFragment extends Fragment {
 
         }
 
-        private List<Trip_M> getBlogs() {
-            List<Trip_M> blogList = null;
+        private List<BlogFinish> getBlogs() {
+            List<BlogFinish> blogList = null;
             if (Common.networkConnected(activity)) {
-                String Url = Common.URL_SERVER + "Trip_M_Servlet"; /////////
+                String Url = Common.URL_SERVER + "BlogServlet"; /////////
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "getAll");
+                jsonObject.addProperty("action", "getMyBlog");
+                jsonObject.addProperty("memberId", memberId);
                 String jsonOut = jsonObject.toString();
                 blogGetAllTask = new CommonTask(Url, jsonOut);
                 try {
                     String jsonIn = blogGetAllTask.execute().get();
-                    Type listtype = new TypeToken<List<Trip_M>>() {  /////
+                    Type listtype = new TypeToken<List<BlogFinish>>() {  /////
                     }.getType();
                     blogList = new Gson().fromJson(jsonIn, listtype);
                 } catch (Exception e) {
@@ -111,7 +120,7 @@ public class BlogHomeFragment extends Fragment {
             return blogList;
         }
 
-        private void showBlogs(List<Trip_M> groupList) {
+        private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
                 Common.showToast(activity, "搜尋不到行程");
             }
@@ -126,17 +135,17 @@ public class BlogHomeFragment extends Fragment {
 
         private class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyViewHolder> {
             private LayoutInflater layoutInflater;
-            private List<Trip_M> blogList;
+            private List<BlogFinish> blogList;
             private int imageSize;
 
-            BlogAdapter(Context context, List<Trip_M> blogList) { ///
+            BlogAdapter(Context context, List<BlogFinish> blogList) { ///
                 layoutInflater = LayoutInflater.from(context);
                 this.blogList = blogList;
                 imageSize = getResources().getDisplayMetrics().widthPixels / 2;
 
             }
 
-            void setBlogs(List<Trip_M> blogList) {
+            void setBlogs(List<BlogFinish> blogList) {
                 this.blogList = blogList;
             }
 
@@ -168,13 +177,13 @@ public class BlogHomeFragment extends Fragment {
             @Override
             public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder myViewHolder, int position) {
 
-                final Trip_M blog = blogList.get(position);
+                final BlogFinish blogFinish = blogList.get(position);
                 String Url = Common.URL_SERVER + "Trip_M_Servlet";
-                String id = blog.getTripId();
+                String id = blogFinish.getTrip_Id();
                 blogImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
                 blogImageTask.execute();
 
-                myViewHolder.tvTitle.setText(blog.getTripTitle());
+                myViewHolder.tvTitle.setText(blogFinish.getBlog_title());
 
             }
         }
