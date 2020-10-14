@@ -160,7 +160,7 @@ public class BlogMainFragment extends Fragment {
     }
 
     private void showDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog dialog = builder.create();
         final View view = View.inflate(getActivity(), R.layout.dialog_comment, null);
         TextView tvComment;
@@ -171,14 +171,17 @@ public class BlogMainFragment extends Fragment {
         rvComment = view.findViewById(R.id.rvComment);
         rvComment.setLayoutManager(new LinearLayoutManager(activity));
         commentList = getComment();
-        rvComment.setAdapter(new CommentAdapter(activity,commentList));
+        showComments(commentList);
         detail_page_do_comment = view.findViewById(R.id.detail_page_do_comment);
         btSend = view.findViewById(R.id.btSend);
+        dialog.setView(view);
+        dialog.show();
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-                String blogId = String.valueOf(preferences.getInt("TripListId",0));
+                Bundle bundle = getArguments();
+                String blogId = bundle.getString("BlogId");
                 String comment = detail_page_do_comment.getText().toString();
                 String memberId= preferences.getString("memberId",null);
                 if (Common.networkConnected(activity)) {
@@ -206,10 +209,16 @@ public class BlogMainFragment extends Fragment {
 
                 }
 
+                commentList = getComment();
+                showComments(commentList);
+
+                dialog.setView(view);
+                dialog.show();
+
             }
+
         });
-        dialog.setView(view);
-        dialog.show();
+
 
 
 
@@ -262,10 +271,7 @@ public class BlogMainFragment extends Fragment {
         }
     }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 0548612df02974a081832286ab0b600b12f16e84
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
