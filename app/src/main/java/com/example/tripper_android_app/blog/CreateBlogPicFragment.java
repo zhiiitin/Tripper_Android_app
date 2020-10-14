@@ -63,7 +63,8 @@ public class CreateBlogPicFragment extends Fragment {
     private RecyclerView rvPhoto;
     private MainActivity activity;
     private ImageView ivPoint;
-    private TextView tvSpotName, tvSlipe;
+    private ImageButton ibAdd;
+    private TextView tvSpotName, tvSlipe ,tvTouch;
     private ImageButton ibUpdate;
     private CommonTask imageTask;
     private static final int REQ_TAKE_PICTURE = 0;
@@ -108,10 +109,20 @@ public class CreateBlogPicFragment extends Fragment {
         ivPoint = view.findViewById(R.id.ivPoint);
         tvSpotName = view.findViewById(R.id.tvSpotName);
         ibUpdate = view.findViewById(R.id.ibUpdate);
+        ibAdd = view.findViewById(R.id.ibAdd);
+        tvTouch = view.findViewById(R.id.textView12);
+
+        ibAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTypeDialog();
+            }
+        });
+
 
 
 //接收前頁bundle
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         String spotName = (String) bundle.get("spotName");
         blogID = (String) bundle.get("blogID");
         locId = (String) bundle.get("locId");
@@ -234,61 +245,45 @@ public class CreateBlogPicFragment extends Fragment {
             }
         }
 
-        //區分顯示的種類
-        @Override
-        public int getItemViewType(int position) {
-            if (position == 0) {
-                return 1;   //選擇圖片
-            }
-            if (imgList.size() == 4){
-                return 2;
-            }
-            else {
-                return 2;
-            }
-        }
+
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView;
-            if (viewType == 1) {
-                itemView = layoutInflater.inflate(R.layout.item_view_createblog_pick, parent, false);
-                return new PickViewHolder(itemView);
-            } else {
+
                 itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
                 return new MyViewHolder(itemView);
-            }
+
         }
 
         //設定長度
         @Override
         public int getItemCount() {
-            return imgList == null ? 1 : (1 + imgList.size());
+            return imgList == null ? 1 : ( imgList.size());
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+//
+//            if (holder instanceof PickViewHolder) {
+//
+//                PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
+//                pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
+//                pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                       showTypeDialog();
+//                    }
+//                });
 
-            if (holder instanceof PickViewHolder) {
-
-                PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
-                pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
-                pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                       showTypeDialog();
-                    }
-                });
-
-            } else if (holder instanceof MyViewHolder) {
 
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
                 // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
                 // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟
-                Bitmap bitmapPosition = imgList.get(position - 1);
+                Bitmap bitmapPosition = imgList.get(position );
                 myViewHolder.ivArticleImageInsert.setImageBitmap(bitmapPosition);
-            }
+
 
         }
     }
@@ -412,6 +407,8 @@ public class CreateBlogPicFragment extends Fragment {
             if(bitmapList.size() == 4){
                 String pic4 = Base64.encodeToString(photo,Base64.DEFAULT);
                 blogPic.setPic4(pic4);
+                ibAdd.setVisibility(View.GONE);
+                tvTouch.setVisibility(View.GONE);
             }
         }
 
