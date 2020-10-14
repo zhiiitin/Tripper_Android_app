@@ -29,7 +29,7 @@
         <SearchView
             android:id="@+id/svGroup"
             android:layout_width="372dp"
-            android:layout_height="64dp"
+            android:layout_height="48dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:iconifiedByDefault="false"
@@ -39,7 +39,7 @@
 
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="485dp">
+            android:layout_height="495dp">
 
 
             <androidx.recyclerview.widget.RecyclerView
