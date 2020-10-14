@@ -244,7 +244,6 @@ public class Register_Member_Fragment extends Fragment {
             }
         });
 
-        showMember();
     }
 
 
@@ -325,7 +324,8 @@ public class Register_Member_Fragment extends Fragment {
             if (bitmap != null && bitmap.getByteCount() != 0) {
                 ivPhoto.setImageBitmap(bitmap);
             } else {
-                ivPhoto.setImageResource(R.drawable.ic_nopicture);
+                Log.d("image", R.drawable.ic_nopicture + "");
+                //ivPhoto.setImageResource(R.drawable.ic_nopicture);
             }
 
         }
@@ -424,4 +424,9 @@ public class Register_Member_Fragment extends Fragment {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        showMember();
+    }
 }
