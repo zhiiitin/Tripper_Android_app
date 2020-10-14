@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -90,6 +91,10 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
         etTripTitle = view.findViewById(R.id.etTripTitle);
         textDate = view.findViewById(R.id.textDate);
         textTime = view.findViewById(R.id.textTime);
+
+        preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        startDate = preference.getString("tripDate", Common.DEFAULT_FILE);
+        Log.d("行程日期？：", startDate);
 
 
         //停留時間挑選
@@ -145,16 +150,6 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
                     Common.showToast(activity, "請先選擇天數");
                     Navigation.findNavController(v).popBackStack();
                 }
-                // 處理出發日期
-//                if(!daySelected.equals("1")){
-//
-//                    startDate = preference.getString("tripDate", Common.DEFAULT_FILE);
-//                    try {
-//                        startDate = DateUtil.date4day(startDate, Integer.parseInt(daySelected) );
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
 
                 //檢查停留時間是否輸入
                 if (textStayTime.getText().toString().equals("")) {
@@ -170,48 +165,63 @@ public class UpdateTripLocDetail extends Fragment implements TimePickerDialog.On
                 // TODO 讀取出發日期 根據Spinner存入不同的天數
                 preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
                 startDate = preference.getString("tripDate", Common.DEFAULT_FILE);
+                String dayForSpinnerSelect = "";
                 if ("2".equals(daySelected)) {
                     try {
-                        startDate = DateUtil.date4day(startDate, 1);
+                        dayForSpinnerSelect = DateUtil.date4day(startDate, 1);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 } else if ("3".equals(daySelected)) {
                     try {
-                        startDate = DateUtil.date4day(startDate, 2);
+                        dayForSpinnerSelect = DateUtil.date4day(startDate, 2);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 } else if ("4".equals(daySelected)) {
                     try {
-                        startDate = DateUtil.date4day(startDate, 3);
+                        dayForSpinnerSelect = DateUtil.date4day(startDate, 3);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 } else if ("5".equals(daySelected)) {
                     try {
-                        startDate = DateUtil.date4day(startDate, 4);
+                        dayForSpinnerSelect = DateUtil.date4day(startDate, 4);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 } else if ("6".equals(daySelected)) {
                     try {
-                        startDate = DateUtil.date4day(startDate, 5);
+                        dayForSpinnerSelect = DateUtil.date4day(startDate, 5);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
 
-                Log.e(TAG, "StartDate::" + daySelected);
+                Log.e(TAG, "dayForSpinnerSelect::" + dayForSpinnerSelect);
 
 
 
                 // String tripId, String transId, String name, String address, String locId,  String memos, String stayTimes,  String startDate
-                Location_D locationD = new Location_D(name, address, locId, memos, stayTimes, startDate);
+                Location_D locationD = new Location_D(name, address, locId, memos, stayTimes, dayForSpinnerSelect);
                 locationDs.add(locationD);
                 Common.map.put(daySelected, locationDs);
+                Log.d("#### 景點對應的日期？：", dayForSpinnerSelect);
+
 
                 Navigation.findNavController(v).popBackStack(R.id.updateTripFragment, false);
+
+//                Log.d("### map size", Common.map.size()+"");
+//             locationDs = Common.map.get(Common.spinnerSelect);
+//            locationDs = Common.map.get("0");
+//            if (locationDs == null) {
+//                Log.d("locInfoList空的話顯示：", "enter null");
+//            } else {
+//                Log.d("locInfoList不是空的顯示：", "enter not null");
+//            }
+//            for(int i = 0; i <= Common.map.size(); i++){
+//                Log.d("Map存了幾個景點:  ","i:"+ i + "->" + Common.map.get((i)+"")+"");
+//            }
             }
         });
     }

@@ -154,7 +154,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
                 etTripTitle.setText("南台灣四天三夜遊");
-                textDate.setText("2020-10-10");
+                textDate.setText("2020-11-25");
                 textTime.setText("10:00");
 
             }
@@ -305,10 +305,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     }
                     if (count == 0) {
                         Common.showToast(activity, "建立行程成功");
-                        Navigation.findNavController(v)
-                                .popBackStack(R.id.trip_HomePage, false);
                         deletePreferences();
                         Common.map.clear();
+                        Navigation.findNavController(v)
+                                .popBackStack(R.id.trip_HomePage, false);
                     } else {
                         Common.showToast(activity, "建立行程失敗");
                         Log.d(TAG, "Trip Fail: " + count);
@@ -316,6 +316,8 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 } else {
                     Common.showToast(activity, "請檢查網路連線");
                 }
+
+                Log.e("map data::", String.valueOf(Common.map.size()));
             }
         });
     }
