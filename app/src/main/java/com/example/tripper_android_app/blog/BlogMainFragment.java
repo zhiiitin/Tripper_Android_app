@@ -160,7 +160,7 @@ public class BlogMainFragment extends Fragment {
     }
 
     private void showDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog dialog = builder.create();
         final View view = View.inflate(getActivity(), R.layout.dialog_comment, null);
         TextView tvComment;
@@ -178,7 +178,8 @@ public class BlogMainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-                String blogId = String.valueOf(preferences.getInt("TripListId",0));
+                Bundle bundle = getArguments();
+                String blogId = bundle.getString("BlogId");
                 String comment = detail_page_do_comment.getText().toString();
                 String memberId= preferences.getString("memberId",null);
                 if (Common.networkConnected(activity)) {

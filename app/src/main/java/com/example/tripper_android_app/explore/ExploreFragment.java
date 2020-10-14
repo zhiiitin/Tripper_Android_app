@@ -274,7 +274,7 @@ public class ExploreFragment extends Fragment {
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
             String url = Common.URL_SERVER + "ExploreServlet";
-            String id = explore.getUserId();
+            String id = explore.getBlogId();
             ImageTask imageTask = new ImageTask(url,id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
