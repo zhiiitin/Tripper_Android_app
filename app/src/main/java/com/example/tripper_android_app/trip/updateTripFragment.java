@@ -349,7 +349,7 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
 
 
     private void showLocList() {
-        List<Location_D> tripDs = new ArrayList<>();
+        List<Location_D> tripDs;
         tripDs = Common.map.get(Common.spinnerSelect);
         Log.d(TAG, "enter showLocList");
         ShowTripLocAdapter showTripLocAdapter = (ShowTripLocAdapter) rvLocChosen.getAdapter();

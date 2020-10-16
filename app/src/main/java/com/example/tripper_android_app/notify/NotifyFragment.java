@@ -1,6 +1,5 @@
 package com.example.tripper_android_app.notify;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -8,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,14 +15,15 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
@@ -51,6 +52,7 @@ public class NotifyFragment extends Fragment {
     private MainActivity activity;
     private RecyclerView rvNotifyList;
     private List<Notify> notifies = new ArrayList<>();
+    private List<ImageTask> imageTasks = new ArrayList<>();
     private Gson gson = new Gson();
     private NotifyAdapter notifyAdapter;
 
@@ -59,6 +61,7 @@ public class NotifyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
+        Log.d("###", "11111");
     }
 
     @Override
@@ -70,10 +73,10 @@ public class NotifyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.notify_Fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
         Toolbar toolbar = view.findViewById(R.id.notifyToolbar);
+        activity.setSupportActionBar(toolbar);
         toolbar.setTitle("通知訊息");
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
@@ -83,6 +86,12 @@ public class NotifyFragment extends Fragment {
         // 取得該帳號所有通知訊息
         notifies = getAllNotify(memberId);
         showNotifies(notifies);
+
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
+        NavController navController = Navigation.findNavController(activity, R.id.notifyFragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        Menu itemMenu = bottomNavigationView.getMenu();
+        itemMenu.getItem(3).setChecked(true);
 
     }
 
@@ -179,11 +188,14 @@ public class NotifyFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull NotifyViewHolder holder, int position) {
             Notify notify = notifies.get(position);
-
-            // TODO 取得頭相照片
+            // 依寄送的人來取得頭像
+            int memberId = notify.getSendId();
             if(holder.civPic != null ){
                 if(Common.networkConnected(activity)){
-                   String url = Common.URL_SERVER + "";
+                   String url = Common.URL_SERVER + "MemberServlet";
+                    ImageTask imageTask = new ImageTask(url, memberId, imageSize, holder.civPic);
+                    imageTask.execute();
+                    imageTasks.add(imageTask);
                 }else {
                     Common.showToast(activity, "請確認網路連線狀態");
                 }
@@ -196,7 +208,22 @@ public class NotifyFragment extends Fragment {
             View.OnClickListener btClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int isApply = 0;
+                    switch (v.getId()){
+                        case R.id.btApply:
+                            isApply = 2;
+                            break;
+                        case R.id.btReject:
+                            isApply = 3;
+                            break;
+                        default:
+                            break;
+                    }
+                    if(Common.networkConnected(activity)){
+                        String url = Common.URL_SERVER + "";
+                    }else {
+                        Common.showToast(activity, "請確認網路連線狀態");
+                    }
                 }
             };
 

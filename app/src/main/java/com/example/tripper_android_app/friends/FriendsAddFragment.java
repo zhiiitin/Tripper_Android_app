@@ -27,6 +27,7 @@ import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -84,7 +85,6 @@ public class FriendsAddFragment extends Fragment {
         View.OnClickListener buttonClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 int memberId = Integer.parseInt(pref.getString("memberId","0"));
                 if(Common.networkConnected(activity)){
                     switch (v.getId()){
@@ -158,37 +158,18 @@ public class FriendsAddFragment extends Fragment {
         AppMessage message = null;
         String account = pref.getString("account","");
         // msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id
-        String msgType = "F";
-        String title = account + "申請加入您為好友！";
-        String body = "申請加入您為好友！";
+        String msgType = Common.FRIEND_TYPE;
+        String title =  "申請好友通知";
+        String body = account + "申請加您為好友！";
         int stat = 0;
         int sendId = memberId;
         int recId = friends.getId();
-
-        if(Common.networkConnected(activity)){
-            message = new AppMessage(msgType, memberId, title, body, stat, sendId, recId);
-            String url = Common.URL_SERVER + "FCMServlet";
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "sendMsg");
-            jsonObject.addProperty("message", new Gson().toJson(message));
-            String jsonOut = jsonObject.toString();
-            Log.d(TAG, "jsonOut:: " + jsonOut);
-            CommonTask sentAddFriendMsgTask = new CommonTask(url, jsonOut);
-            try {
-                String result = sentAddFriendMsgTask.execute().get();
-                int count = Integer.parseInt(result);
-                if(count > 0){
-                    Common.showToast(activity, "已發出好友邀請!");
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Common.showToast(activity, "請確認網路連線狀態");
+        message = new AppMessage(msgType, memberId, title, body, stat, sendId, recId);
+        SendMessage sendMessage = new SendMessage(activity, message);
+        boolean isSendOk = sendMessage.sendMessage();
+        if(isSendOk){
+            Common.showToast(activity, "已發出好友邀請!");
         }
-
     }
 
     private void showSearchResult() {
@@ -231,14 +212,13 @@ public class FriendsAddFragment extends Fragment {
     //toolbar 左上角返回按鈕
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.:
-//            case android.R.id.home:
-//                Navigation.findNavController(getView()).popBackStack();
-//                return true;
-//            default:
-//                break;
-//        }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(getView()).popBackStack();
+                return true;
+            default:
+                break;
+        }
         Navigation.findNavController(getView()).popBackStack();
         return super.onOptionsItemSelected(item);
     }
