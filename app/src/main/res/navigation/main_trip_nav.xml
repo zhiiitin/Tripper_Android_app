@@ -409,14 +409,6 @@
     </fragment>
 
 
-<<<<<<< HEAD
-
-
-
-
-
-=======
->>>>>>> 359d3afb0da4c0500098904e2005da3dd05435a3
     <fragment
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
@@ -522,10 +514,4 @@
             app:destination="@id/blog_HomePage" />
     </fragment>
 
-
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 359d3afb0da4c0500098904e2005da3dd05435a3
 </navigation>
