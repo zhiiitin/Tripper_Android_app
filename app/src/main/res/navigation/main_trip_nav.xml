@@ -37,7 +37,11 @@
         tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/action_exploreFragment_to_blogMainFragment"
-            app:destination="@id/blogMainFragment" />
+            app:destination="@id/blogMainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -187,7 +191,11 @@
         tools:layout="@layout/fragment_group" >
         <action
             android:id="@+id/action_groupFragment_to_tripHasSavedPage"
-            app:destination="@id/tripHasSavedPage" />
+            app:destination="@id/tripHasSavedPage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/notifyFragment"
@@ -231,7 +239,11 @@
         tools:layout="@layout/fragment_blog_main">
         <action
             android:id="@+id/action_blogMainFragment_to_blogTripListFragment"
-            app:destination="@id/blogTripListFragment" />
+            app:destination="@id/blogTripListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogMainFragment_to_blogEditFragment"
             app:destination="@id/blogEditFragment" />
@@ -243,7 +255,11 @@
         tools:layout="@layout/fragment_create__trip_">
         <action
             android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
-            app:destination="@id/create_Trip_LocationList" />
+            app:destination="@id/create_Trip_LocationList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_create_Trip_Fragment_to_trip_HomePage"
             app:destination="@id/trip_HomePage" />
@@ -255,16 +271,32 @@
         tools:layout="@layout/fragment_trip__home_page">
         <action
             android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
-            app:destination="@id/create_Trip_Fragment" />
+            app:destination="@id/create_Trip_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_trip_HomePage_to_tripHasSavedPage"
-            app:destination="@id/tripHasSavedPage" />
+            app:destination="@id/tripHasSavedPage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_trip_HomePage_to_updateTripFragment"
-            app:destination="@id/updateTripFragment" />
+            app:destination="@id/updateTripFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
-            app:destination="@id/register_main_Fragment" />
+            app:destination="@id/register_main_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"

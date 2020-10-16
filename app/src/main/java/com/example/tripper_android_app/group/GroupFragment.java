@@ -214,9 +214,12 @@ public class GroupFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("locName", group.getTripTitle());
+                    bundle.putString("tripTitle", group.getTripTitle());
                     bundle.putString("tripId", group.getTripId());
-                    Navigation.findNavController(v).navigate(R.id.tripHasSavedPage, bundle);
+                    bundle.putString("startDate",group.getStartDate());
+                    bundle.putString("startTime", group.getStartTime());
+                    bundle.putInt("status",group.getStatus());
+                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_tripHasSavedPage, bundle);
                 }
             });
 

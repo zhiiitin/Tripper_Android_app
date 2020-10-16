@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,6 +65,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.navigation.Navigation.findNavController;
 
 
@@ -82,7 +84,7 @@ public class CreateBlogFragment extends Fragment {
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
     private List<Bitmap> bitmapList = new ArrayList<>();
-    private BlogPic blogPic = null ;
+    private BlogPic blogPic = null;
 
 
     @Override
@@ -367,7 +369,6 @@ public class CreateBlogFragment extends Fragment {
         }
 
 
-
         //根據viewType 顯示不同RecyclerView
         @NonNull
         @Override
@@ -380,8 +381,6 @@ public class CreateBlogFragment extends Fragment {
                 return new ViewHolderDay(itemView);
             }
         }
-
-
 
 
         @Override
@@ -471,25 +470,35 @@ public class CreateBlogFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-            if(blogPic != null) {
-                if (blogPic.getPic1() != null) {
-                    byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
-                    Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
-                    viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                }if (blogPic.getPic2() != null) {
-                    byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
-                    Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
-                    viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                }if (blogPic.getPic3() != null) {
-                    byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
-                    Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
-                    viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                }if (blogPic.getPic4() != null) {
-                    byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
-                    Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
-                    viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                if (blogPic != null) {
+                    if (blogPic.getPic1() != null) {
+                        byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                        Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                    }
+                    if (blogPic.getPic2() != null) {
+                        byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                        Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }
+                    if (blogPic.getPic3() != null) {
+                        byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                        Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                        viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                    }
+                    if (blogPic.getPic4() != null) {
+                        byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                        Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                        viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
+//進到挑選照片頁面前，先將note存偏好設定
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                String note = pref.getString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), null);
+                if (note != null && !note.isEmpty()) {
+                    viewHolderSpot.etBlog.setText(note);
+                }
 //------------------------------
 
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -503,6 +512,9 @@ public class CreateBlogFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit().putString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), blogNote).apply();
 
                         String url = Common.URL_SERVER + "BlogServlet";
                         Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -565,24 +577,34 @@ public class CreateBlogFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(blogPic != null) {
+                if (blogPic != null) {
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic2() != null) {
+                    }
+                    if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic3() != null) {
+                    }
+                    if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic4() != null) {
+                    }
+                    if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
                     }
+                }
+//進到挑選照片頁面前，先將note存偏好設定
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                String note = pref.getString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), null);
+                if (note != null && !note.isEmpty()) {
+                    viewHolderSpot.etBlog.setText(note);
                 }
 //-------------------------
 //將備註心得傳回資料庫
@@ -590,6 +612,9 @@ public class CreateBlogFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit().putString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), blogNote).apply();
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -652,24 +677,34 @@ public class CreateBlogFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(blogPic != null) {
+                if (blogPic != null) {
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic2() != null) {
+                    }
+                    if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic3() != null) {
+                    }
+                    if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic4() != null) {
+                    }
+                    if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
                     }
+                }
+//進到挑選照片頁面前，先將note存偏好設定
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                String note = pref.getString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), null);
+                if (note != null && !note.isEmpty()) {
+                    viewHolderSpot.etBlog.setText(note);
                 }
 //--------------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -683,6 +718,9 @@ public class CreateBlogFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit().putString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), blogNote).apply();
 
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
@@ -746,27 +784,37 @@ public class CreateBlogFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(blogPic != null) {
+                if (blogPic != null) {
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic2() != null) {
+                    }
+                    if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic3() != null) {
+                    }
+                    if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic4() != null) {
+                    }
+                    if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
                     }
                 }
 
-//--------------------------
+//進到挑選照片頁面前，先將note存偏好設定
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                String note = pref.getString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), null);
+                if (note != null && !note.isEmpty()) {
+                    viewHolderSpot.etBlog.setText(note);
+                }
+//-----------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -778,6 +826,9 @@ public class CreateBlogFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit().putString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), blogNote).apply();
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -840,27 +891,37 @@ public class CreateBlogFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(blogPic != null) {
+                if (blogPic != null) {
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic2() != null) {
+                    }
+                    if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic3() != null) {
+                    }
+                    if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic4() != null) {
+                    }
+                    if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
                     }
                 }
+//進到挑選照片頁面前，先將note存偏好設定
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                String note = pref.getString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), null);
+                if (note != null && !note.isEmpty()) {
+                    viewHolderSpot.etBlog.setText(note);
+                }
 
-//-------------------
+//----------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -872,6 +933,10 @@ public class CreateBlogFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+//將文字先存入偏好設定檔
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit().putString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), blogNote).apply();
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
@@ -935,24 +1000,34 @@ public class CreateBlogFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(blogPic != null) {
+                if (blogPic != null) {
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic2() != null) {
+                    }
+                    if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic3() != null) {
+                    }
+                    if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                    }if (blogPic.getPic4() != null) {
+                    }
+                    if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
                     }
+                }
+//進到挑選照片頁面前，先將note存偏好設定
+                SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                        MODE_PRIVATE);
+                String note = pref.getString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), null);
+                if (note != null && !note.isEmpty()) {
+                    viewHolderSpot.etBlog.setText(note);
                 }
 
 //----------------------
@@ -967,6 +1042,9 @@ public class CreateBlogFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+                                MODE_PRIVATE);
+                        pref.edit().putString("blog_note" + blog_spot.getTrip_Id() + blog_spot.getLoc_Id(), blogNote).apply();
                         if (Common.networkConnected(activity)) {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
