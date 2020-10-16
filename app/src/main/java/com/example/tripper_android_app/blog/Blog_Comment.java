@@ -7,6 +7,15 @@ public class Blog_Comment {
     String content;
     String member_ID;
     int ivImage;
+    String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public Blog_Comment(){
 
