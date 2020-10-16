@@ -34,6 +34,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -58,6 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static androidx.navigation.Navigation.findNavController;
 import static com.example.tripper_android_app.util.Common.showToast;
 
 
@@ -179,6 +181,19 @@ public class CreateBlogPicFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(ibUpdate).popBackStack();
+                return true;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -440,21 +455,6 @@ public class CreateBlogPicFragment extends Fragment {
         }
     }
 
-//    public List<Member> getMemberList() {
-//        List<Member> memberList = new ArrayList<>();
-//        memberList.add(new Member(23, R.drawable.p01, "John"));
-//        memberList.add(new Member(75, R.drawable.p02, "Jack"));
-//        memberList.add(new Member(65, R.drawable.p03, "Mark"));
-//        memberList.add(new Member(12, R.drawable.p04, "Ben"));
-//        memberList.add(new Member(92, R.drawable.p05, "James"));
-//        memberList.add(new Member(103, R.drawable.p06, "David"));
-//        memberList.add(new Member(45, R.drawable.p07, "Ken"));
-//        memberList.add(new Member(78, R.drawable.p08, "Ron"));
-//        memberList.add(new Member(234, R.drawable.p09, "Jerry"));
-//        memberList.add(new Member(35, R.drawable.p10, "Maggie"));
-//        memberList.add(new Member(57, R.drawable.p11, "Sue"));
-//        memberList.add(new Member(61, R.drawable.p12, "Cathy"));
-//        return memberList;
-//    }
+
 
 }

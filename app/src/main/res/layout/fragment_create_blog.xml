@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F5F5"
+    android:background="#F0F2F6"
     tools:context=".blog.CreateBlogFragment">
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_width="62dp"
         android:layout_height="39dp"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="11dp"
         android:background="@drawable/button"
         android:text="第一天"
         android:textColor="#FFFFFF"
@@ -77,8 +77,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBlog"
         android:layout_width="405dp"
-        android:layout_height="450dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="463dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btDay1" />
@@ -104,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="12dp"
         android:text="九份好好玩"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -115,7 +115,7 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:text="日期：2020-08-01"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tvBlogName"

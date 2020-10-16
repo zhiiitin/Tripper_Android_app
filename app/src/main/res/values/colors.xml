@@ -15,4 +15,5 @@
     <color name="grayWhite">#D6D6D6</color>
     <color name="grayWhitee">#E7E7E7</color>
     <color name="GRAYYY">#EBEDF0</color>
+    <color name="colorForDeepPrimaryDark">#008B9B</color>
 </resources>

@@ -54,6 +54,7 @@ public class BlogHomeFragment extends Fragment {
         private CommonTask blogGetAllTask;
         private ImageTask blogImageTask;
         private List<BlogFinish> blogList;
+        private TextView tvInfo,tvInfo2;
         private String memberId ;
 
         @Override
@@ -77,7 +78,8 @@ public class BlogHomeFragment extends Fragment {
             swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
             rvBlog = view.findViewById(R.id.rvBlog_Home);
             rvBlog.setLayoutManager(new LinearLayoutManager(activity));
-
+            tvInfo = view.findViewById(R.id.tvInfo);
+            tvInfo2 = view.findViewById(R.id.tvInfo2);
             SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                     MODE_PRIVATE);
             memberId = pref.getString("memberId",null);
@@ -122,14 +124,18 @@ public class BlogHomeFragment extends Fragment {
 
         private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
-                Common.showToast(activity, "搜尋不到行程");
-            }
-            BlogAdapter  blogAdapter = (BlogAdapter) rvBlog.getAdapter();
-            if (blogAdapter == null) {
-                rvBlog.setAdapter(new BlogAdapter(activity, blogList));
-            } else {
-                blogAdapter.setBlogs(blogList);
-                blogAdapter.notifyDataSetChanged();
+                Common.showToast(activity, "尚無網誌");
+            }else {
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                tvInfo.setVisibility(View.GONE);
+                tvInfo2.setVisibility(View.GONE);
+                BlogAdapter blogAdapter = (BlogAdapter) rvBlog.getAdapter();
+                if (blogAdapter == null) {
+                    rvBlog.setAdapter(new BlogAdapter(activity, blogList));
+                } else {
+                    blogAdapter.setBlogs(blogList);
+                    blogAdapter.notifyDataSetChanged();
+                }
             }
         }
 
