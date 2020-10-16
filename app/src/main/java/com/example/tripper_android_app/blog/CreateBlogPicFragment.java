@@ -36,6 +36,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,9 +65,9 @@ public class CreateBlogPicFragment extends Fragment {
     private static final String TAG = "TAG_C_BlogPicFragment";
     private RecyclerView rvPhoto;
     private MainActivity activity;
-    private ImageView ivPoint;
+    private ImageView ivPoint, ivnopic;
     private ImageButton ibAdd;
-    private TextView tvSpotName, tvSlipe ,tvTouch;
+    private TextView tvSpotName, tvnopic, tvTouch, tvUpdate;
     private ImageButton ibUpdate;
     private CommonTask imageTask;
     private static final int REQ_TAKE_PICTURE = 0;
@@ -73,7 +76,7 @@ public class CreateBlogPicFragment extends Fragment {
     private Uri contentUri;
     private byte[] photo;
     private List<Bitmap> bitmapList = new ArrayList<>();
-    private String blogID , locId ;
+    private String blogID, locId;
     private BlogPic blogPic = new BlogPic();
 
 
@@ -111,14 +114,19 @@ public class CreateBlogPicFragment extends Fragment {
         ibUpdate = view.findViewById(R.id.ibUpdate);
         ibAdd = view.findViewById(R.id.ibAdd);
         tvTouch = view.findViewById(R.id.textView12);
+        tvUpdate = view.findViewById(R.id.tvUpdate);
+        ivnopic = view.findViewById(R.id.ivnoPic);
+        tvnopic = view.findViewById(R.id.tvnoPic);
 
         ibAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTypeDialog();
+                rvPhoto.setVisibility(View.VISIBLE);
+                tvnopic.setVisibility(View.GONE);
+                ivnopic.setVisibility(View.GONE);
             }
         });
-
 
 
 //接收前頁bundle
@@ -133,7 +141,7 @@ public class CreateBlogPicFragment extends Fragment {
 //RecyclerView
         rvPhoto = view.findViewById(R.id.rvPhoto);
 //        rvPhoto.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
-        rvPhoto.setLayoutManager(new GridLayoutManager(activity,2));
+        rvPhoto.setLayoutManager(new GridLayoutManager(activity, 2));
         rvPhoto.setAdapter(new ImgAdpter(activity, bitmapList));
 //        rvPhoto.setOnFlingListener(null);
 //        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
@@ -143,18 +151,23 @@ public class CreateBlogPicFragment extends Fragment {
         ibUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Common.networkConnected(activity)){
+
+                tvUpdate.setVisibility(View.VISIBLE);
+
+                if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "BlogServlet";
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "imageUpdate");
                     jsonObject.addProperty("blogPic", new Gson().toJson(blogPic));
                     int count = 0;
                     try {                               //呼叫execute()執行doInBackGround
-                        String jsonIn = new CommonTask(url,jsonObject.toString()).execute().get();;
+                        String jsonIn = new CommonTask(url, jsonObject.toString()).execute().get();
+                        ;
                         count = Integer.parseInt(jsonIn);
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
-                    }if (count == 0) {
+                    }
+                    if (count == 0) {
                         Common.showToast(activity, "新增失敗");
                     } else {
                         Common.showToast(activity, "上傳成功");
@@ -169,10 +182,9 @@ public class CreateBlogPicFragment extends Fragment {
     }
 
 
-
     private class ImgAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater layoutInflater;
-//        private List<Img> imgs;
+        //        private List<Img> imgs;
         private ImageView pickIcon;
         private int imageSize;
         private List<Bitmap> imgList;
@@ -217,7 +229,7 @@ public class CreateBlogPicFragment extends Fragment {
             this.imageSize = imageSize;
         }
 
-        ImgAdpter( Context context, List<Bitmap> imgList) {
+        ImgAdpter(Context context, List<Bitmap> imgList) {
             layoutInflater = LayoutInflater.from(context);
             this.pickIcon = pickIcon;
             this.imgList = imgList;
@@ -246,21 +258,20 @@ public class CreateBlogPicFragment extends Fragment {
         }
 
 
-
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView;
 
-                itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
-                return new MyViewHolder(itemView);
+            itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
+            return new MyViewHolder(itemView);
 
         }
 
         //設定長度
         @Override
         public int getItemCount() {
-            return imgList == null ? 1 : ( imgList.size());
+            return imgList == null ? 1 : (imgList.size());
         }
 
         @Override
@@ -278,11 +289,11 @@ public class CreateBlogPicFragment extends Fragment {
 //                });
 
 
-                MyViewHolder myViewHolder = (MyViewHolder) holder;
-                // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
-                // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟
-                Bitmap bitmapPosition = imgList.get(position );
-                myViewHolder.ivArticleImageInsert.setImageBitmap(bitmapPosition);
+            MyViewHolder myViewHolder = (MyViewHolder) holder;
+            // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
+            // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟
+            Bitmap bitmapPosition = imgList.get(position);
+            myViewHolder.ivArticleImageInsert.setImageBitmap(bitmapPosition);
 
 
         }
@@ -389,23 +400,23 @@ public class CreateBlogPicFragment extends Fragment {
             bitmapList.add(bitmap);
             showPhotos(bitmapList);
 
-            if(bitmapList.size() == 1){
-                String pic1 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 1) {
+                String pic1 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic1(pic1);
             }
 
-            if(bitmapList.size() == 2){
-                String pic2 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 2) {
+                String pic2 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic2(pic2);
             }
 
-            if(bitmapList.size() == 3){
-                String pic3 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 3) {
+                String pic3 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic3(pic3);
             }
 
-            if(bitmapList.size() == 4){
-                String pic4 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 4) {
+                String pic4 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic4(pic4);
                 ibAdd.setVisibility(View.GONE);
                 tvTouch.setVisibility(View.GONE);

@@ -233,7 +233,6 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
                 Common.map.put(daySelected, locationDs);
 
                 Navigation.findNavController(v).
-
                         popBackStack(R.id.create_Trip_Fragment, false);
             }
         });

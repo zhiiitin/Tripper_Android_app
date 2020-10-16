@@ -178,12 +178,23 @@ public class BlogHomeFragment extends Fragment {
             public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder myViewHolder, int position) {
 
                 final BlogFinish blogFinish = blogList.get(position);
-                String Url = Common.URL_SERVER + "Trip_M_Servlet";
+                String Url = Common.URL_SERVER + "BlogServlet";
                 String id = blogFinish.getTrip_Id();
                 blogImageTask = new ImageTask(Url, id, imageSize, myViewHolder.imageView);
                 blogImageTask.execute();
 
                 myViewHolder.tvTitle.setText(blogFinish.getBlog_title());
+                myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString( "UserId",blogFinish.getMemberId());
+                        bundle.putString("BlogId",blogFinish.getTrip_Id());
+                        bundle.putString("BlogTitle",blogFinish.getBlog_title());
+                        bundle.putString("BlogDesc",blogFinish.getBlog_Info());
+                        Navigation.findNavController(v).navigate(R.id.action_blog_HomePage_to_blogMainFragment,bundle);
+                    }
+                });
 
             }
         }

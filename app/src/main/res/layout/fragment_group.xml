@@ -63,7 +63,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:itemBackground="@color/colorForBottomBar"
+        app:itemBackground="@color/GRAYYY"
         app:itemIconTint="@color/bottom_bar_selected_color"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"

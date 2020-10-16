@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.group.GroupFragment;
+import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
@@ -53,6 +54,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -81,6 +83,7 @@ public class Trip_HomePage extends Fragment {
     private List<Trip_M> tripList;
     private SwipeRefreshLayout swipes;
     private ImageButton editTrip;
+    private Trip_M tripM;
     //show member
     private Member member;
     private FirebaseAuth auth;
@@ -144,10 +147,9 @@ public class Trip_HomePage extends Fragment {
         Menu itemMenu = bottomNavigationViewTop.getMenu();
         itemMenu.getItem(0).setChecked(true);
         // 每次進到畫面都先更新token
-        if(Common.isLogin(activity)){
+        if (Common.isLogin(activity)) {
             Common.getTokenSendServer(activity);
         }
-
 
 
     }
@@ -280,6 +282,35 @@ public class Trip_HomePage extends Fragment {
                                 case R.id.tripHomepageEdit:
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable("tripM", tripM);
+
+                                    //連線取得行程的景點後，帶去編輯行程頁面
+                                    if (Common.networkConnected(activity)) {
+                                        String url = Common.URL_SERVER + "TripServlet";
+
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "showLocName");
+                                        jsonObject.addProperty("tripId", tripId);
+                                        String jsonOut = jsonObject.toString();
+                                        tripGetAllTask = new CommonTask(url, jsonOut);
+                                        try {
+                                            String jsonIn = tripGetAllTask.execute().get();
+                                            Type type = new TypeToken<Map<String, List<Location_D>>>() {
+                                            }.getType();
+                                            Common.map = new Gson().fromJson(jsonIn, type);
+                                            if (Common.map == null) {
+                                                Log.d("DB抓景點資料進map，map空值顯示：", "enter Common.map null");
+                                            } else {
+
+                                                Log.d("DB抓景點資料進map，map有東西顯示：", "enter Common.map not null");
+                                            }
+                                        } catch (ExecutionException | InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        Common.showToast(activity, "請確認網路連線");
+                                    }
+
+
                                     Navigation.findNavController(view).navigate(R.id.action_trip_HomePage_to_updateTripFragment, bundle);
                                     break;
 
@@ -341,6 +372,7 @@ public class Trip_HomePage extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
     //show 使用者資訊
     private void showMember() {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
@@ -360,13 +392,13 @@ public class Trip_HomePage extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-//                String nickname = member.getNickName();
-//                textUserName.setText(" " + nickname + " ");
+                String nickname = member.getNickName();
+                textUserName.setText(" " + nickname + " ");
 
             } else {
                 Common.showToast(activity, "no network connection found");
             }
-//            showMemberPic();
+            showMemberPic();
 
         }
     }
@@ -415,7 +447,7 @@ public class Trip_HomePage extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!Common.isLogin(activity)){
+        if (!Common.isLogin(activity)) {
             Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
         }
     }

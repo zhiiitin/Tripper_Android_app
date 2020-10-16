@@ -11,6 +11,7 @@ import android.graphics.ImageDecoder;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -26,7 +27,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,8 +42,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.explore.Explore;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.DateUtil;
@@ -66,7 +71,7 @@ public class CreateBlogFragment extends Fragment {
     private static final String TAG = "TAG_Create_BlogFragment";
     private RecyclerView rvBlog, rvPhoto;
     private MainActivity activity;
-    private CommonTask groupGet1Task, InsertNoteTask ,getImageTask;
+    private CommonTask groupGet1Task, InsertNoteTask, getImageTask;
     private TextView tvBlogName, tvDate, tvTime;
     private String startDate, tripId;
     private Button btDay1, btDay2, btDay3, btDay4, btDay5, btDay6;
@@ -76,7 +81,8 @@ public class CreateBlogFragment extends Fragment {
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
-    private List<Bitmap> bitmapList = new ArrayList<>() ;
+    private List<Bitmap> bitmapList = new ArrayList<>();
+    private BlogPic blogPic = null ;
 
 
     @Override
@@ -114,6 +120,7 @@ public class CreateBlogFragment extends Fragment {
 //RecyclerView
         rvBlog = view.findViewById(R.id.rvBlog);
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
+        rvBlog.setItemViewCacheSize(10);
 //取得前頁bungle
         Bundle bundle = getArguments();
         String blogName = bundle.getString("tripName");
@@ -260,8 +267,8 @@ public class CreateBlogFragment extends Fragment {
                 return true;
             case R.id.btNextStep:
                 Bundle bundle = new Bundle();
-                bundle.putString("tripId",tripId);
-                findNavController(tvBlogName).navigate(R.id.action_createBlogFragment_to_createBlogFinishFragment,bundle);
+                bundle.putString("tripId", tripId);
+                findNavController(tvBlogName).navigate(R.id.action_createBlogFragment_to_createBlogFinishFragment, bundle);
                 return true;
 
             default:
@@ -359,6 +366,8 @@ public class CreateBlogFragment extends Fragment {
             return spotNum1 + nameNum + spotNum2 + spotNum3 + spotNum4 + spotNum5 + spotNum6;
         }
 
+
+
         //根據viewType 顯示不同RecyclerView
         @NonNull
         @Override
@@ -371,6 +380,9 @@ public class CreateBlogFragment extends Fragment {
                 return new ViewHolderDay(itemView);
             }
         }
+
+
+
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
@@ -424,6 +436,7 @@ public class CreateBlogFragment extends Fragment {
 
 //第一天景點列表-------------------------------------------------------------------------------
             if (position > 0 && position < day1count) {
+
                 final Blog_SpotInfo blog_spot = spotList1.get(position - 1);
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
@@ -435,24 +448,49 @@ public class CreateBlogFragment extends Fragment {
                         String locId = blog_spot.getLoc_Id();
                         String blogID = blog_spot.getTrip_Id();
                         Bundle bundle = new Bundle();
-                        bundle.putString("spotName",spotName);
-                        bundle.putString("locId",locId);
-                        bundle.putString("blogID",blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
-//---------------------------------------------------------------------
+//將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action","getSpotImage");
-                jsonObject.addProperty("blog_Id",blog_spot.getTrip_Id());
-                jsonObject.addProperty("loc_id",blog_spot.getLoc_Id());
-                getImageTask = new CommonTask(url,jsonObject.toString());
+                jsonObject.addProperty("action", "getSpotImage");
+                jsonObject.addProperty("blog_Id", blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url, jsonObject.toString());
+                blogPic = new BlogPic();
+                try {
+                    String jsonIn = getImageTask.execute().get();
+                    Type listType = new TypeToken<BlogPic>() {
+                    }.getType();
 
-
-
-
-//---------------------------------------------------------------------
+                    blogPic = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            if(blogPic != null) {
+                if (blogPic.getPic1() != null) {
+                    byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                    Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                    viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                }if (blogPic.getPic2() != null) {
+                    byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                    Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                    viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                }if (blogPic.getPic3() != null) {
+                    byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                    Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                    viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                }if (blogPic.getPic4() != null) {
+                    byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                    Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                    viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                }
+            }
+//------------------------------
 
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -504,12 +542,49 @@ public class CreateBlogFragment extends Fragment {
                         String locId = blog_spot.getLoc_Id();
                         String blogID = blog_spot.getTrip_Id();
                         Bundle bundle = new Bundle();
-                        bundle.putString("spotName",spotName);
-                        bundle.putString("locId",locId);
-                        bundle.putString("blogID",blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+//將選擇完且上傳的照片show出來
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getSpotImage");
+                jsonObject.addProperty("blog_Id", blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url, jsonObject.toString());
+                blogPic = new BlogPic();
+                try {
+                    String jsonIn = getImageTask.execute().get();
+                    Type listType = new TypeToken<BlogPic>() {
+                    }.getType();
+
+                    blogPic = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if(blogPic != null) {
+                    if (blogPic.getPic1() != null) {
+                        byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                        Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic2() != null) {
+                        byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                        Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic3() != null) {
+                        byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                        Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                        viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic4() != null) {
+                        byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                        Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                        viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                    }
+                }
+//-------------------------
 //將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -554,13 +629,49 @@ public class CreateBlogFragment extends Fragment {
                         String locId = blog_spot.getLoc_Id();
                         String blogID = blog_spot.getTrip_Id();
                         Bundle bundle = new Bundle();
-                        bundle.putString("spotName",spotName);
-                        bundle.putString("locId",locId);
-                        bundle.putString("blogID",blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+//將選擇完且上傳的照片show出來
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getSpotImage");
+                jsonObject.addProperty("blog_Id", blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url, jsonObject.toString());
+                blogPic = new BlogPic();
+                try {
+                    String jsonIn = getImageTask.execute().get();
+                    Type listType = new TypeToken<BlogPic>() {
+                    }.getType();
 
+                    blogPic = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if(blogPic != null) {
+                    if (blogPic.getPic1() != null) {
+                        byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                        Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic2() != null) {
+                        byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                        Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic3() != null) {
+                        byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                        Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                        viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic4() != null) {
+                        byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                        Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                        viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                    }
+                }
+//--------------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -612,13 +723,50 @@ public class CreateBlogFragment extends Fragment {
                         String locId = blog_spot.getLoc_Id();
                         String blogID = blog_spot.getTrip_Id();
                         Bundle bundle = new Bundle();
-                        bundle.putString("spotName",spotName);
-                        bundle.putString("locId",locId);
-                        bundle.putString("blogID",blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+//將選擇完且上傳的照片show出來
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getSpotImage");
+                jsonObject.addProperty("blog_Id", blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url, jsonObject.toString());
+                blogPic = new BlogPic();
+                try {
+                    String jsonIn = getImageTask.execute().get();
+                    Type listType = new TypeToken<BlogPic>() {
+                    }.getType();
 
+                    blogPic = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if(blogPic != null) {
+                    if (blogPic.getPic1() != null) {
+                        byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                        Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic2() != null) {
+                        byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                        Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic3() != null) {
+                        byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                        Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                        viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic4() != null) {
+                        byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                        Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                        viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                    }
+                }
+
+//--------------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -669,13 +817,50 @@ public class CreateBlogFragment extends Fragment {
                         String locId = blog_spot.getLoc_Id();
                         String blogID = blog_spot.getTrip_Id();
                         Bundle bundle = new Bundle();
-                        bundle.putString("spotName",spotName);
-                        bundle.putString("locId",locId);
-                        bundle.putString("blogID",blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+//將選擇完且上傳的照片show出來
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getSpotImage");
+                jsonObject.addProperty("blog_Id", blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url, jsonObject.toString());
+                blogPic = new BlogPic();
+                try {
+                    String jsonIn = getImageTask.execute().get();
+                    Type listType = new TypeToken<BlogPic>() {
+                    }.getType();
 
+                    blogPic = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if(blogPic != null) {
+                    if (blogPic.getPic1() != null) {
+                        byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                        Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic2() != null) {
+                        byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                        Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic3() != null) {
+                        byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                        Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                        viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic4() != null) {
+                        byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                        Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                        viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                    }
+                }
+
+//-------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -727,13 +912,50 @@ public class CreateBlogFragment extends Fragment {
                         String locId = blog_spot.getLoc_Id();
                         String blogID = blog_spot.getTrip_Id();
                         Bundle bundle = new Bundle();
-                        bundle.putString("spotName",spotName);
-                        bundle.putString("locId",locId);
-                        bundle.putString("blogID",blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment,bundle);
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+//將選擇完且上傳的照片show出來
+                String url = Common.URL_SERVER + "BlogServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getSpotImage");
+                jsonObject.addProperty("blog_Id", blog_spot.getTrip_Id());
+                jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
+                getImageTask = new CommonTask(url, jsonObject.toString());
+                blogPic = new BlogPic();
+                try {
+                    String jsonIn = getImageTask.execute().get();
+                    Type listType = new TypeToken<BlogPic>() {
+                    }.getType();
 
+                    blogPic = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if(blogPic != null) {
+                    if (blogPic.getPic1() != null) {
+                        byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                        Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
+                        viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic2() != null) {
+                        byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                        Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
+                        viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic3() != null) {
+                        byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                        Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
+                        viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                    }if (blogPic.getPic4() != null) {
+                        byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                        Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
+                        viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                    }
+                }
+
+//----------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1079,7 +1301,7 @@ public class CreateBlogFragment extends Fragment {
     }
 
 
-//對話視窗 挑選照片
+    //對話視窗 挑選照片
     private void showTypeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog dialog = builder.create();
