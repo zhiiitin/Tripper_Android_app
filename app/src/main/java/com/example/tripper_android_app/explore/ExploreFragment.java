@@ -274,7 +274,7 @@ public class ExploreFragment extends Fragment {
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
             String url = Common.URL_SERVER + "ExploreServlet";
-            int id = explore.getUserId();
+            String id = explore.getBlogId();
             ImageTask imageTask = new ImageTask(url,id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -291,8 +291,8 @@ public class ExploreFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putInt( "UserId",explore.getUserId());
-                    bundle.putInt("BlogId",explore.getBlogId());
+                    bundle.putString( "UserId",explore.getUserId());
+                    bundle.putString("BlogId",explore.getBlogId());
                     bundle.putString("BlogTitle",explore.getTittleName());
                     bundle.putString("BlogDesc",explore.getBlogDesc());
                     Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment,bundle);

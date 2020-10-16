@@ -34,8 +34,12 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,6 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static androidx.navigation.Navigation.findNavController;
 import static com.example.tripper_android_app.util.Common.showToast;
 
 
@@ -62,8 +67,9 @@ public class CreateBlogPicFragment extends Fragment {
     private static final String TAG = "TAG_C_BlogPicFragment";
     private RecyclerView rvPhoto;
     private MainActivity activity;
-    private ImageView ivPoint;
-    private TextView tvSpotName, tvSlipe;
+    private ImageView ivPoint, ivnopic;
+    private ImageButton ibAdd;
+    private TextView tvSpotName, tvnopic, tvTouch, tvUpdate;
     private ImageButton ibUpdate;
     private CommonTask imageTask;
     private static final int REQ_TAKE_PICTURE = 0;
@@ -72,7 +78,7 @@ public class CreateBlogPicFragment extends Fragment {
     private Uri contentUri;
     private byte[] photo;
     private List<Bitmap> bitmapList = new ArrayList<>();
-    private String blogID , locId ;
+    private String blogID, locId;
     private BlogPic blogPic = new BlogPic();
 
 
@@ -108,10 +114,25 @@ public class CreateBlogPicFragment extends Fragment {
         ivPoint = view.findViewById(R.id.ivPoint);
         tvSpotName = view.findViewById(R.id.tvSpotName);
         ibUpdate = view.findViewById(R.id.ibUpdate);
+        ibAdd = view.findViewById(R.id.ibAdd);
+        tvTouch = view.findViewById(R.id.textView12);
+        tvUpdate = view.findViewById(R.id.tvUpdate);
+        ivnopic = view.findViewById(R.id.ivnoPic);
+        tvnopic = view.findViewById(R.id.tvnoPic);
+
+        ibAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTypeDialog();
+                rvPhoto.setVisibility(View.VISIBLE);
+                tvnopic.setVisibility(View.GONE);
+                ivnopic.setVisibility(View.GONE);
+            }
+        });
 
 
 //接收前頁bundle
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         String spotName = (String) bundle.get("spotName");
         blogID = (String) bundle.get("blogID");
         locId = (String) bundle.get("locId");
@@ -122,7 +143,7 @@ public class CreateBlogPicFragment extends Fragment {
 //RecyclerView
         rvPhoto = view.findViewById(R.id.rvPhoto);
 //        rvPhoto.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL));
-        rvPhoto.setLayoutManager(new GridLayoutManager(activity,2));
+        rvPhoto.setLayoutManager(new GridLayoutManager(activity, 2));
         rvPhoto.setAdapter(new ImgAdpter(activity, bitmapList));
 //        rvPhoto.setOnFlingListener(null);
 //        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
@@ -132,18 +153,23 @@ public class CreateBlogPicFragment extends Fragment {
         ibUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Common.networkConnected(activity)){
+
+                tvUpdate.setVisibility(View.VISIBLE);
+
+                if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "BlogServlet";
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", "imageUpdate");
                     jsonObject.addProperty("blogPic", new Gson().toJson(blogPic));
                     int count = 0;
                     try {                               //呼叫execute()執行doInBackGround
-                        String jsonIn = new CommonTask(url,jsonObject.toString()).execute().get();;
+                        String jsonIn = new CommonTask(url, jsonObject.toString()).execute().get();
+                        ;
                         count = Integer.parseInt(jsonIn);
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
-                    }if (count == 0) {
+                    }
+                    if (count == 0) {
                         Common.showToast(activity, "新增失敗");
                     } else {
                         Common.showToast(activity, "上傳成功");
@@ -157,11 +183,23 @@ public class CreateBlogPicFragment extends Fragment {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(ibUpdate).popBackStack();
+                return true;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     private class ImgAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater layoutInflater;
-//        private List<Img> imgs;
+        //        private List<Img> imgs;
         private ImageView pickIcon;
         private int imageSize;
         private List<Bitmap> imgList;
@@ -206,7 +244,7 @@ public class CreateBlogPicFragment extends Fragment {
             this.imageSize = imageSize;
         }
 
-        ImgAdpter( Context context, List<Bitmap> imgList) {
+        ImgAdpter(Context context, List<Bitmap> imgList) {
             layoutInflater = LayoutInflater.from(context);
             this.pickIcon = pickIcon;
             this.imgList = imgList;
@@ -234,61 +272,44 @@ public class CreateBlogPicFragment extends Fragment {
             }
         }
 
-        //區分顯示的種類
-        @Override
-        public int getItemViewType(int position) {
-            if (position == 0) {
-                return 1;   //選擇圖片
-            } else {
-                return 2;
-            }
-        }
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView;
-            if (viewType == 1) {
-                itemView = layoutInflater.inflate(R.layout.item_view_createblog_pick, parent, false);
-                return new PickViewHolder(itemView);
-            } else {
-                itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
-                return new MyViewHolder(itemView);
-            }
+
+            itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
+            return new MyViewHolder(itemView);
+
         }
 
         //設定長度
         @Override
         public int getItemCount() {
-            return imgList == null ? 1 : (1 + imgList.size());
+            return imgList == null ? 1 : (imgList.size());
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+//
+//            if (holder instanceof PickViewHolder) {
+//
+//                PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
+//                pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
+//                pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                       showTypeDialog();
+//                    }
+//                });
 
-            if (holder instanceof PickViewHolder) {
 
-                PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
-                pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
-                pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                       showTypeDialog();
-                    }
-                });
-                if(bitmapList.size() ==4){
+            MyViewHolder myViewHolder = (MyViewHolder) holder;
+            // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
+            // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟
+            Bitmap bitmapPosition = imgList.get(position);
+            myViewHolder.ivArticleImageInsert.setImageBitmap(bitmapPosition);
 
-                    notifyItemRemoved(0);
-                    notifyItemChanged(0,imgList.size());
-                }
-            } else if (holder instanceof MyViewHolder) {
-
-                MyViewHolder myViewHolder = (MyViewHolder) holder;
-                // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
-                // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟
-                Bitmap bitmapPosition = imgList.get(position - 1);
-                myViewHolder.ivArticleImageInsert.setImageBitmap(bitmapPosition);
-            }
 
         }
     }
@@ -394,24 +415,26 @@ public class CreateBlogPicFragment extends Fragment {
             bitmapList.add(bitmap);
             showPhotos(bitmapList);
 
-            if(bitmapList.size() == 1){
-                String pic1 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 1) {
+                String pic1 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic1(pic1);
             }
 
-            if(bitmapList.size() == 2){
-                String pic2 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 2) {
+                String pic2 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic2(pic2);
             }
 
-            if(bitmapList.size() == 3){
-                String pic3 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 3) {
+                String pic3 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic3(pic3);
             }
 
-            if(bitmapList.size() == 4){
-                String pic4 = Base64.encodeToString(photo,Base64.DEFAULT);
+            if (bitmapList.size() == 4) {
+                String pic4 = Base64.encodeToString(photo, Base64.DEFAULT);
                 blogPic.setPic4(pic4);
+                ibAdd.setVisibility(View.GONE);
+                tvTouch.setVisibility(View.GONE);
             }
         }
 
@@ -432,21 +455,6 @@ public class CreateBlogPicFragment extends Fragment {
         }
     }
 
-//    public List<Member> getMemberList() {
-//        List<Member> memberList = new ArrayList<>();
-//        memberList.add(new Member(23, R.drawable.p01, "John"));
-//        memberList.add(new Member(75, R.drawable.p02, "Jack"));
-//        memberList.add(new Member(65, R.drawable.p03, "Mark"));
-//        memberList.add(new Member(12, R.drawable.p04, "Ben"));
-//        memberList.add(new Member(92, R.drawable.p05, "James"));
-//        memberList.add(new Member(103, R.drawable.p06, "David"));
-//        memberList.add(new Member(45, R.drawable.p07, "Ken"));
-//        memberList.add(new Member(78, R.drawable.p08, "Ron"));
-//        memberList.add(new Member(234, R.drawable.p09, "Jerry"));
-//        memberList.add(new Member(35, R.drawable.p10, "Maggie"));
-//        memberList.add(new Member(57, R.drawable.p11, "Sue"));
-//        memberList.add(new Member(61, R.drawable.p12, "Cathy"));
-//        return memberList;
-//    }
+
 
 }

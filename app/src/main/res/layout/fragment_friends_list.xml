@@ -64,23 +64,23 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btEnterAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_margin="8dp"
         android:src="@drawable/ic_add"
-        android:layout_gravity="end"
         android:translationY="540dp"
-        app:elevation="6dp"
-        />
+        app:elevation="6dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        app:itemBackground="@color/colorForBottomBar"
+        app:itemBackground="@color/GRAYYY"
         app:itemIconTint="@color/bottom_bar_selected_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_bar_menu" />

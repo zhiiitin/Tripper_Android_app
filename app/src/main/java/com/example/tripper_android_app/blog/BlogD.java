@@ -3,13 +3,13 @@ package com.example.tripper_android_app.blog;
 public class BlogD {
 
         private int dayCount;
-        private int locationId;
+        private String locationId;
         private String locationName;
         private String blogNote;
         private String s_Date;
-        private int blogId;
-        private int tripId;
-    public BlogD(int blogId,int locationId, String locationName, String blogNote,String s_Date,int tripId) {
+        private String blogId;
+        private String tripId;
+    public BlogD(String blogId,String locationId, String locationName, String blogNote,String s_Date,String tripId) {
         super();
         this.blogId = blogId;
         this.locationId = locationId;
@@ -22,26 +22,20 @@ public class BlogD {
         this.s_Date= s_Date;
     }
 
-    public void setBlogId(int blogId) {
+    public void setBlogId(String blogId) {
         this.blogId = blogId;
     }
 
-    public int getTripId() {
+    public String getTripId() {
         return tripId;
     }
 
-    public void setTripId(int tripId) {
+    public void setTripId(String tripId) {
         this.tripId = tripId;
     }
 
-    public BlogD(int dayCount, int locationId, String locationName, String blogNote) {
-            super();
-            this.dayCount = dayCount;
-            this.locationId = locationId;
-            this.locationName = locationName;
-            this.blogNote = blogNote;
-        }
-    public int getBlogId(){
+
+    public String getBlogId(){
             return blogId;
     }
 
@@ -53,7 +47,7 @@ public class BlogD {
         this.s_Date = s_Date;
     }
 
-    public BlogD(int locationId, String locationName, String blogNote, String s_Date) {
+    public BlogD(String locationId, String locationName, String blogNote, String s_Date) {
             super();
             this.locationId = locationId;
             this.locationName = locationName;
@@ -66,10 +60,10 @@ public class BlogD {
         public void setDayCount(int dayCount) {
             this.dayCount = dayCount;
         }
-        public int getLocationId() {
+        public String getLocationId() {
             return locationId;
         }
-        public void setLocationId(int locationId) {
+        public void setLocationId(String locationId) {
             locationId = locationId;
         }
         public String getLocationName() {

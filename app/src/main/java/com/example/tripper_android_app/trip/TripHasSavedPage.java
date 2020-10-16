@@ -490,7 +490,7 @@ public class TripHasSavedPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                        popupMenu.inflate(R.menu.trip_memo_card_list);
+                        popupMenu.inflate(R.menu.trip_saved_more_button_menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @SuppressLint("LongLogTag")
                             @Override
@@ -532,7 +532,7 @@ public class TripHasSavedPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                        popupMenu.inflate(R.menu.trip_memo_card_list);
+                        popupMenu.inflate(R.menu.trip_saved_more_button_menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @SuppressLint("LongLogTag")
                             @Override
@@ -574,7 +574,7 @@ public class TripHasSavedPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                        popupMenu.inflate(R.menu.trip_memo_card_list);
+                        popupMenu.inflate(R.menu.trip_saved_more_button_menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @SuppressLint("LongLogTag")
                             @Override
@@ -616,7 +616,7 @@ public class TripHasSavedPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                        popupMenu.inflate(R.menu.trip_memo_card_list);
+                        popupMenu.inflate(R.menu.trip_saved_more_button_menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @SuppressLint("LongLogTag")
                             @Override
@@ -658,7 +658,7 @@ public class TripHasSavedPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                        popupMenu.inflate(R.menu.trip_memo_card_list);
+                        popupMenu.inflate(R.menu.trip_saved_more_button_menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @SuppressLint("LongLogTag")
                             @Override
@@ -700,7 +700,7 @@ public class TripHasSavedPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
-                        popupMenu.inflate(R.menu.trip_memo_card_list);
+                        popupMenu.inflate(R.menu.trip_saved_more_button_menu);
                         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @SuppressLint("LongLogTag")
                             @Override

@@ -57,6 +57,7 @@ import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.DateUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -66,6 +67,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -83,7 +85,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class updateTripFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private static final String TAG = "TAG_Date";
+    private static final String TAG = "UpdateTripInfo: ";
     private MainActivity activity;
     private TextView textDate, textTime, textChoseGroupPpl;
     private EditText etTripTitle;
@@ -92,7 +94,6 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
     private static int year, month, day, hour, minute;
     private RecyclerView rvLocChosen;
     private List<Location_D> locInfoList;
-
 
 
     private int lastPosition;
@@ -158,20 +159,21 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
 
 
         //recyclerview
-
-
-        if(Common.spinnerSelect.isEmpty()) {
+        if (Common.spinnerSelect.isEmpty()) {
             Common.spinnerSelect = "1";
         }
         rvLocChosen.setLayoutManager(new LinearLayoutManager(activity));
-        //locInfoList = getLocInfo(Common.spinnerSelect);
-        getLocInfo();
         showLocList();
+        spinnerShowLoc();
+
 
 
 
         // spinner監聽器，顯示不同天的景點清單
         spDay.setOnItemSelectedListener(listener);
+
+
+
         //日期選擇
         Button btPickDate = view.findViewById(R.id.btPickDate);
         btPickDate.setOnClickListener(new View.OnClickListener() {
@@ -310,6 +312,42 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
                         textTime.setError("請選擇出發時間");
                         return;
                     }
+
+                    // TODO 讀取出發日期 根據Spinner存入不同的天數
+                    //
+                    String dayForSpinnerSelect = "";
+                    if ("2".equals(Common.spinnerSelect)) {
+                        try {
+                            dayForSpinnerSelect = DateUtil.date4day(startDate, 1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if ("3".equals(Common.spinnerSelect)) {
+                        try {
+                            dayForSpinnerSelect = DateUtil.date4day(startDate, 2);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if ("4".equals(Common.spinnerSelect)) {
+                        try {
+                            dayForSpinnerSelect = DateUtil.date4day(startDate, 3);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if ("5".equals(Common.spinnerSelect)) {
+                        try {
+                            dayForSpinnerSelect = DateUtil.date4day(startDate, 4);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if ("6".equals(Common.spinnerSelect)) {
+                        try {
+                            dayForSpinnerSelect = DateUtil.date4day(startDate, 5);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     // String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax, int status
                     Trip_M tripMaster = new Trip_M(tripId, memberId, tripTitle, startDate, startTime, dayCount, pMax, status);
 
@@ -330,7 +368,7 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
-                    if (count == 0) {
+                    if (count > 0) {
                         Common.showToast(activity, "修改行程成功");
                     } else {
                         Common.showToast(activity, "修改行程失敗");
@@ -349,8 +387,11 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
 
 
     private void showLocList() {
-        List<Location_D> tripDs;
-        tripDs = Common.map.get(Common.spinnerSelect);
+        List<Location_D> tripDs = Common.map.get(Common.spinnerSelect);
+        if (tripDs == null || tripDs.isEmpty()) {
+            tripDs = new ArrayList<>();
+        }
+//        Log.e("triDs:: ", tripDs + "");
         Log.d(TAG, "enter showLocList");
         ShowTripLocAdapter showTripLocAdapter = (ShowTripLocAdapter) rvLocChosen.getAdapter();
         if (showTripLocAdapter == null) {
@@ -360,42 +401,41 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
             Log.d(TAG, "enter Adapter is not null");
             showTripLocAdapter.setLocationDs(tripDs);
             showTripLocAdapter.notifyDataSetChanged();
-
         }
     }
 
-    private void getLocInfo() {
-       // List<Location_D> locationDs = new ArrayList<>();
-        if (Common.networkConnected(activity)) {
-            String url = Common.URL_SERVER + "TripServlet";
-            Trip_M tripM = (Trip_M) bundle.getSerializable("tripM");
-            String tripId = tripM.getTripId();
-
-
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "showLocName");
-            jsonObject.addProperty("tripId", tripId);
-            String jsonOut = jsonObject.toString();
-            tripGetAllTask = new CommonTask(url, jsonOut);
-            try {
-                String jsonIn = tripGetAllTask.execute().get();
-                Type type = new TypeToken<Map<String, List<Location_D>>>() {
-                }.getType();
-                Common.map = new Gson().fromJson(jsonIn, type);
-                if (Common.map == null) {
-                    Log.d("DB抓景點資料進map，map空值顯示：", "enter Common.map null");
-                } else {
-
-                    Log.d("DB抓景點資料進map，map有東西顯示：", "enter Common.map not null");
-                }
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Common.showToast(activity, "請確認網路連線");
-        }
-
-    }
+//    private void getLocInfo() {
+//        // List<Location_D> locationDs = new ArrayList<>();
+//        if (Common.networkConnected(activity)) {
+//            String url = Common.URL_SERVER + "TripServlet";
+//            Trip_M tripM = (Trip_M) bundle.getSerializable("tripM");
+//            String tripId = tripM.getTripId();
+//
+//
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("action", "showLocName");
+//            jsonObject.addProperty("tripId", tripId);
+//            String jsonOut = jsonObject.toString();
+//            tripGetAllTask = new CommonTask(url, jsonOut);
+//            try {
+//                String jsonIn = tripGetAllTask.execute().get();
+//                Type type = new TypeToken<Map<String, List<Location_D>>>() {
+//                }.getType();
+//                Common.map = new Gson().fromJson(jsonIn, type);
+//                if (Common.map == null) {
+//                    Log.d("DB抓景點資料進map，map空值顯示：", "enter Common.map null");
+//                } else {
+//
+//                    Log.d("DB抓景點資料進map，map有東西顯示：", "enter Common.map not null");
+//                }
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            Common.showToast(activity, "請確認網路連線");
+//        }
+//
+//    }
 
 
     private class ShowTripLocAdapter extends RecyclerView.Adapter<ShowTripLocAdapter.TripLocVH> {
@@ -477,6 +517,13 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
                                         case View.INVISIBLE:
                                             break;
                                     }
+                                    break;
+                                case R.id.mDeleteLoc:
+                                    int newPosition = tripLocVH.getAdapterPosition();
+                                    tripList.remove(newPosition);
+                                    notifyItemRemoved(newPosition);
+                                    notifyItemChanged(newPosition, tripList.size());
+                                    break;
                             }
                             return true;
                         }
@@ -493,27 +540,24 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //原本取索引所以要改成取對應的值+1
-            //Common.spinnerSelect = String.valueOf(tripM.getDayCount());
-            Log.d("### position:" ,position + "");
+            Log.d("### position:", position + "");
             Common.spinnerSelect = position + 1 + "";
             Log.d("Spinnner索引對應的值:", Common.spinnerSelect);
-            //getLocInfo();
 
-            //Log.d("### map size", Common.map.size()+"");
-           // locInfoList = Common.map.get(Common.spinnerSelect);
-            //locInfoList = Common.map.get("0");
+//            Log.d("### map size", Common.map.size()+"");
+//             locInfoList = Common.map.get(Common.spinnerSelect);
+//            locInfoList = Common.map.get("0");
 //            if (locInfoList == null) {
 //                Log.d("locInfoList空的話顯示：", "enter null");
 //            } else {
 //                Log.d("locInfoList不是空的顯示：", "enter not null");
 //            }
-            for(int i = 0; i <= Common.map.size(); i++){
-                Log.d("#### ","i:"+ i + "->" + Common.map.get((i)+"")+"");
-            }
-            Log.e("###TEST :: ", String.valueOf(Common.map.get(Common.spinnerSelect)));
-
+//            for(int i = 0; i <= Common.map.size(); i++){
+//                Log.d("#### ","i:"+ i + "->" + Common.map.get((i)+"")+"");
+//            }
+            Log.e("幾筆資料: ", String.valueOf(Common.map.get(Common.spinnerSelect)));
             showLocList();
-            //showLocList(Common.map.get((position + 1)+""));
+
         }
 
         @Override
@@ -524,12 +568,14 @@ public class updateTripFragment extends Fragment implements DatePickerDialog.OnD
 
     //Spinner 選擇天數對應的recyclerView
     public void spinnerShowLoc() {
-        if (Common.spinnerSelect == null || Common.spinnerSelect.isEmpty()){
-            Common.spinnerSelect = "1";
-        }
-        Log.e("已存的天數：", Common.spinnerSelect);
-       // showLocList(Common.map.get(Common.spinnerSelect));
-        Log.e("有東西嗎？：", String.valueOf(Common.map.get("1")));
+//        if (Common.spinnerSelect == null || Common.spinnerSelect.isEmpty()) {
+//            Common.spinnerSelect = "1";
+//        }
+        Log.e("選擇的天數：", Common.spinnerSelect);
+        // showLocList(Common.map.get(Common.spinnerSelect));
+        Log.e("map存的景點： ", String.valueOf(Common.map.get(Common.spinnerSelect)));
+
+        Common.map.get(Common.spinnerSelect);
     }
 
 

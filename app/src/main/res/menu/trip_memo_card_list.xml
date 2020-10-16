@@ -5,4 +5,8 @@
         android:id="@+id/mShowmore"
         android:title="@string/textShowMore" />
 
+    <item
+        android:id="@+id/mDeleteLoc"
+        android:title="@string/deleteLoc" />
+
 </menu>

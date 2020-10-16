@@ -12,7 +12,18 @@
         tools:layout="@layout/fragment_blog__home_page">
         <action
             android:id="@+id/action_blog_HomePage_to_create_Blog_Location_List"
-            app:destination="@id/create_Blog_Location_List" />
+            app:destination="@id/create_Blog_Location_List"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_blog_HomePage_to_blogMainFragment"
+            app:destination="@id/blogMainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/exploreFragment"
@@ -21,7 +32,11 @@
         tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/action_exploreFragment_to_blogMainFragment"
-            app:destination="@id/blogMainFragment" />
+            app:destination="@id/blogMainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -171,7 +186,11 @@
         tools:layout="@layout/fragment_group" >
         <action
             android:id="@+id/action_groupFragment_to_tripHasSavedPage"
-            app:destination="@id/tripHasSavedPage" />
+            app:destination="@id/tripHasSavedPage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/notifyFragment"
@@ -215,7 +234,11 @@
         tools:layout="@layout/fragment_blog_main">
         <action
             android:id="@+id/action_blogMainFragment_to_blogTripListFragment"
-            app:destination="@id/blogTripListFragment" />
+            app:destination="@id/blogTripListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogMainFragment_to_blogEditFragment"
             app:destination="@id/blogEditFragment" />
@@ -227,7 +250,11 @@
         tools:layout="@layout/fragment_create__trip_">
         <action
             android:id="@+id/action_create_Trip_Fragment_to_create_Trip_LocationList"
-            app:destination="@id/create_Trip_LocationList" />
+            app:destination="@id/create_Trip_LocationList"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_create_Trip_Fragment_to_trip_HomePage"
             app:destination="@id/trip_HomePage" />
@@ -239,13 +266,25 @@
         tools:layout="@layout/fragment_trip__home_page">
         <action
             android:id="@+id/action_trip_HomePage_to_create_Trip_Fragment"
-            app:destination="@id/create_Trip_Fragment" />
+            app:destination="@id/create_Trip_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_trip_HomePage_to_tripHasSavedPage"
-            app:destination="@id/tripHasSavedPage" />
+            app:destination="@id/tripHasSavedPage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_trip_HomePage_to_updateTripFragment"
-            app:destination="@id/updateTripFragment" />
+            app:destination="@id/updateTripFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
             app:destination="@id/register_main_Fragment" />
@@ -290,7 +329,12 @@
             app:destination="@id/blog_HomePage" />
         <action
             android:id="@+id/action_create_Blog_Location_List_to_createBlogFragment"
-            app:destination="@id/createBlogFragment" />
+            app:destination="@id/createBlogFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
 
@@ -358,6 +402,7 @@
         tools:layout="@layout/fragment_group_manage">
     </fragment>
 
+
     <fragment
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
@@ -373,7 +418,18 @@
             app:destination="@id/create_Blog_Location_List" />
         <action
             android:id="@+id/action_createBlogFragment_to_createBlogPicFragment"
-            app:destination="@id/createBlogPicFragment" />
+            app:destination="@id/createBlogPicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_createBlogFragment_to_createBlogFinishFragment"
+            app:destination="@id/createBlogFinishFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/friendsListFragment"
@@ -411,11 +467,12 @@
     <fragment
         android:id="@+id/updateTripLocList"
         android:name="com.example.tripper_android_app.trip.UpdateTripLocList"
-        android:label="UpdateTripLocList" >
+        android:label="UpdateTripLocList" />
         <action
             android:id="@+id/action_updateTripLocList_to_updateTripLocDetail"
             app:destination="@id/updateTripLocDetail" />
-    </fragment>
+
+
 
     <fragment
         android:id="@+id/contactUsFragment"
@@ -440,6 +497,7 @@
         android:name="com.example.tripper_android_app.goal.GoalListFragment"
         android:label="fragment_goal_list"
         tools:layout="@layout/fragment_goal_list" />
+
     <navigation android:id="@+id/navigation2"
         app:startDestination="@id/blogHomeFragment">
         <fragment
@@ -448,4 +506,15 @@
             android:label="fragment_blog_home"
             tools:layout="@layout/fragment_blog_home" />
     </navigation>
+
+    <fragment
+        android:id="@+id/createBlogFinishFragment"
+        android:name="com.example.tripper_android_app.blog.CreateBlogFinishFragment"
+        android:label="fragment_create_blog_finish"
+        tools:layout="@layout/fragment_create_blog_finish" >
+        <action
+            android:id="@+id/action_createBlogFinishFragment_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+    </fragment>
+
 </navigation>

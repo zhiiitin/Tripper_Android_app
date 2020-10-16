@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Explore implements Serializable {
 
-    private int blogId;
-    private int userId;
+    private String blogId;
+    private String userId;
     private String nickName;
     private String tittleName;
     private String blogDesc;
@@ -18,7 +18,7 @@ public class Explore implements Serializable {
         this.blogDesc = blogDesc;
     }
 
-    public Explore(int blogId, int userId, String nickName, String tittleName, String blogDesc) {
+    public Explore(String blogId, String userId, String nickName, String tittleName, String blogDesc) {
         this.blogId = blogId;
         this.userId = userId;
         this.nickName = nickName;
@@ -26,23 +26,23 @@ public class Explore implements Serializable {
         this.blogDesc = blogDesc;
     }
 
-    public Explore(int blogId, int userId, String nickName, String tittleName) {
+    public Explore(String blogId, String userId, String nickName, String tittleName) {
         super();
         this.blogId = blogId;
         this.userId = userId;
         this.nickName = nickName;
         this.tittleName = tittleName;
     }
-    public int getBlogId() {
+    public String getBlogId() {
         return blogId;
     }
-    public void setBlogId(int blogId) {
+    public void setBlogId(String blogId) {
         this.blogId = blogId;
     }
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
     public String getNickName() {

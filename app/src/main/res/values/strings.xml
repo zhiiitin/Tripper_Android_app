@@ -180,6 +180,8 @@
     <string name="homepageEdit">編輯行程</string>
     <string name="homepageDelete">刪除行程</string>
     <string name="btNextStep">下一步</string>
+    <string name="textUpdateFail">留言失敗</string>
+    <string name="textUpdateSuccess">留言成功</string>
 
 
 </resources>
