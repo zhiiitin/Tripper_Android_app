@@ -131,17 +131,6 @@ public class Goal_HomePage extends Fragment {
         });
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //TODO 判斷是否為會員
-        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        boolean login = pref.getBoolean("login", false);
-        if (login) {
-            inflater.inflate(R.menu.app_bar_button, menu);
-        }
-    }
-
     //show 使用者資訊
     private void showMember() {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);

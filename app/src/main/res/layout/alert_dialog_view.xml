@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_card"
+        android:layout_width="380dp"
+        android:layout_height="685dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edit_bg_yellow"
+        android:gravity="center"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/dialog_ibDown"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="14dp"
+        android:background="#00000000"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_card"
+        app:layout_constraintStart_toStartOf="@+id/dialog_card"
+        app:layout_constraintTop_toTopOf="@+id/dialog_card"
+        app:srcCompat="@drawable/ic_down" />
+
+    <ImageView
+        android:id="@+id/dialog_ivBig"
+        android:layout_width="208.8dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="86dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="85dp"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_card"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/dialog_card"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_ibDown"
+        app:srcCompat="@drawable/ic_goal_mountain_bike_big" />
+
+    <TextView
+        android:id="@+id/dialog_tvGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="只要蒐集到5個景點就可以解鎖該成就哦！"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_card"
+        app:layout_constraintStart_toStartOf="@+id/dialog_card"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_ivBig" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

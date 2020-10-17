@@ -70,7 +70,7 @@ public class CreateBlogFinishFragment extends Fragment {
     private ImageButton ibInsertB_PIG,ibBlogUpdate;
     private TextView tvTitle,tvInfo ;
     private TextInputEditText etTitle,etInfo ;
-    private CommonTask blogFinishTask ;
+    private CommonTask blogFinishTask ,tripStatusTask;
     private byte[] photo;
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_PICTURE = 1;
@@ -138,6 +138,19 @@ public class CreateBlogFinishFragment extends Fragment {
                 }
 
                 BlogFinish blogFinish = new BlogFinish(tripId,title,info,memberId);
+//更改該行程BlogStatus
+                String urlTripM = Common.URL_SERVER + "Trip_M_Servlet";
+                JsonObject jsonObject2 = new JsonObject();
+                jsonObject2.addProperty("action", "updateTrip");
+                jsonObject2.addProperty("tripId",blogFinish.getTrip_Id());
+                tripStatusTask = new CommonTask(urlTripM,jsonObject2.toString());
+
+                try {
+                    String jsonIn2 = tripStatusTask.execute().get();
+                    System.out.println(jsonIn2);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
 
                 if (Common.networkConnected(activity)) {
                     String Url = Common.URL_SERVER + "BlogServlet";
@@ -162,6 +175,7 @@ public class CreateBlogFinishFragment extends Fragment {
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
+
                 }
             }
         });
