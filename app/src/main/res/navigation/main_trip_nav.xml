@@ -24,6 +24,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_blog_HomePage_to_chatMainFragment"
+            app:destination="@id/chatMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/exploreFragment"
@@ -519,5 +522,10 @@
             android:id="@+id/action_createBlogFinishFragment_to_blog_HomePage"
             app:destination="@id/blog_HomePage" />
     </fragment>
+    <fragment
+        android:id="@+id/chatMainFragment"
+        android:name="com.example.tripper_android_app.chat.ChatMainFragment"
+        android:label="fragment_chat_main"
+        tools:layout="@layout/fragment_chat_main" />
 
 </navigation>
