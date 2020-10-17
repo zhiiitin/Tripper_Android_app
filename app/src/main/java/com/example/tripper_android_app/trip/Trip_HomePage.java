@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -76,7 +77,7 @@ public class Trip_HomePage extends Fragment {
     private CommonTask tripGetAllTask;
     private CommonTask tripDeleteTask;
     private List<ImageTask> imageTasks;
-    private TextView textUserName;
+    private TextView textUserName, tvHomeInfo, tvHomeInfo2;
     private ImageView ivUserPic;
     private RecyclerView rvTripHome;
     private ImageTask tripImageTask;
@@ -84,6 +85,7 @@ public class Trip_HomePage extends Fragment {
     private SwipeRefreshLayout swipes;
     private ImageButton editTrip;
     private Trip_M tripM;
+    private LinearLayout tripMainLayout;
     //show member
     private Member member;
     private FirebaseAuth auth;
@@ -113,6 +115,11 @@ public class Trip_HomePage extends Fragment {
         rvTripMainList = view.findViewById(R.id.rvTripMainList);
         rvTripMainList.setLayoutManager(new LinearLayoutManager(activity));
         activity.setSupportActionBar(toolbar);
+
+        tvHomeInfo = view.findViewById(R.id.tvHomeInfo);
+        tvHomeInfo2 = view.findViewById(R.id.tvHomeInfo2);
+        tripMainLayout = view.findViewById(R.id.tripMainLayout);
+
 
         mUser = auth.getCurrentUser();
         ivUserPic = view.findViewById(R.id.ivUserPic);
@@ -156,15 +163,20 @@ public class Trip_HomePage extends Fragment {
 
     private void showTripList(List<Trip_M> tripMs) {
         if (tripMs == null || tripMs.isEmpty()) {
+            tvHomeInfo.setVisibility(View.VISIBLE);
+            tvHomeInfo2.setVisibility(View.VISIBLE);
             Common.showToast(activity, "尚未建立任何行程");
-            return;
-        }
-        TripListAdapter tripListAdapter = (TripListAdapter) rvTripMainList.getAdapter();
-        if (tripListAdapter == null) {
-            rvTripMainList.setAdapter(new TripListAdapter(activity, tripMs));
         } else {
-            tripListAdapter.setTripMs(tripMs);
-            tripListAdapter.notifyDataSetChanged();
+            tripMainLayout.setVisibility(View.VISIBLE);
+            tvHomeInfo.setVisibility(View.GONE);
+            tvHomeInfo2.setVisibility(View.GONE);
+            TripListAdapter tripListAdapter = (TripListAdapter) rvTripMainList.getAdapter();
+            if (tripListAdapter == null) {
+                rvTripMainList.setAdapter(new TripListAdapter(activity, tripMs));
+            } else {
+                tripListAdapter.setTripMs(tripMs);
+                tripListAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -392,13 +404,14 @@ public class Trip_HomePage extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(member == null ){
-                    pref.edit().putBoolean("login",false).apply();
+                if (member == null) {
+                    pref.edit().putBoolean("login", false).apply();
                     Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
-                }
-                String nickname = member.getNickName();
-                textUserName.setText(" " + nickname + " ");
+                } else {
+                    String userName = member.getNickName();
+                    textUserName.setText(userName);
 
+                }
             } else {
                 Common.showToast(activity, "no network connection found");
             }
