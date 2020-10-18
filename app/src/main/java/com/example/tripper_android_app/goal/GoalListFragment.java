@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,7 +65,12 @@ public class GoalListFragment extends Fragment {
                 alertDialog.dismiss();
             }
         });
-//        window.setBackgroundDrawableResource(R.layout.alert_dialog_view);
+        // 將彈出的成就字卡設定成圓角邊框
+        WindowManager.LayoutParams layoutParams = alertDialog.getWindow().getAttributes();
+        layoutParams.width = 970;
+        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(layoutParams);
+        window.setBackgroundDrawableResource(R.drawable.edit_bg_yellow);
         window.setContentView(view);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(true);

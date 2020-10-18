@@ -15,7 +15,6 @@ import androidx.navigation.ui.NavigationUI;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -131,7 +130,7 @@ public class Goal_HomePage extends Fragment {
         });
     }
 
-    //show 使用者資訊
+    // show 使用者資訊
     private void showMember() {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         boolean login = pref.getBoolean("login", false);
@@ -157,11 +156,10 @@ public class Goal_HomePage extends Fragment {
                 Common.showToast(activity, "no network connection found");
             }
             showMemberPic();
-
         }
     }
 
-    //show UserPic
+    // show UserPic
     private void showMemberPic() {
         if (mUser != null) {
             String Url = Common.URL_SERVER + "MemberServlet";
