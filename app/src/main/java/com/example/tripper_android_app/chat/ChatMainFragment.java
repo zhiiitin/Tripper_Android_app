@@ -1,5 +1,6 @@
 package com.example.tripper_android_app.chat;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,17 +21,27 @@ import android.widget.Toast;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.fcm.AppMessage;
+import com.example.tripper_android_app.friends.Friends;
+import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ChatMainFragment extends Fragment implements TextWatcher {
     private String name;
@@ -40,6 +51,9 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
     private RecyclerView recyclerView;
     private ImageView sendBtn;
     private MainActivity activity;
+    boolean notify = false;
+    SharedPreferences pref = null;
+    private Friends friend = null;
 
 
     @Override
@@ -66,21 +80,19 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
         MessageAdapter messageAdapter = new MessageAdapter(getLayoutInflater());
         recyclerView.setAdapter(messageAdapter);//先別管我
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject jsonObject = new JSONObject();
-                try{
-                    jsonObject.put("name",name);
-                    jsonObject.put("message", messageEdit.getText().toString());
-                    webSocket.send(jsonObject.toString());
-                    jsonObject.put("isSent", true);
-                    messageAdapter.addItem(jsonObject);
-                    resetMessageEdit();
-                }catch (Exception e) {
-                    e.printStackTrace();
+                int memberId = Integer.parseInt(pref.getString("memberId","0"));
+                String msg = messageEdit.getText().toString();
+                if(!msg.equals("")){
+                    sendMessage(memberId);
+                }else {
+                    Toast.makeText(activity , "請輸入訊息" , Toast.LENGTH_SHORT).show();
                 }
+                messageEdit.setText("");
             }
         });
     }
@@ -164,8 +176,6 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
     public class MessageAdapter extends RecyclerView.Adapter {
         private final int TYPE_MESSAGE_SENT = 0;
         private final int TYPE_MESSAGE_RECEIVED = 1;
-        private final int TYPE_IMAGE_SENT = 2;
-        private final int TYPE_IMAGE_RECEIVED = 3;
 
         private LayoutInflater inflater;
         private List<JSONObject> messages = new ArrayList<>();
@@ -232,22 +242,13 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
 
             try {
                 if(message.getBoolean("isSent")){
-                    if(message.has("message")){
                         return TYPE_MESSAGE_SENT;
-                    }else{
-                        return TYPE_IMAGE_SENT;
-                    }
                 }else{
-                    if(message.has("message")){
-                        return TYPE_MESSAGE_RECEIVED;
-                    }else{
-                        return TYPE_IMAGE_RECEIVED;
-                    }
+                    return TYPE_MESSAGE_RECEIVED;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return -1;
         }
 
@@ -259,11 +260,6 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
                     if(message.has("message")){
                         SentMessageHolder messageHolder = (SentMessageHolder) holder;
                         messageHolder.messageTxt.setText(message.getString("message"));
-                    }else{
-//                        SentImageHolder imageHolder = (SentImageHolder) holder;
-//                        Bitmap bitmap = getBitmapFromString(message.getString("image"));
-//
-//                        imageHolder.imageView.setImageBitmap(bitmap);
                     }
                 }else{
                     if(message.has("message")){
@@ -287,6 +283,41 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
 //            byte[] bytes = Base64.decode(image, Base64.DEFAULT);
 //            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 //        }
+
+
+    }
+
+
+
+
+
+
+    public void sendMessage( int memberId){
+        AppMessage message = null;
+
+        String msgType = Common.SEND_MESSEAGE_TYPE;
+        String title =  "";
+        String body = messageEdit.getText().toString().trim();
+        int stat = 0;
+        int sendId = memberId;
+
+
+        //取得"台北時區"時間
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Taipei"));
+        Calendar calendar = Calendar.getInstance();
+        String uptime = simpleDateFormat.format(calendar.getTime());
+
+        message = new AppMessage(msgType,memberId,title,body,stat,sendId,1,uptime);
+        SendMessage sendMessage = new SendMessage(activity, message);
+        sendMessage.sendChatMessage();
+//        HashMap<String , Object> hashMap = new HashMap<>();
+//        //上傳後會依下列"名稱"建立節點及對應值
+//        hashMap.put("sender" , sender);
+//        hashMap.put("receiver" , receiver);
+//        hashMap.put("Message" , Message);
+//        hashMap.put("seen" , false);
+//        hashMap.put("uptime", uptime);
 
 
     }
