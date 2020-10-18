@@ -124,8 +124,8 @@ public class BlogHomeFragment extends Fragment {
 
         private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
-                Common.showToast(activity, "尚無網誌");
-            }else {
+                Common.showToast(activity, "尚未建立任何網誌");
+            } else {
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
                 tvInfo.setVisibility(View.GONE);
                 tvInfo2.setVisibility(View.GONE);
