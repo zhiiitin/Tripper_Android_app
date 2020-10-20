@@ -1,5 +1,6 @@
 package com.example.tripper_android_app.chat;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -23,17 +24,27 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.friends.Friends;
+import com.example.tripper_android_app.notify.Notify;
+import com.example.tripper_android_app.notify.NotifyFragment;
+import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.SendMessage;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -43,17 +54,20 @@ import okhttp3.WebSocketListener;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ChatMainFragment extends Fragment implements TextWatcher {
+public class ChatMainFragment extends Fragment {
     private String name;
-    private String SERVER_PATH = "ws://echo.websocket.org";
-    private WebSocket webSocket ;
+
     private EditText messageEdit;
     private RecyclerView recyclerView;
     private ImageView sendBtn;
     private MainActivity activity;
     boolean notify = false;
     SharedPreferences pref = null;
-    private Friends friend = null;
+    private List<AppMessage> chatMessage = new ArrayList<>();
+    private List<Notify> messagess = new ArrayList<>();
+    private MessageAdapter messageAdapter;
+    private Gson gson = new Gson();
+    private LinearLayoutManager linearLayoutManager;
 
 
     @Override
@@ -72,120 +86,53 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initiateSocketConnection();
+
         messageEdit = view.findViewById(R.id.messageEdit);
         sendBtn = view.findViewById(R.id.sendBtn);
         recyclerView = view.findViewById(R.id.recyclerView);
-        messageEdit.addTextChangedListener(this);
-        MessageAdapter messageAdapter = new MessageAdapter(getLayoutInflater());
-        recyclerView.setAdapter(messageAdapter);//先別管我
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        MessageAdapter messageAdapter = new MessageAdapter(activity,messagess);
+        recyclerView.setAdapter(messageAdapter);
+        linearLayoutManager = new LinearLayoutManager(activity);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        int memberId = Integer.parseInt(pref.getString("memberId",null));
+
+        //取得該聊天室內容
+        messagess = getAllMessagess(memberId,2);
+        showChat(messagess);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int memberId = Integer.parseInt(pref.getString("memberId","0"));
+                int memberId = Integer.parseInt(pref.getString("memberId", "0"));
                 String msg = messageEdit.getText().toString();
-                if(!msg.equals("")){
+                if (!msg.equals("")) {
                     sendMessage(memberId);
-                }else {
-                    Toast.makeText(activity , "請輸入訊息" , Toast.LENGTH_SHORT).show();
+                    recyclerView.scrollToPosition(messagess.size()-1);
+                } else {
+                    Toast.makeText(activity, "請輸入訊息", Toast.LENGTH_SHORT).show();
                 }
                 messageEdit.setText("");
             }
         });
     }
 
-    private void initializeView() {
-        messageEdit = getView().findViewById(R.id.messageEdit);
-        sendBtn = getView().findViewById(R.id.sendBtn);
-
-        recyclerView = getView().findViewById(R.id.recyclerView);
-
-        messageEdit.addTextChangedListener(this);
-        MessageAdapter messageAdapter = new MessageAdapter(getLayoutInflater());//先別管我
-        recyclerView.setAdapter(messageAdapter);//先別管我
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));//先別管我
-    }
-
-
-    private void initiateSocketConnection(){
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(SERVER_PATH).build();
-        webSocket = client.newWebSocket(request,new SocketListener());
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        String string = s.toString().trim();
-        if(string.isEmpty()){
-            resetMessageEdit();
-        }else{
-//            sendBtn.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void resetMessageEdit() {
-        messageEdit.removeTextChangedListener(this);
-
-        messageEdit.setText("");
-//       sendBtn.setVisibility(View.VISIBLE);
-
-        messageEdit.addTextChangedListener(this);
-    }
-
-    private class SocketListener extends WebSocketListener {
-        @Override
-        public void onOpen(WebSocket webSocket, Response response) {
-            super.onOpen(webSocket, response);
-
-                Toast.makeText(activity, "Socket Connection Successful",
-                        Toast.LENGTH_SHORT).show();
-                initializeView();
-
-        }
-
-        @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            super.onMessage(webSocket, text);
-
-                try {
-                    JSONObject jsonObject = new JSONObject(text);
-                    jsonObject.put("isSent", false);
-                    MessageAdapter messageAdapter = (MessageAdapter)recyclerView.getAdapter();
-                    messageAdapter.addItem(jsonObject);//先別管我
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-        }
-
-    }
 
     public class MessageAdapter extends RecyclerView.Adapter {
         private final int TYPE_MESSAGE_SENT = 0;
         private final int TYPE_MESSAGE_RECEIVED = 1;
+        private Context context;
+        private List<Notify> messages;
 
-        private LayoutInflater inflater;
-        private List<JSONObject> messages = new ArrayList<>();
+        public MessageAdapter(Context context, List<Notify> messages) {
+            this.messages = messages;
+            this.context = context;
 
-        public MessageAdapter(LayoutInflater inflater){
-            this.inflater = inflater;
         }
 
-        public void addItem(JSONObject jsonObject){
-            messages.add(jsonObject);
+        public void addItem(Notify message) {
+            messages.add(message);
             notifyDataSetChanged();
         }
 
@@ -193,25 +140,29 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view;
-            switch(viewType) {
+            switch (viewType) {
                 case TYPE_MESSAGE_SENT:
-                    view = inflater.inflate(R.layout.item_send_message, parent, false);
+                    view = LayoutInflater.from(context).inflate(R.layout.item_send_message, parent, false);
                     return new SentMessageHolder(view);
                 case TYPE_MESSAGE_RECEIVED:
-                    view = inflater.inflate(R.layout.item_received_message, parent, false);
+                    view = LayoutInflater.from(context).inflate(R.layout.item_received_message, parent, false);
                     return new ReceivedMessageHolder(view);
             }
 
             return null;
         }
 
-
+        void setMessagess(List<Notify> messages){
+            this.messages = messages;
+            notifyDataSetChanged();
+        }
 
         @Override
         public int getItemCount() {
-            return messages.size();
+            return messages == null ? 0 : (messages.size());
         }
-//發送訊息的ViewHolder
+
+        //發送訊息的ViewHolder
         private class SentMessageHolder extends RecyclerView.ViewHolder {
 
             TextView messageTxt;
@@ -222,8 +173,9 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
                 messageTxt = itemView.findViewById(R.id.tvSent);
             }
         }
-//接收訊息的ViewHolder
-        private class ReceivedMessageHolder extends RecyclerView.ViewHolder{
+
+        //接收訊息的ViewHolder
+        private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
             TextView nameTxt, messageTxt;
 
@@ -237,69 +189,54 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
 
         @Override
         public int getItemViewType(int position) {
+            int memberId = Integer.parseInt(pref.getString("memberId", "0"));
 
-            JSONObject message = messages.get(position);
-
-            try {
-                if(message.getBoolean("isSent")){
-                        return TYPE_MESSAGE_SENT;
-                }else{
-                    return TYPE_MESSAGE_RECEIVED;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            //本機端使用者的發言 顯示在右邊
+            if (messages.get(position).getSendId() == memberId) {
+                return TYPE_MESSAGE_SENT;
+            } else {
+                return TYPE_MESSAGE_RECEIVED;
             }
-            return -1;
+
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            JSONObject message = messages.get(position);
+            int memberId = Integer.parseInt(pref.getString("memberId", "0"));
+
+            Notify message = messages.get(position);
             try {
-                if(message.getBoolean("isSent")){
-                    if(message.has("message")){
-                        SentMessageHolder messageHolder = (SentMessageHolder) holder;
-                        messageHolder.messageTxt.setText(message.getString("message"));
-                    }
-                }else{
-                    if(message.has("message")){
-                        ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
-                        messageHolder.nameTxt.setText(message.getString("name"));
-                        messageHolder.messageTxt.setText(message.getString("message"));
-                    }else{
+                if (message.getSendId() == memberId) {
+                    SentMessageHolder messageHolder = (SentMessageHolder) holder;
+                    messageHolder.messageTxt.setText(message.getMsgBody());
+                } else {
+                    ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
+                    messageHolder.nameTxt.setText(message.getNickname());
+                    messageHolder.messageTxt.setText(message.getMsgBody());
 //                        ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
 //                        imageHolder.nameTxt.setText(message.getString("name"));
 //
 //                        Bitmap bitmap = getBitmapFromString(message.getString("image"));
 //                        imageHolder.imageView.setImageBitmap(bitmap);
-                    }
                 }
-            } catch (Exception e) {
+
+            } catch (
+                    Exception e) {
                 e.printStackTrace();
             }
         }
 
-//        private Bitmap getBitmapFromString(String image) {
-//            byte[] bytes = Base64.decode(image, Base64.DEFAULT);
-//            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//        }
-
-
     }
 
 
-
-
-
-
-    public void sendMessage( int memberId){
+    public void sendMessage(int memberid) {
         AppMessage message = null;
 
         String msgType = Common.SEND_MESSEAGE_TYPE;
-        String title =  "";
+        String title = "";
         String body = messageEdit.getText().toString().trim();
         int stat = 0;
-        int sendId = memberId;
+        int sendId = memberid;
 
 
         //取得"台北時區"時間
@@ -308,18 +245,58 @@ public class ChatMainFragment extends Fragment implements TextWatcher {
         Calendar calendar = Calendar.getInstance();
         String uptime = simpleDateFormat.format(calendar.getTime());
 
-        message = new AppMessage(msgType,memberId,title,body,stat,sendId,1,uptime);
+        message = new AppMessage(msgType, memberid, title, body, stat, sendId, 2, uptime);
         SendMessage sendMessage = new SendMessage(activity, message);
         sendMessage.sendChatMessage();
-//        HashMap<String , Object> hashMap = new HashMap<>();
-//        //上傳後會依下列"名稱"建立節點及對應值
-//        hashMap.put("sender" , sender);
-//        hashMap.put("receiver" , receiver);
-//        hashMap.put("Message" , Message);
-//        hashMap.put("seen" , false);
-//        hashMap.put("uptime", uptime);
+
+        messageAdapter = (MessageAdapter) recyclerView.getAdapter();
+
+        messagess = getAllMessagess(memberid,1);
+        showChat(messagess);
 
 
+
+    }
+
+
+
+    private void showChat(List<Notify> messages) {
+        if(messages == null || messages.isEmpty()){
+            return;
+        }
+        messageAdapter = (MessageAdapter) recyclerView.getAdapter();
+        if(messageAdapter == null) {
+            recyclerView.setAdapter(new MessageAdapter(activity,messages));
+        } else {
+            messageAdapter.setMessagess(messages);
+            messageAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private List<Notify> getAllMessagess(int memberId,int recieverId) {
+        List<Notify> notifies = new ArrayList<>();
+        if(Common.networkConnected(activity)){
+            String url = Common.URL_SERVER + "FCMServlet";
+            JsonObject jsonObject  = new JsonObject();
+            jsonObject.addProperty("action", "getChatMsg");
+            jsonObject.addProperty("memberId", 1);
+            jsonObject.addProperty("recirverId",2);
+            String jsonOut = jsonObject.toString();
+            System.out.println("");
+            CommonTask getNotifyTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = getNotifyTask.execute().get();
+                Type typelist = new TypeToken<List<Notify>>(){}.getType();
+                notifies = gson.fromJson(jsonIn, typelist);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else {
+            Common.showToast(activity, "請確認網路連線狀態");
+        }
+        return notifies;
     }
 
 
