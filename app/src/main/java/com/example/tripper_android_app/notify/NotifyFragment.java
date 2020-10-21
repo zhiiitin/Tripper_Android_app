@@ -62,6 +62,7 @@ public class NotifyFragment extends Fragment {
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
         Log.d("###", "11111");
+
     }
 
     @Override

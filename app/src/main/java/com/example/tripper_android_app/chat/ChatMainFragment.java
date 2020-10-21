@@ -56,19 +56,19 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ChatMainFragment extends Fragment {
     private String name;
-
+    private static final String TAG = "TAG_ChatFragment";
     private EditText messageEdit;
     private RecyclerView recyclerView;
     private ImageView sendBtn;
     private MainActivity activity;
-    boolean notify = false;
     SharedPreferences pref = null;
-    private List<AppMessage> chatMessage = new ArrayList<>();
     private List<Notify> messagess = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private Gson gson = new Gson();
     private LinearLayoutManager linearLayoutManager;
-
+    private MessageDelegate messageDelegate = MessageDelegate.getInstance();
+    private int memberId = 0;
+    private MessageDelegate.OnMessageReceiveListener listener ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class ChatMainFragment extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        int memberId = Integer.parseInt(pref.getString("memberId",null));
+        memberId = Integer.parseInt(pref.getString("memberId",null));
 
         //取得該聊天室內容
         messagess = getAllMessagess(memberId,2);
@@ -131,8 +131,8 @@ public class ChatMainFragment extends Fragment {
 
         }
 
-        public void addItem(Notify message) {
-            messages.add(message);
+        public void addItem() {
+
             notifyDataSetChanged();
         }
 
@@ -300,4 +300,29 @@ public class ChatMainFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        messageDelegate.addOnMessageReceiveListener(new MessageDelegate.OnMessageReceiveListener() {
+            @Override
+            public void onMessage(String message) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        messagess = getAllMessagess(memberId,2);
+                        showChat(messagess);
+                        recyclerView.scrollToPosition(messagess.size()-1);
+                    }
+                });
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        messageDelegate.removeOnMessageReceiveListener(listener);
+    }
 }
