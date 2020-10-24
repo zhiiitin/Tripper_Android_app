@@ -98,13 +98,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_register_main_Fragment_to_register_Login_Fragment"
-            app:destination="@id/register_Login_Fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
             android:id="@+id/action_register_main_Fragment_to_FB_Login_Fragment"
             app:destination="@id/FB_Login_Fragment"
             app:enterAnim="@anim/slide_in_right"
@@ -126,6 +119,20 @@
         <action
             android:id="@+id/action_register_main_Fragment_to_register_Member_Fragment"
             app:destination="@id/register_Member_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_register_Member_Fragment2"
+            app:destination="@id/register_Member_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_registerResetpasswordFragment"
+            app:destination="@id/registerResetpasswordFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -163,19 +170,6 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
-    <fragment
-        android:id="@+id/register_Login_Fragment"
-        android:name="com.example.tripper_android_app.setting.member.Normal_Login_Fragment"
-        android:label="fragment_register__login_"
-        tools:layout="@layout/fragment_register__login_">
-        <action
-            android:id="@+id/action_register_Login_Fragment_to_register_Member_Fragment"
-            app:destination="@id/register_Member_Fragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/insert_Location_Fragment"
@@ -527,5 +521,10 @@
         android:name="com.example.tripper_android_app.chat.ChatMainFragment"
         android:label="fragment_chat_main"
         tools:layout="@layout/fragment_chat_main" />
+    <fragment
+        android:id="@+id/registerResetpasswordFragment"
+        android:name="com.example.tripper_android_app.setting.member.RegisterResetpasswordFragment"
+        android:label="fragment_register_resetpassword"
+        tools:layout="@layout/fragment_register_resetpassword" />
 
 </navigation>
