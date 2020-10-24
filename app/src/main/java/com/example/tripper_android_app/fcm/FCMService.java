@@ -1,11 +1,13 @@
 package com.example.tripper_android_app.fcm;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -25,6 +27,7 @@ import java.util.Map;
 public class FCMService extends FirebaseMessagingService {
     private static final String TAG = "TAG_FCMService";
     private final static int CHAT_TYPE = 1;
+    private Context context ;
 
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
@@ -70,7 +73,9 @@ public class FCMService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Notification notification = new NotificationCompat.Builder(this, channelId)
+                .setWhen(System.currentTimeMillis())
                 .setSmallIcon(android.R.drawable.stat_notify_chat)
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),android.R.drawable.stat_notify_chat))
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)

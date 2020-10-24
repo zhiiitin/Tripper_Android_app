@@ -11,15 +11,25 @@
         android:id="@+id/tvSent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/chat_sender"
-        android:maxWidth="310dp"
+        android:maxWidth="300dp"
         android:padding="8dp"
         android:text="Hello"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUptime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        android:text="20:15"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSent"
+        app:layout_constraintEnd_toStartOf="@+id/tvSent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

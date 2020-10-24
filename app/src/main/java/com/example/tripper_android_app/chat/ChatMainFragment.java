@@ -2,17 +2,24 @@ package com.example.tripper_android_app.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -20,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.fcm.AppMessage;
@@ -27,6 +35,8 @@ import com.example.tripper_android_app.friends.Friends;
 import com.example.tripper_android_app.notify.Notify;
 import com.example.tripper_android_app.notify.NotifyFragment;
 import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.task.ImageTask;
+import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.SendMessage;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,6 +63,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 import static android.content.Context.MODE_PRIVATE;
+import static androidx.navigation.Navigation.findNavController;
 
 public class ChatMainFragment extends Fragment {
     private String name;
@@ -68,12 +79,16 @@ public class ChatMainFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private MessageDelegate messageDelegate = MessageDelegate.getInstance();
     private int memberId = 0;
-    private MessageDelegate.OnMessageReceiveListener listener ;
+    private MessageDelegate.OnMessageReceiveListener listener;
+    private FirebaseUser mUser;
+    private FirebaseAuth auth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
+        setHasOptionsMenu(true);
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -87,20 +102,38 @@ public class ChatMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mUser = auth.getCurrentUser();
+
+        //ToolBar
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("Regina");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
+        if (upArrow != null) {
+            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
+            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+
         messageEdit = view.findViewById(R.id.messageEdit);
         sendBtn = view.findViewById(R.id.sendBtn);
         recyclerView = view.findViewById(R.id.recyclerView);
-        MessageAdapter messageAdapter = new MessageAdapter(activity,messagess);
+        MessageAdapter messageAdapter = new MessageAdapter(activity, messagess);
         recyclerView.setAdapter(messageAdapter);
         linearLayoutManager = new LinearLayoutManager(activity);
-        linearLayoutManager.setStackFromEnd(true);
+//        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        memberId = Integer.parseInt(pref.getString("memberId",null));
+        memberId = Integer.parseInt(pref.getString("memberId", null));
 
         //取得該聊天室內容
-        messagess = getAllMessagess(memberId,2);
+        messagess = getAllMessagess(memberId, 2);
         showChat(messagess);
+
+        if(messagess.size() != 0){
+            recyclerView.scrollToPosition(messagess.size() - 1);
+        }
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +142,7 @@ public class ChatMainFragment extends Fragment {
                 String msg = messageEdit.getText().toString();
                 if (!msg.equals("")) {
                     sendMessage(memberId);
-                    recyclerView.scrollToPosition(messagess.size()-1);
+                    recyclerView.scrollToPosition(messagess.size() - 1);
                 } else {
                     Toast.makeText(activity, "請輸入訊息", Toast.LENGTH_SHORT).show();
                 }
@@ -152,7 +185,7 @@ public class ChatMainFragment extends Fragment {
             return null;
         }
 
-        void setMessagess(List<Notify> messages){
+        void setMessagess(List<Notify> messages) {
             this.messages = messages;
             notifyDataSetChanged();
         }
@@ -165,25 +198,26 @@ public class ChatMainFragment extends Fragment {
         //發送訊息的ViewHolder
         private class SentMessageHolder extends RecyclerView.ViewHolder {
 
-            TextView messageTxt;
+            TextView messageTxt , tvUptime;
 
             public SentMessageHolder(@NonNull View itemView) {
                 super(itemView);
-
                 messageTxt = itemView.findViewById(R.id.tvSent);
+                tvUptime = itemView.findViewById(R.id.tvUptime);
             }
         }
 
         //接收訊息的ViewHolder
         private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
-            TextView nameTxt, messageTxt;
+            TextView messageTxt , tvUptime ;
+            CircleImageView revievePhoto;
 
             public ReceivedMessageHolder(@NonNull View itemView) {
                 super(itemView);
-
-                nameTxt = itemView.findViewById(R.id.tvName);
+                revievePhoto = itemView.findViewById(R.id.ivPhoto);
                 messageTxt = itemView.findViewById(R.id.tvReceived);
+                tvUptime = itemView.findViewById(R.id.tvUptime);
             }
         }
 
@@ -209,10 +243,30 @@ public class ChatMainFragment extends Fragment {
                 if (message.getSendId() == memberId) {
                     SentMessageHolder messageHolder = (SentMessageHolder) holder;
                     messageHolder.messageTxt.setText(message.getMsgBody());
+                    messageHolder.tvUptime.setText(message.getNotifyDateTime());
                 } else {
                     ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
-                    messageHolder.nameTxt.setText(message.getNickname());
+//取得大頭貼                    int id = member.getId();
+                    int id = 1;
+                    Bitmap bitmap = null;
+                    String url = Common.URL_SERVER + "MemberServlet";
+                    int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+                    try {
+                        bitmap = new ImageTask(url, id, imageSize).execute().get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //若此帳號之資料庫有照片，便使用資料庫的照
+                    if (bitmap != null) {
+                        messageHolder.revievePhoto.setImageBitmap(bitmap);
+                    } else {
+                        //否則連接到第三方大頭照
+                        String fbPhotoURL = mUser.getPhotoUrl().toString();
+                        Glide.with(activity).load(fbPhotoURL).into(messageHolder.revievePhoto);
+                    }
                     messageHolder.messageTxt.setText(message.getMsgBody());
+                    messageHolder.tvUptime.setText(message.getNotifyDateTime());
+
 //                        ReceivedImageHolder imageHolder = (ReceivedImageHolder) holder;
 //                        imageHolder.nameTxt.setText(message.getString("name"));
 //
@@ -251,49 +305,48 @@ public class ChatMainFragment extends Fragment {
 
         messageAdapter = (MessageAdapter) recyclerView.getAdapter();
 
-        messagess = getAllMessagess(memberid,1);
+        messagess = getAllMessagess(memberid, 1);
         showChat(messagess);
-
 
 
     }
 
 
-
     private void showChat(List<Notify> messages) {
-        if(messages == null || messages.isEmpty()){
+        if (messages == null || messages.isEmpty()) {
             return;
         }
         messageAdapter = (MessageAdapter) recyclerView.getAdapter();
-        if(messageAdapter == null) {
-            recyclerView.setAdapter(new MessageAdapter(activity,messages));
+        if (messageAdapter == null) {
+            recyclerView.setAdapter(new MessageAdapter(activity, messages));
         } else {
             messageAdapter.setMessagess(messages);
             messageAdapter.notifyDataSetChanged();
         }
     }
 
-    private List<Notify> getAllMessagess(int memberId,int recieverId) {
+    private List<Notify> getAllMessagess(int memberId, int recieverId) {
         List<Notify> notifies = new ArrayList<>();
-        if(Common.networkConnected(activity)){
+        if (Common.networkConnected(activity)) {
             String url = Common.URL_SERVER + "FCMServlet";
-            JsonObject jsonObject  = new JsonObject();
+            JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getChatMsg");
             jsonObject.addProperty("memberId", 1);
-            jsonObject.addProperty("recirverId",2);
+            jsonObject.addProperty("recirverId", 2);
             String jsonOut = jsonObject.toString();
             System.out.println("");
             CommonTask getNotifyTask = new CommonTask(url, jsonOut);
             try {
                 String jsonIn = getNotifyTask.execute().get();
-                Type typelist = new TypeToken<List<Notify>>(){}.getType();
+                Type typelist = new TypeToken<List<Notify>>() {
+                }.getType();
                 notifies = gson.fromJson(jsonIn, typelist);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             Common.showToast(activity, "請確認網路連線狀態");
         }
         return notifies;
@@ -309,9 +362,9 @@ public class ChatMainFragment extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        messagess = getAllMessagess(memberId,2);
+                        messagess = getAllMessagess(memberId, 2);
                         showChat(messagess);
-                        recyclerView.scrollToPosition(messagess.size()-1);
+                        recyclerView.scrollToPosition(messagess.size() - 1);
                     }
                 });
 
@@ -324,5 +377,18 @@ public class ChatMainFragment extends Fragment {
     public void onPause() {
         super.onPause();
         messageDelegate.removeOnMessageReceiveListener(listener);
+    }
+// toorBar
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(messageEdit).popBackStack();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

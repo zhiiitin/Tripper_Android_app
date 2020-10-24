@@ -39,6 +39,14 @@
         </provider>
 
         <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@android:drawable/stat_notify_chat" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming notification message. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorSender" />
+
+        <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data

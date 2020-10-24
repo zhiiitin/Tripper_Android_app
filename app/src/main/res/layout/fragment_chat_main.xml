@@ -6,13 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".chat.ChatMainFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="595dp"
+        android:layout_height="540dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
@@ -37,8 +52,9 @@
                 android:id="@+id/messageEdit"
                 android:layout_width="336dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:background="#76CFDA"
-                android:hint="Message..."
+                android:hint="  Message..."
                 android:padding="8dp"
                 android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
