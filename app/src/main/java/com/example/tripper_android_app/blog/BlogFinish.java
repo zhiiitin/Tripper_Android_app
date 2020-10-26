@@ -7,12 +7,21 @@ public class BlogFinish implements Serializable {
     private String blog_title ;
     private String blog_Info ;
     private String memberId ;
+    private int status ;
 
-    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId) {
+    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId ) {
         this.trip_Id = trip_Id;
         this.blog_title = blog_title;
         this.blog_Info = blog_Info;
         this.memberId = memberId;
+    }
+
+    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, int status ) {
+        this.trip_Id = trip_Id;
+        this.blog_title = blog_title;
+        this.blog_Info = blog_Info;
+        this.memberId = memberId;
+        this.status = status ;
     }
 
 
@@ -46,5 +55,13 @@ public class BlogFinish implements Serializable {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

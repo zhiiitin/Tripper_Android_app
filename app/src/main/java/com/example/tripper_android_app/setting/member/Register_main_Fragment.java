@@ -148,11 +148,10 @@ public class Register_main_Fragment extends Fragment {
                         pref.edit()
                                 .putBoolean("login", true)
                                 .putString("account", account)
-                                .putString("password", password)
                                 .apply();
                         ////登入成功後，把資訊存入偏好設定檔
 
-                        Navigation.findNavController(ibLogin).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment2);
+                        Navigation.findNavController(ibLogin).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
 
                     }
                 } else {
@@ -244,7 +243,7 @@ public class Register_main_Fragment extends Fragment {
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
                         }
-                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
 
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");
@@ -386,7 +385,7 @@ public class Register_main_Fragment extends Fragment {
                                 Log.e(TAG, "Internet is null");
                             }
                             Common.showToast(activity,"登入成功！");
-                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
 
                         } else {
                             Exception exception = task.getException();

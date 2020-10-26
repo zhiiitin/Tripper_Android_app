@@ -137,6 +137,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_trip_HomePage"
+            app:destination="@id/trip_HomePage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/register_NormalFragment"
@@ -170,6 +177,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_register_Member_Fragment_to_registerChangePwFragment"
+            app:destination="@id/registerChangePwFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/insert_Location_Fragment"
@@ -193,7 +207,11 @@
         android:id="@+id/notifyFragment"
         android:name="com.example.tripper_android_app.notify.NotifyFragment"
         android:label="fragment_notify"
-        tools:layout="@layout/fragment_notify" />
+        tools:layout="@layout/fragment_notify" >
+        <action
+            android:id="@+id/action_notifyFragment_to_register_main_Fragment"
+            app:destination="@id/register_main_Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/location_List_Fragment"
         android:name="com.example.tripper_android_app.location.LocationListFragment"
@@ -526,5 +544,10 @@
         android:name="com.example.tripper_android_app.setting.member.RegisterResetpasswordFragment"
         android:label="fragment_register_resetpassword"
         tools:layout="@layout/fragment_register_resetpassword" />
+    <fragment
+        android:id="@+id/registerChangePwFragment"
+        android:name="com.example.tripper_android_app.setting.member.RegisterChangePwFragment"
+        android:label="fragment_register_change_pw"
+        tools:layout="@layout/fragment_register_change_pw" />
 
 </navigation>

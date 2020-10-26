@@ -247,7 +247,14 @@ public class NotifyFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!Common.isLogin(activity)) {
+            Navigation.findNavController(this.getView()).navigate(R.id.action_notifyFragment_to_register_main_Fragment);
+            Common.showToast(activity,"請先登入會員");
+        }
+    }
 
 
 }

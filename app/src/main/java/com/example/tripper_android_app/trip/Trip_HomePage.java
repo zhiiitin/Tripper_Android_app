@@ -398,6 +398,7 @@ public class Trip_HomePage extends Fragment {
                 }
                 String nickname = member.getNickName();
                 textUserName.setText(" " + nickname + " ");
+                pref.edit().putString("memberId",member.getId()+"").apply();
 
             } else {
                 Common.showToast(activity, "no network connection found");
@@ -453,6 +454,7 @@ public class Trip_HomePage extends Fragment {
         super.onResume();
         if (!Common.isLogin(activity)) {
             Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+            Common.showToast(activity,"請先登入會員");
         }
     }
 }
