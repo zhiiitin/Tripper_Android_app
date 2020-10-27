@@ -1,13 +1,18 @@
 package com.example.tripper_android_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 
+import android.app.NativeActivity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.tripper_android_app.chat.ChatMainFragment;
+import com.example.tripper_android_app.notify.NotifyFragment;
 import com.example.tripper_android_app.util.Common;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,10 +39,24 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             String data = bundle.getString("data");
-            Log.d(TAG, "DATA::" + data);
+            Log.d(TAG, "dddddd DATA::" + data);
             Common.showToast(this, "DATA::" + data);
+            Navigation.findNavController(this,R.id.chatMainFragment).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail);
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        System.out.println("會不會執行這段語句");
+        System.out.println("會不會執行這段語句");
+        System.out.println("會不會執行這段語句");
 
+        int messageType = getIntent().getIntExtra("message",1);
+        if(messageType == 1){
+
+            Navigation.findNavController(this,R.id.trip_HomePage).navigate(R.id.chatMainFragment);
+
+        }
+    }
 }

@@ -273,14 +273,15 @@ public class ExploreFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
-            String url = Common.URL_SERVER + "ExploreServlet";
+            String url = Common.URL_SERVER + "BlogServlet";
             String id = explore.getBlogId();
+            String userId = explore.getUserId();
             ImageTask imageTask = new ImageTask(url,id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
             String icoUrl = Common.URL_SERVER + "MemberServlet";
             //從MEMBER資料表 娶回來的資料無法秀在上面
-            ImageTask imageTask1 = new ImageTask(icoUrl, id, imageSize, holder.ivUser);
+            ImageTask imageTask1 = new ImageTask(icoUrl, userId, imageSize, holder.ivUser);
             imageTask1.execute();
             imageTasks.add(imageTask);
             //大頭貼

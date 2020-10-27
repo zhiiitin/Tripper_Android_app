@@ -24,6 +24,20 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_blog_HomePage_to_editBlogFragment"
+            app:destination="@+id/editBlogFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_blog_HomePage_to_blogEditFragment"
+            app:destination="@id/blogEditFragment" />
+        <action
+            android:id="@+id/action_blog_HomePage_to_chatMainFragment"
+            app:destination="@id/chatMainFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/exploreFragment"
@@ -95,13 +109,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_register_main_Fragment_to_register_Login_Fragment"
-            app:destination="@id/register_Login_Fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
             android:id="@+id/action_register_main_Fragment_to_FB_Login_Fragment"
             app:destination="@id/FB_Login_Fragment"
             app:enterAnim="@anim/slide_in_right"
@@ -123,6 +130,27 @@
         <action
             android:id="@+id/action_register_main_Fragment_to_register_Member_Fragment"
             app:destination="@id/register_Member_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_register_Member_Fragment2"
+            app:destination="@id/register_Member_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_registerResetpasswordFragment"
+            app:destination="@id/registerResetpasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_register_main_Fragment_to_trip_HomePage"
+            app:destination="@id/trip_HomePage"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -160,19 +188,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
-    <fragment
-        android:id="@+id/register_Login_Fragment"
-        android:name="com.example.tripper_android_app.setting.member.Normal_Login_Fragment"
-        android:label="fragment_register__login_"
-        tools:layout="@layout/fragment_register__login_">
         <action
-            android:id="@+id/action_register_Login_Fragment_to_register_Member_Fragment"
-            app:destination="@id/register_Member_Fragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
+            android:id="@+id/action_register_Member_Fragment_to_registerChangePwFragment"
+            app:destination="@id/registerChangePwFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/insert_Location_Fragment"
@@ -192,7 +214,11 @@
         android:id="@+id/notifyFragment"
         android:name="com.example.tripper_android_app.notify.NotifyFragment"
         android:label="fragment_notify"
-        tools:layout="@layout/fragment_notify" />
+        tools:layout="@layout/fragment_notify" >
+        <action
+            android:id="@+id/action_notifyFragment_to_register_main_Fragment"
+            app:destination="@id/register_main_Fragment" />
+    </fragment>
     <fragment
         android:id="@+id/location_List_Fragment"
         android:name="com.example.tripper_android_app.location.LocationListFragment"
@@ -345,7 +371,21 @@
         android:id="@+id/blogEditFragment"
         android:name="com.example.tripper_android_app.blog.BlogEditFragment"
         android:label="fragment_blog_edit"
-        tools:layout="@layout/fragment_blog_edit" />
+        tools:layout="@layout/fragment_blog_edit" >
+        <action
+            android:id="@+id/action_blogEditFragment_to_createBlogPicFragment"
+            app:destination="@id/createBlogPicFragment" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_blogEditFinishFragment"
+            app:destination="@id/blogEditFinishFragment" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_blogEditPicFragmenmt"
+            app:destination="@id/blogEditPicFragmenmt" />
+
+    </fragment>
     <fragment
         android:id="@+id/railwayTimeListFragment"
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
@@ -421,7 +461,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_createBlogFragment_to_createBlogFinishFragment"
             app:destination="@id/createBlogFinishFragment"
@@ -516,9 +556,41 @@
             app:destination="@id/blog_HomePage" />
     </fragment>
     <fragment
+<<<<<<< HEAD
         android:id="@+id/groupTripPage"
         android:name="com.example.tripper_android_app.group.GroupTripPage"
         android:label="fragment_group_trip_page"
         tools:layout="@layout/fragment_group_trip_page" />
+=======
 
+        android:id="@+id/blogEditFinishFragment"
+        android:name="com.example.tripper_android_app.blog.BlogEditFinishFragment"
+        android:label="fragment_blog_edit_finish"
+        tools:layout="@layout/fragment_blog_edit_finish" >
+        <action
+            android:id="@+id/action_blogEditFinishFragment_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/blogEditPicFragmenmt"
+        android:name="com.example.tripper_android_app.blog.BlogEditPicFragmenmt"
+        android:label="fragment_blog_edit_pic_fragmenmt"
+        tools:layout="@layout/fragment_blog_edit_pic_fragmenmt" />
+>>>>>>> 7056464271c821406bee9856fe6fc85694568e49
+
+    <fragment
+        android:id="@+id/chatMainFragment"
+        android:name="com.example.tripper_android_app.chat.ChatMainFragment"
+        android:label="fragment_chat_main"
+        tools:layout="@layout/fragment_chat_main" />
+    <fragment
+        android:id="@+id/registerResetpasswordFragment"
+        android:name="com.example.tripper_android_app.setting.member.RegisterResetpasswordFragment"
+        android:label="fragment_register_resetpassword"
+        tools:layout="@layout/fragment_register_resetpassword" />
+    <fragment
+        android:id="@+id/registerChangePwFragment"
+        android:name="com.example.tripper_android_app.setting.member.RegisterChangePwFragment"
+        android:label="fragment_register_change_pw"
+        tools:layout="@layout/fragment_register_change_pw" />
 </navigation>

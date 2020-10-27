@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/blogHomepageEdit"
+        android:title="編輯網誌" />
+    <item
+        android:id="@+id/blogHomepageDelete"
+        android:title="刪除網誌" />
+</menu>

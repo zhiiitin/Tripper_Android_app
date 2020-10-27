@@ -71,7 +71,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class Register_Member_Fragment extends Fragment {
     private final static String TAG = "TAG_MemberFragment";
     private MainActivity activity;
-    private TextView tvId, tvLoginType, tvUpdate;
+    private TextView tvId, tvLoginType, tvUpdate ,tvPassword;
     private EditText etNickName ;
     private CardView cvUpdate;
     private ImageButton ibLogout;
@@ -122,7 +122,7 @@ public class Register_Member_Fragment extends Fragment {
         }
 
 
-
+        tvPassword = view.findViewById(R.id.tvPassword);
         tvId = view.findViewById(R.id.tvId_member);
         etNickName = view.findViewById(R.id.tvNickname_member);
         tvLoginType = view.findViewById(R.id.tvLoginType_member);
@@ -168,6 +168,7 @@ public class Register_Member_Fragment extends Fragment {
                     tvId.setText(id);
                     pref.edit()
                             .putString("memberId", id)
+                            .putString("memberPw" , member.getPassword())
                             .apply();
                 }
                 String nickname = member.getNickName();
@@ -177,8 +178,10 @@ public class Register_Member_Fragment extends Fragment {
                     tvLoginType.setText("一般登入");
                 } else if (member.getLoginType() == 1) {
                     tvLoginType.setText("GOOGLE");
+                    tvPassword.setVisibility(View.GONE);
                 } else if (member.getLoginType() == 2) {
                     tvLoginType.setText("FACEBOOK");
+                    tvPassword.setVisibility(View.GONE);
                 }
 
             } else {
@@ -243,6 +246,14 @@ public class Register_Member_Fragment extends Fragment {
                 }
             }
         });
+
+        //修改密碼
+            tvPassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.findNavController(v).navigate(R.id.action_register_Member_Fragment_to_registerChangePwFragment);
+                }
+            });
 
     }
 

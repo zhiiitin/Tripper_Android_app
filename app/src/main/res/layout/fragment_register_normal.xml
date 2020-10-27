@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".setting.member.Register_Normal_Fragment">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPassword2"
+        android:layout_width="260dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="43dp"
+        android:hint=" 請再次輸入密碼"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="35dp"
+        android:text="確認密碼："
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -23,37 +46,36 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etPassword2"
+        android:id="@+id/etEmail"
         android:layout_width="260dp"
         android:layout_height="44dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="43dp"
-        android:hint="請再次輸入密碼"
-        android:inputType="textPassword"
+        android:hint=" 輸入信箱（忘記密碼可使用）"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/etPassword2" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="35dp"
-        android:text="確認密碼："
+        android:text="信箱："
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="35dp"
         android:text="暱稱："
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <TextView
@@ -84,8 +106,8 @@
         android:layout_width="260dp"
         android:layout_height="44dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="40dp"
-        android:hint="請輸入帳號"
+        android:layout_marginEnd="43dp"
+        android:hint=" 請輸入帳號"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
@@ -94,8 +116,8 @@
         android:layout_width="260dp"
         android:layout_height="44dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="45dp"
-        android:hint="請輸入6~12位數"
+        android:layout_marginEnd="43dp"
+        android:hint=" 請輸入6~12位數"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAccount" />
@@ -105,10 +127,10 @@
         android:layout_width="260dp"
         android:layout_height="44dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="44dp"
-        android:hint="限定10字元"
+        android:layout_marginEnd="43dp"
+        android:hint=" 限定10字元"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword2" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
     <ImageButton
         android:id="@+id/btRegister"
@@ -134,4 +156,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_bar_menu" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

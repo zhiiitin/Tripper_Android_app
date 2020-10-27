@@ -21,7 +21,7 @@ import java.net.URL;
 
 public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     private final static String TAG = "TAG_ImageTask";
-    private String url;
+    private String url,blogId,locId;
     private int id, imageSize;
     private String key = ""; // 資料表大多數PK為String型別，所另建此欄位
     /* ImageTask的屬性strong參照到SpotListFragment內的imageView不好，
@@ -34,12 +34,13 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     public ImageTask(String url, int id, int imageSize) {
         this(url, id, imageSize, null);
     }
-
+    
     public ImageTask(String url, String key, int imageSize) {
         this(url, key, imageSize, null);
     }
 
-    // 取完圖片後使用傳入的ImageView顯示，適用於顯示多張圖片
+
+        // 取完圖片後使用傳入的ImageView顯示，適用於顯示多張圖片
     public ImageTask(String url, int id, int imageSize, ImageView imageView) {
         this.url = url;
         this.id = id;
@@ -60,7 +61,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         jsonObject.addProperty("action", "getImage");
         if(key.isEmpty()|| key.equals("")){
             jsonObject.addProperty("id", id);
-        }else{
+        }else {
             jsonObject.addProperty("id", key);
         }
         jsonObject.addProperty("imageSize", imageSize);
