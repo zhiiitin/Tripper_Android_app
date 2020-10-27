@@ -122,6 +122,7 @@ public class RegisterChangePwFragment extends Fragment {
                     }
                     if (count == 1) {
                         Common.showToast(activity, "密碼修改成功");
+                        pref.edit().putString("password",newPassword1).apply();
                         Navigation.findNavController(etNewPassword1).popBackStack();
                     }
                 } else {
