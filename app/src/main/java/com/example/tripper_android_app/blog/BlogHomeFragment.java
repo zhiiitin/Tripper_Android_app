@@ -132,25 +132,19 @@ public class BlogHomeFragment extends Fragment {
 
         private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
                 Common.showToast(activity, "搜尋不到網誌");
             }
             BlogAdapter  blogAdapter = (BlogAdapter) rvBlog.getAdapter();
             if (blogAdapter == null) {
                 rvBlog.setAdapter(new BlogAdapter(activity, blogList));
-=======
                 Common.showToast(activity, "尚未建立任何網誌");
->>>>>>> bab854fa3a74185d8d35090bc12b708066e1069d
-            } else {
-=======
-
-            }else {
->>>>>>> 會員註冊功能
+            }
+            else {
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
                 tvInfo.setVisibility(View.GONE);
                 tvInfo2.setVisibility(View.GONE);
-                BlogAdapter blogAdapter = (BlogAdapter) rvBlog.getAdapter();
+                 blogAdapter = (BlogAdapter) rvBlog.getAdapter();
                 if (blogAdapter == null) {
                     rvBlog.setAdapter(new BlogAdapter(activity, blogList));
                 } else {
