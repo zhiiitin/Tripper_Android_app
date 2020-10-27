@@ -148,6 +148,7 @@ public class Register_main_Fragment extends Fragment {
                         pref.edit()
                                 .putBoolean("login", true)
                                 .putString("account", account)
+                                .putString("password",password)
                                 .apply();
                         ////登入成功後，把資訊存入偏好設定檔
 

@@ -130,31 +130,25 @@ public class BlogHomeFragment extends Fragment {
             return blogList;
         }
 
-        private void showBlogs(List<BlogFinish> groupList) {
-            if (groupList == null || groupList.isEmpty()) {
+    private void showBlogs(List<BlogFinish> groupList) {
+        if (groupList == null || groupList.isEmpty()) {
 
-                Common.showToast(activity, "搜尋不到網誌");
-            }
-            BlogAdapter  blogAdapter = (BlogAdapter) rvBlog.getAdapter();
+        }else {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            tvInfo.setVisibility(View.GONE);
+            tvInfo2.setVisibility(View.GONE);
+            BlogAdapter blogAdapter = (BlogAdapter) rvBlog.getAdapter();
             if (blogAdapter == null) {
                 rvBlog.setAdapter(new BlogAdapter(activity, blogList));
-                Common.showToast(activity, "尚未建立任何網誌");
-            }
-            else {
-                swipeRefreshLayout.setVisibility(View.VISIBLE);
-                tvInfo.setVisibility(View.GONE);
-                tvInfo2.setVisibility(View.GONE);
-                 blogAdapter = (BlogAdapter) rvBlog.getAdapter();
-                if (blogAdapter == null) {
-                    rvBlog.setAdapter(new BlogAdapter(activity, blogList));
-                } else {
-                    blogAdapter.setBlogs(blogList);
-                    blogAdapter.notifyDataSetChanged();
-                }
+            } else {
+                blogAdapter.setBlogs(blogList);
+                blogAdapter.notifyDataSetChanged();
             }
         }
+    }
 
-        private class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyViewHolder> {
+
+    private class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.MyViewHolder> {
             private LayoutInflater layoutInflater;
             private List<BlogFinish> blogList;
             private int imageSize;
