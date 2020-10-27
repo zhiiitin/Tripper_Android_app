@@ -107,6 +107,7 @@ public class TripHasSavedPage extends Fragment {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
         textShowSDate = view.findViewById(R.id.textShowSDate);
         textShowSTime = view.findViewById(R.id.textShowSTime);

@@ -62,6 +62,7 @@ public class BlogHomeFragment extends Fragment {
         private CommonTask blogGetAllTask,blogDeleteTask;
         private ImageTask blogImageTask;
         private List<BlogFinish> blogList;
+        private TextView tvInfo,tvInfo2;
         private String memberId ;
 
         @Override
@@ -85,7 +86,8 @@ public class BlogHomeFragment extends Fragment {
             swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
             rvBlog = view.findViewById(R.id.rvBlog_Home);
             rvBlog.setLayoutManager(new LinearLayoutManager(activity));
-
+            tvInfo = view.findViewById(R.id.tvInfo);
+            tvInfo2 = view.findViewById(R.id.tvInfo2);
             SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                     MODE_PRIVATE);
             memberId = pref.getString("memberId",null);
@@ -130,14 +132,26 @@ public class BlogHomeFragment extends Fragment {
 
         private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
+<<<<<<< HEAD
                 Common.showToast(activity, "搜尋不到網誌");
             }
             BlogAdapter  blogAdapter = (BlogAdapter) rvBlog.getAdapter();
             if (blogAdapter == null) {
                 rvBlog.setAdapter(new BlogAdapter(activity, blogList));
+=======
+                Common.showToast(activity, "尚未建立任何網誌");
+>>>>>>> bab854fa3a74185d8d35090bc12b708066e1069d
             } else {
-                blogAdapter.setBlogs(blogList);
-                blogAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                tvInfo.setVisibility(View.GONE);
+                tvInfo2.setVisibility(View.GONE);
+                BlogAdapter blogAdapter = (BlogAdapter) rvBlog.getAdapter();
+                if (blogAdapter == null) {
+                    rvBlog.setAdapter(new BlogAdapter(activity, blogList));
+                } else {
+                    blogAdapter.setBlogs(blogList);
+                    blogAdapter.notifyDataSetChanged();
+                }
             }
         }
 

@@ -11,6 +11,10 @@ import java.io.Serializable;
 public class AppMessage implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	private static final String FRIEND_NOTIFY = "F"; // 好友相關訊息
+	private static final String BLOG_NOTIFY = "B"; // 網誌相關訊息
+	private static final String GROUP_NOTIFY = "G"; // 揪團相關訊息
+	private static final String TRIP_NOTIFY = "T"; // 行程相關訊息
 	private String msgType;
 	private int memberId;
 	private String msgTitle;
@@ -18,6 +22,7 @@ public class AppMessage implements Serializable{
 	private int msgStat;
 	private int sendId;
 	private int reciverId;
+
 	public AppMessage(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId) {
 		super();
 		this.msgType = msgType;

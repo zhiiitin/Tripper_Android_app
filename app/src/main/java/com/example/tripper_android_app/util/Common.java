@@ -46,10 +46,11 @@ public class Common {
     public static String spinnerSelect2 = "";
     public static String tripId = "";
     public static int memberId;
+    public static final String FRIEND_TYPE = "F"; // 朋友相關類型訊息
+    public static final String TRIP_TYPE = "T"; // 行程相關類型訊息
+    public static final String GROUP_TYPE = "G"; // 揪團相關類型訊息
+    public static final String BLOG_TYPE = "B"; // 網誌相關類型訊息
     private  MainActivity activity ;
-
-
-
 
     /**
      * 檢查是否有網路連線

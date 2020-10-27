@@ -21,7 +21,7 @@
         android:title="@string/action_profile" />
 
     <item
-        android:id="@+id/notify_Fragment"
+        android:id="@+id/notifyFragment"
         android:icon="@drawable/ic_button_notification_xxxhdpi"
         android:title="@string/action_notification" />
 

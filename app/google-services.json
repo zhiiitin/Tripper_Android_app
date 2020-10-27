@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "619854241393-qsjp4s5avotvgks7psqmvg3jek7ehj7q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tripper_android_app",
+            "certificate_hash": "f013ce1e8b44744c2fdf2702bd362d427d773c92"
+          }
+        },
+        {
           "client_id": "619854241393-plv519ivd0v59ucbrt7fn4bkmda5441c.apps.googleusercontent.com",
           "client_type": 3
         }

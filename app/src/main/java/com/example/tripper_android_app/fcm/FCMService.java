@@ -1,8 +1,5 @@
 package com.example.tripper_android_app.fcm;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -23,7 +20,6 @@ public class FCMService extends FirebaseMessagingService {
             title = notification.getTitle();
             body = notification.getBody();
         }
-
         // 取得自訂資料
         Map<String, String> map = remoteMessage.getData();
         String data = map.get("data");
