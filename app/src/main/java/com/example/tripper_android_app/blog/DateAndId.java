@@ -1,5 +1,14 @@
 package com.example.tripper_android_app.blog;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.tripper_android_app.R;
+
 public class DateAndId {
     String s_Date;
     String trip_Id;
@@ -34,4 +43,6 @@ public class DateAndId {
     public void setTrip_Id(String trip_Id) {
         this.trip_Id = trip_Id;
     }
+
+
 }

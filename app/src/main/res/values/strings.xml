@@ -182,6 +182,8 @@
     <string name="btNextStep">下一步</string>
     <string name="textUpdateFail">留言失敗</string>
     <string name="textUpdateSuccess">留言成功</string>
+    <string name="textDeleteFail">刪除失敗</string>
+    <string name="textDeleteSuccess">網誌刪除成功</string>
 
 
 </resources>

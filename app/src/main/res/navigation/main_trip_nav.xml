@@ -29,6 +29,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_blog_HomePage_to_editBlogFragment"
+            app:destination="@+id/editBlogFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_blog_HomePage_to_blogEditFragment"
+            app:destination="@id/blogEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/exploreFragment"
@@ -320,7 +330,21 @@
         android:id="@+id/blogEditFragment"
         android:name="com.example.tripper_android_app.blog.BlogEditFragment"
         android:label="fragment_blog_edit"
-        tools:layout="@layout/fragment_blog_edit" />
+        tools:layout="@layout/fragment_blog_edit" >
+        <action
+            android:id="@+id/action_blogEditFragment_to_createBlogPicFragment"
+            app:destination="@id/createBlogPicFragment" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_blogEditFinishFragment"
+            app:destination="@id/blogEditFinishFragment" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_blogEditPicFragmenmt"
+            app:destination="@id/blogEditPicFragmenmt" />
+
+    </fragment>
     <fragment
         android:id="@+id/railwayTimeListFragment"
         android:name="com.example.tripper_android_app.setting.railway.RailwayTimeListFragment"
@@ -377,14 +401,6 @@
     </fragment>
 
 
-<<<<<<< HEAD
-
-
-
-
-
-=======
->>>>>>> 359d3afb0da4c0500098904e2005da3dd05435a3
     <fragment
         android:id="@+id/groupManageFragment"
         android:name="com.example.tripper_android_app.group.GroupManageFragment"
@@ -404,7 +420,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_createBlogFragment_to_createBlogFinishFragment"
             app:destination="@id/createBlogFinishFragment"
@@ -489,11 +505,20 @@
             android:id="@+id/action_createBlogFinishFragment_to_blog_HomePage"
             app:destination="@id/blog_HomePage" />
     </fragment>
+    <fragment
+        android:id="@+id/blogEditFinishFragment"
+        android:name="com.example.tripper_android_app.blog.BlogEditFinishFragment"
+        android:label="fragment_blog_edit_finish"
+        tools:layout="@layout/fragment_blog_edit_finish" >
+        <action
+            android:id="@+id/action_blogEditFinishFragment_to_blog_HomePage"
+            app:destination="@id/blog_HomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/blogEditPicFragmenmt"
+        android:name="com.example.tripper_android_app.blog.BlogEditPicFragmenmt"
+        android:label="fragment_blog_edit_pic_fragmenmt"
+        tools:layout="@layout/fragment_blog_edit_pic_fragmenmt" />
 
 
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 359d3afb0da4c0500098904e2005da3dd05435a3
 </navigation>

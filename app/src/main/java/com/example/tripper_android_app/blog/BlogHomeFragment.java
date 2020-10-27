@@ -18,17 +18,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.group.GroupFragment;
+import com.example.tripper_android_app.location.Location_D;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.trip.Trip_M;
@@ -41,6 +47,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -51,7 +59,7 @@ public class BlogHomeFragment extends Fragment {
         private SwipeRefreshLayout swipeRefreshLayout;
         private RecyclerView rvBlog;
         private MainActivity activity;
-        private CommonTask blogGetAllTask;
+        private CommonTask blogGetAllTask,blogDeleteTask;
         private ImageTask blogImageTask;
         private List<BlogFinish> blogList;
         private String memberId ;
@@ -122,7 +130,7 @@ public class BlogHomeFragment extends Fragment {
 
         private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
-                Common.showToast(activity, "搜尋不到行程");
+                Common.showToast(activity, "搜尋不到網誌");
             }
             BlogAdapter  blogAdapter = (BlogAdapter) rvBlog.getAdapter();
             if (blogAdapter == null) {
@@ -152,6 +160,7 @@ public class BlogHomeFragment extends Fragment {
             class MyViewHolder extends RecyclerView.ViewHolder {
                 ImageView imageView;
                 TextView tvTitle, tvDate, tvCount;
+                ImageButton ibEditBlog;
 
                 MyViewHolder(View itemView) {
                     super(itemView);
@@ -159,6 +168,7 @@ public class BlogHomeFragment extends Fragment {
                     tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
                     tvDate = itemView.findViewById(R.id.tvDate);
                     tvCount = itemView.findViewById(R.id.tvCount);
+                    ibEditBlog = itemView.findViewById(R.id.ibEditTrip);
                 }
             }
 
@@ -195,6 +205,65 @@ public class BlogHomeFragment extends Fragment {
                         Navigation.findNavController(v).navigate(R.id.action_blog_HomePage_to_blogMainFragment,bundle);
                     }
                 });
+                myViewHolder.ibEditBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
+                        popupMenu.inflate(R.menu.blog_homepage_more_menu);
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.blogHomepageEdit:
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString( "UserId",blogFinish.getMemberId());
+                                        bundle.putString("BlogId",blogFinish.getTrip_Id());
+                                        bundle.putString("BlogTitle",blogFinish.getBlog_title());
+                                        bundle.putString("BlogDesc",blogFinish.getBlog_Info());
+                                        bundle.putString("BlogDate",blogFinish.getStartDate());
+                                        bundle.putString("BlogTime",blogFinish.getStartTime());
+                                        Navigation.findNavController(rvBlog).navigate(R.id.action_blog_HomePage_to_blogEditFragment, bundle);
+                                        break;
+
+                                    case R.id.blogHomepageDelete:
+
+                                        if (Common.networkConnected(activity)) {
+                                            String url = Common.URL_SERVER + "BlogServlet";
+                                            JsonObject jsonObject = new JsonObject();
+                                            jsonObject.addProperty("action", "blogDelete");
+                                            jsonObject.addProperty("blogId",blogFinish.getTrip_Id());
+                                            int count = 0;
+                                            try {
+                                                blogDeleteTask = new CommonTask(url, jsonObject.toString());
+                                                String result = blogDeleteTask.execute().get();
+                                                count = Integer.parseInt(result);
+                                            } catch (Exception e) {
+                                                Log.e(TAG, e.toString());
+                                            }
+                                            if (count == 0) {
+                                                Common.showToast(activity, R.string.textDeleteFail);
+                                            } else {
+                                                blogList.remove(blogFinish);
+                                                BlogAdapter.this.notifyDataSetChanged();
+                                                // 外面spots也必須移除選取的spot
+                                                BlogHomeFragment.this.blogList.remove(blogFinish);
+                                                Common.showToast(activity, R.string.textDeleteSuccess);
+                                            }
+                                        } else {
+                                            Common.showToast(activity, R.string.textNoNetwork);
+                                        }
+                                }
+                                return true;
+
+                                }
+
+                        });
+                        popupMenu.show();
+
+                    }
+                });
+
+
 
             }
         }
@@ -209,6 +278,10 @@ public class BlogHomeFragment extends Fragment {
             if(blogImageTask !=null){
                 blogImageTask.cancel(true);
                 blogImageTask = null ;
+            }
+            if(blogDeleteTask != null){
+                blogDeleteTask.cancel(true);
+                blogDeleteTask= null;
             }
 
         }

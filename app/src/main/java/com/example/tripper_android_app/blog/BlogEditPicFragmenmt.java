@@ -37,17 +37,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,13 +64,17 @@ import static android.app.Activity.RESULT_OK;
 import static com.example.tripper_android_app.util.Common.showToast;
 
 
-public class CreateBlogPicFragment extends Fragment {
-    private static final String TAG = "TAG_C_BlogPicFragment";
+public class BlogEditPicFragmenmt extends Fragment {
+
+
+
+    private static final String TAG = "TAG_BlogPicFragment";
+    private static final int READ_REQUEST_CODE =42 ;
     private RecyclerView rvPhoto;
     private MainActivity activity;
     private ImageView ivPoint, ivnopic;
     private ImageButton ibAdd;
-    private TextView tvSpotName, tvnopic, tvTouch, tvUpdate;
+    private TextView tvSpotName, tvnopic, tvTouch, tvUpdate,tvText;
     private ImageButton ibUpdate;
     private CommonTask imageTask;
     private static final int REQ_TAKE_PICTURE = 0;
@@ -69,6 +82,7 @@ public class CreateBlogPicFragment extends Fragment {
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
     private byte[] photo;
+
     private List<Bitmap> bitmapList = new ArrayList<>();
     private String blogID, locId;
     private BlogPic blogPic = new BlogPic();
@@ -79,12 +93,14 @@ public class CreateBlogPicFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_blog_pic, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_blog_edit_pic_fragmenmt, container, false);
     }
 
     @Override
@@ -94,7 +110,7 @@ public class CreateBlogPicFragment extends Fragment {
 
 //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("新增照片");
+        toolbar.setTitle("編輯照片");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -111,6 +127,7 @@ public class CreateBlogPicFragment extends Fragment {
         tvUpdate = view.findViewById(R.id.tvUpdate);
         ivnopic = view.findViewById(R.id.ivnoPic);
         tvnopic = view.findViewById(R.id.tvnoPic);
+        tvText = view.findViewById(R.id.tvText);
 
         ibAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +157,8 @@ public class CreateBlogPicFragment extends Fragment {
 //        rvPhoto.setOnFlingListener(null);
 //        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
 //        pagerSnapHelper.attachToRecyclerView(rvPhoto);
-
+//        bitmapList = getPhotoList();
+//        showPhotos(bitmapList);
 
         ibUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +169,7 @@ public class CreateBlogPicFragment extends Fragment {
                 if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "BlogServlet";
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "imageUpdate");
+                    jsonObject.addProperty("action", "UpdateImage");
                     jsonObject.addProperty("blogPic", new Gson().toJson(blogPic));
                     int count = 0;
                     try {                               //呼叫execute()執行doInBackGround
@@ -162,9 +180,9 @@ public class CreateBlogPicFragment extends Fragment {
                         Log.e(TAG, e.toString());
                     }
                     if (count == 0) {
-                        Common.showToast(activity, "新增失敗");
+                        Common.showToast(activity, "更新失敗");
                     } else {
-                        Common.showToast(activity, "上傳成功");
+                        Common.showToast(activity, "更新成功");
                         navController.popBackStack();
                     }
                 } else {
@@ -176,6 +194,7 @@ public class CreateBlogPicFragment extends Fragment {
     }
 
 
+
     private class ImgAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private LayoutInflater layoutInflater;
         //        private List<Img> imgs;
@@ -184,6 +203,7 @@ public class CreateBlogPicFragment extends Fragment {
         private List<Bitmap> imgList;
 
         public List<Bitmap> getImgList() {
+
             return imgList;
         }
 
@@ -241,15 +261,7 @@ public class CreateBlogPicFragment extends Fragment {
             }
         }
 
-        //加入圖片ViewHolder > header
-        public class PickViewHolder extends RecyclerView.ViewHolder {
-            ImageView ivArticleImagePick;
 
-            public PickViewHolder(@NonNull View itemView) {
-                super(itemView);
-                ivArticleImagePick = itemView.findViewById(R.id.ivPhoto);
-            }
-        }
 
 
         @NonNull
@@ -258,7 +270,7 @@ public class CreateBlogPicFragment extends Fragment {
             View itemView;
 
             itemView = layoutInflater.inflate(R.layout.item_view_createblog_photo, parent, false);
-            return new MyViewHolder(itemView);
+            return new ImgAdpter.MyViewHolder(itemView);
 
         }
 
@@ -270,24 +282,12 @@ public class CreateBlogPicFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//
-//            if (holder instanceof PickViewHolder) {
-//
-//                PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
-//                pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
-//                pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                       showTypeDialog();
-//                    }
-//                });
-
-
-            MyViewHolder myViewHolder = (MyViewHolder) holder;
+            ImgAdpter.MyViewHolder myViewHolder = (ImgAdpter.MyViewHolder) holder;
             // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
             // 但imgList的索引值是從0開始，對不上position的1 ， 所以 position - 1 > 跟
             Bitmap bitmapPosition = imgList.get(position);
             myViewHolder.ivArticleImageInsert.setImageBitmap(bitmapPosition);
+
 
 
         }
@@ -339,6 +339,8 @@ public class CreateBlogPicFragment extends Fragment {
     private void openAlbum() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQ_PICK_PICTURE);
+        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
     }
 
     @Override
@@ -355,7 +357,9 @@ public class CreateBlogPicFragment extends Fragment {
                 case REQ_CROP_PICTURE:
                     handleCropResult(intent);
                     break;
+
             }
+
         }
     }
 
@@ -423,9 +427,9 @@ public class CreateBlogPicFragment extends Fragment {
 
     private void showPhotos(List<Bitmap> PhotoList) {
         if (PhotoList == null || PhotoList.isEmpty()) {
-            showToast(activity, "搜尋不到行程");
+            showToast(activity, "搜尋不到照片");
         }
-        ImgAdpter photoAdapter = (ImgAdpter) rvPhoto.getAdapter();
+      ImgAdpter photoAdapter = (ImgAdpter) rvPhoto.getAdapter();
         if (photoAdapter == null) {
             rvPhoto.setAdapter(new ImgAdpter(activity, bitmapList));
         } else {
@@ -433,6 +437,9 @@ public class CreateBlogPicFragment extends Fragment {
             photoAdapter.notifyDataSetChanged();
         }
     }
+
+
+
 
 //    public List<Member> getMemberList() {
 //        List<Member> memberList = new ArrayList<>();
