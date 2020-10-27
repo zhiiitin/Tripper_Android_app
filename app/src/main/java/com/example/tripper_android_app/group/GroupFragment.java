@@ -220,7 +220,7 @@ public class GroupFragment extends Fragment {
                     bundle.putString("startDate",group.getStartDate());
                     bundle.putString("startTime", group.getStartTime());
                     bundle.putInt("status",group.getStatus());
-                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_tripHasSavedPage, bundle);
+                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_groupTripPage, bundle);
                 }
             });
 

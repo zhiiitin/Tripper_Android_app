@@ -185,12 +185,8 @@
         android:label="fragment_group"
         tools:layout="@layout/fragment_group" >
         <action
-            android:id="@+id/action_groupFragment_to_tripHasSavedPage"
-            app:destination="@id/tripHasSavedPage"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            android:id="@+id/action_groupFragment_to_groupTripPage"
+            app:destination="@id/groupTripPage" />
     </fragment>
     <fragment
         android:id="@+id/notifyFragment"
@@ -519,5 +515,10 @@
             android:id="@+id/action_createBlogFinishFragment_to_blog_HomePage"
             app:destination="@id/blog_HomePage" />
     </fragment>
+    <fragment
+        android:id="@+id/groupTripPage"
+        android:name="com.example.tripper_android_app.group.GroupTripPage"
+        android:label="fragment_group_trip_page"
+        tools:layout="@layout/fragment_group_trip_page" />
 
 </navigation>

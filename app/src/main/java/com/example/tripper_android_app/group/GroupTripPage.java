@@ -1,4 +1,5 @@
-package com.example.tripper_android_app.trip;
+package com.example.tripper_android_app.group;
+
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,10 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
@@ -39,6 +41,10 @@ import com.example.tripper_android_app.blog.DateAndId;
 import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.trip.TripGroup;
+import com.example.tripper_android_app.trip.TripHasSavedPage;
+import com.example.tripper_android_app.trip.Trip_LocInfo;
+import com.example.tripper_android_app.trip.Trip_M;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.DateUtil;
 import com.google.gson.Gson;
@@ -55,13 +61,13 @@ import static android.content.Context.MODE_PRIVATE;
 import static androidx.navigation.Navigation.findNavController;
 
 /**
- * 行程建立儲存後頁面
- *
- * @author cooperhsieh
- * @version 2020 09 17
+揪團頁面，點擊想參加按鈕
+Cooper
+2020 10 27
  */
-public class TripHasSavedPage extends Fragment {
-    private final static String TAG = "TAG_TripInfo";
+
+public class GroupTripPage extends Fragment {
+    private final static String TAG = "TAG_GroupInfo";
     private MainActivity activity;
     private TextView textSavedShowTitle, textShowSDate, textShowSTime;
     private RecyclerView rvShowTripD;
@@ -69,16 +75,7 @@ public class TripHasSavedPage extends Fragment {
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
     private String startDate, tripId;
-    private ImageButton btManageGroupPpl;
-
-    private int num_columns = 4;
-    private byte[] photo;
-    private static final int REQ_TAKE_PICTURE = 0;
-    private static final int REQ_PICK_PICTURE = 1;
-    private static final int REQ_CROP_PICTURE = 2;
-    private Uri contentUri;
-    private Bitmap bitmap;
-
+    private ImageButton btJoinGroup;
     private CommonTask tripGet1Task;
 
 
@@ -95,7 +92,7 @@ public class TripHasSavedPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trip_has_saved_page, container, false);
+        return inflater.inflate(R.layout.fragment_group_trip_page, container, false);
     }
 
     @Override
@@ -108,10 +105,11 @@ public class TripHasSavedPage extends Fragment {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
         textShowSDate = view.findViewById(R.id.textShowSDate);
         textShowSTime = view.findViewById(R.id.textShowSTime);
-//        btJoinGroup = view.findViewById(R.id.btJoinGroup);
+
 
         //recyclerview
         rvShowTripD = view.findViewById(R.id.rvShowTripD);
@@ -119,46 +117,71 @@ public class TripHasSavedPage extends Fragment {
 
 
         //從上一頁bundle帶過來（不包含圖片）
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         String TripName = bundle.getString("tripTitle");
         tripId = bundle.getString("tripId");
         startDate = bundle.getString("startDate");
-        String startTime = bundle.getString("startTime");
+        final String startTime = bundle.getString("startTime");
 
         textSavedShowTitle.setText(TripName);
         textShowSDate.setText(startDate);
         textShowSTime.setText(startTime);
 
 
-        //揪團人數按鈕
-        btManageGroupPpl = view.findViewById(R.id.btManageGroupPpl);
-        //判斷是否為主揪人所建的行程，true = 顯示按鈕
-        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        int status = bundle.getInt("status");
-        String mId = pref.getString("memberId", Common.PREF_FILE + "");
-        Log.e(TAG, "STAUS## " + status + " and " + "memberId " + mId);
+        //參加揪團人數按鈕
+        btJoinGroup = view.findViewById(R.id.btJoinGroup);
+        //判斷是否為主揪人所建的行程，true = 不顯示想參加
+        final SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        //int status = bundle.getInt("status");
+        String mId = pref.getString("memberId",  null);
+        final String mId2 = bundle.getInt("memberId")+"";
+        Log.e(TAG, "mid## " + mId + " and " + "memberId " + mId2);
 
-        if (mId.equals(pref.getString("memberId", Common.PREF_FILE + "")) && status == 1) {
-            btManageGroupPpl.setVisibility(View.VISIBLE);
-            btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
+        if (mId.equals(mId2) ) {
+           btJoinGroup.setVisibility(View.GONE);
+        } else {
+            btJoinGroup.setVisibility(View.VISIBLE);
+            btJoinGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment);
+                    if (Common.networkConnected(activity)) {
+                        String url = Common.URL_SERVER + "TripServlet";
+
+                        String tripId = bundle.getString("tripId");
+                        //參加人的會員ID
+                        int memberId = Integer.parseInt(pref.getString("memberId", ""));
+
+                        TripGroup tripGroup = new TripGroup(tripId, memberId);
+
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "updateGroup");
+                        jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+
+
+
+                        int count = 0;
+                        try {
+                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                            count = Integer.parseInt(result);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (count == 0) {
+                            Common.showToast(activity,"加入揪團成功！");
+                            Navigation.findNavController(v).popBackStack(R.id.groupFragment, false);
+                        } else {
+                            Common.showToast(activity, "加入揪團失敗！");
+                            Log.d(TAG, "Trip Fail: " + count);
+                        }
+                    } else {
+                        Common.showToast(activity, "請檢查網路連線");
+                    }
                 }
             });
-        } else {
-            btManageGroupPpl.setVisibility(View.GONE);
         }
 
 
-        btManageGroupPpl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment);
-            }
-        });
+
 
 
         //取得list
@@ -293,7 +316,7 @@ public class TripHasSavedPage extends Fragment {
     }
 
     //創建RecyclerView 的 Adapter
-    private class TripLocAdapter extends RecyclerView.Adapter {
+    private class GroupLocAdapter extends RecyclerView.Adapter {
         private LayoutInflater layoutInflater;
         private View visibleView;
         private int imageSize;
@@ -305,7 +328,7 @@ public class TripHasSavedPage extends Fragment {
         private List<Trip_LocInfo> tripList5;
         private List<Trip_LocInfo> tripList6;
 
-        TripLocAdapter(Context context, List<Trip_LocInfo> locList) {
+        GroupLocAdapter (Context context, List<Trip_LocInfo> locList) {
             layoutInflater = LayoutInflater.from(context);
             this.tripList1 = locList;
             this.tripList2 = locList;
@@ -390,10 +413,10 @@ public class TripHasSavedPage extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == 1) {
                 View itemView = layoutInflater.inflate(R.layout.item_view_location_detail_card, parent, false);
-                return new ViewHolderLoc(itemView);
+                return new GroupLocAdapter.ViewHolderLoc(itemView);
             } else {
                 View itemView = layoutInflater.inflate(R.layout.item_view_createblog_day, parent, false);
-                return new ViewHolderDay(itemView);
+                return new GroupLocAdapter.ViewHolderDay(itemView);
             }
         }
 
@@ -475,13 +498,13 @@ public class TripHasSavedPage extends Fragment {
                     trip_day = dayList.get(position - locNum1 - locNum2 - locNum3 - locNum4 - locNum5 - locNum6);
                 }
 
-                ViewHolderDay viewHolderDay = (ViewHolderDay) holder;
+                GroupTripPage.GroupLocAdapter.ViewHolderDay viewHolderDay = (GroupTripPage.GroupLocAdapter.ViewHolderDay) holder;
                 viewHolderDay.tvDay.setText(trip_day);
             }
 
             if (position > 0 && position < day1count) {
                 Trip_LocInfo trip_locInfo = tripList1.get(position - 1);
-                final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
+                final GroupLocAdapter.ViewHolderLoc viewHolderLoc = (GroupLocAdapter.ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
                 viewHolderLoc.LocStayTimeChosen.setText(trip_locInfo.getStaytime());
@@ -566,7 +589,7 @@ public class TripHasSavedPage extends Fragment {
 
             if (position > day2count && position < day3count) {
                 Trip_LocInfo trip_locInfo = tripList3.get(position - 1 - day2count);
-                final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
+                final GroupLocAdapter.ViewHolderLoc viewHolderLoc = (GroupLocAdapter.ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
                 viewHolderLoc.LocStayTimeChosen.setText(trip_locInfo.getStaytime());
@@ -608,7 +631,7 @@ public class TripHasSavedPage extends Fragment {
 
             if (position > day3count && position < day4count) {
                 Trip_LocInfo trip_locInfo = tripList4.get(position - 1 - day3count);
-                final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
+                final GroupLocAdapter.ViewHolderLoc viewHolderLoc = (GroupLocAdapter.ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
                 viewHolderLoc.LocStayTimeChosen.setText(trip_locInfo.getStaytime());
@@ -650,7 +673,7 @@ public class TripHasSavedPage extends Fragment {
 
             if (position > day4count && position < day5count) {
                 Trip_LocInfo trip_locInfo = tripList5.get(position - 1 - day4count);
-                final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
+                final GroupLocAdapter.ViewHolderLoc viewHolderLoc = (GroupLocAdapter.ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
                 viewHolderLoc.LocStayTimeChosen.setText(trip_locInfo.getStaytime());
@@ -692,7 +715,7 @@ public class TripHasSavedPage extends Fragment {
 
             if (position > day5count && position < day6count) {
                 Trip_LocInfo trip_locInfo = tripList6.get(position - 1 - day5count);
-                final ViewHolderLoc viewHolderLoc = (ViewHolderLoc) holder;
+                final GroupLocAdapter.ViewHolderLoc viewHolderLoc = (GroupLocAdapter.ViewHolderLoc) holder;
                 viewHolderLoc.LocChosen.setText(trip_locInfo.getName());
                 viewHolderLoc.LocAddChosen.setText(trip_locInfo.getAddress());
                 viewHolderLoc.LocStayTimeChosen.setText(trip_locInfo.getStaytime());
@@ -771,9 +794,9 @@ public class TripHasSavedPage extends Fragment {
         if (locList == null || locList.isEmpty()) {
             Common.showToast(activity, "搜尋不到行程");
         }
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
-            rvShowTripD.setAdapter(new TripLocAdapter(activity, locList));
+            rvShowTripD.setAdapter(new GroupTripPage.GroupLocAdapter(activity, locList));
         } else {
             tripLocAdapter.setLocs1(locList);
             tripLocAdapter.notifyDataSetChanged();
@@ -808,9 +831,9 @@ public class TripHasSavedPage extends Fragment {
     }
 
     private void showLocList2(List<Trip_LocInfo> locList) {
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
-            rvShowTripD.setAdapter(new TripLocAdapter(activity, locList));
+            rvShowTripD.setAdapter(new GroupTripPage.GroupLocAdapter(activity, locList));
         } else {
             tripLocAdapter.setLocs2(locList);
             tripLocAdapter.notifyDataSetChanged();
@@ -845,9 +868,9 @@ public class TripHasSavedPage extends Fragment {
     }
 
     private void showLocList3(List<Trip_LocInfo> locList) {
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
-            rvShowTripD.setAdapter(new TripLocAdapter(activity, locList));
+            rvShowTripD.setAdapter(new GroupTripPage.GroupLocAdapter(activity, locList));
         } else {
             tripLocAdapter.setLocs3(locList);
             tripLocAdapter.notifyDataSetChanged();
@@ -882,9 +905,9 @@ public class TripHasSavedPage extends Fragment {
     }
 
     private void showLocList4(List<Trip_LocInfo> locList) {
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
-            rvShowTripD.setAdapter(new TripLocAdapter(activity, locList));
+            rvShowTripD.setAdapter(new GroupTripPage.GroupLocAdapter(activity, locList));
         } else {
             tripLocAdapter.setLocs4(locList);
             tripLocAdapter.notifyDataSetChanged();
@@ -919,9 +942,9 @@ public class TripHasSavedPage extends Fragment {
     }
 
     private void showLocList5(List<Trip_LocInfo> locList) {
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
-            rvShowTripD.setAdapter(new TripLocAdapter(activity, locList));
+            rvShowTripD.setAdapter(new GroupTripPage.GroupLocAdapter(activity, locList));
         } else {
             tripLocAdapter.setLocs5(locList);
             tripLocAdapter.notifyDataSetChanged();
@@ -956,9 +979,9 @@ public class TripHasSavedPage extends Fragment {
     }
 
     private void showLocList6(List<Trip_LocInfo> locList) {
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
-            rvShowTripD.setAdapter(new TripLocAdapter(activity, locList));
+            rvShowTripD.setAdapter(new GroupTripPage.GroupLocAdapter(activity, locList));
         } else {
             tripLocAdapter.setLocs6(locList);
             tripLocAdapter.notifyDataSetChanged();
@@ -983,7 +1006,7 @@ public class TripHasSavedPage extends Fragment {
         if (dayList == null || dayList.isEmpty()) {
             Common.showToast(activity, "搜尋不到行程");
         }
-        TripLocAdapter tripLocAdapter = (TripLocAdapter) rvShowTripD.getAdapter();
+        GroupTripPage.GroupLocAdapter tripLocAdapter = (GroupTripPage.GroupLocAdapter) rvShowTripD.getAdapter();
         if (tripLocAdapter == null) {
 //            rvShowTripD.setAdapter(new TripLocAdapter(activity, dayList));
         } else {
@@ -1010,9 +1033,10 @@ public class TripHasSavedPage extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(textSavedShowTitle).popBackStack(R.id.trip_HomePage, false);
+                Navigation.findNavController(textSavedShowTitle).popBackStack(R.id.groupFragment, false);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 }
+
