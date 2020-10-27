@@ -556,13 +556,12 @@
             app:destination="@id/blog_HomePage" />
     </fragment>
     <fragment
-<<<<<<< HEAD
+
         android:id="@+id/groupTripPage"
         android:name="com.example.tripper_android_app.group.GroupTripPage"
         android:label="fragment_group_trip_page"
         tools:layout="@layout/fragment_group_trip_page" />
-=======
-
+    <fragment
         android:id="@+id/blogEditFinishFragment"
         android:name="com.example.tripper_android_app.blog.BlogEditFinishFragment"
         android:label="fragment_blog_edit_finish"
@@ -576,7 +575,7 @@
         android:name="com.example.tripper_android_app.blog.BlogEditPicFragmenmt"
         android:label="fragment_blog_edit_pic_fragmenmt"
         tools:layout="@layout/fragment_blog_edit_pic_fragmenmt" />
->>>>>>> 7056464271c821406bee9856fe6fc85694568e49
+
 
     <fragment
         android:id="@+id/chatMainFragment"
