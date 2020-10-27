@@ -366,6 +366,8 @@ public class BlogMainFragment extends Fragment {
             final BlogD blogD = blogList.get(position);
             String dateTime = blogD.getS_Date();
             SimpleDateFormat format = new SimpleDateFormat("MM-dd");
+            String blogId =blogD.getBlogId();
+            String locId= blogD.getLocationId();
             try {
                 Date date = format.parse(dateTime);
                 System.out.println(date);
@@ -406,6 +408,22 @@ public class BlogMainFragment extends Fragment {
                     byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                     Glide.with(activity).load(img1).into(holder.ivPic);
                     holder.ivPic.setVisibility(View.VISIBLE);
+                    holder.ivPic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                            View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                            alertDialog.setView(view);
+                            ImageTask bigImageTask = new ImageTask(url, blogId,locId, getResources().getDisplayMetrics().widthPixels, view.findViewById(R.id.ivPhoto));
+                            bigImageTask.execute();
+                            imageTasks.add(bigImageTask);
+                            //將白色部分設為透明
+                            alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            alertDialog.setCancelable(true);
+                            alertDialog.show();
+
+                        }
+                    });
                 }if (blogPic.getPic2() != null) {
                     byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                     Glide.with(activity).load(img2).into(holder.ivPic1);

@@ -21,7 +21,7 @@ import java.net.URL;
 
 public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     private final static String TAG = "TAG_ImageTask";
-    private String url,blogId;
+    private String url,blogId,locId;
     private int id, imageSize;
     private String key = ""; // 資料表大多數PK為String型別，所另建此欄位
     /* ImageTask的屬性strong參照到SpotListFragment內的imageView不好，
@@ -34,7 +34,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     public ImageTask(String url, int id, int imageSize) {
         this(url, id, imageSize, null);
     }
-
+    
     public ImageTask(String url, String key, int imageSize) {
         this(url, key, imageSize, null);
     }
