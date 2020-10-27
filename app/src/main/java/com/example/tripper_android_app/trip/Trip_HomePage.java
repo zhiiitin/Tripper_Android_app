@@ -407,9 +407,16 @@ public class Trip_HomePage extends Fragment {
                 if (member == null) {
                     pref.edit().putBoolean("login", false).apply();
                     Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+<<<<<<< HEAD
                 } else {
                     String userName = member.getNickName();
                     textUserName.setText(userName);
+=======
+                }
+                String nickname = member.getNickName();
+                textUserName.setText(" " + nickname + " ");
+                pref.edit().putString("memberId",member.getId()+"").apply();
+>>>>>>> 會員註冊功能
 
                 }
             } else {
@@ -466,6 +473,7 @@ public class Trip_HomePage extends Fragment {
         super.onResume();
         if (!Common.isLogin(activity)) {
             Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+            Common.showToast(activity,"請先登入會員");
         }
     }
 }

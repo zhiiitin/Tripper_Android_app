@@ -133,6 +133,7 @@ public class BlogHomeFragment extends Fragment {
         private void showBlogs(List<BlogFinish> groupList) {
             if (groupList == null || groupList.isEmpty()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Common.showToast(activity, "搜尋不到網誌");
             }
             BlogAdapter  blogAdapter = (BlogAdapter) rvBlog.getAdapter();
@@ -142,6 +143,10 @@ public class BlogHomeFragment extends Fragment {
                 Common.showToast(activity, "尚未建立任何網誌");
 >>>>>>> bab854fa3a74185d8d35090bc12b708066e1069d
             } else {
+=======
+
+            }else {
+>>>>>>> 會員註冊功能
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
                 tvInfo.setVisibility(View.GONE);
                 tvInfo2.setVisibility(View.GONE);
