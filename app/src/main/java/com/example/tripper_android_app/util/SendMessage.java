@@ -49,4 +49,32 @@ public class SendMessage {
 
         return isSendOk;
     }
+
+    public boolean sendChatMessage(){
+        if(Common.networkConnected(activity)){
+            // message = new AppMessage(msgType, memberId, title, body, stat, sendId, recId);
+            String url = Common.URL_SERVER + "FCMServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "sendChatMsg");
+            jsonObject.addProperty("message", new Gson().toJson(message));
+            String jsonOut = jsonObject.toString();
+            Log.d(TAG, "jsonOut:: " + jsonOut);
+            CommonTask sentAddFriendMsgTask = new CommonTask(url, jsonOut);
+            try {
+                String result = sentAddFriendMsgTask.execute().get();
+                int count = Integer.parseInt(result);
+                if(count > 0){
+                    isSendOk = true;
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.showToast(activity, "請確認網路連線狀態");
+        }
+
+        return isSendOk;
+    }
 }
