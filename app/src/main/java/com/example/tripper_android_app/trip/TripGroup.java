@@ -9,20 +9,16 @@ public class TripGroup implements Serializable {
     private String createDateTime;
     private int memberId;
 
-    public TripGroup(String groupTransId, String tripId, String createDateTime, int memberId) {
+
+
+
+    public TripGroup(String groupTransId, String tripId, int memberId) {
         super();
         this.groupTransId = groupTransId;
         this.tripId = tripId;
-        this.createDateTime = createDateTime;
         this.memberId = memberId;
     }
 
-    public TripGroup(String tripId, String createDateTime, int memberId) {
-        super();
-        this.tripId = tripId;
-        this.createDateTime = createDateTime;
-        this.memberId = memberId;
-    }
 
     public TripGroup(String tripId, int memberId) {
         super();

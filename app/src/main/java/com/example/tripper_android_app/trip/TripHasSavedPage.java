@@ -69,7 +69,7 @@ public class TripHasSavedPage extends Fragment {
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
     private String startDate, tripId;
-    private ImageButton btManageGroupPpl, btJoinGroup;
+    private ImageButton btManageGroupPpl;
 
     private int num_columns = 4;
     private byte[] photo;

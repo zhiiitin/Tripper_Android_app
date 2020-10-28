@@ -1,20 +1,16 @@
 package com.example.tripper_android_app.blog;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,6 +27,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
@@ -59,11 +57,12 @@ public class BlogMainFragment extends Fragment {
     private static final String TAG = "TAG_Blog_Main_Fragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvBlog,rvComment;
-    private CommonTask blogGetAllTask, blogDeleteTask;
+    private CommonTask blogGetAllTask, blogDeleteTask,getImageTask;
     private List<ImageTask> imageTasks;
     private List<BlogD> blogList;
     private List<Blog_Comment> commentList;
     private SharedPreferences preferences;
+    private BlogPic blogPic = null ;
 
 
 
@@ -113,8 +112,8 @@ public class BlogMainFragment extends Fragment {
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
         blogList = getBlogs();
         showBlogs(blogList);
-        String url = Common.URL_SERVER+"ExploreServlet";
-        String userId = bundle.getString("UserId");
+        String url = Common.URL_SERVER+"BlogServlet";
+        String userId = bundle.getString("BlogId");
         int imageSize = 500;
         ImageTask imageTask = new ImageTask(url,userId,imageSize,ivBackground);
         imageTask.execute();
@@ -192,8 +191,7 @@ public class BlogMainFragment extends Fragment {
                         Common.showToast(activity, R.string.textUpdateSuccess);
                         commentList = getComment();
                         showComments(commentList);
-                        dialog.setView(view);
-                        dialog.show();
+
                     }
                 } else {
                     Common.showToast(activity, R.string.textNoNetwork);
@@ -368,6 +366,8 @@ public class BlogMainFragment extends Fragment {
             final BlogD blogD = blogList.get(position);
             String dateTime = blogD.getS_Date();
             SimpleDateFormat format = new SimpleDateFormat("MM-dd");
+            String blogId =blogD.getBlogId();
+            String locId= blogD.getLocationId();
             try {
                 Date date = format.parse(dateTime);
                 System.out.println(date);
@@ -387,11 +387,46 @@ public class BlogMainFragment extends Fragment {
             }
             holder.tvSpotName.setText("景點描述:");
             holder.tvPic.setText("景點照片:");
+            String url = Common.URL_SERVER + "BlogServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getSpotImage");
+            jsonObject.addProperty("blog_Id", blogD.getBlogId());
+            jsonObject.addProperty("loc_Id", blogD.getLocationId());
+            getImageTask = new CommonTask(url, jsonObject.toString());
+            blogPic = new BlogPic();
+            try {
+                String jsonIn = getImageTask.execute().get();
+                Type listType = new TypeToken<BlogPic>() {
+                }.getType();
 
+                blogPic = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if(blogPic != null) {
+                if (blogPic.getPic1() != null) {
+                    byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                    Glide.with(activity).load(img1).into(holder.ivPic);
+                    holder.ivPic.setVisibility(View.VISIBLE);
+                }if (blogPic.getPic2() != null) {
+                    byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                    Glide.with(activity).load(img2).into(holder.ivPic1);
+                    holder.ivPic1.setVisibility(View.VISIBLE);
+                }if (blogPic.getPic3() != null) {
+                    byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                    Glide.with(activity).load(img3).into(holder.ivPic2);
+                    holder.ivPic2.setVisibility(View.VISIBLE);
+                }if (blogPic.getPic4() != null) {
+                    byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                    Glide.with(activity).load(img4).into(holder.ivPic3);
+                    holder.ivPic3.setVisibility(View.VISIBLE);
+                }
+            }
 
 
 
         }
+
 
         @Override
         public int getItemCount() {
@@ -411,7 +446,7 @@ public class BlogMainFragment extends Fragment {
                 ivPic1 = itemView.findViewById(R.id.ivPic1);
                 ivPic2 = itemView.findViewById(R.id.ivPic2);
                 ivPic3 = itemView.findViewById(R.id.ivPic3);
-                ivPic= itemView.findViewById(R.id.ivPic);
+                ivPic= itemView.findViewById(R.id.ivSpot1);
                 imDays = itemView.findViewById(R.id.imDays2);
                 tvPic = itemView.findViewById(R.id.tvPic);
                 tvSpotName= itemView.findViewById(R.id.tvSpotName);
