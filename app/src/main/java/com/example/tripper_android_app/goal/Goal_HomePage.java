@@ -35,6 +35,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,11 +45,16 @@ public class Goal_HomePage extends Fragment {
     public static final String TAG = "TAG_GoalHomePage";
     private MainActivity activity;
     private ImageView ivUserPic, ivStar;
-    private TextView textUserName, tvBG3, tvLocCount, tvTripCount, tvGoalDone, tvGoalCount;
+    private TextView textUserName, tvBG3, tvTripCount, tvBlogCount, tvGoalDone, tvGoalCount;
     // show member
     private Member member;
     private FirebaseAuth auth;
     private FirebaseUser mUser;
+    // 成就使用
+    private Goal goal;
+    private List<Goal> goals;
+    private int goalId, goalCond1, goalCond2;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +74,7 @@ public class Goal_HomePage extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // 設定toolbar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("個人頁面");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
@@ -79,12 +87,54 @@ public class Goal_HomePage extends Fragment {
         // 顯示會員資料
         showMember();
 
+        // 從偏好設定檔取得memberId
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        int memberId = Integer.parseInt(pref.getString("memberId", null));
+
+        // 檢查網路連線
+        if(Common.networkConnected(activity)) {
+            String url = Common.URL_SERVER + "GoalServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getGoalByMember");
+            jsonObject.addProperty("memberId", memberId);
+            Log.d(TAG,"CurrentMemberId: " + " " + memberId);
+            String jsonOut = jsonObject.toString();
+            Log.d(TAG, "Goal_jsonOut:" + jsonOut);
+            CommonTask getSearchDataTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = getSearchDataTask.execute().get();
+                Type listType = new TypeToken<List<Goal>>() {
+                }.getType();
+                goals = new Gson().fromJson(jsonIn, listType);
+                goal = goals.get(0);
+                if(goal == null){
+                    Common.showToast(activity, "搜尋不到該帳號資訊");
+                } else {
+                    // 於成就主頁載入時，計算並顯示建立的"行程數"
+                    tvTripCount = view.findViewById(R.id.tvTripCount);
+                    goalCond1 = goal.getGoalCond1();
+                    tvTripCount.setText(String.valueOf(goalCond1));
+                    // 於成就主頁載入時，計算並顯示建立的"網誌數"
+                    tvBlogCount = view.findViewById(R.id.tvBlogCount);
+                    goalCond2 = goal.getGoalCond2();
+                    tvBlogCount.setText(String.valueOf(goalCond2));
+                    // 於成就主頁載入時，計算並顯示解鎖的"成就數"
+                    tvGoalCount = view.findViewById(R.id.tvGoalCount);
+                    goalId = goal.getGoalId();
+                    tvGoalCount.setText(String.valueOf(goalId));
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.goal_HomePage);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(2).setChecked(true);
-
 
         BottomNavigationView bottomNavigationViewTop = view.findViewById(R.id.navigation);
         NavController navControllerTop = Navigation.findNavController(activity, R.id.goal_HomePage);
@@ -101,7 +151,9 @@ public class Goal_HomePage extends Fragment {
         ivStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment);
+                Bundle bundle = new Bundle();
+                bundle.putInt("goalId", goalId);
+                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
 
@@ -109,7 +161,9 @@ public class Goal_HomePage extends Fragment {
         tvBG3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment);
+                Bundle bundle = new Bundle();
+                bundle.putInt("goalId", goalId);
+                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
 
@@ -117,7 +171,9 @@ public class Goal_HomePage extends Fragment {
         tvGoalDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment);
+                Bundle bundle = new Bundle();
+                bundle.putInt("goalId", goalId);
+                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
 
@@ -125,7 +181,9 @@ public class Goal_HomePage extends Fragment {
         tvGoalCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment);
+                Bundle bundle = new Bundle();
+                bundle.putInt("goalId", goalId);
+                Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
     }
@@ -171,11 +229,11 @@ public class Goal_HomePage extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //若此帳號之資料庫有照片，便使用資料庫的照
+            // 若此帳號之資料庫有照片，便使用資料庫的照片
             if (bitmap != null) {
                 ivUserPic.setImageBitmap(bitmap);
             } else {
-                //否則連接到第三方大頭照
+                // 否則連接到第三方大頭照
                 String fbPhotoURL = mUser.getPhotoUrl().toString();
                 Glide.with(this).load(fbPhotoURL).into(ivUserPic);
             }

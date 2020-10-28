@@ -32,12 +32,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class GoalListFragment extends Fragment {
+    public static final String TAG = "TAG_GoalListFragment";
     private MainActivity activity;
     private ImageButton ibHiking, ibMountainBike, ibCar, ibFlight,
             ibRocket, ibPositiveVote, ibTrophy, ibFire, ibHands, dialog_ibDown;
     private ImageView dialog_ivBig;
     private TextView tvHiking, tvMountainBike, tvCar, tvFlight,
             tvRocket, tvPositiveVote, tvTrophy, tvFire, tvHands, dialog_tvGoal;
+    private int goalBundle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,15 +52,20 @@ public class GoalListFragment extends Fragment {
     private void showDialog(int imageId, String articleText) {
         final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.show();
+        // AlertDialog預設的顯示位置是window的位置
         Window window = alertDialog.getWindow();
+        // 將window設定在底部位置
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.popupAnimation);
         View view = View.inflate(activity, R.layout.alert_dialog_view, null);
-        dialog_ivBig = (ImageView) view.findViewById(R.id.dialog_ivBig);
+        // 讓成就字卡show出的圖會依照不同的成就去顯示對應成就的圖示
+        dialog_ivBig = view.findViewById(R.id.dialog_ivBig);
         dialog_ivBig.setImageResource(imageId);
-        dialog_tvGoal = (TextView) view.findViewById(R.id.dialog_tvGoal);
+        // 讓成就字卡show出的文字會依照不同的成就去顯示對應成就的條件
+        dialog_tvGoal = view.findViewById(R.id.dialog_tvGoal);
         dialog_tvGoal.setText(articleText);
-        dialog_ibDown = (ImageButton) view.findViewById(R.id.dialog_ibDown);
+        // 點擊成就字卡上的"向下按鈕"會讓字卡下滑消失
+        dialog_ibDown = view.findViewById(R.id.dialog_ibDown);
         dialog_ibDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,13 +114,14 @@ public class GoalListFragment extends Fragment {
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(2).setChecked(true);
 
-
         // 成就1：旅行初心者
         ibHiking = view.findViewById(R.id.ibHiking);
         ibHiking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_hiking_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_hiking_big,
+                        "只要建立完成" + "1個行程" + "、1個網誌，" +
+                                "\n並參與1個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -121,7 +129,9 @@ public class GoalListFragment extends Fragment {
         tvHiking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_hiking_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_hiking_big,
+                        "只要建立完成" + "1個行程" + "、1個網誌，" +
+                                "\n並參與1個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -131,7 +141,9 @@ public class GoalListFragment extends Fragment {
         ibMountainBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_mountain_bike_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_mountain_bike_big,
+                        "只要建立完成" + "3個行程" + "、3個網誌，" +
+                                "\n並參與3個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -140,7 +152,9 @@ public class GoalListFragment extends Fragment {
         tvMountainBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_mountain_bike_big,"只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_mountain_bike_big,
+                        "只要建立完成" + "3個行程" + "、3個網誌，" +
+                                "\n並參與3個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -150,7 +164,9 @@ public class GoalListFragment extends Fragment {
         ibCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_car_big,"只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_car_big,
+                        "只要建立完成" + "5個行程" + "、5個網誌，" +
+                                "\n並參與5個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -158,7 +174,9 @@ public class GoalListFragment extends Fragment {
         tvCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_car_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_car_big,
+                        "只要建立完成" + "5個行程" + "、5個網誌，" +
+                                "\n並參與5個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -168,7 +186,9 @@ public class GoalListFragment extends Fragment {
         ibFlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_flight_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_flight_big,
+                        "只要建立完成" + "7個行程" + "、7個網誌，" +
+                                "\n並參與7個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -176,7 +196,9 @@ public class GoalListFragment extends Fragment {
         tvFlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_flight_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_flight_big,
+                        "只要建立完成" + "7個行程" + "、7個網誌，" +
+                                "\n並參與7個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -186,7 +208,9 @@ public class GoalListFragment extends Fragment {
         ibRocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_rocket_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_rocket_big,
+                        "只要建立完成" + "10個行程" + "、10個網誌，" +
+                                "\n並參與10個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -194,7 +218,9 @@ public class GoalListFragment extends Fragment {
         tvRocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_rocket_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_rocket_big,
+                        "只要建立完成" + "10個行程" + "、10個網誌，" +
+                                "\n並參與10個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -204,7 +230,9 @@ public class GoalListFragment extends Fragment {
         ibPositiveVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_positive_vote_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_positive_vote_big,
+                        "只要建立完成" + "15個行程" + "、15個網誌，" +
+                                "\n並參與15個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -212,7 +240,9 @@ public class GoalListFragment extends Fragment {
         tvPositiveVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_positive_vote_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_positive_vote_big,
+                        "只要建立完成" + "15個行程" + "、15個網誌，" +
+                                "\n並參與15個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -222,7 +252,9 @@ public class GoalListFragment extends Fragment {
         ibTrophy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_trophy_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_trophy_big,
+                        "只要建立完成" + "18個行程" + "、18個網誌，" +
+                                "\n並參與18個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -230,7 +262,9 @@ public class GoalListFragment extends Fragment {
         tvTrophy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_trophy_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_trophy_big,
+                        "只要建立完成" + "18個行程" + "、18個網誌，" +
+                                "\n並參與18個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -240,7 +274,9 @@ public class GoalListFragment extends Fragment {
         ibFire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_fire_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_fire_big,
+                        "只要建立完成" + "19個行程" + "、19個網誌，" +
+                                "\n並參與19個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -248,7 +284,9 @@ public class GoalListFragment extends Fragment {
         tvFire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_fire_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_fire_big,
+                        "只要建立完成" + "19個行程" + "、19個網誌，" +
+                                "\n並參與19個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -258,7 +296,9 @@ public class GoalListFragment extends Fragment {
         ibHands.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_hands_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_hands_big,
+                        "只要建立完成" + "20個行程" + "、20個網誌，" +
+                                "\n並參與20個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
@@ -266,10 +306,47 @@ public class GoalListFragment extends Fragment {
         tvHands.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(R.drawable.ic_goal_hands_big, "只要蒐集到5個景點就可以解鎖該成就哦！");
+                showDialog(R.drawable.ic_goal_hands_big,
+                        "只要建立完成" + "20個行程" + "、20個網誌，" +
+                                "\n並參與20個揪團" + "，就可以解鎖該成就哦！");
             }
         });
 
+        /* 依照成就DB的欄位，成就ID的數字與達成的成就個數意義相同(ID剛好等於成就個數)，
+           故將成就ID利用Bundle從"成就主頁"帶到"我的成就"頁面去判斷與顯示成就解鎖的圖示。 */
+        Bundle bundle = getArguments();
+        if(bundle == null){
+            Navigation.findNavController(view).popBackStack();
+            return;
+        }
+        goalBundle = bundle.getInt("goalId");
+        if (goalBundle >= 1) {
+            ibHiking.setImageResource(R.drawable.ic_goal_hiking);
+        }
+        if (goalBundle >= 2) {
+            ibMountainBike.setImageResource(R.drawable.ic_goal_mountain_bike);
+        }
+        if (goalBundle >= 3) {
+            ibCar.setImageResource(R.drawable.ic_goal_car);
+        }
+        if (goalBundle >= 4) {
+            ibFlight.setImageResource(R.drawable.ic_goal_flight);
+        }
+        if (goalBundle >= 5) {
+            ibRocket.setImageResource(R.drawable.ic_goal_rocket);
+        }
+        if (goalBundle >= 6) {
+            ibPositiveVote.setImageResource(R.drawable.ic_goal_positive_vote);
+        }
+        if (goalBundle >= 7) {
+            ibTrophy.setImageResource(R.drawable.ic_goal_trophy);
+        }
+        if (goalBundle >= 8) {
+            ibFire.setImageResource(R.drawable.ic_goal_fire);
+        }
+        if (goalBundle >= 9) {
+            ibHands.setImageResource(R.drawable.ic_goal_hands);
+        }
     }
 
     @Override
