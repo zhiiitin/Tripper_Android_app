@@ -46,7 +46,7 @@ public class GroupFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvGroup;
     private MainActivity activity;
-    private CommonTask groupGetAllTask;
+    private CommonTask groupGetAllTask ,groupGetCountTask;
     private ImageTask groupImageTask;
     private List<Trip_M> groupList;
 
@@ -203,9 +203,24 @@ public class GroupFragment extends Fragment {
 //            int id = group.getMemberId();
             groupImageTask = new ImageTask(Url, tripId, imageSize, myViewHolder.imageView);
             groupImageTask.execute();
+//透過網路搜尋揪團參與人數
+            String url = Common.URL_SERVER + "Trip_Group_Servlet";
+            String trip_Id = group.getTripId();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getGroupCount");
+            jsonObject.addProperty("trip_Id" , trip_Id);
+            String jsonOut = jsonObject.toString();
+            groupGetCountTask = new CommonTask(url, jsonOut);
+            int count = 0 ;
+            try {
+                String result = groupGetCountTask.execute().get();
+                count = Integer.parseInt(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             myViewHolder.tvTitle.setText(group.getTripTitle());
             myViewHolder.tvDate.setText("出發日：" + group.getStartDate());
-            myViewHolder.tvCount.setText("已參與人數："+group.getMcount() + "/" + group.getpMax());
+            myViewHolder.tvCount.setText("已參與人數："+ count + "/" + group.getpMax());
 
 
 //            myViewHolder.tvCount.setText("已參與人數：" + group.get +"/"+ group.getpMax());
