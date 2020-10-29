@@ -219,14 +219,6 @@ public class BlogTripListFragment extends Fragment {
 
     }
 
-
-
-
-
-
-
-
-
     public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.MyDaysViewHolder> {
         private Context context;
         private List<Blog_Day> blog_days;

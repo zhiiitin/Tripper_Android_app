@@ -162,6 +162,7 @@ public class CreateBlogFinishFragment extends Fragment {
                 JsonObject jsonObject2 = new JsonObject();
                 jsonObject2.addProperty("action", "updateTrip");
                 jsonObject2.addProperty("tripId",blogFinish.getTrip_Id());
+                jsonObject2.addProperty("blogStatus", 1);
                 tripStatusTask = new CommonTask(urlTripM,jsonObject2.toString());
 
                 try {

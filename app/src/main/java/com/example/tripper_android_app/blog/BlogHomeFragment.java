@@ -59,7 +59,7 @@ public class BlogHomeFragment extends Fragment {
         private SwipeRefreshLayout swipeRefreshLayout;
         private RecyclerView rvBlog;
         private MainActivity activity;
-        private CommonTask blogGetAllTask,blogDeleteTask;
+        private CommonTask blogGetAllTask,blogDeleteTask,tripStatusTask;
         private ImageTask blogImageTask;
         private List<BlogFinish> blogList;
         private TextView tvInfo,tvInfo2;
@@ -255,6 +255,21 @@ public class BlogHomeFragment extends Fragment {
                                                 // 外面spots也必須移除選取的spot
                                                 BlogHomeFragment.this.blogList.remove(blogFinish);
                                                 Common.showToast(activity, R.string.textDeleteSuccess);
+
+                                                //更改行程狀態為可挑選
+                                                String urlTripM = Common.URL_SERVER + "Trip_M_Servlet";
+                                                JsonObject jsonObject2 = new JsonObject();
+                                                jsonObject2.addProperty("action", "updateTrip");
+                                                jsonObject2.addProperty("tripId",blogFinish.getTrip_Id());
+                                                jsonObject2.addProperty("blogStatus", 0);
+                                                tripStatusTask = new CommonTask(urlTripM,jsonObject2.toString());
+
+                                                try {
+                                                    String jsonIn2 = tripStatusTask.execute().get();
+                                                    System.out.println(jsonIn2);
+                                                } catch (Exception e) {
+                                                    Log.e(TAG, e.toString());
+                                                }
                                             }
                                         } else {
                                             Common.showToast(activity, R.string.textNoNetwork);
@@ -282,6 +297,10 @@ public class BlogHomeFragment extends Fragment {
                 blogGetAllTask.cancel(true);
                 blogGetAllTask = null ;
             }
+            if(tripStatusTask!= null){
+                tripStatusTask.cancel(true);
+                tripStatusTask = null ;
+            }
             if(blogImageTask !=null){
                 blogImageTask.cancel(true);
                 blogImageTask = null ;
@@ -293,3 +312,7 @@ public class BlogHomeFragment extends Fragment {
 
         }
     }
+
+
+
+

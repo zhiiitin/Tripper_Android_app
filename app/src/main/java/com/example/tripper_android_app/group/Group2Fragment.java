@@ -1,30 +1,20 @@
 package com.example.tripper_android_app.group;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
@@ -33,19 +23,16 @@ import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.trip.Trip_M;
 import com.example.tripper_android_app.util.Common;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class GroupFragment extends Fragment {
+public class Group2Fragment extends Fragment {
+
     private static final String TAG = "TAG_GroupListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvGroup;
@@ -53,8 +40,7 @@ public class GroupFragment extends Fragment {
     private CommonTask groupGetAllTask ,groupGetCountTask;
     private ImageTask groupImageTask;
     private List<Trip_M> groupList;
-    private TabLayout tabLayout ;
-    private ViewPager2 viewPager ;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,22 +51,12 @@ public class GroupFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_group, container, false);
+        return inflater.inflate(R.layout.fragment_group1, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("揪團");
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
-        activity.setSupportActionBar(toolbar);
-
-
-
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
 
         swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
@@ -98,50 +74,6 @@ public class GroupFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-        tabLayout = view.findViewById(R.id.tablayout);
-        viewPager = view.findViewById(R.id.viewPager);
-        viewPager.setAdapter(new PagerAdapter(activity));
-        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                switch (position){
-                    case 0 :
-                        tab.setText("可參與");
-                        break;
-                    case 1:
-                        tab.setText("已參與");
-                        break;
-                }
-            }
-        });
-        tabLayoutMediator.attach();
-
-
-
-
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (newText.isEmpty()) {
-//                    showGroups(groupList);
-//                } else {
-//                    List<Trip_M> searchGroup = new ArrayList<>();
-//                    for (Trip_M group : groupList) {
-//                        if (group.getTripTitle().toUpperCase().contains(newText.toUpperCase())) {
-//                            searchGroup.add(group);
-//                        }
-//                    }
-//                    showGroups(searchGroup);
-//                }
-//                return true;
-//            }
-//        });
 
     }
 
@@ -218,7 +150,6 @@ public class GroupFragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_group, parent, false);
-            itemView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             return new MyViewHolder(itemView);
         }
