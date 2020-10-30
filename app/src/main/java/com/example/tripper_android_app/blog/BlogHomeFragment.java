@@ -69,7 +69,6 @@ public class BlogHomeFragment extends Fragment {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             activity = (MainActivity)getActivity();
-
         }
 
         @Override

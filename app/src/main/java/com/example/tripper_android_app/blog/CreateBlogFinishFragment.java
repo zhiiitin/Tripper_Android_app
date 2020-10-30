@@ -326,5 +326,18 @@ public class CreateBlogFinishFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(blogFinishTask != null){
+            blogFinishTask.cancel(true);
+            blogFinishTask = null ;
+        }
+        if(tripStatusTask!= null){
+            tripStatusTask.cancel(true);
+            tripStatusTask = null ;
+        }
+
+    }
 
 }
