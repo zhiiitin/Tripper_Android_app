@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.fcm.AppMessage;
+import com.example.tripper_android_app.notify.Notify;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
@@ -128,13 +129,17 @@ public class FriendsAddFragment extends Fragment {
                                 String result = insertTask.execute().get();
                                 int count = Integer.parseInt(result);
                                 if( count > 0 ){
-                                    btAddFriend.setText("等待確認");
-                                    btAddFriend.setClickable(false);
-                                    btAddFriend.setBackgroundColor(R.drawable.button_checking);
+                                   // btAddFriend.setText("已為好友");
+                                    // btAddFriend.setClickable(false);
+                                    // btAddFriend.setBackgroundColor(R.drawable.button_checking);
+                                    btAddFriend.setVisibility(View.INVISIBLE);
+                                    // 自己加好友成功的訊息
+                                    addSuccessMsg(memberId);
+                                    // 推播訊息
                                     sendAddFriendMsg(friend, memberId);
                                     break;
                                 }
-                                Common.showToast(activity, "邀請失敗!");
+                                Common.showToast(activity, "加好友失敗!");
                             } catch (ExecutionException e) {
                                 e.printStackTrace();
                             } catch (InterruptedException e) {
@@ -154,13 +159,14 @@ public class FriendsAddFragment extends Fragment {
 
     }
 
+    // 推播訊息
     private void sendAddFriendMsg(Friends friends, int memberId) {
         AppMessage message = null;
         String account = pref.getString("account","");
         // msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id
-        String msgType = Common.FRIEND_TYPE;
-        String title =  "申請好友通知";
-        String body = account + "申請加您為好友！";
+        String msgType = Common.NORMAL_MSG_TYPE;
+        String title =  "好友通知";
+        String body = account + "加您為好友！";
         int stat = 0;
         int sendId = memberId;
         int recId = friends.getId();
@@ -168,7 +174,7 @@ public class FriendsAddFragment extends Fragment {
         SendMessage sendMessage = new SendMessage(activity, message);
         boolean isSendOk = sendMessage.sendMessage();
         if(isSendOk){
-            Common.showToast(activity, "已發出好友邀請!");
+            Common.showToast(activity, "加好友成功!");
         }
     }
 
@@ -221,6 +227,40 @@ public class FriendsAddFragment extends Fragment {
         }
         Navigation.findNavController(getView()).popBackStack();
         return super.onOptionsItemSelected(item);
+    }
+
+    // 新增好友成功
+    private void addSuccessMsg(int memberId) {
+        System.out.println("#### enter addSuccessMsg");
+        AppMessage message = null;
+        // msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id
+        String msgType = Common.NORMAL_MSG_TYPE;
+        String title =  "好友新增成功";
+        String body = "您已與"+ tvNickname.getText() +"成為好友！";
+        int stat = 0;
+        // 發給自己的通知
+        message = new AppMessage(msgType, memberId, title, body, stat, memberId, memberId);
+        JsonObject jsonObject = new JsonObject();
+        if(Common.networkConnected(activity)){
+            String url = Common.URL_SERVER + "FCMServlet";
+            jsonObject.addProperty("action","add");
+            jsonObject.addProperty("appMessage", new Gson().toJson(message));
+            // 塞資料至後台
+            CommonTask task = new CommonTask(url, jsonObject.toString());
+            try {
+                System.out.println("#### add ready:: ");
+                String result = task.execute().get();
+                System.out.println("#### add result:: " + result);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else {
+            Common.showToast(activity, "請確認網路連線狀態");
+        }
+
+
     }
 
 }

@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.chat.MessageDelegate;
 import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.friends.Friends;
 import com.example.tripper_android_app.task.CommonTask;
@@ -59,6 +60,9 @@ public class NotifyFragment extends Fragment {
     private Gson gson = new Gson();
     private NotifyAdapter notifyAdapter;
     private SharedPreferences pref = null;
+    private MessageDelegate messageDelegate = MessageDelegate.getInstance();
+    private MessageDelegate.OnMessageReceiveListener listener;
+    int memberId = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,7 @@ public class NotifyFragment extends Fragment {
         toolbar.setTitle("通知訊息");
         pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
-        int memberId = Integer.parseInt(pref.getString("memberId",""));
+        memberId = Integer.parseInt(pref.getString("memberId",""));
         rvNotifyList = view.findViewById(R.id.rvNotifyList);
         rvNotifyList.setLayoutManager(new LinearLayoutManager(activity));
         // 取得該帳號所有通知訊息
@@ -317,6 +321,20 @@ public class NotifyFragment extends Fragment {
             Navigation.findNavController(this.getView()).navigate(R.id.action_notifyFragment_to_register_main_Fragment);
             Common.showToast(activity,"請先登入會員");
         }
+        messageDelegate.addOnMessageReceiveListener(new MessageDelegate.OnMessageReceiveListener() {
+            @Override
+            public void onMessage(String message) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifies = getAllNotify(memberId);
+                        showNotifies(notifies);
+                        //rvNotifyList.scrollToPosition(notifies.size() - 1);
+                    }
+                });
+
+            }
+        });
     }
 
     // 新增好友成功
@@ -349,5 +367,12 @@ public class NotifyFragment extends Fragment {
 
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        messageDelegate.removeOnMessageReceiveListener(listener);
+    }
+
 
 }

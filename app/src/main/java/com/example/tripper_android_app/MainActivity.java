@@ -41,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
             String data = bundle.getString("data");
             Log.d(TAG, "dddddd DATA::" + data);
             Common.showToast(this, "DATA::" + data);
-            Navigation.findNavController(this,R.id.chatMainFragment).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail);
+            if(data.equals("N")){
+                Navigation.findNavController(this,R.id.trip_HomePage).navigate(R.id.notifyFragment);
+            }else {
+                Navigation.findNavController(this,R.id.chatMainFragment).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail);
+            }
+
         }
     }
 
@@ -54,9 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
         int messageType = getIntent().getIntExtra("message",1);
         if(messageType == 1){
-
             Navigation.findNavController(this,R.id.trip_HomePage).navigate(R.id.chatMainFragment);
 
+        }else {
+            Navigation.findNavController(this,R.id.trip_HomePage).navigate(R.id.notifyFragment);
         }
     }
 }
