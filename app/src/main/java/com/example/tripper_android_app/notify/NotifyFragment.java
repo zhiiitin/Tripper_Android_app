@@ -28,10 +28,12 @@ import android.widget.TextView;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.fcm.AppMessage;
+import com.example.tripper_android_app.friends.Friends;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -46,6 +48,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class NotifyFragment extends Fragment {
     private final static int FRIEND_TYPE = 0;
+    private final static int NORMAL_MSG_TYPE = 4;
     private final static int BLOG_TYPE = 1;
     private final static int GROUP_TYPE = 2;
     private final static int TRIP_TYPE = 3;
@@ -55,13 +58,13 @@ public class NotifyFragment extends Fragment {
     private List<ImageTask> imageTasks = new ArrayList<>();
     private Gson gson = new Gson();
     private NotifyAdapter notifyAdapter;
+    private SharedPreferences pref = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
-        Log.d("###", "11111");
     }
 
     @Override
@@ -73,12 +76,10 @@ public class NotifyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         Toolbar toolbar = view.findViewById(R.id.notifyToolbar);
         activity.setSupportActionBar(toolbar);
         toolbar.setTitle("通知訊息");
-        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
+        pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         int memberId = Integer.parseInt(pref.getString("memberId",""));
         rvNotifyList = view.findViewById(R.id.rvNotifyList);
@@ -106,6 +107,7 @@ public class NotifyFragment extends Fragment {
             notifyAdapter.setNotifies(notifies);
             notifyAdapter.notifyDataSetChanged();
         }
+
     }
 
     private List<Notify> getAllNotify(int memberId) {
@@ -152,13 +154,18 @@ public class NotifyFragment extends Fragment {
 
         @Override
         public int getItemCount() {
+            System.out.println("count::" + notifies.size());
             return notifies == null ? 0 : notifies.size();
         }
 
         @Override
         public int getItemViewType(int position) {
+            // 取得訊息類型
             Notify notify = notifies.get(position);
+
             switch (notify.getMsgType()){
+                case "N":
+                    return NORMAL_MSG_TYPE;
                 case "F":
                     return FRIEND_TYPE;
                 case "B":
@@ -175,21 +182,31 @@ public class NotifyFragment extends Fragment {
         @Override
         public NotifyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = null;
-            switch (viewType){
-                case FRIEND_TYPE:
-                    itemView = layoutInflater.inflate(R.layout.item_view_friend_apply, parent, false);
-                    return new NotifyViewHolder(itemView);
-                case BLOG_TYPE:
-                    break;
+            // 依message type取得不同的item
+
+            if(viewType == FRIEND_TYPE) {
+                itemView = layoutInflater.inflate(R.layout.item_view_friend_apply, parent, false);
+                return new NotifyViewHolder(itemView);
+            }else {
+                itemView = layoutInflater.inflate(R.layout.item_view_normal_message, parent, false);
+                return new NotifyViewHolder(itemView);
             }
-            return null;
+//            switch (viewType){
+//                case FRIEND_TYPE:
+//                    itemView = layoutInflater.inflate(R.layout.item_view_friend_apply, parent, false);
+//                    return new NotifyViewHolder(itemView);
+//                case BLOG_TYPE:
+//                    break;
+//            }
+//            return new NotifyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull NotifyViewHolder holder, int position) {
-            Notify notify = notifies.get(position);
+            final Notify notify = notifies.get(position);
+
             // 依寄送的人來取得頭像
-            int memberId = notify.getSendId();
+            final int memberId = notify.getSendId();
             if(holder.civPic != null ){
                 if(Common.networkConnected(activity)){
                    String url = Common.URL_SERVER + "MemberServlet";
@@ -204,31 +221,58 @@ public class NotifyFragment extends Fragment {
             holder.tvMsgBody.setText(notify.getMsgBody());
             holder.tvNotifyDateTime.setText(notify.getNotifyDateTime());
 
-            // TODO 點擊同意or拒絕處理事件
+            // 點擊同意or拒絕處理事件
             View.OnClickListener btClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int isApply = 0;
+                    JsonObject jsonObject = new JsonObject();
+                    String status = "";
                     switch (v.getId()){
                         case R.id.btApply:
-                            isApply = 2;
+                            // 當點選同意時，新增一筆資料且更改原申請資料的狀態碼
+                            status = "apply";
+                            // 新增成為好友的推播訊息for申請人
+                            sendReplyMsg(notify.getReciverId(), notify.getSendId(), status);
                             break;
                         case R.id.btReject:
-                            isApply = 3;
+                            // 當點選拒絕時，刪除原交友的申請資料
+                            status = "delete";
                             break;
                         default:
                             break;
                     }
+                    jsonObject.addProperty("action", status);
+                    jsonObject.addProperty("memberId", notify.getReciverId());
+                    jsonObject.addProperty("friendId", notify.getSendId());
                     if(Common.networkConnected(activity)){
-                        String url = Common.URL_SERVER + "";
+                        String url = Common.URL_SERVER + "FriendsServlet";
+                        // 更改好友關係狀態 friends table
+                        CommonTask updateFriendStatusTask = new CommonTask(url, jsonObject.toString());
+                        try {
+                            updateFriendStatusTask.execute().get();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }else {
                         Common.showToast(activity, "請確認網路連線狀態");
                     }
+
+                    // 新增成為好友的通知訊息for自己
+                    // 將好友邀請訊息狀態改為已讀
+                    addSuccessMsg(memberId, notify);
+
+
+
                 }
             };
 
-            holder.btApply.setOnClickListener(btClickListener);
-            holder.btReject.setOnClickListener(btClickListener);
+            if(holder.btApply != null && holder.btReject != null){
+                holder.btApply.setOnClickListener(btClickListener);
+                holder.btReject.setOnClickListener(btClickListener);
+            }
+
         }
 
         private class NotifyViewHolder extends RecyclerView.ViewHolder {
@@ -246,7 +290,56 @@ public class NotifyFragment extends Fragment {
         }
     }
 
+    // 傳送回覆交友狀態訊息
+    private void sendReplyMsg(int memberId, int friendId, String reply) {
+        if (reply.equals("apply")) {
+            AppMessage message = null;
+            String account = pref.getString("account","");
+            // msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id
+            String msgType = Common.NORMAL_MSG_TYPE;
+            String title =  "好友同意通知";
+            String body = account + "已同意加您為好友！";
+            int stat = 0;
+
+            message = new AppMessage(msgType, memberId, title, body, stat, memberId, friendId);
+            SendMessage sendMessage = new SendMessage(activity, message);
+            boolean isSendOk = sendMessage.sendMessage();
+            if(isSendOk){
+                Common.showToast(activity, "已發出好友邀請!");
+            }
+        }
+    }
 
 
+    // 新增好友成功
+    private void addSuccessMsg(int memberId, Notify notify) {
+        AppMessage message = null;
+        // msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id
+        String msgType = Common.NORMAL_MSG_TYPE;
+        String title =  "好友新增成功";
+        String body = "您已與"+ notify.getNickname() +"成為好友！";
+        int stat = 0;
+        // 發給自己的通知
+        message = new AppMessage(msgType, memberId, title, body, stat, memberId, memberId);
+        JsonObject jsonObject = new JsonObject();
+        if(Common.networkConnected(activity)){
+            String url = Common.URL_SERVER + "FCMServlet";
+            jsonObject.addProperty("action","add");
+            jsonObject.addProperty("appMessage", new Gson().toJson(message));
+            // 塞資料至後
+            CommonTask task = new CommonTask(url, jsonObject.toString());
+            try {
+                task.execute().get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else {
+            Common.showToast(activity, "請確認網路連線狀態");
+        }
+
+
+    }
 
 }
