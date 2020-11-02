@@ -1,6 +1,6 @@
 package com.example.tripper_android_app.setting.member;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,33 +14,31 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import static android.content.Context.MODE_PRIVATE;
+import com.google.firebase.auth.FirebaseAuth;
 
 
-public class Normal_Login_Fragment extends Fragment {
-    private final static String TAG = "TAG_LoginFragment";
+public class RegisterResetpasswordFragment extends Fragment {
+
+    private final static String TAG = "TAG_ResetPwFragment";
     private MainActivity activity;
-    private TextInputEditText etAccount, etPassword;
-    private ImageButton ibLogin;
+    private TextInputEditText etEmailReset ;
+    private ImageButton ibResetPassword ;
+    private FirebaseAuth firebaseAuth;
 
 
     @Override
@@ -48,14 +46,14 @@ public class Normal_Login_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
-
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_register__login_, container, false);
+        return inflater.inflate(R.layout.fragment_register_resetpassword, container, false);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class Normal_Login_Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("一般登入");
+        toolbar.setTitle("忘記密碼");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,67 +70,38 @@ public class Normal_Login_Fragment extends Fragment {
             upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
-//BottomNavigation
+//NavigationButton
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
         NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(4).setChecked(true);
 
-        etAccount = view.findViewById(R.id.etAccount_login);
-        etPassword = view.findViewById(R.id.etPassword_login);
-        ibLogin = view.findViewById(R.id.btLogin);
+        etEmailReset = view.findViewById(R.id.etEmailReset);
+        ibResetPassword = view.findViewById(R.id.ibResetPassword);
 
-        //神奇小按鈕
-        TextView btToFill = view.findViewById(R.id.btToFill);
-        btToFill.setOnClickListener(new View.OnClickListener() {
+        ibResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etAccount.setText("amber");
-                etPassword.setText("password");
-            }
-        });
-
-        ibLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Common.networkConnected(activity)) {
-                    String account = etAccount.getText().toString().trim();
-                    String password = etPassword.getText().toString().trim();
-                    String Url = Common.URL_SERVER + "MemberServlet";
-                    Member member = new Member(account, password);
-                    member.setLoginType(1);
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "logIn");
-                    jsonObject.addProperty("member", new Gson().toJson(member));
-                    int count = 0;
-                    try {
-                        String result = new CommonTask(Url, jsonObject.toString()).execute().get();
-                        count = Integer.parseInt(result);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    if (count == 0) {
-                        Common.showToast(activity, "帳號或密碼錯誤");
-                    } else {
-                        Common.showToast(activity, "登入成功！");
-                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-                        pref.edit()
-                                .putBoolean("login", true)
-                                .putString("account", account)
-                                .putString("password", password)
-                                .apply();
-                        ////登入成功後，把資訊存入偏好設定檔
-
-                        Navigation.findNavController(ibLogin).navigate(R.id.action_register_Login_Fragment_to_register_Member_Fragment);
-
-                    }
-                } else {
-                    Common.showToast(activity, "no network connection found");
+                String email = etEmailReset.getText().toString().trim();
+                if(email.equals("")){
+                    etEmailReset.setError("請輸入正確信箱格式");
+                }else {
+                    firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Common.showToast(activity,"發送成功，請檢查您的電子郵件");
+                            }else {
+                                String error = task.getException().getMessage();
+                                Common.showToast(activity,error);
+                            }
+                        }
+                    });
                 }
             }
-
         });
+
     }
 
     @Override

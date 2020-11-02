@@ -180,19 +180,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="65dp"
-                    android:text="@string/daysChoose"
+                    android:text="行程天數"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textTripStartDate" />
 
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="第"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/textView10"
+                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
                 <Spinner
                     android:id="@+id/spDay"
-                    android:layout_width="169dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
                     android:entries="@array/daysForTrip"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView15"
                     app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
                 <Button
@@ -210,12 +220,11 @@
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="45dp"
                     android:text="@string/showDay"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/spDay"
-                    app:layout_constraintTop_toBottomOf="@+id/btPickTime" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

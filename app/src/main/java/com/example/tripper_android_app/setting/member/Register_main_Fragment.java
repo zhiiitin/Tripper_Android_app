@@ -21,7 +21,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tripper_android_app.MainActivity;
@@ -65,10 +67,11 @@ public class Register_main_Fragment extends Fragment {
     private static final String TAG = "TAG_MainFragment";
     private static final int REQ_SIGN_IN = 101;
     private MainActivity activity;
-    private ImageButton ivRegister_Google ;
+    private ImageButton ivRegister_Google ,ibLogin ;
     private GoogleSignInClient client;
     private FirebaseAuth auth;
-
+    private TextView ivRegister_hand , btToFill ,tvResetPassword ;
+    private EditText etAccount , etPassword ;
     private CallbackManager callbackManager;
     private String name, email;
 
@@ -103,56 +106,72 @@ public class Register_main_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//ToolBar
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("會員註冊");
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
-        activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Drawable upArrow = ContextCompat.getDrawable(activity, R.drawable.abc_ic_ab_back_material);
-        if(upArrow != null) {
-            upArrow.setColorFilter(ContextCompat.getColor(activity, R.color.colorForWhite), PorterDuff.Mode.SRC_ATOP);
-            activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
-//BottomNavigation
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        Menu itemMenu = bottomNavigationView.getMenu();
-        itemMenu.getItem(4).setChecked(true);
 
-        ImageButton ivRegister_hand = view.findViewById(R.id.btRegister_hand);
-        ImageButton ivRegister_login = view.findViewById(R.id.btRegister_Login);
+        etAccount = view.findViewById(R.id.etAccount);
+        etPassword = view.findViewById(R.id.etPassword);
+        ibLogin = view.findViewById(R.id.ibLogin);
+        btToFill = view.findViewById(R.id.btToFill);
+        tvResetPassword = view.findViewById(R.id.tvResetPassword);
+//神奇小按鈕
+        btToFill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etAccount.setText("regina");
+                etPassword.setText("password");
+            }
+        });
+//登入系統
+        ibLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Common.networkConnected(activity)) {
+                    String account = etAccount.getText().toString().trim();
+                    String password = etPassword.getText().toString().trim();
+                    String Url = Common.URL_SERVER + "MemberServlet";
+                    Member member = new Member(account, password);
+                    member.setLoginType(1);
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "logIn");
+                    jsonObject.addProperty("member", new Gson().toJson(member));
+                    int count = 0;
+                    try {
+                        String result = new CommonTask(Url, jsonObject.toString()).execute().get();
+                        count = Integer.parseInt(result);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (count == 0) {
+                        Common.showToast(activity, "帳號或密碼錯誤");
+                    } else {
+                        Common.showToast(activity, "登入成功！");
+                        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                        pref.edit()
+                                .putBoolean("login", true)
+                                .putString("account", account)
+                                .putString("password",password)
+                                .apply();
+                        ////登入成功後，把資訊存入偏好設定檔
 
-//        ivRegister_hand.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_NormalFragment);
-//            }
-//        });
-//        ivRegister_login.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_Login_Fragment);
-//
-//            }
-//        });
+                        Navigation.findNavController(ibLogin).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
+
+                    }
+                } else {
+                    Common.showToast(activity, "no network connection found");
+                }
+            }
+
+        });
+
 
 //進入一般註冊頁面
+        ivRegister_hand = view.findViewById(R.id.btRegister_hand);
         ivRegister_hand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_NormalFragment);
             }
         });
-//進入一般登入頁面
-        ivRegister_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_register_Login_Fragment);
 
-            }
-        });
 //進入FB登入頁面
         final ImageButton ivRegister_FB = view.findViewById(R.id.btRegister_FB);
         ivRegister_FB.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +186,14 @@ public class Register_main_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 signInGoogle();
+            }
+        });
+
+//忘記密碼頁面
+        tvResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_register_main_Fragment_to_registerResetpasswordFragment);
             }
         });
 
@@ -217,7 +244,7 @@ public class Register_main_Fragment extends Fragment {
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
                         }
-                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
 
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");
@@ -359,7 +386,7 @@ public class Register_main_Fragment extends Fragment {
                                 Log.e(TAG, "Internet is null");
                             }
                             Common.showToast(activity,"登入成功！");
-                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_register_Member_Fragment);
+                            Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
 
                         } else {
                             Exception exception = task.getException();

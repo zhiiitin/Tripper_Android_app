@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -76,7 +77,7 @@ public class Trip_HomePage extends Fragment {
     private CommonTask tripGetAllTask;
     private CommonTask tripDeleteTask;
     private List<ImageTask> imageTasks;
-    private TextView textUserName;
+    private TextView textUserName, tvHomeInfo, tvHomeInfo2;
     private ImageView ivUserPic;
     private RecyclerView rvTripHome;
     private ImageTask tripImageTask;
@@ -84,8 +85,9 @@ public class Trip_HomePage extends Fragment {
     private SwipeRefreshLayout swipes;
     private ImageButton editTrip;
     private Trip_M tripM;
+    private LinearLayout tripMainLayout;
     //show member
-    private Member member;
+    private Member member ;
     private FirebaseAuth auth;
     private FirebaseUser mUser;
 
@@ -113,6 +115,11 @@ public class Trip_HomePage extends Fragment {
         rvTripMainList = view.findViewById(R.id.rvTripMainList);
         rvTripMainList.setLayoutManager(new LinearLayoutManager(activity));
         activity.setSupportActionBar(toolbar);
+
+        tvHomeInfo = view.findViewById(R.id.tvHomeInfo);
+        tvHomeInfo2 = view.findViewById(R.id.tvHomeInfo2);
+        tripMainLayout = view.findViewById(R.id.tripMainLayout);
+
 
         mUser = auth.getCurrentUser();
         ivUserPic = view.findViewById(R.id.ivUserPic);
@@ -156,15 +163,20 @@ public class Trip_HomePage extends Fragment {
 
     private void showTripList(List<Trip_M> tripMs) {
         if (tripMs == null || tripMs.isEmpty()) {
+            tvHomeInfo.setVisibility(View.VISIBLE);
+            tvHomeInfo2.setVisibility(View.VISIBLE);
             Common.showToast(activity, "尚未建立任何行程");
-            return;
-        }
-        TripListAdapter tripListAdapter = (TripListAdapter) rvTripMainList.getAdapter();
-        if (tripListAdapter == null) {
-            rvTripMainList.setAdapter(new TripListAdapter(activity, tripMs));
         } else {
-            tripListAdapter.setTripMs(tripMs);
-            tripListAdapter.notifyDataSetChanged();
+            tripMainLayout.setVisibility(View.VISIBLE);
+            tvHomeInfo.setVisibility(View.GONE);
+            tvHomeInfo2.setVisibility(View.GONE);
+            TripListAdapter tripListAdapter = (TripListAdapter) rvTripMainList.getAdapter();
+            if (tripListAdapter == null) {
+                rvTripMainList.setAdapter(new TripListAdapter(activity, tripMs));
+            } else {
+                tripListAdapter.setTripMs(tripMs);
+                tripListAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -392,54 +404,71 @@ public class Trip_HomePage extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                if (member == null) {
+                    pref.edit().putBoolean("login", false).apply();
+                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+
+                } else {
+                    String userName = member.getNickName();
+                    textUserName.setText(userName);
+
+                }
                 String nickname = member.getNickName();
                 textUserName.setText(" " + nickname + " ");
+                pref.edit().putString("memberId", member.getId() + "").apply();
 
-            } else {
-                Common.showToast(activity, "no network connection found");
+
             }
-            showMemberPic();
-
+        } else {
+            Common.showToast(activity, "no network connection found");
         }
+        showMemberPic();
     }
 
 
     //show UserPic
     private void showMemberPic() {
-        if (mUser != null) {
-            String Url = Common.URL_SERVER + "MemberServlet";
-            int id = member.getId();
-            int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
-            Bitmap bitmap = null;
-            try {
-                bitmap = new ImageTask(Url, id, imageSize).execute().get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //若此帳號之資料庫有照片，便使用資料庫的照
-            if (bitmap != null) {
-                ivUserPic.setImageBitmap(bitmap);
-            } else {
-                //否則連接到第三方大頭照
-                String fbPhotoURL = mUser.getPhotoUrl().toString();
-                Glide.with(this).load(fbPhotoURL).into(ivUserPic);
-            }
+        if (member == null) {
+            SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            pref.edit().putBoolean("login", false).apply();
+            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+        }else {
 
-        } else {
+            if (mUser != null) {
+                String Url = Common.URL_SERVER + "MemberServlet";
+                int id = member.getId();
+                int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+                Bitmap bitmap = null;
+                try {
+                    bitmap = new ImageTask(Url, id, imageSize).execute().get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //若此帳號之資料庫有照片，便使用資料庫的照
+                if (bitmap != null) {
+                    ivUserPic.setImageBitmap(bitmap);
+                } else {
+                    //否則連接到第三方大頭照
+                    String fbPhotoURL = mUser.getPhotoUrl().toString();
+                    Glide.with(this).load(fbPhotoURL).into(ivUserPic);
+                }
 
-            String Url = Common.URL_SERVER + "MemberServlet";
-            int id = member.getId();
-            int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
-            Bitmap bitmap = null;
-            try {
-                bitmap = new ImageTask(Url, id, imageSize).execute().get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (bitmap != null) {
-                ivUserPic.setImageBitmap(bitmap);
             } else {
-                ivUserPic.setImageResource(R.drawable.ic_nopicture);
+
+                String Url = Common.URL_SERVER + "MemberServlet";
+                int id = member.getId();
+                int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+                Bitmap bitmap = null;
+                try {
+                    bitmap = new ImageTask(Url, id, imageSize).execute().get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (bitmap != null) {
+                    ivUserPic.setImageBitmap(bitmap);
+                } else {
+                    ivUserPic.setImageResource(R.drawable.ic_nopicture);
+                }
             }
         }
     }
@@ -449,6 +478,7 @@ public class Trip_HomePage extends Fragment {
         super.onResume();
         if (!Common.isLogin(activity)) {
             Navigation.findNavController(this.getView()).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+            Common.showToast(activity, "請先登入會員");
         }
     }
 }

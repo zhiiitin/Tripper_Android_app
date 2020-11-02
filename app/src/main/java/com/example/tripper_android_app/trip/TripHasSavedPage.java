@@ -69,7 +69,7 @@ public class TripHasSavedPage extends Fragment {
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
     private String startDate, tripId;
-    private ImageButton btManageGroupPpl, btJoinGroup;
+    private ImageButton btManageGroupPpl;
 
     private int num_columns = 4;
     private byte[] photo;
@@ -106,6 +106,7 @@ public class TripHasSavedPage extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
         textShowSDate = view.findViewById(R.id.textShowSDate);

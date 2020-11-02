@@ -116,6 +116,12 @@ public class Blog_HomePage extends Fragment {
         ivUserPic = view.findViewById(R.id.ivUserPic);
         tvUserName = view.findViewById(R.id.tvUserName);
         ivBGPic = view.findViewById(R.id.ivBGPic);
+        ivUserPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_blog_HomePage_to_chatMainFragment);
+            }
+        });
 
         showMember();
 

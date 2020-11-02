@@ -37,6 +37,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
@@ -70,12 +73,14 @@ public class CreateBlogFinishFragment extends Fragment {
     private ImageButton ibInsertB_PIG,ibBlogUpdate;
     private TextView tvTitle,tvInfo ;
     private TextInputEditText etTitle,etInfo ;
-    private CommonTask blogFinishTask ;
+    private CommonTask blogFinishTask ,tripStatusTask;
     private byte[] photo;
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_PICTURE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
+    private RadioGroup radioGroup;
+    private int status ;
 
 
 
@@ -115,6 +120,7 @@ public class CreateBlogFinishFragment extends Fragment {
         tvInfo = view.findViewById(R.id.tvInfo);
         etTitle = view.findViewById(R.id.etTitle);
         etInfo = view.findViewById(R.id.etInfo);
+        radioGroup = view.findViewById(R.id.radioGroup);
 
 //取得tripId
         Bundle bundle = getArguments();
@@ -123,6 +129,19 @@ public class CreateBlogFinishFragment extends Fragment {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                 MODE_PRIVATE);
         final String memberId = pref.getString("memberId",null);
+
+//選擇公開或私密
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = group.findViewById(checkedId);
+                if(radioButton.getText().equals("公開")){
+                    status = 0 ;   //0為公開，1為私密
+                }else {
+                    status = 1 ;
+                }
+            }
+        });
 
 
 //按下發佈網誌按鈕，送出標題及描述
@@ -137,7 +156,20 @@ public class CreateBlogFinishFragment extends Fragment {
                     return;
                 }
 
-                BlogFinish blogFinish = new BlogFinish(tripId,title,info,memberId);
+                BlogFinish blogFinish = new BlogFinish(tripId,title,info,memberId,status);
+//更改該行程BlogStatus
+                String urlTripM = Common.URL_SERVER + "Trip_M_Servlet";
+                JsonObject jsonObject2 = new JsonObject();
+                jsonObject2.addProperty("action", "updateTrip");
+                jsonObject2.addProperty("tripId",blogFinish.getTrip_Id());
+                tripStatusTask = new CommonTask(urlTripM,jsonObject2.toString());
+
+                try {
+                    String jsonIn2 = tripStatusTask.execute().get();
+                    System.out.println(jsonIn2);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
 
                 if (Common.networkConnected(activity)) {
                     String Url = Common.URL_SERVER + "BlogServlet";
@@ -162,6 +194,7 @@ public class CreateBlogFinishFragment extends Fragment {
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
+
                 }
             }
         });
