@@ -592,4 +592,14 @@
         android:name="com.example.tripper_android_app.setting.member.RegisterChangePwFragment"
         android:label="fragment_register_change_pw"
         tools:layout="@layout/fragment_register_change_pw" />
+    <fragment
+        android:id="@+id/group1Fragment"
+        android:name="com.example.tripper_android_app.group.Group1Fragment"
+        android:label="fragment_group1"
+        tools:layout="@layout/fragment_group1" />
+    <fragment
+        android:id="@+id/group2Fragment"
+        android:name="com.example.tripper_android_app.group.Group2Fragment"
+        android:label="fragment_group2"
+        tools:layout="@layout/fragment_group2" />
 </navigation>

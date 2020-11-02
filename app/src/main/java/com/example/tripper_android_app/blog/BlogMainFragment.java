@@ -534,4 +534,7 @@ public class BlogMainFragment extends Fragment {
 //            btSend = itemView.findViewById(R.id.btSend);
         }
     }
+
+
+
 }
