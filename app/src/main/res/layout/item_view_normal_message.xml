@@ -34,31 +34,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.204" />
 
-        <Button
-            android:id="@+id/btApply"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/ic_confirm_friend"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btReject"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btReject"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="170dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/ic_cancel_friend"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/tvMsgBody"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tvNotifyDateTime"
             android:layout_width="wrap_content"

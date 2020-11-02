@@ -73,7 +73,6 @@ public class Create_Blog_Location_List extends Fragment {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
         swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvGroup = view.findViewById(R.id.rvBlog_Home);
         rvGroup.setLayoutManager(new LinearLayoutManager(activity));
@@ -216,7 +215,6 @@ public class Create_Blog_Location_List extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Navigation.findNavController(rvGroup).popBackStack(R.id.blog_HomePage, false);
-
                 return true;
             default:
                 break;

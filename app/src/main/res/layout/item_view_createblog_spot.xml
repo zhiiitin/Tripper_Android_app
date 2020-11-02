@@ -53,8 +53,8 @@
             android:layout_marginTop="6dp"
             android:fontFamily="@font/noto_sans"
             android:text="輸入網誌內容："
-            android:textColor="#0C0C0C"
-            android:textSize="20sp"
+            android:textColor="#4E4D4D"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
@@ -74,7 +74,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/colorForWhite"
-            android:hint="請輸入文字：限500字"
+            android:hint="輸入說明文字"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvInput" />

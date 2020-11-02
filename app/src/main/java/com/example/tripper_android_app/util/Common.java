@@ -50,6 +50,7 @@ public class Common {
     public static final String TRIP_TYPE = "T"; // 行程相關類型訊息
     public static final String GROUP_TYPE = "G"; // 揪團相關類型訊息
     public static final String BLOG_TYPE = "B"; // 網誌相關類型訊息
+    public static final String NORMAL_MSG_TYPE = "N"; // 一般通知類型訊息
     public static final String SEND_MESSEAGE_TYPE = "RIGHT"; //發送聊天訊息
     public static final String RECEIVE_MESSEAGE_TYPE = "LEFT"; //接收聊天訊息
     private  MainActivity activity ;

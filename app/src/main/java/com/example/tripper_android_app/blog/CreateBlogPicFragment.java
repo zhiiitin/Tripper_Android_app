@@ -449,6 +449,4 @@ public class CreateBlogPicFragment extends Fragment {
         }
     }
 
-
-
 }

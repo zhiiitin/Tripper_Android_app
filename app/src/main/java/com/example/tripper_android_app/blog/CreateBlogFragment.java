@@ -87,6 +87,7 @@ public class CreateBlogFragment extends Fragment {
     private BlogPic blogPic = null;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1482,5 +1483,21 @@ public class CreateBlogFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(groupGet1Task!= null){
+            groupGet1Task.cancel(true);
+            groupGet1Task = null ;
+        }
+        if(InsertNoteTask!= null){
+            InsertNoteTask.cancel(true);
+            InsertNoteTask = null ;
+        }
+        if(getImageTask!= null){
+            getImageTask.cancel(true);
+            getImageTask = null ;
+        }
 
+    }
 }
