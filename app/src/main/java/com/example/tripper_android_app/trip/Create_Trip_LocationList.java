@@ -80,14 +80,14 @@ public class Create_Trip_LocationList extends Fragment {
         activity.setSupportActionBar(toolbar);
         textLocName = view.findViewById(R.id.textLocName);
 
-        rvSelectLoc = view.findViewById(R.id.rvSelectLoc);
+        rvSelectLoc = view.findViewById(R.id.rvLocSelect);
         rvSelectLoc.setLayoutManager(new LinearLayoutManager(activity));
         locationList = getLocation();
         showLocation(locationList);
 
 
         //刷新景點
-        swipe = view.findViewById(R.id.swipeRefreshForLoc);
+        swipe = view.findViewById(R.id.swipeLoc);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -99,7 +99,7 @@ public class Create_Trip_LocationList extends Fragment {
 
 
         SearchView searchLoc = view.findViewById(R.id.searchLoc);
-        rvSelectLoc = view.findViewById(R.id.rvSelectLoc);
+        //rvSelectLoc = view.findViewById(R.id.rvLocSelect);
         searchLoc.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
