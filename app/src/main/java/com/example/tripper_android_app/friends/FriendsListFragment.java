@@ -222,7 +222,19 @@ public class FriendsListFragment extends Fragment {
             imageTask.execute();
             imageTasks.add(imageTask);
             friendsViewHolder.tvNickname.setText(friend.getNickName());
+
+
             // TODO 點擊好友careView 進到聊天畫面
+            friendsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String recirverName = friend.getNickName();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("recieverId",memberId);
+                    bundle.putString("recirverName",recirverName);
+                    Navigation.findNavController(v).navigate(R.id.action_friendsListFragment_to_chatMainFragment,bundle);
+                }
+            });
         }
     }
 

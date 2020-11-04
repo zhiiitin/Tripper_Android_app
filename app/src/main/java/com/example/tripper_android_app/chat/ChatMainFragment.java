@@ -82,6 +82,7 @@ public class ChatMainFragment extends Fragment {
     private MessageDelegate.OnMessageReceiveListener listener;
     private FirebaseUser mUser;
     private FirebaseAuth auth;
+    private int recieverId = 0 ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,10 +104,13 @@ public class ChatMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mUser = auth.getCurrentUser();
+        Bundle bundle = getArguments();
+        recieverId = bundle.getInt("recieverId");
+        String revieverName = bundle.getString("recirverName");
 
         //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Regina");
+        toolbar.setTitle(revieverName);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -128,7 +132,7 @@ public class ChatMainFragment extends Fragment {
         memberId = Integer.parseInt(pref.getString("memberId", null));
 
         //取得該聊天室內容
-        messagess = getAllMessagess(memberId, 2);
+        messagess = getAllMessagess(memberId, recieverId);
         showChat(messagess);
 
         if(messagess.size() != 0){
@@ -247,7 +251,7 @@ public class ChatMainFragment extends Fragment {
                 } else {
                     ReceivedMessageHolder messageHolder = (ReceivedMessageHolder) holder;
 //取得大頭貼                    int id = member.getId();
-                    int id = 1;
+                    int id = recieverId;
                     Bitmap bitmap = null;
                     String url = Common.URL_SERVER + "MemberServlet";
                     int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
@@ -299,13 +303,13 @@ public class ChatMainFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         String uptime = simpleDateFormat.format(calendar.getTime());
 
-        message = new AppMessage(msgType, memberid, title, body, stat, sendId, 2, uptime);
+        message = new AppMessage(msgType, memberid, title, body, stat, sendId, recieverId, uptime);
         SendMessage sendMessage = new SendMessage(activity, message);
         sendMessage.sendChatMessage();
 
         messageAdapter = (MessageAdapter) recyclerView.getAdapter();
 
-        messagess = getAllMessagess(memberid, 1);
+        messagess = getAllMessagess(memberid, recieverId);
         showChat(messagess);
 
 
@@ -331,8 +335,8 @@ public class ChatMainFragment extends Fragment {
             String url = Common.URL_SERVER + "FCMServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getChatMsg");
-            jsonObject.addProperty("memberId", 1);
-            jsonObject.addProperty("recirverId", 2);
+            jsonObject.addProperty("memberId", memberId);
+            jsonObject.addProperty("recirverId", recieverId);
             String jsonOut = jsonObject.toString();
             System.out.println("");
             CommonTask getNotifyTask = new CommonTask(url, jsonOut);
@@ -362,7 +366,7 @@ public class ChatMainFragment extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        messagess = getAllMessagess(memberId, 2);
+                        messagess = getAllMessagess(memberId, recieverId);
                         showChat(messagess);
                         recyclerView.scrollToPosition(messagess.size() - 1);
                     }
@@ -391,4 +395,6 @@ public class ChatMainFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

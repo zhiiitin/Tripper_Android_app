@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.group;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class Group2Fragment extends Fragment {
@@ -70,6 +73,7 @@ public class Group2Fragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
+                groupList = getGroups();
                 showGroups(groupList);
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -78,11 +82,14 @@ public class Group2Fragment extends Fragment {
     }
 
     private List<Trip_M> getGroups() {
+        SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        String mId = pref.getString("memberId",  null);
         List<Trip_M> groupList = null;
         if (Common.networkConnected(activity)) {
             String Url = Common.URL_SERVER + "Trip_M_Servlet";
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
+            jsonObject.addProperty("action", "getMyGroup");
+            jsonObject.addProperty("memberId",mId);
             String jsonOut = jsonObject.toString();
             groupGetAllTask = new CommonTask(Url, jsonOut);
             try {
@@ -174,7 +181,7 @@ public class Group2Fragment extends Fragment {
             int count = 0 ;
             try {
                 String result = groupGetCountTask.execute().get();
-                count = Integer.parseInt(result);
+                count = Integer.parseInt(result) + 1;
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -80,6 +80,7 @@ public class Group1Fragment extends Fragment {
                 @Override
                 public void onRefresh() {
                     swipeRefreshLayout.setRefreshing(true);
+                    groupList = getGroups();
                     showGroups(groupList);
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -184,10 +185,11 @@ public class Group1Fragment extends Fragment {
                 int count = 0 ;
                 try {
                     String result = groupGetCountTask.execute().get();
-                    count = Integer.parseInt(result);
+                    count = Integer.parseInt(result) + 1;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 myViewHolder.tvTitle.setText(group.getTripTitle());
                 myViewHolder.tvDate.setText("出發日：" + group.getStartDate());
                 myViewHolder.tvCount.setText("已參與人數："+ count + "/" + group.getpMax());

@@ -180,5 +180,18 @@
             android:theme="@style/ToolBarStyle" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ImageButton
+        android:id="@+id/ibExiGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="#ffffff"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/icexitgroup" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -75,7 +75,7 @@ public class GroupTripPage extends Fragment {
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
     private String startDate, tripId;
-    private ImageButton btJoinGroup;
+    private ImageButton btJoinGroup ,ibExitGroup ;
     private CommonTask tripGet1Task;
 
 
@@ -126,7 +126,8 @@ public class GroupTripPage extends Fragment {
         textSavedShowTitle.setText(TripName);
         textShowSDate.setText(startDate);
         textShowSTime.setText(startTime);
-
+        //按下參加按鈕後，顯示退出揪團按鈕
+        ibExitGroup = view.findViewById(R.id.ibExiGroup);
 
         //參加揪團人數按鈕
         btJoinGroup = view.findViewById(R.id.btJoinGroup);
@@ -137,9 +138,29 @@ public class GroupTripPage extends Fragment {
         final String mId2 = bundle.getInt("memberId")+"";
         Log.e(TAG, "mid## " + mId + " and " + "memberId " + mId2);
 
-        if (mId.equals(mId2) ) {
-           btJoinGroup.setVisibility(View.GONE);
-        } else {
+        //判斷是否已參加---------------------------------------
+        String url = Common.URL_SERVER +"Trip_Group_Servlet";
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("action","getMyGroup");
+        jsonObject.addProperty("trip_Id",tripId);
+        jsonObject.addProperty("memberId",mId);
+        int checkCount = 0 ;
+        try {
+            String result = new CommonTask(url, jsonObject.toString()).execute().get();
+            checkCount = Integer.parseInt(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //---------------------------------------------------
+        if (mId.equals(mId2)) {
+            btJoinGroup.setVisibility(View.GONE);
+        }
+        else if(checkCount == 1){
+            btJoinGroup.setVisibility(View.GONE);
+            ibExitGroup.setVisibility(View.VISIBLE);
+        }
+         else {
             btJoinGroup.setVisibility(View.VISIBLE);
             btJoinGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,7 +179,6 @@ public class GroupTripPage extends Fragment {
                         jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
 
 
-
                         int count = 0;
                         try {
                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
@@ -168,7 +188,8 @@ public class GroupTripPage extends Fragment {
                         }
                         if (count == 0) {
                             Common.showToast(activity,"加入揪團成功！");
-                            Navigation.findNavController(v).popBackStack(R.id.groupFragment, false);
+                            btJoinGroup.setVisibility(View.GONE);
+                            ibExitGroup.setVisibility(View.VISIBLE);
                         } else {
                             Common.showToast(activity, "加入揪團失敗！");
                             Log.d(TAG, "Trip Fail: " + count);
@@ -180,6 +201,39 @@ public class GroupTripPage extends Fragment {
             });
         }
 
+         ibExitGroup.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 if (Common.networkConnected(activity)) {
+                     String url = Common.URL_SERVER + "TripServlet";
+
+                     String tripId = bundle.getString("tripId");
+                     //參加人的會員ID
+                     int memberId = Integer.parseInt(pref.getString("memberId", ""));
+
+                     TripGroup tripGroup = new TripGroup(tripId, memberId);
+
+                     JsonObject jsonObject = new JsonObject();
+                     jsonObject.addProperty("action", "deleteGroup");
+                     jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+
+                     int count = 0;
+                     try {
+                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                         count = Integer.parseInt(result);
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+                     if (count == 1) {
+                         Common.showToast(activity,"已退出此揪團");
+                         ibExitGroup.setVisibility(View.GONE);
+                         btJoinGroup.setVisibility(View.VISIBLE);
+                     }
+                 } else {
+                     Common.showToast(activity, "請檢查網路連線");
+                 }
+             }
+         });
 
 
 
