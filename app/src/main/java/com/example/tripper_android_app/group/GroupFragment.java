@@ -107,7 +107,7 @@ public class GroupFragment extends Fragment {
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position){
                     case 0 :
-                        tab.setText("可參與");
+                        tab.setText("列表");
                         break;
                     case 1:
                         tab.setText("已參與");
@@ -197,7 +197,7 @@ public class GroupFragment extends Fragment {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView;
+            ImageView imageView ,ivFill;
             TextView tvTitle, tvDate, tvCount;
 
             MyViewHolder(View itemView) {
@@ -206,6 +206,7 @@ public class GroupFragment extends Fragment {
                 tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvCount = itemView.findViewById(R.id.tvCount);
+                ivFill = itemView.findViewById(R.id.ivFill);
             }
         }
 

@@ -50,6 +50,7 @@ public class Group1Fragment extends Fragment {
         private CommonTask groupGetAllTask ,groupGetCountTask;
         private ImageTask groupImageTask;
         private List<Trip_M> groupList;
+        private int mbrStatus = 0;
 
 
         @Override
@@ -140,7 +141,7 @@ public class Group1Fragment extends Fragment {
             }
 
             class MyViewHolder extends RecyclerView.ViewHolder {
-                ImageView imageView;
+                ImageView imageView,ivFill,ivWillFill;
                 TextView tvTitle, tvDate, tvCount;
 
                 MyViewHolder(View itemView) {
@@ -149,6 +150,8 @@ public class Group1Fragment extends Fragment {
                     tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
                     tvDate = itemView.findViewById(R.id.tvDate);
                     tvCount = itemView.findViewById(R.id.tvCount);
+                    ivFill = itemView.findViewById(R.id.ivFill);
+                    ivWillFill = itemView.findViewById(R.id.ivWillFill);
                 }
             }
 
@@ -194,8 +197,18 @@ public class Group1Fragment extends Fragment {
                 myViewHolder.tvDate.setText("出發日：" + group.getStartDate());
                 myViewHolder.tvCount.setText("已參與人數："+ count + "/" + group.getpMax());
 
+                if((group.getpMax() - count) == 2 || (group.getpMax() - count) == 1){
+                    myViewHolder.ivWillFill.setVisibility(View.VISIBLE);
+                }
+//人數滿時顯示人數已滿
+                if(count == group.getpMax()){
+                    myViewHolder.tvCount.setVisibility(View.GONE);
+                    myViewHolder.ivFill.setVisibility(View.VISIBLE);
+                    //狀態等於1，表示成員已滿
+                    mbrStatus = 1 ;
+                }
 
-//            myViewHolder.tvCount.setText("已參與人數：" + group.get +"/"+ group.getpMax());
+
 //點擊頁面傳到行程頁面
                 myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -207,6 +220,7 @@ public class Group1Fragment extends Fragment {
                         bundle.putString("startDate",group.getStartDate());
                         bundle.putString("startTime", group.getStartTime());
                         bundle.putInt("status",group.getStatus());
+                        bundle.putInt("mbrStatus",mbrStatus);
                         Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_groupTripPage, bundle);
                     }
                 });

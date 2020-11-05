@@ -74,9 +74,12 @@ public class GroupTripPage extends Fragment {
     private Button btDay1, btDay2, btDay3, btDay4, btDay5, btDay6;
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
-    private String startDate, tripId;
-    private ImageButton btJoinGroup ,ibExitGroup ;
+    private String startDate, tripId ;
+    private int memberId ;
+    private ImageButton btJoinGroup ,ibExitGroup,ibMbrFill ;
     private CommonTask tripGet1Task;
+    private int checkCount = 0 , mbrStatus = 0 ;
+    private Bundle bundle2 = new Bundle();
 
 
     @Override
@@ -121,13 +124,19 @@ public class GroupTripPage extends Fragment {
         String TripName = bundle.getString("tripTitle");
         tripId = bundle.getString("tripId");
         startDate = bundle.getString("startDate");
+        memberId = bundle.getInt("memberId");
+        mbrStatus = bundle.getInt("mbrStatus");
         final String startTime = bundle.getString("startTime");
+
+        bundle2.putString("tripId",tripId);
+        bundle2.putInt("memberId",memberId);
 
         textSavedShowTitle.setText(TripName);
         textShowSDate.setText(startDate);
         textShowSTime.setText(startTime);
         //按下參加按鈕後，顯示退出揪團按鈕
         ibExitGroup = view.findViewById(R.id.ibExiGroup);
+        ibMbrFill = view.findViewById(R.id.ibMbrFill);
 
         //參加揪團人數按鈕
         btJoinGroup = view.findViewById(R.id.btJoinGroup);
@@ -145,7 +154,7 @@ public class GroupTripPage extends Fragment {
         jsonObject.addProperty("action","getMyGroup");
         jsonObject.addProperty("trip_Id",tripId);
         jsonObject.addProperty("memberId",mId);
-        int checkCount = 0 ;
+
         try {
             String result = new CommonTask(url, jsonObject.toString()).execute().get();
             checkCount = Integer.parseInt(result);
@@ -161,44 +170,48 @@ public class GroupTripPage extends Fragment {
             ibExitGroup.setVisibility(View.VISIBLE);
         }
          else {
-            btJoinGroup.setVisibility(View.VISIBLE);
-            btJoinGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (Common.networkConnected(activity)) {
-                        String url = Common.URL_SERVER + "TripServlet";
+            if (mbrStatus == 0) {
+                btJoinGroup.setVisibility(View.VISIBLE);
+                btJoinGroup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (Common.networkConnected(activity)) {
+                            String url = Common.URL_SERVER + "TripServlet";
 
-                        String tripId = bundle.getString("tripId");
-                        //參加人的會員ID
-                        int memberId = Integer.parseInt(pref.getString("memberId", ""));
+                            String tripId = bundle.getString("tripId");
+                            //參加人的會員ID
+                            int memberId = Integer.parseInt(pref.getString("memberId", ""));
 
-                        TripGroup tripGroup = new TripGroup(tripId, memberId);
+                            TripGroup tripGroup = new TripGroup(tripId, memberId);
 
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("action", "updateGroup");
-                        jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "updateGroup");
+                            jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
 
 
-                        int count = 0;
-                        try {
-                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
-                            count = Integer.parseInt(result);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        if (count == 0) {
-                            Common.showToast(activity,"加入揪團成功！");
-                            btJoinGroup.setVisibility(View.GONE);
-                            ibExitGroup.setVisibility(View.VISIBLE);
+                            int count = 0;
+                            try {
+                                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                count = Integer.parseInt(result);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (count == 0) {
+                                Common.showToast(activity, "加入揪團成功！");
+                                btJoinGroup.setVisibility(View.GONE);
+                                ibExitGroup.setVisibility(View.VISIBLE);
+                            } else {
+                                Common.showToast(activity, "加入揪團失敗！");
+                                Log.d(TAG, "Trip Fail: " + count);
+                            }
                         } else {
-                            Common.showToast(activity, "加入揪團失敗！");
-                            Log.d(TAG, "Trip Fail: " + count);
+                            Common.showToast(activity, "請檢查網路連線");
                         }
-                    } else {
-                        Common.showToast(activity, "請檢查網路連線");
                     }
-                }
-            });
+                });
+            }else {
+                ibMbrFill.setVisibility(View.VISIBLE);
+            }
         }
 
          ibExitGroup.setOnClickListener(new View.OnClickListener() {
@@ -1084,11 +1097,23 @@ public class GroupTripPage extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        if (checkCount == 1) {
+            inflater.inflate(R.menu.app_bar_group_member, menu);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Navigation.findNavController(textSavedShowTitle).popBackStack(R.id.groupFragment, false);
                 break;
+
+            case R.id.btMemberList:
+                Navigation.findNavController(textSavedShowTitle).navigate(R.id.action_groupTripPage_to_groupMbrListFragment,bundle2);
         }
         return super.onOptionsItemSelected(item);
     }
