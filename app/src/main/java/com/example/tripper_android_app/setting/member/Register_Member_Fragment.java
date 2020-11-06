@@ -165,7 +165,7 @@ public class Register_Member_Fragment extends Fragment {
                     Log.e(TAG, e.toString());
                 }if(member.getId()!=0) {
                     String id = member.getId() + "";
-                    tvId.setText(id);
+                    tvId.setText(account);
                     pref.edit()
                             .putString("memberId", id)
                             .putString("memberPw" , member.getPassword())

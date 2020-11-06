@@ -33,10 +33,11 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_blog_HomePage_to_blogEditFragment"
-            app:destination="@id/blogEditFragment" />
-        <action
-            android:id="@+id/action_blog_HomePage_to_chatMainFragment"
-            app:destination="@id/chatMainFragment" />
+            app:destination="@id/blogEditFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
     </fragment>
     <fragment
@@ -86,7 +87,11 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_setting_Fragment_to_friendsListFragment"
-            app:destination="@id/friendsListFragment" />
+            app:destination="@id/friendsListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_setting_Fragment_to_contactUsFragment"
             app:destination="@id/contactUsFragment"
@@ -208,7 +213,11 @@
         tools:layout="@layout/fragment_group" >
         <action
             android:id="@+id/action_groupFragment_to_groupTripPage"
-            app:destination="@id/groupTripPage" />
+            app:destination="@id/groupTripPage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/notifyFragment"
@@ -374,10 +383,18 @@
         tools:layout="@layout/fragment_blog_edit" >
         <action
             android:id="@+id/action_blogEditFragment_to_createBlogPicFragment"
-            app:destination="@id/createBlogPicFragment" />
+            app:destination="@id/createBlogPicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogEditFragment_to_blogEditFinishFragment"
-            app:destination="@id/blogEditFinishFragment" />
+            app:destination="@id/blogEditFinishFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogEditFragment_to_blog_HomePage"
             app:destination="@id/blog_HomePage" />
@@ -477,7 +494,18 @@
         tools:layout="@layout/fragment_friends_list" >
         <action
             android:id="@+id/action_friendsListFragment_to_friendsAddFragment"
-            app:destination="@id/friendsAddFragment" />
+            app:destination="@id/friendsAddFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_friendsListFragment_to_chatMainFragment"
+            app:destination="@id/chatMainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/friendsAddFragment"
@@ -560,7 +588,15 @@
         android:id="@+id/groupTripPage"
         android:name="com.example.tripper_android_app.group.GroupTripPage"
         android:label="fragment_group_trip_page"
-        tools:layout="@layout/fragment_group_trip_page" />
+        tools:layout="@layout/fragment_group_trip_page" >
+        <action
+            android:id="@+id/action_groupTripPage_to_groupMbrListFragment"
+            app:destination="@id/groupMbrListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/blogEditFinishFragment"
         android:name="com.example.tripper_android_app.blog.BlogEditFinishFragment"
@@ -602,4 +638,9 @@
         android:name="com.example.tripper_android_app.group.Group2Fragment"
         android:label="fragment_group2"
         tools:layout="@layout/fragment_group2" />
+    <fragment
+        android:id="@+id/groupMbrListFragment"
+        android:name="com.example.tripper_android_app.group.GroupMbrListFragment"
+        android:label="fragment_group_mbr_list"
+        tools:layout="@layout/fragment_group_mbr_list" />
 </navigation>

@@ -1,10 +1,12 @@
 package com.example.tripper_android_app.trip;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,6 +54,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -126,7 +130,13 @@ public class Trip_HomePage extends Fragment {
         textUserName = view.findViewById(R.id.textUserName);
 
         //顯示會員資料
-        showMember();
+        try {
+            showMember();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         tripMs = new ArrayList<>();
         tripMs = getTripMs();
@@ -386,7 +396,7 @@ public class Trip_HomePage extends Fragment {
 
 
     //show 使用者資訊
-    private void showMember() {
+    private void showMember() throws ExecutionException, InterruptedException {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         boolean login = pref.getBoolean("login", false);
         if (login) {
@@ -427,7 +437,7 @@ public class Trip_HomePage extends Fragment {
 
 
     //show UserPic
-    private void showMemberPic() {
+    private void showMemberPic() throws ExecutionException, InterruptedException {
         if (member == null) {
             SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
             pref.edit().putBoolean("login", false).apply();
@@ -451,6 +461,36 @@ public class Trip_HomePage extends Fragment {
                     //否則連接到第三方大頭照
                     String fbPhotoURL = mUser.getPhotoUrl().toString();
                     Glide.with(this).load(fbPhotoURL).into(ivUserPic);
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bitmap bitmap = null;
+                            try {
+                                bitmap = Glide.with(activity).asBitmap().load(fbPhotoURL).submit().get();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            byte[] image = getBytesByBitmap(bitmap) ;
+                            String url = Common.URL_SERVER + "MemberServlet";
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "memberUpdate");
+                            jsonObject.addProperty("member", new Gson().toJson(member));
+                            jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
+                            int count = 0;
+                            try {
+                                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                count = Integer.parseInt(result);
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }
+                    });
+                    thread.start();
+
+
                 }
 
             } else {
@@ -481,7 +521,15 @@ public class Trip_HomePage extends Fragment {
             Common.showToast(activity, "請先登入會員");
         }
     }
-}
+
+    public byte[] getBytesByBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(bitmap.getByteCount());
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        return outputStream.toByteArray();
+    }
+
+
+    }
 
 
 
