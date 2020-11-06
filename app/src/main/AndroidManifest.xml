@@ -22,9 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+<<<<<<< HEAD
         >
 
 
+=======
+
+        tools:targetApi="m">
+>>>>>>> e9f5b16c56cb9f53f53b179ac92902c80bcd9bd0
 
         <uses-library
             android:name="org.apache.http.legacy"

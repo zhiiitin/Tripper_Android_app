@@ -38,7 +38,7 @@ public class MessageDelegate {
         listenerList.remove(listener);
     }
 
-    interface OnMessageReceiveListener {
+    public interface OnMessageReceiveListener {
         void onMessage(String message);
     }
 }

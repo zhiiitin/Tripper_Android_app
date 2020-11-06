@@ -443,6 +443,7 @@ public class BlogMainFragment extends Fragment {
                 if (blogPic.getPic1() != null) {
                     byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                     Glide.with(activity).load(img1).into(holder.ivPic);
+<<<<<<< HEAD
                      holder.ivPic.setVisibility(View.VISIBLE);
                         holder.ivPic.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -480,10 +481,14 @@ public class BlogMainFragment extends Fragment {
                         });
 
 
+=======
+                    holder.ivPic.setVisibility(View.VISIBLE);
+>>>>>>> e9f5b16c56cb9f53f53b179ac92902c80bcd9bd0
                 }if (blogPic.getPic2() != null) {
                     byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                     Glide.with(activity).load(img2).into(holder.ivPic1);
                     holder.ivPic1.setVisibility(View.VISIBLE);
+<<<<<<< HEAD
                     holder.ivPic1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -518,6 +523,8 @@ public class BlogMainFragment extends Fragment {
                             }
                         }
                     });
+=======
+>>>>>>> e9f5b16c56cb9f53f53b179ac92902c80bcd9bd0
                 }if (blogPic.getPic3() != null) {
                     byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                     Glide.with(activity).load(img3).into(holder.ivPic2);
@@ -839,4 +846,8 @@ public class BlogMainFragment extends Fragment {
     }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e9f5b16c56cb9f53f53b179ac92902c80bcd9bd0
 }

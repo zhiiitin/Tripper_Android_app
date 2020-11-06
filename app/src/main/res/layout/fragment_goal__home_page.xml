@@ -170,12 +170,12 @@
         app:srcCompat="@drawable/ic_mapmarker" />
 
     <TextView
-        android:id="@+id/tvLocDone"
-        android:layout_width="131dp"
+        android:id="@+id/tvTripDone"
+        android:layout_width="153dp"
         android:layout_height="30dp"
         android:layout_marginStart="19dp"
         android:layout_marginTop="14dp"
-        android:text="去過的景點："
+        android:text="已建立的行程："
         android:textColor="@color/colorForNormalText"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -183,8 +183,8 @@
         app:layout_constraintTop_toTopOf="@+id/tvBG1" />
 
     <TextView
-        android:id="@+id/tvLocCount"
-        android:layout_width="175dp"
+        android:id="@+id/tvTripCount"
+        android:layout_width="152dp"
         android:layout_height="30dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="11dp"
@@ -193,7 +193,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/tvBG1"
-        app:layout_constraintStart_toEndOf="@+id/tvLocDone"
+        app:layout_constraintStart_toEndOf="@+id/tvTripDone"
         app:layout_constraintTop_toTopOf="@+id/tvBG1" />
 
     <ImageView
@@ -207,12 +207,12 @@
         app:srcCompat="@drawable/ic_create" />
 
     <TextView
-        android:id="@+id/tvTripDone"
+        android:id="@+id/tvBlogDone"
         android:layout_width="153dp"
         android:layout_height="30dp"
         android:layout_marginStart="19dp"
         android:layout_marginTop="14dp"
-        android:text="已建立的行程："
+        android:text="已建立的網誌："
         android:textColor="@color/colorForNormalText"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -220,7 +220,7 @@
         app:layout_constraintTop_toTopOf="@+id/tvBG2" />
 
     <TextView
-        android:id="@+id/tvTripCount"
+        android:id="@+id/tvBlogCount"
         android:layout_width="152dp"
         android:layout_height="30dp"
         android:layout_marginTop="14dp"
@@ -230,7 +230,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/tvBG2"
-        app:layout_constraintStart_toEndOf="@+id/tvTripDone"
+        app:layout_constraintStart_toEndOf="@+id/tvBlogDone"
         app:layout_constraintTop_toTopOf="@+id/tvBG2" />
 
     <ImageView
@@ -245,11 +245,11 @@
 
     <TextView
         android:id="@+id/tvGoalDone"
-        android:layout_width="131dp"
+        android:layout_width="153dp"
         android:layout_height="30dp"
         android:layout_marginStart="19dp"
         android:layout_marginTop="14dp"
-        android:text="解鎖的成就："
+        android:text="已解鎖的成就："
         android:textColor="@color/colorForNormalText"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -258,7 +258,7 @@
 
     <TextView
         android:id="@+id/tvGoalCount"
-        android:layout_width="175dp"
+        android:layout_width="152dp"
         android:layout_height="30dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="11dp"

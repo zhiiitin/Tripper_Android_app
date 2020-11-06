@@ -16,12 +16,14 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -32,6 +34,8 @@ import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.trip.Trip_M;
 import com.example.tripper_android_app.util.Common;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -46,9 +50,11 @@ public class GroupFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvGroup;
     private MainActivity activity;
-    private CommonTask groupGetAllTask;
+    private CommonTask groupGetAllTask ,groupGetCountTask;
     private ImageTask groupImageTask;
     private List<Trip_M> groupList;
+    private TabLayout tabLayout ;
+    private ViewPager2 viewPager ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +82,7 @@ public class GroupFragment extends Fragment {
         NavController navController = Navigation.findNavController(activity, R.id.groupFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        SearchView searchView = view.findViewById(R.id.svGroup);
+
         swipeRefreshLayout = view.findViewById(R.id.srlBlog_Home);
         rvGroup = view.findViewById(R.id.rvGroup);
         rvGroup.setLayoutManager(new LinearLayoutManager(activity));
@@ -93,28 +99,49 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        tabLayout = view.findViewById(R.id.tablayout);
+        viewPager = view.findViewById(R.id.viewPager);
+        viewPager.setAdapter(new PagerAdapter(activity));
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()) {
-                    showGroups(groupList);
-                } else {
-                    List<Trip_M> searchGroup = new ArrayList<>();
-                    for (Trip_M group : groupList) {
-                        if (group.getTripTitle().toUpperCase().contains(newText.toUpperCase())) {
-                            searchGroup.add(group);
-                        }
-                    }
-                    showGroups(searchGroup);
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                switch (position){
+                    case 0 :
+                        tab.setText("列表");
+                        break;
+                    case 1:
+                        tab.setText("已參與");
+                        break;
                 }
-                return true;
             }
         });
+        tabLayoutMediator.attach();
+
+
+
+
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                if (newText.isEmpty()) {
+//                    showGroups(groupList);
+//                } else {
+//                    List<Trip_M> searchGroup = new ArrayList<>();
+//                    for (Trip_M group : groupList) {
+//                        if (group.getTripTitle().toUpperCase().contains(newText.toUpperCase())) {
+//                            searchGroup.add(group);
+//                        }
+//                    }
+//                    showGroups(searchGroup);
+//                }
+//                return true;
+//            }
+//        });
 
     }
 
@@ -170,7 +197,7 @@ public class GroupFragment extends Fragment {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView;
+            ImageView imageView ,ivFill;
             TextView tvTitle, tvDate, tvCount;
 
             MyViewHolder(View itemView) {
@@ -179,6 +206,7 @@ public class GroupFragment extends Fragment {
                 tvTitle = itemView.findViewById(R.id.tvTitle_Blog);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvCount = itemView.findViewById(R.id.tvCount);
+                ivFill = itemView.findViewById(R.id.ivFill);
             }
         }
 
@@ -191,6 +219,8 @@ public class GroupFragment extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = layoutInflater.inflate(R.layout.item_view_group, parent, false);
+            itemView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
             return new MyViewHolder(itemView);
         }
 
@@ -203,9 +233,24 @@ public class GroupFragment extends Fragment {
 //            int id = group.getMemberId();
             groupImageTask = new ImageTask(Url, tripId, imageSize, myViewHolder.imageView);
             groupImageTask.execute();
+//透過網路搜尋揪團參與人數
+            String url = Common.URL_SERVER + "Trip_Group_Servlet";
+            String trip_Id = group.getTripId();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getGroupCount");
+            jsonObject.addProperty("trip_Id" , trip_Id);
+            String jsonOut = jsonObject.toString();
+            groupGetCountTask = new CommonTask(url, jsonOut);
+            int count = 0 ;
+            try {
+                String result = groupGetCountTask.execute().get();
+                count = Integer.parseInt(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             myViewHolder.tvTitle.setText(group.getTripTitle());
             myViewHolder.tvDate.setText("出發日：" + group.getStartDate());
-            myViewHolder.tvCount.setText("已參與人數："+group.getMcount() + "/" + group.getpMax());
+            myViewHolder.tvCount.setText("已參與人數："+ count + "/" + group.getpMax());
 
 
 //            myViewHolder.tvCount.setText("已參與人數：" + group.get +"/"+ group.getpMax());
@@ -220,7 +265,7 @@ public class GroupFragment extends Fragment {
                     bundle.putString("startDate",group.getStartDate());
                     bundle.putString("startTime", group.getStartTime());
                     bundle.putInt("status",group.getStatus());
-                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_tripHasSavedPage, bundle);
+                    Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_groupTripPage, bundle);
                 }
             });
 

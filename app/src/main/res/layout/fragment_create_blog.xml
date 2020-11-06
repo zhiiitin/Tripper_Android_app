@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F2F6"
+    android:background="#F2F2F6"
     tools:context=".blog.CreateBlogFragment">
 
     <Button
@@ -45,7 +45,7 @@
         android:layout_width="62dp"
         android:layout_height="39dp"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="9dp"
         android:background="@drawable/button"
         android:text="第一天"
         android:textColor="#FFFFFF"
@@ -77,7 +77,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBlog"
         android:layout_width="405dp"
-        android:layout_height="463dp"
+        android:layout_height="477dp"
         android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,10 +103,10 @@
         android:id="@+id/tvBlogName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:text="九份好好玩"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar" />
@@ -115,9 +115,9 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:text="日期：2020-08-01"
-        android:textSize="16sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/tvBlogName"
         app:layout_constraintTop_toBottomOf="@+id/tvBlogName" />
 
@@ -125,9 +125,9 @@
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="33dp"
+        android:layout_marginEnd="16dp"
         android:text="出發時間：8:00 am"
-        android:textSize="16sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvDate" />
 
