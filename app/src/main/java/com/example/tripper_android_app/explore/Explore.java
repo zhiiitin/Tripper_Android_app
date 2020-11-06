@@ -9,6 +9,24 @@ public class Explore implements Serializable {
     private String nickName;
     private String tittleName;
     private String blogDesc;
+    private String dateTime;
+
+    public Explore(String blogId, String userId, String nickName, String tittleName, String blogDesc, String dateTime) {
+        this.blogId = blogId;
+        this.userId = userId;
+        this.nickName = nickName;
+        this.tittleName = tittleName;
+        this.blogDesc = blogDesc;
+        this.dateTime = dateTime;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
 
     public String getBlogDesc() {
         return blogDesc;

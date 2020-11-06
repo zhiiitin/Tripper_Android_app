@@ -11,7 +11,7 @@
         android:id="@+id/ivUser"
         android:layout_width="50dp"
         android:layout_height="47dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:scaleType="centerCrop"
@@ -22,34 +22,97 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="63dp"
-        android:layout_height="19dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="評論人"
-        android:textSize="16dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivUser"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvComment"
-        android:layout_width="358dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="20dp"
-        android:text="留言內容"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="15dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivUser" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.26">
+
+        <EditText
+            android:id="@+id/editComment"
+            android:layout_width="308dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="5dp"
+            android:ems="10"
+            android:inputType="textLongMessage"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivUser" />
+
+        <TextView
+            android:id="@+id/tvComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:maxWidth="300dp"
+            android:padding="7dp"
+            android:text="Hello my name is yancehn"
+            android:textColor="#00BCD4"
+            android:textSize="20sp" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="156dp"
         android:text="TextView"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivEdit"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/more_icon" />
+
+    <ImageView
+        android:id="@+id/ivSave"
+        android:layout_width="50dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivEdit"
+        app:layout_constraintVertical_bias="0.754"
+        app:srcCompat="@drawable/submit_ui" />
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="50dp"
+        android:layout_height="39dp"
+        android:visibility="gone"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivEdit"
+        app:srcCompat="@drawable/back_ui" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

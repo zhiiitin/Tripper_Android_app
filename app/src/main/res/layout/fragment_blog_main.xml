@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -32,7 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="651dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="3dp"
             android:orientation="vertical">
 
@@ -40,7 +40,7 @@
             <ImageView
                 android:id="@+id/ivBackground"
                 android:layout_width="match_parent"
-                android:layout_height="116dp"
+                android:layout_height="120dp"
                 android:layout_marginTop="0dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/no_image" />
@@ -51,17 +51,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="330dp"
+                android:layout_marginEnd="350dp"
+                android:layout_marginBottom="15dp"
                 android:lineSpacingExtra="6sp"
                 android:textColor="#000000"
                 android:textSize="16sp" />
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 card_view:cardCornerRadius="10dp"
                 card_view:cardElevation="10dp">
 
@@ -69,7 +71,7 @@
                     android:id="@+id/textDescription"
                     android:layout_width="383dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="10dp"
                     android:lineSpacingExtra="6sp"
                     android:textColor="#000000"
                     android:textSize="16sp"
@@ -79,95 +81,96 @@
 
             </androidx.cardview.widget.CardView>
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBlog"
-                android:layout_width="411dp"
-                android:layout_height="393dp"
+                android:layout_width="match_parent"
+                android:layout_height="385dp"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="6dp"
-                android:background="@color/colorForWhite">
+                android:background="@color/colorForWhite"
+                android:padding="5dp">
 
             </androidx.recyclerview.widget.RecyclerView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="417dp"
-                android:layout_height="44dp">
-
-                <TextView
-                    android:id="@+id/detail_page_do_comment"
-                    android:layout_width="249dp"
-                    android:layout_height="22dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/comment_bt_selector"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="18dp"
-                    android:text="Add a comment..."
-                    android:textColor="#B6B6B6"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/txTirpIcon"
-                    android:layout_width="61dp"
-                    android:layout_height="17dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="行程列表"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.666"
-                    app:layout_constraintStart_toEndOf="@+id/txLikeIcon" />
-
-                <ImageView
-                    android:id="@+id/ivThumbs"
-                    android:layout_width="26dp"
-                    android:layout_height="29dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/txLikeIcon"
-                    app:layout_constraintHorizontal_bias="0.488"
-                    app:layout_constraintStart_toEndOf="@+id/txLikeIcon"
-                    tools:src="@drawable/collection" />
-
-                <ImageView
-                    android:id="@+id/ivTripList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginEnd="23dp"
-                    app:layout_constraintBottom_toTopOf="@+id/txTirpIcon"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/ivThumbs"
-                    tools:src="@drawable/icontriplist" />
-
-                <TextView
-                    android:id="@+id/txLikeIcon"
-                    android:layout_width="61dp"
-                    android:layout_height="17dp"
-                    android:layout_marginStart="280dp"
-                    android:text="Like"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivThumbs"
-                    app:layout_constraintVertical_bias="1.0" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="615dp"
+        android:background="@color/colorSender">
+
+        <TextView
+            android:id="@+id/detail_page_do_comment"
+            android:layout_width="249dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/comment_bt_selector"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"
+            android:text="Add a comment..."
+            android:textColor="#B6B6B6"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txTirpIcon"
+            android:layout_width="61dp"
+            android:layout_height="17dp"
+            android:layout_marginEnd="10dp"
+            android:text="行程列表"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toEndOf="@+id/txLikeIcon" />
+
+        <ImageView
+            android:id="@+id/ivThumbs"
+            android:layout_width="26dp"
+            android:layout_height="29dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txLikeIcon"
+            app:layout_constraintHorizontal_bias="0.488"
+            app:layout_constraintStart_toEndOf="@+id/txLikeIcon"
+            tools:src="@drawable/collection" />
+
+        <ImageView
+            android:id="@+id/ivTripList"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="23dp"
+            app:layout_constraintBottom_toTopOf="@+id/txTirpIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/ivThumbs"
+            tools:src="@drawable/icontriplist" />
+
+        <TextView
+            android:id="@+id/txLikeIcon"
+            android:layout_width="61dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="280dp"
+            android:text="Like"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivThumbs"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

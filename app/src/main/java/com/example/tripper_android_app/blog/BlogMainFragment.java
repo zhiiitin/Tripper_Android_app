@@ -1,31 +1,42 @@
 package com.example.tripper_android_app.blog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,30 +50,37 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.Inflater;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class BlogMainFragment extends Fragment {
 
-    private ImageView ivBackground,ivThumbs,ivTripList;
+    private ImageView ivBackground,ivThumbs,ivTripList,btSend;
     private MainActivity activity;
     private TextView tvDescription, textDescription,detail_page_do_comment;
-    private Button btSend;
     private static final String TAG = "TAG_Blog_Main_Fragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvBlog,rvComment;
-    private CommonTask blogGetAllTask, blogDeleteTask,getImageTask;
+    private CommonTask blogGetAllTask, blogDeleteTask,getImageTask,commentFinishTask;
     private List<ImageTask> imageTasks;
     private List<BlogD> blogList;
-    private List<Blog_Comment> commentList;
+    private List<Blog_Comment> commentList ;
     private SharedPreferences preferences;
+    private CommentAdapter commentAdapter;
     private BlogPic blogPic = null ;
+    private HorizontalScrollView horizontalScrollView;
+    private Blog_Comment blog_comment;
+    private Dialog mDialog;
+
 
 
 
@@ -72,6 +90,7 @@ public class BlogMainFragment extends Fragment {
         setHasOptionsMenu(true);
         activity = (MainActivity) getActivity();
         imageTasks =new ArrayList<>();
+
 
 
     }
@@ -87,7 +106,6 @@ public class BlogMainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         final Bundle bundle = getArguments();
         String blogTitle  = bundle.getString("BlogTitle");
@@ -140,6 +158,7 @@ public class BlogMainFragment extends Fragment {
         detail_page_do_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 showDialog();
             }
         });
@@ -147,11 +166,23 @@ public class BlogMainFragment extends Fragment {
     }
 
     private void showDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final AlertDialog dialog = builder.create();
-        final View view = View.inflate(getActivity(), R.layout.dialog_comment, null);
+
+        final View view = LayoutInflater.from(activity).inflate(R.layout.dialog_comment, null);
+        mDialog = new Dialog(activity, R.style.dialogstyle);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();
+        Window window = mDialog.getWindow();
+        window.setContentView(view);
+        WindowManager.LayoutParams pl = window.getAttributes();
+        pl.gravity=Gravity.BOTTOM;
+        pl.width= WindowManager.LayoutParams.MATCH_PARENT;
+        pl.height= WindowManager.LayoutParams.WRAP_CONTENT;
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        window.setAttributes(pl);
         TextView tvComment;
         ImageButton imComment;
+        ImageView ivBack;
+        ivBack = view.findViewById(R.id.ivBack);
         tvComment = view.findViewById(R.id.tvComment);
         imComment = view.findViewById(R.id.imComment);
         tvComment.setText("留言區");
@@ -159,10 +190,14 @@ public class BlogMainFragment extends Fragment {
         rvComment.setLayoutManager(new LinearLayoutManager(activity));
         commentList = getComment();
         showComments(commentList);
-        detail_page_do_comment = view.findViewById(R.id.detail_page_do_comment);
-        btSend = view.findViewById(R.id.btSend);
-        dialog.setView(view);
-        dialog.show();
+        EditText detail_page_do_comment = view.findViewById(R.id.detail_page_do_comment);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+            }
+        });
+        btSend = view.findViewById(R.id.sendBtn);
         btSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +205,10 @@ public class BlogMainFragment extends Fragment {
                 Bundle bundle = getArguments();
                 String blogId = bundle.getString("BlogId");
                 String comment = detail_page_do_comment.getText().toString();
+                if (comment.length() <= 0) {
+                    Common.showToast(activity, R.string.textNameIsInvalid);
+                    return;
+                }
                 String memberId= preferences.getString("memberId",null);
                 if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "BlogServlet";
@@ -191,18 +230,17 @@ public class BlogMainFragment extends Fragment {
                         Common.showToast(activity, R.string.textUpdateSuccess);
                         commentList = getComment();
                         showComments(commentList);
+                        detail_page_do_comment.setText("");
+
+
+
 
                     }
                 } else {
                     Common.showToast(activity, R.string.textNoNetwork);
-
                 }
-
-
-
-
-
             }
+
 
         });
 
@@ -210,11 +248,15 @@ public class BlogMainFragment extends Fragment {
 
 
 
+
+
     }
+
+
 
     private  List<Blog_Comment> getComment() {
 
-        List<Blog_Comment> blog_comments= null;
+        List<Blog_Comment> blog_comments= new ArrayList<>();
         Bundle bundle = getArguments();
         String blogId = bundle.getString("BlogId");
 
@@ -248,9 +290,9 @@ public class BlogMainFragment extends Fragment {
             Common.showToast(activity, R.string.textNoSpotsFound);
 
         }
-        CommentAdapter commentAdapter = (CommentAdapter)rvComment.getAdapter();
+         commentAdapter = (CommentAdapter)rvComment.getAdapter();
         if (commentAdapter == null) {
-            rvComment.setAdapter(new CommentAdapter(activity, commentList));
+            rvComment.setAdapter(new CommentAdapter(activity, BlogMainFragment.this.commentList));
         } else {
             commentAdapter.setBlogs(commentList);
             //刷新頁面
@@ -272,9 +314,7 @@ public class BlogMainFragment extends Fragment {
             case android.R.id.home:
                 Navigation.findNavController(rvBlog).popBackStack();
                 break;
-            case R.id.blogEditFragment:
-                Navigation.findNavController(rvBlog).navigate(R.id.action_blogMainFragment_to_blogEditFragment);
-                break;
+
             default:
                 break;
         }
@@ -364,20 +404,11 @@ public class BlogMainFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder holder, int position) {
             final BlogD blogD = blogList.get(position);
-            String dateTime = blogD.getS_Date();
-            SimpleDateFormat format = new SimpleDateFormat("MM-dd");
-            String blogId =blogD.getBlogId();
-            String locId= blogD.getLocationId();
-            try {
-                Date date = format.parse(dateTime);
-                System.out.println(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
             holder.tvLocation.setText(blogD.getLocationName());
             holder.tvBlogDescription.setText(blogD.getBlogNote());
             holder.tvDays.setText(blogD.getS_Date());
             holder.imDays.setImageResource(R.drawable.layout_box_line);
+
             preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
             if(position == 0 ){
                 preferences.edit()
@@ -386,13 +417,18 @@ public class BlogMainFragment extends Fragment {
                         .apply();
             }
             holder.tvSpotName.setText("景點描述:");
-            holder.tvPic.setText("景點照片:");
+            holder.tvPic.setText("景點照片:(向左滑動照片)");
             String url = Common.URL_SERVER + "BlogServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getSpotImage");
             jsonObject.addProperty("blog_Id", blogD.getBlogId());
             jsonObject.addProperty("loc_Id", blogD.getLocationId());
             getImageTask = new CommonTask(url, jsonObject.toString());
+            horizontalScrollView.post(new Runnable() {
+                public void run() {
+                    horizontalScrollView.scrollTo(0, horizontalScrollView.getBottom());
+                }
+            });
             blogPic = new BlogPic();
             try {
                 String jsonIn = getImageTask.execute().get();
@@ -407,37 +443,166 @@ public class BlogMainFragment extends Fragment {
                 if (blogPic.getPic1() != null) {
                     byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                     Glide.with(activity).load(img1).into(holder.ivPic);
-                    holder.ivPic.setVisibility(View.VISIBLE);
-                    holder.ivPic.setOnClickListener(new View.OnClickListener() {
+                     holder.ivPic.setVisibility(View.VISIBLE);
+                        holder.ivPic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+                                String url = Common.URL_SERVER + "BlogServlet";
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("action", "getSpotImage");
+                                jsonObject.addProperty("blog_Id", blogD.getBlogId());
+                                jsonObject.addProperty("loc_Id", blogD.getLocationId());
+                                getImageTask = new CommonTask(url, jsonObject.toString());
+                                blogPic = new BlogPic();
+                                try {
+                                    String jsonIn = getImageTask.execute().get();
+                                    Type listType = new TypeToken<BlogPic>() {
+                                    }.getType();
+
+                                    blogPic = new Gson().fromJson(jsonIn, listType);
+                                } catch (Exception e) {
+                                    Log.e(TAG, e.toString());
+                                }
+                                if (blogPic.getPic1() != null) {
+                                    byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
+                                    Glide.with(activity).load(img1).into(ivPhoto);
+                                    //將白色部分設為透明
+                                    alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    alertDialog.setCancelable(true);
+                                    alertDialog.show();
+
+                                }
+                            }
+                        });
+
+
+                }if (blogPic.getPic2() != null) {
+                    byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                    Glide.with(activity).load(img2).into(holder.ivPic1);
+                    holder.ivPic1.setVisibility(View.VISIBLE);
+                    holder.ivPic1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                             View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
                             alertDialog.setView(view);
-                            ImageTask bigImageTask = new ImageTask(url, blogId,locId, getResources().getDisplayMetrics().widthPixels, view.findViewById(R.id.ivPhoto));
-                            bigImageTask.execute();
-                            imageTasks.add(bigImageTask);
-                            //將白色部分設為透明
-                            alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            alertDialog.setCancelable(true);
-                            alertDialog.show();
+                            ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getSpotImage");
+                            jsonObject.addProperty("blog_Id", blogD.getBlogId());
+                            jsonObject.addProperty("loc_Id", blogD.getLocationId());
+                            getImageTask = new CommonTask(url, jsonObject.toString());
+                            blogPic = new BlogPic();
+                            try {
+                                String jsonIn = getImageTask.execute().get();
+                                Type listType = new TypeToken<BlogPic>() {
+                                }.getType();
 
+                                blogPic = new Gson().fromJson(jsonIn, listType);
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            if (blogPic.getPic2() != null) {
+                                byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+
+                            }
                         }
                     });
-                }if (blogPic.getPic2() != null) {
-                    byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
-                    Glide.with(activity).load(img2).into(holder.ivPic1);
-                    holder.ivPic1.setVisibility(View.VISIBLE);
                 }if (blogPic.getPic3() != null) {
                     byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                     Glide.with(activity).load(img3).into(holder.ivPic2);
                     holder.ivPic2.setVisibility(View.VISIBLE);
+                    holder.ivPic2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                            View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                            alertDialog.setView(view);
+                            ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getSpotImage");
+                            jsonObject.addProperty("blog_Id", blogD.getBlogId());
+                            jsonObject.addProperty("loc_Id", blogD.getLocationId());
+                            getImageTask = new CommonTask(url, jsonObject.toString());
+                            blogPic = new BlogPic();
+                            try {
+                                String jsonIn = getImageTask.execute().get();
+                                Type listType = new TypeToken<BlogPic>() {
+                                }.getType();
+
+                                blogPic = new Gson().fromJson(jsonIn, listType);
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            if (blogPic.getPic3() != null) {
+                                byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+
+                            }
+
+                        }
+
+                    });
                 }if (blogPic.getPic4() != null) {
                     byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                     Glide.with(activity).load(img4).into(holder.ivPic3);
                     holder.ivPic3.setVisibility(View.VISIBLE);
+                    holder.ivPic3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                            View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                            alertDialog.setView(view);
+                            ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getSpotImage");
+                            jsonObject.addProperty("blog_Id", blogD.getBlogId());
+                            jsonObject.addProperty("loc_Id", blogD.getLocationId());
+                            getImageTask = new CommonTask(url, jsonObject.toString());
+                            blogPic = new BlogPic();
+                            try {
+                                String jsonIn = getImageTask.execute().get();
+                                Type listType = new TypeToken<BlogPic>() {
+                                }.getType();
+
+                                blogPic = new Gson().fromJson(jsonIn, listType);
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            if (blogPic.getPic4() != null) {
+                                byte[] img2 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+
+                            }
+
+                        }
+                    });
+                }else if(blogPic.getPic1() == null || blogPic.getPic2()== null ||blogPic.getPic3() == null || blogPic.getPic4() == null){
+                    holder.ivPic.setImageResource(R.drawable.no_image);
                 }
             }
+
+
 
 
 
@@ -459,13 +624,14 @@ public class BlogMainFragment extends Fragment {
                 tvBlogDescription = itemView.findViewById(R.id.tvBlogDescription);
                 tvDays = itemView.findViewById(R.id.tvDays);
                 tvLocation = itemView.findViewById(R.id.tvLocation);
-                ivPic1 = itemView.findViewById(R.id.ivPic1);
-                ivPic2 = itemView.findViewById(R.id.ivPic2);
-                ivPic3 = itemView.findViewById(R.id.ivPic3);
+                ivPic1 = itemView.findViewById(R.id.ivSpot2);
+                ivPic2 = itemView.findViewById(R.id.ivSpot3);
+                ivPic3 = itemView.findViewById(R.id.ivSpot4);
                 ivPic= itemView.findViewById(R.id.ivSpot1);
                 imDays = itemView.findViewById(R.id.imDays2);
                 tvPic = itemView.findViewById(R.id.tvPic);
                 tvSpotName= itemView.findViewById(R.id.tvSpotName);
+                horizontalScrollView = itemView.findViewById(R.id.horizontalScrollView);
 
 
             }
@@ -504,7 +670,7 @@ public class BlogMainFragment extends Fragment {
             this.commentList = commentList;
         }
         void setBlogs(List<Blog_Comment> commentList){
-            BlogMainFragment.this.commentList = commentList;
+            this.commentList = commentList;
         }
         @NonNull
         @Override
@@ -515,20 +681,136 @@ public class BlogMainFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            final Blog_Comment blog_comment = commentList.get(position);
-            holder.tvComment.setText(""+ "" +blog_comment.getName());
-            holder.tvName.setText(blog_comment.getBlogId());
+            final  Blog_Comment blog_comment = commentList.get(position);
+            holder.tvComment.setText(""+ "" +blog_comment.getContent());
+            holder.tvName.setText(blog_comment.getName());
             holder.ivPic.setImageResource(blog_comment.ivImage);
-            holder.tvDate.setText(blog_comment.getMember_ID());
-
+            holder.tvDate.setText(blog_comment.getDate());
             String icoUrl = Common.URL_SERVER + "MemberServlet";
             //從MEMBER資料表 娶回來的資料無法秀在上面
-            String id = blog_comment.getContent();
-            ImageTask imageTask1 = new ImageTask(icoUrl, id, imageSize, holder.ivPic);
+            String member_Id = blog_comment.getMember_ID();
+            ImageTask imageTask1 = new ImageTask(icoUrl,member_Id, imageSize, holder.ivPic);
             imageTask1.execute();
             imageTasks.add(imageTask1);
+            holder.ivEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final PopupMenu popupMenu = new PopupMenu(activity, v, Gravity.END);
+                    popupMenu.inflate(R.menu.blog_comment_edit_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            switch (item.getItemId()) {
+                                case R.id.blogCommentEdit:
+                                     holder.editComment.setVisibility(View.VISIBLE);
+                                     holder.tvComment.setVisibility(View.GONE);
+                                     holder.editComment.setText(blog_comment.getContent());
+                                     holder.ivSave.setVisibility(View.VISIBLE);
+                                     holder.ivBack.setVisibility(View.VISIBLE);
+                                     holder.ivBack.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             holder.ivBack.setVisibility(View.GONE);
+                                             holder.ivSave.setVisibility(View.GONE);
+                                             holder.editComment.setVisibility(View.GONE);
+                                             holder.tvComment.setVisibility(View.VISIBLE);
+                                             holder.tvComment.setText(blog_comment.getContent());
+                                         }
+                                     });
+                                     holder.ivSave.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             String comment = holder.editComment.getText().toString().trim();
+
+                                             if (comment.length() <= 0) {
+                                                 Common.showToast(activity, R.string.textNameIsInvalid);
+                                                 return;
+                                             }
+                                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                                             Date dt=new Date();
+                                             String dts=sdf.format(dt);
+                                             String name= blog_comment.getName();
+                                             int comId = blog_comment.getComId();
+                                             String tripId = blog_comment.getBlogId();
+                                             Blog_Comment blogComment = new Blog_Comment(tripId,name,comment,member_Id,dts,comId);
+                                             if (Common.networkConnected(activity)) {
+                                                 String Url = Common.URL_SERVER + "BlogServlet";
+                                                 JsonObject jsonObject = new JsonObject();
+                                                 jsonObject.addProperty("action", "updateComment");
+                                                 jsonObject.addProperty("comment", new Gson().toJson(blogComment));
+                                                 commentFinishTask = new CommonTask(Url,jsonObject.toString());
+                                                 int count = 0;
+                                                 try {
+                                                     String jsonIn = commentFinishTask.execute().get();
+                                                     count = Integer.parseInt(jsonIn);
+                                                     if (count >= 1) {
+                                                         Log.e(TAG, "Update sucessful");
+                                                         Common.showToast(activity, "留言修改成功");
+                                                         holder.ivSave.setVisibility(View.GONE);
+                                                         holder.ivBack.setVisibility(View.GONE);
+                                                         holder.editComment.setVisibility(View.GONE);
+                                                         holder.tvComment.setVisibility(View.VISIBLE);
+                                                         holder.tvComment.setText(comment);
+                                                     } else {
+                                                         Common.showToast(activity, "留言修改失敗");
+                                                     }
+                                                 } catch (Exception e) {
+                                                     Log.e(TAG, e.toString());
+                                                 }
+                                             }
+
+
+
+                                         }
+                                     });
+
+                                     break;
+                                case R.id.blogCommentDelete:
+                                    if (Common.networkConnected(activity)) {
+                                        String url = Common.URL_SERVER + "BlogServlet";
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "deleteComment");
+                                        jsonObject.addProperty("comId",blog_comment.getComId());
+                                        int count = 0;
+                                        try {
+                                            blogDeleteTask = new CommonTask(url, jsonObject.toString());
+                                            String result = blogDeleteTask.execute().get();
+                                            count = Integer.parseInt(result);
+                                        } catch (Exception e) {
+                                            Log.e(TAG, e.toString());
+                                        }
+                                        if (count == 0) {
+                                            Common.showToast(activity, R.string.textDeleteFail);
+                                        } else {
+                                            commentList.remove(blog_comment);
+                                           BlogMainFragment.CommentAdapter.this.notifyDataSetChanged();
+                                           BlogMainFragment.CommentAdapter.this.commentList.remove(blog_comment);
+                                            // 外面spots也必須移除選取的spot
+                                            Common.showToast(activity, R.string.textDeleteCommentSuccess);
+                                        }
+                                    } else {
+                                        Common.showToast(activity, R.string.textNoNetwork);
+                                    }
+
+                            }
+                            return true;
+
+
+                        }
+
+
+                    });
+                    popupMenu.show();
+                }
+
+            });
+
+
+
 
         }
+
 
         @Override
         public int getItemCount() {
@@ -539,6 +821,8 @@ public class BlogMainFragment extends Fragment {
     private class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvName,tvComment,tvDate;
         CircleImageView ivPic;
+        ImageView ivEdit,ivSave,ivBack;
+        EditText editComment;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -546,8 +830,13 @@ public class BlogMainFragment extends Fragment {
             tvName = itemView.findViewById(R.id.tvName);
             ivPic = itemView.findViewById(R.id.ivUser);
             tvDate = itemView.findViewById(R.id.tvDate);
-//            detail_page_do_comment = itemView.findViewById(R.id.detail_page_do_comment);
-//            btSend = itemView.findViewById(R.id.btSend);
+            ivEdit = itemView.findViewById(R.id.ivEdit);
+            ivSave = itemView.findViewById(R.id.ivSave);
+            ivBack = itemView.findViewById(R.id.ivBack);
+            editComment = itemView.findViewById(R.id.editComment);
+
         }
     }
+
+
 }

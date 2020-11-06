@@ -2,7 +2,6 @@ package com.example.tripper_android_app.explore;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
@@ -35,10 +33,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ExploreFragment extends Fragment {
 
@@ -46,13 +45,11 @@ public class ExploreFragment extends Fragment {
     private MainActivity activity ;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView rvExplore;
-
+    private RecyclerView rvExplore,rvLocation;
     private CommonTask exploreGetAllTask, exploreDeleteTask;
-
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
-    private List<Member> members;
+
 
 
 
@@ -80,23 +77,15 @@ public class ExploreFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("探索");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
-
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-
         NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
         SearchView searchView = view.findViewById(R.id.svGroup);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);
-
         rvExplore.setLayoutManager(new LinearLayoutManager(activity));
         explores = getExplores();
-
-
         showExplores(explores);
-      ;
-
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -254,8 +243,8 @@ public class ExploreFragment extends Fragment {
 
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView ivBlogPic, ivUser;
-            TextView tvUseName, tvBlogName;
+            ImageView ivBlogPic, ivUser,ivThumbs;
+            TextView tvUseName, tvBlogName,tvDate,tvThumbs;
             CircleImageView circleImageView;
 
 
@@ -265,6 +254,9 @@ public class ExploreFragment extends Fragment {
                 tvBlogName = itemView.findViewById(R.id.tvTitle_Blog);
                 tvUseName = itemView.findViewById(R.id.tvUserName);
                 ivUser = itemView.findViewById(R.id.ivUser);
+                tvDate = itemView.findViewById(R.id.tvDate);
+                tvThumbs = itemView.findViewById(R.id.tvThumbs);
+                ivThumbs = itemView.findViewById(R.id.ivThumbs);
 
             }
         }
@@ -288,6 +280,9 @@ public class ExploreFragment extends Fragment {
             imageTasks.add(imageTask1);
             holder.tvUseName.setText(explore.getNickName());
             holder.tvBlogName.setText(explore.getTittleName());
+            holder.tvDate.setText(explore.getDateTime());
+            holder.tvThumbs.setText("203個讚");
+            holder.ivThumbs.setImageResource(R.drawable.icnthumbs);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

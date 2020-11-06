@@ -5,102 +5,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="520dp">
 
-    <ImageView
-        android:id="@+id/ivSpot1"
-        android:layout_width="181dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="17dp"
-        android:layout_marginBottom="350dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/no_image"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic1"
-        app:layout_constraintHorizontal_bias="0.142"
-        app:layout_constraintTop_toTopOf="parent"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivPic3"
-        android:layout_width="181dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginBottom="236dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/no_image"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="24dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mark" />
-
-    <ImageView
-        android:id="@+id/ivPic2"
-        android:layout_width="181dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="15dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/no_image"
-        app:layout_constraintEnd_toStartOf="@+id/ivPic3"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSpot1" />
-
-    <ImageView
-        android:id="@+id/ivPic1"
-        android:layout_width="181dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginTop="52dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/no_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imDays2" />
 
     <TextView
         android:id="@+id/tvPic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="337dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="290dp"
         android:text="TextView"
         android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="219dp"
         android:layout_height="29dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="15dp"
         android:text="TextView"
         android:textSize="20dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/tvDays"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imDays2"
-        android:layout_width="101dp"
-        android:layout_height="37dp"
+        android:layout_width="113dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="100dp"
         android:layout_marginTop="20dp"
         android:background="@color/colorForWhite"
         app:layout_constraintHorizontal_bias="0.949"
@@ -114,24 +52,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="42dp"
         android:text="TextView"
         android:textColor="#FFFFFF"
         android:textSize="16dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.629"
-        app:layout_constraintStart_toEndOf="@+id/tvLocation"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="391dp"
-        android:layout_height="139dp"
+        android:layout_width="374dp"
+        android:layout_height="143dp"
         android:layout_marginStart="13dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="13dp"
         android:background="@color/colorForBottomBar"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+        app:layout_constraintVertical_bias="0.972"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="10dp">
 
@@ -154,13 +97,82 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="341dp"
+        android:layout_marginEnd="290dp"
+        android:layout_marginBottom="10dp"
         android:text="TextView"
         android:textSize="16dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPic2" />
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="0dp"
+        android:layout_height="237dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPic">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivSpot1"
+                android:layout_width="407dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/ivSpot2"
+                android:layout_width="407dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/ivSpot3"
+                android:layout_width="407dp"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/ivSpot4"
+                android:layout_width="407dp"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ImageView
+        android:id="@+id/ivMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="7dp"
+        app:layout_constraintEnd_toStartOf="@+id/tvLocation"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        card_view:srcCompat="@drawable/icon_awesome_map_marker_alt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

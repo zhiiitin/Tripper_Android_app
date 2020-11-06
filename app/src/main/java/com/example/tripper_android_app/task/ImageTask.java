@@ -34,7 +34,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     public ImageTask(String url, int id, int imageSize) {
         this(url, id, imageSize, null);
     }
-    
+
     public ImageTask(String url, String key, int imageSize) {
         this(url, key, imageSize, null);
     }

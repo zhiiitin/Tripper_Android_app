@@ -268,6 +268,9 @@
         <action
             android:id="@+id/action_blogMainFragment_to_blogEditFragment"
             app:destination="@id/blogEditFragment" />
+        <action
+            android:id="@+id/action_blogMainFragment_to_blogEditCommentFragment"
+            app:destination="@id/blogEditCommentFragment" />
     </fragment>
     <fragment
         android:id="@+id/create_Trip_Fragment"
@@ -590,4 +593,9 @@
         android:name="com.example.tripper_android_app.setting.member.RegisterChangePwFragment"
         android:label="fragment_register_change_pw"
         tools:layout="@layout/fragment_register_change_pw" />
+    <fragment
+        android:id="@+id/blogEditCommentFragment"
+        android:name="com.example.tripper_android_app.blog.BlogEditCommentFragment"
+        android:label="fragment_blog_edit_comment"
+        tools:layout="@layout/fragment_blog_edit_comment" />
 </navigation>

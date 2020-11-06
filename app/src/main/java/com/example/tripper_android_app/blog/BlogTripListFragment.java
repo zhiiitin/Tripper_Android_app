@@ -67,6 +67,8 @@ public class BlogTripListFragment extends Fragment {
     private static final String TAG = "TAG_TripList_Fragment";
     private SharedPreferences preferences;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private Blog_SpotInformation blog_spotInformation;
+    private Blog_Day blog_day;
 
 
 
@@ -101,11 +103,26 @@ public class BlogTripListFragment extends Fragment {
         blog_days = getDays();
         showDays(blog_days);
 
+    }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.blog_edit_menu, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Navigation.findNavController(rvDays).popBackStack();
+                break;
 
-
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
     private List<Blog_Day> getDays() {
         List<Blog_Day> blog_days = null;
@@ -251,7 +268,7 @@ public class BlogTripListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyDaysViewHolder holder, int position) {
-            final Blog_Day  blog_day= blog_days.get(position);
+            blog_day= blog_days.get(position);
             if(position ==0){
                 holder.tvDays.setText("第一天");
                 holder.tvDate.setText(blog_day.getDayTitle());
@@ -294,13 +311,12 @@ public class BlogTripListFragment extends Fragment {
             }
 
             public void set_BlogDays (List<Blog_Day> blog_days){
-                this.blog_days = blog_days;
+              this.blog_days = blog_days;
             }
 
 
             public class MyDaysViewHolder extends RecyclerView.ViewHolder {
                 private ImageButton imDays;
-                private List<Blog_SpotInformation> blog_location;
                 private TextView tvDays,tvDate;
 //              private RecyclerView rvLocation;
 //              private LocationAdapter locationAdapter;
@@ -343,17 +359,17 @@ public class BlogTripListFragment extends Fragment {
 
     public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.MyLocationViewHolder> {
             private  Context context;
-
+            private  List<Blog_SpotInformation> blog_location;
             private int lastPosition = -1;
 
 
             LocationAdapter(Context context, List<Blog_SpotInformation> blog_location) {
                this.context = context;
-               BlogTripListFragment.this.blog_location = blog_location;
+               this.blog_location = blog_location;
             }
 
             public void set_locations( List<Blog_SpotInformation> blog_location) {
-                BlogTripListFragment.this.blog_location = blog_location;
+               this.blog_location = blog_location;
             }
 
             @Override
@@ -375,11 +391,10 @@ public class BlogTripListFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull MyLocationViewHolder holder, int position) {
-
-                    final Blog_SpotInformation blog_spotInformation = blog_location.get(position);
+                   blog_spotInformation = blog_location.get(position);
 
                     holder.tvLocation.setText(blog_spotInformation.getSpotName());
-                    holder.tvStayTime.setText("一小時");
+                    holder.tvStayTime.setText(blog_spotInformation.getStayTime());
                     holder.ivMark.setImageResource(R.drawable.mark);
                     holder.ivLine.setImageResource(R.drawable.line);
 

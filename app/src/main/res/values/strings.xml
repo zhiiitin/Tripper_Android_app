@@ -184,6 +184,8 @@
     <string name="textUpdateSuccess">留言成功</string>
     <string name="textDeleteFail">刪除失敗</string>
     <string name="textDeleteSuccess">網誌刪除成功</string>
+    <string name="textDeleteCommentSuccess">刪除成功</string>
+    <string name="textNameIsInvalid">留言不能空白</string>
 
 
 </resources>
