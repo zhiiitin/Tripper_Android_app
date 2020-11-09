@@ -129,6 +129,9 @@ public class TripHasSavedPage extends Fragment {
         textShowSDate.setText(startDate);
         textShowSTime.setText(startTime);
 
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("tripId",tripId);
+
 
         //揪團人數按鈕
         btManageGroupPpl = view.findViewById(R.id.btManageGroupPpl);
@@ -144,7 +147,7 @@ public class TripHasSavedPage extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Navigation.findNavController(v)
-                            .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment);
+                            .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment , bundle2);
                 }
             });
         } else {
@@ -156,7 +159,7 @@ public class TripHasSavedPage extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v)
-                        .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment);
+                        .navigate(R.id.action_tripHasSavedPage_to_groupManageFragment , bundle2);
             }
         });
 

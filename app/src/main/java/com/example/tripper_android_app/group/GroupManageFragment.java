@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ public class GroupManageFragment extends Fragment {
     private TextView tvFriendName;
     private ImageButton ibKick;
     private SharedPreferences preferences;
+    private String tripId ;
     private TripGroup tripGroup;
     private List<TripGroupMember> tripGroupMembers;
     private TripGroupMember tripGroupMember;
@@ -53,6 +56,7 @@ public class GroupManageFragment extends Fragment {
     private CommonTask memberGetProfileTask;
     private RecyclerView rvTripGroupList;
     private List<ImageTask> imageTasks;
+    private Bundle bundle2 = new Bundle();
 
 
     @Override
@@ -78,6 +82,13 @@ public class GroupManageFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //取得前頁bundle
+        Bundle bundle = getArguments();
+        tripId = bundle.getString("tripId");
+
+
+        bundle2.putString("tripId",tripId);
+
         rvTripGroupList = view.findViewById(R.id.rvTripGroupList);
         rvTripGroupList.setLayoutManager(new LinearLayoutManager(activity));
         tvFriendName = view.findViewById(R.id.tvFriendName);
@@ -95,12 +106,21 @@ public class GroupManageFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(tvFriendName).popBackStack(R.id.tripHasSavedPage, false);
+                Navigation.findNavController(this.getView()).popBackStack();
                 return true;
+            case R.id.btApplicationList:
+                Navigation.findNavController(this.getView()).navigate(R.id.action_groupManageFragment_to_groupManageApplicationFragment, bundle2);
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //顯示申請名單按鈕
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+            inflater.inflate(R.menu.group_application_list, menu);
     }
 
 
@@ -127,7 +147,7 @@ public class GroupManageFragment extends Fragment {
         List<TripGroupMember> tripGroupMembers = null;
         if(Common.networkConnected(activity)){
             //String tripId = preferences.getString("tripId", "noData");
-            String tripId= "aaa";
+
             if(!tripId.equals("noData")){
                 String url = Common.URL_SERVER + "Trip_Group_Servlet";
                 JsonObject jsonObject = new JsonObject();
