@@ -201,8 +201,10 @@ public class GroupManageApplicationFragment extends Fragment {
                             e.printStackTrace();
                         }
                         if (count == 1) {
-                            memberList = getMemberList();
-                            showMemberList(memberList);
+                            //確認及拒絕按鈕消失，顯示已參加
+                            applicationListViewHolder.ibAgree.setVisibility(View.GONE);
+                            applicationListViewHolder.ibDisagree.setVisibility(View.GONE);
+                            applicationListViewHolder.ibHasJoin.setVisibility(View.VISIBLE);
                         }
                     } else {
                         Common.showToast(activity, "請檢查網路連線");
@@ -214,7 +216,30 @@ public class GroupManageApplicationFragment extends Fragment {
             applicationListViewHolder.ibDisagree.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Common.networkConnected(activity)) {
+                        String url = Common.URL_SERVER + "TripServlet";
 
+                        TripGroup tripGroup = new TripGroup(tripId, memberId);
+
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "deleteGroup");
+                        jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+                        int count = 0;
+                        try {
+                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                            count = Integer.parseInt(result);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (count == 1) {
+                            memberList.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position,memberList.size());
+                        }
+                    } else {
+                        Common.showToast(activity, "請檢查網路連線");
+                    }
                 }
             });
 
@@ -224,13 +249,14 @@ public class GroupManageApplicationFragment extends Fragment {
     class ApplicationListViewHolder extends RecyclerView.ViewHolder {
         TextView tvNickname;
         CircleImageView civPic;
-        ImageButton ibAgree , ibDisagree ;
+        ImageButton ibAgree , ibDisagree ,ibHasJoin;
         public ApplicationListViewHolder(View v) {
             super(v);
             civPic = v.findViewById(R.id.ivPeoplePic);
             tvNickname = v.findViewById(R.id.tvFriendName);
             ibAgree = v.findViewById(R.id.ibAgree);
             ibDisagree = v.findViewById(R.id.ibDisagree);
+            ibHasJoin = v.findViewById(R.id.ibHasJoin);
         }
     }
 

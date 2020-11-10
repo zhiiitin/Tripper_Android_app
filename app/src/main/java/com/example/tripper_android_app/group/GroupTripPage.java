@@ -2,7 +2,9 @@ package com.example.tripper_android_app.group;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -235,34 +237,52 @@ public class GroupTripPage extends Fragment {
          ibExitGroup.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 if (Common.networkConnected(activity)) {
-                     String url = Common.URL_SERVER + "TripServlet";
+                 new AlertDialog.Builder(activity)
+                         .setTitle("退出揪團")
+                         .setIcon(R.drawable.trippericon)
+                         .setMessage("確定退出「"+tripName+"」的揪團嗎？")
+                         .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 if (Common.networkConnected(activity)) {
+                                     String url = Common.URL_SERVER + "TripServlet";
 
-                     String tripId = bundle.getString("tripId");
-                     //參加人的會員ID
-                     int memberId = Integer.parseInt(pref.getString("memberId", ""));
+                                     String tripId = bundle.getString("tripId");
+                                     //參加人的會員ID
+                                     int memberId = Integer.parseInt(pref.getString("memberId", ""));
 
-                     TripGroup tripGroup = new TripGroup(tripId, memberId);
+                                     TripGroup tripGroup = new TripGroup(tripId, memberId);
 
-                     JsonObject jsonObject = new JsonObject();
-                     jsonObject.addProperty("action", "deleteGroup");
-                     jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+                                     JsonObject jsonObject = new JsonObject();
+                                     jsonObject.addProperty("action", "deleteGroup");
+                                     jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
 
-                     int count = 0;
-                     try {
-                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
-                         count = Integer.parseInt(result);
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                     }
-                     if (count == 1) {
-                         Common.showToast(activity,"已退出此揪團");
-                         ibExitGroup.setVisibility(View.GONE);
-                         btJoinGroup.setVisibility(View.VISIBLE);
-                     }
-                 } else {
-                     Common.showToast(activity, "請檢查網路連線");
-                 }
+                                     int count = 0;
+                                     try {
+                                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                         count = Integer.parseInt(result);
+                                     } catch (Exception e) {
+                                         e.printStackTrace();
+                                     }
+                                     if (count == 1) {
+                                         Common.showToast(activity,"已退出此揪團");
+                                         ibExitGroup.setVisibility(View.GONE);
+                                         btJoinGroup.setVisibility(View.VISIBLE);
+                                         checkCount = 0 ;
+                                     }
+                                 } else {
+                                     Common.showToast(activity, "請檢查網路連線");
+                                 }
+                             }
+                         })
+                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 dialog.cancel();
+                             }
+                         })
+                         .setCancelable(true)
+                         .show();
              }
          });
 
@@ -1118,7 +1138,7 @@ public class GroupTripPage extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        if (checkCount == 1) {
+        if (checkCount == 2) {
             inflater.inflate(R.menu.app_bar_group_member, menu);
         }
     }

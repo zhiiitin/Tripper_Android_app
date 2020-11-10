@@ -2,11 +2,13 @@ package com.example.tripper_android_app.group;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,20 +45,23 @@ import java.util.concurrent.ExecutionException;
 import static android.content.Context.MODE_PRIVATE;
 
 public class GroupManageFragment extends Fragment {
+    private final static String TAG = "TAG_GroupManage";
     private MainActivity activity;
-    private ImageView ivPeoplePic;
-    private TextView tvFriendName;
-    private ImageButton ibKick;
     private SharedPreferences preferences;
     private String tripId ;
     private TripGroup tripGroup;
-    private List<TripGroupMember> tripGroupMembers;
+    private List<Member> tripGroupMembers;
     private TripGroupMember tripGroupMember;
-    private CommonTask tripGroupGetIdTask;
+    private CommonTask tripGroupGetIdTask,ApplicationMbrTask;
     private CommonTask memberGetProfileTask;
     private RecyclerView rvTripGroupList;
     private List<ImageTask> imageTasks;
     private Bundle bundle2 = new Bundle();
+    private CardView cvApplication ;
+    private ImageView ivRedCircle ;
+    private TextView tvCount ;
+    private List<Member> memberList;
+    private  int count = 0 ;
 
 
     @Override
@@ -64,7 +69,7 @@ public class GroupManageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
-        imageTasks = new ArrayList<>();
+
     }
 
     @Override
@@ -81,6 +86,8 @@ public class GroupManageFragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ivRedCircle = view.findViewById(R.id.ivRedCircle);
+        tvCount = view.findViewById(R.id.tvMbrCount);
 
         //取得前頁bundle
         Bundle bundle = getArguments();
@@ -91,13 +98,48 @@ public class GroupManageFragment extends Fragment {
 
         rvTripGroupList = view.findViewById(R.id.rvTripGroupList);
         rvTripGroupList.setLayoutManager(new LinearLayoutManager(activity));
-        tvFriendName = view.findViewById(R.id.tvFriendName);
-        ivPeoplePic = view.findViewById(R.id.ivPeoplePic);
+
         preferences = activity.getSharedPreferences("groupSetting", MODE_PRIVATE);
         // 取得trip_group參與人員ID與資料
         tripGroupMembers = getGroupList();
         showGroupList(tripGroupMembers);
+        //申請名單按鈕
+        cvApplication = view.findViewById(R.id.cvApplication);
+        cvApplication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_groupManageFragment_to_groupManageApplicationFragment, bundle2);
+            }
+        });
 
+
+        if(Common.networkConnected(activity)){
+            memberList = new ArrayList<>();
+            String url = Common.URL_SERVER + "Trip_Group_Servlet";
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getApplicationList");
+            jsonObject.addProperty("tripId", tripId);
+            String jsonOut = jsonObject.toString();
+            Log.d(TAG, "getApplicationList jsonOut:: " + jsonOut);
+            ApplicationMbrTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = ApplicationMbrTask.execute().get();
+                Log.d(TAG, "getApplicationList jsonIn::" + jsonIn);
+                Type listType = new TypeToken<List<Member>>(){}.getType();
+                memberList = new Gson().fromJson(jsonIn, listType);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }else {
+            Common.showToast(activity, "請確認網路連線");
+        }
+
+        if(memberList != null && memberList.size() > 0){
+            ivRedCircle.setVisibility(View.VISIBLE);
+            tvCount.setText(memberList.size()+"");
+        }
     }
 
 
@@ -125,7 +167,7 @@ public class GroupManageFragment extends Fragment {
 
 
     // 呈現在管理揪團人員的資料
-    private void showGroupList(List<TripGroupMember> tripGroupMembers) {
+    private void showGroupList(List<Member> tripGroupMembers) {
         if(tripGroupMembers == null || tripGroupMembers.isEmpty()){
             Common.showToast(activity, "尚未有參與揪團人員");
             return;
@@ -143,24 +185,24 @@ public class GroupManageFragment extends Fragment {
     }
 
 
-    private List<TripGroupMember> getGroupList() {
-        List<TripGroupMember> tripGroupMembers = null;
+    private List<Member> getGroupList() {
+        tripGroupMembers = new ArrayList<>();;
         if(Common.networkConnected(activity)){
             //String tripId = preferences.getString("tripId", "noData");
 
             if(!tripId.equals("noData")){
                 String url = Common.URL_SERVER + "Trip_Group_Servlet";
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "findGroupTripId");
+                jsonObject.addProperty("action", "getGroupMbrList");
                 jsonObject.addProperty("tripId", tripId);
                 String jsonOut = jsonObject.toString();
                 // TODO
-                Log.d("#getGroupList jsonOut::", jsonOut);
+                Log.d("#getGroupMbrList jsonOut::", jsonOut);
                 tripGroupGetIdTask = new CommonTask(url, jsonOut);
                 try {
                     String jsonIn = tripGroupGetIdTask.execute().get();
                     Log.d("#getGroupList jsonOut::", jsonIn);
-                    Type listtype = new TypeToken<List<TripGroupMember>>(){}.getType();
+                    Type listtype = new TypeToken<List<Member>>(){}.getType();
                     tripGroupMembers = new Gson().fromJson(jsonIn, listtype);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -176,13 +218,12 @@ public class GroupManageFragment extends Fragment {
 
     private class TripGroupAdapter extends RecyclerView.Adapter<TripGroupAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
-        private List<TripGroupMember> tripGroupMembers;
-        private int imageSize;
+        private List<Member> tripGroupMembers;
 
-        TripGroupAdapter(Context context, List<TripGroupMember> tripGroupMembers){
+
+        TripGroupAdapter(Context context, List<Member> tripGroupMembers){
             layoutInflater = LayoutInflater.from(context);
             this.tripGroupMembers = tripGroupMembers;
-            imageSize = getResources().getDisplayMetrics().widthPixels / 4 ;
             Log.d("####","1");
             Log.d("### 1111 size", tripGroupMembers.size() + "");
         }
@@ -203,37 +244,52 @@ public class GroupManageFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int position) {
-            final TripGroupMember tripGroupMember = tripGroupMembers.get(position);
-            String nickName = tripGroupMember.getNickName();
-            final int memberId = tripGroupMember.getMemberId();
+            final Member tripGroupMember = tripGroupMembers.get(position);
+            int memberId = tripGroupMember.getId();
             String url = Common.URL_SERVER + "MemberServlet";
-            ImageTask imageTask = new ImageTask(url, memberId, imageSize, myViewHolder.ivPeoplePic);
-            imageTask.execute();
-            imageTasks.add(imageTask);
-            myViewHolder.tvNickName.setText(nickName);
+            int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+            myViewHolder.tvNickName.setText(tripGroupMember.getNickName());
+            Bitmap bitmap = null ;
+            try {
+                bitmap = new ImageTask(url, memberId, imageSize).execute().get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }//若此帳號之資料庫有照片，便使用資料庫的照
+            if (bitmap != null) {
+                myViewHolder.ivPeoplePic.setImageBitmap(bitmap);
+            } else {
+                myViewHolder.ivPeoplePic.setImageResource(R.drawable.ic_nopicture);
+            }
+            //將成員踢除
             myViewHolder.ibKick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String url = Common.URL_SERVER + "Trip_Group_Servlet";
-                    // tripGroupDelete and tripId
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "tripGroupDelete");
-                    jsonObject.addProperty("tripId", tripGroupMember.getTripId());
-                    jsonObject.addProperty("memberId", tripGroupMember.getMemberId());
-                    String jsonOut = jsonObject.toString();
-                    CommonTask deleteTask = new CommonTask(url, jsonOut);
-                    try {
-                        String result = deleteTask.execute().get();
-                        int count = Integer.parseInt(result);
-                        if(count > 0){
-                            tripGroupMembers.remove(position);
-                            showGroupList(tripGroupMembers);
-                            Common.showToast(activity, "刪除成功");
-                        }else {
-                            Common.showToast(activity, "刪除失敗");
+                    if (Common.networkConnected(activity)) {
+                        String url = Common.URL_SERVER + "TripServlet";
+                        //參加人的會員ID
+
+                        TripGroup tripGroup = new TripGroup(tripId, memberId);
+
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "deleteGroup");
+                        jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+
+                        int count = 0;
+                        try {
+                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                            count = Integer.parseInt(result);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        if (count == 1) {
+                            tripGroupMembers.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position,tripGroupMembers.size());
+                            Common.showToast(activity, "已將"+tripGroupMember.getNickName()+"踢除");
+
+                        }
+                    } else {
+                        Common.showToast(activity, "請檢查網路連線");
                     }
                 }
             });

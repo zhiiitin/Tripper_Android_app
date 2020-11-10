@@ -205,10 +205,8 @@ public class Group2Fragment extends Fragment {
                     Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_groupTripPage, bundle);
                 }
             });
-
         }
     }
-
 
     @Override
     public void onStop() {

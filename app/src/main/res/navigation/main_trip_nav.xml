@@ -445,7 +445,11 @@
             app:destination="@id/trip_HomePage" />
         <action
             android:id="@+id/action_tripHasSavedPage_to_groupManageFragment"
-            app:destination="@id/groupManageFragment" />
+            app:destination="@id/groupManageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -455,7 +459,11 @@
         tools:layout="@layout/fragment_group_manage">
         <action
             android:id="@+id/action_groupManageFragment_to_groupManageApplicationFragment"
-            app:destination="@id/groupManageApplicationFragment" />
+            app:destination="@id/groupManageApplicationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
