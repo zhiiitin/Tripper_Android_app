@@ -108,7 +108,7 @@ public class Group2Fragment extends Fragment {
 
     private void showGroups(List<Trip_M> groupList) {
         if (groupList == null || groupList.isEmpty()) {
-            Common.showToast(activity, "搜尋不到行程");
+            Common.showToast(activity, "您目前尚未加入任何揪團");
         }
         GroupAdapter groupAdapter = (GroupAdapter) rvGroup.getAdapter();
         if (groupAdapter == null) {
@@ -205,10 +205,8 @@ public class Group2Fragment extends Fragment {
                     Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_groupTripPage, bundle);
                 }
             });
-
         }
     }
-
 
     @Override
     public void onStop() {
@@ -222,5 +220,12 @@ public class Group2Fragment extends Fragment {
             groupImageTask = null;
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        groupList = getGroups();
+        showGroups(groupList);
     }
 }

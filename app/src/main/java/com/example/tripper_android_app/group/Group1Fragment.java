@@ -242,4 +242,11 @@ public class Group1Fragment extends Fragment {
             }
 
         }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        groupList = getGroups();
+        showGroups(groupList);
     }
+}

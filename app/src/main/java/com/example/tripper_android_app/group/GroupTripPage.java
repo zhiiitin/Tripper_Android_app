@@ -2,7 +2,9 @@ package com.example.tripper_android_app.group;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -38,6 +40,7 @@ import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.blog.Blog_SpotInfo;
 import com.example.tripper_android_app.blog.CreateBlogFragment;
 import com.example.tripper_android_app.blog.DateAndId;
+import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
@@ -47,6 +50,7 @@ import com.example.tripper_android_app.trip.Trip_LocInfo;
 import com.example.tripper_android_app.trip.Trip_M;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.DateUtil;
+import com.example.tripper_android_app.util.SendMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -74,12 +78,13 @@ public class GroupTripPage extends Fragment {
     private Button btDay1, btDay2, btDay3, btDay4, btDay5, btDay6;
     private Trip_M tripM;
     private CommonTask tripGetAllTask;
-    private String startDate, tripId ;
-    private int memberId ;
-    private ImageButton btJoinGroup ,ibExitGroup,ibMbrFill ;
+    private String startDate, tripId , tripName ;
+    private int hostId ;
+    private ImageButton btJoinGroup ,ibExitGroup,ibMbrFill,ibCheckGroup;
     private CommonTask tripGet1Task;
     private int checkCount = 0 , mbrStatus = 0 ;
     private Bundle bundle2 = new Bundle();
+    SharedPreferences pref = null;
 
 
     @Override
@@ -107,6 +112,9 @@ public class GroupTripPage extends Fragment {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        pref = activity.getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
+
 
 
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
@@ -121,22 +129,23 @@ public class GroupTripPage extends Fragment {
 
         //從上一頁bundle帶過來（不包含圖片）
         final Bundle bundle = getArguments();
-        String TripName = bundle.getString("tripTitle");
+        tripName = bundle.getString("tripTitle");
         tripId = bundle.getString("tripId");
         startDate = bundle.getString("startDate");
-        memberId = bundle.getInt("memberId");
+        hostId = bundle.getInt("memberId");
         mbrStatus = bundle.getInt("mbrStatus");
         final String startTime = bundle.getString("startTime");
 
         bundle2.putString("tripId",tripId);
-        bundle2.putInt("memberId",memberId);
+        bundle2.putInt("memberId",hostId);
 
-        textSavedShowTitle.setText(TripName);
+        textSavedShowTitle.setText(tripName);
         textShowSDate.setText(startDate);
         textShowSTime.setText(startTime);
-        //按下參加按鈕後，顯示退出揪團按鈕
+        //按下參加按鈕後，顯示已送出要求按鈕
         ibExitGroup = view.findViewById(R.id.ibExiGroup);
         ibMbrFill = view.findViewById(R.id.ibMbrFill);
+        ibCheckGroup = view.findViewById(R.id.ibCheckGroup);
 
         //參加揪團人數按鈕
         btJoinGroup = view.findViewById(R.id.btJoinGroup);
@@ -162,13 +171,23 @@ public class GroupTripPage extends Fragment {
             e.printStackTrace();
         }
         //---------------------------------------------------
+
+        //揪團狀態碼 - 1 -> 等待審核
+        //           2 -> 成功加入
+
         if (mId.equals(mId2)) {
             btJoinGroup.setVisibility(View.GONE);
         }
         else if(checkCount == 1){
             btJoinGroup.setVisibility(View.GONE);
+            ibCheckGroup.setVisibility(View.VISIBLE);
+
+        }
+        else if(checkCount == 2){
+            btJoinGroup.setVisibility(View.GONE);
             ibExitGroup.setVisibility(View.VISIBLE);
         }
+
          else {
             if (mbrStatus == 0) {
                 btJoinGroup.setVisibility(View.VISIBLE);
@@ -185,7 +204,7 @@ public class GroupTripPage extends Fragment {
                             TripGroup tripGroup = new TripGroup(tripId, memberId);
 
                             JsonObject jsonObject = new JsonObject();
-                            jsonObject.addProperty("action", "updateGroup");
+                            jsonObject.addProperty("action", "insertGroup");
                             jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
 
 
@@ -197,9 +216,10 @@ public class GroupTripPage extends Fragment {
                                 e.printStackTrace();
                             }
                             if (count == 0) {
-                                Common.showToast(activity, "加入揪團成功！");
+                                Common.showToast(activity, "已申請加入！");
                                 btJoinGroup.setVisibility(View.GONE);
-                                ibExitGroup.setVisibility(View.VISIBLE);
+                                ibCheckGroup.setVisibility(View.VISIBLE);
+                                sendJoinMsg(memberId);
                             } else {
                                 Common.showToast(activity, "加入揪團失敗！");
                                 Log.d(TAG, "Trip Fail: " + count);
@@ -217,34 +237,52 @@ public class GroupTripPage extends Fragment {
          ibExitGroup.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 if (Common.networkConnected(activity)) {
-                     String url = Common.URL_SERVER + "TripServlet";
+                 new AlertDialog.Builder(activity)
+                         .setTitle("退出揪團")
+                         .setIcon(R.drawable.trippericon)
+                         .setMessage("確定退出「"+tripName+"」的揪團嗎？")
+                         .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 if (Common.networkConnected(activity)) {
+                                     String url = Common.URL_SERVER + "TripServlet";
 
-                     String tripId = bundle.getString("tripId");
-                     //參加人的會員ID
-                     int memberId = Integer.parseInt(pref.getString("memberId", ""));
+                                     String tripId = bundle.getString("tripId");
+                                     //參加人的會員ID
+                                     int memberId = Integer.parseInt(pref.getString("memberId", ""));
 
-                     TripGroup tripGroup = new TripGroup(tripId, memberId);
+                                     TripGroup tripGroup = new TripGroup(tripId, memberId);
 
-                     JsonObject jsonObject = new JsonObject();
-                     jsonObject.addProperty("action", "deleteGroup");
-                     jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
+                                     JsonObject jsonObject = new JsonObject();
+                                     jsonObject.addProperty("action", "deleteGroup");
+                                     jsonObject.addProperty("tripGroup", new Gson().toJson(tripGroup));
 
-                     int count = 0;
-                     try {
-                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
-                         count = Integer.parseInt(result);
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                     }
-                     if (count == 1) {
-                         Common.showToast(activity,"已退出此揪團");
-                         ibExitGroup.setVisibility(View.GONE);
-                         btJoinGroup.setVisibility(View.VISIBLE);
-                     }
-                 } else {
-                     Common.showToast(activity, "請檢查網路連線");
-                 }
+                                     int count = 0;
+                                     try {
+                                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                         count = Integer.parseInt(result);
+                                     } catch (Exception e) {
+                                         e.printStackTrace();
+                                     }
+                                     if (count == 1) {
+                                         Common.showToast(activity,"已退出此揪團");
+                                         ibExitGroup.setVisibility(View.GONE);
+                                         btJoinGroup.setVisibility(View.VISIBLE);
+                                         checkCount = 0 ;
+                                     }
+                                 } else {
+                                     Common.showToast(activity, "請檢查網路連線");
+                                 }
+                             }
+                         })
+                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 dialog.cancel();
+                             }
+                         })
+                         .setCancelable(true)
+                         .show();
              }
          });
 
@@ -1100,7 +1138,7 @@ public class GroupTripPage extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        if (checkCount == 1) {
+        if (checkCount == 2) {
             inflater.inflate(R.menu.app_bar_group_member, menu);
         }
     }
@@ -1117,5 +1155,22 @@ public class GroupTripPage extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //發送請求推播
+    private void sendJoinMsg(int memberId){
+
+        AppMessage message = null;
+        String msgType = Common.GROUP_TYPE ;
+        String account = pref.getString("account","");
+        String title =  "申請揪團通知";
+        String body = account + "申請加入「" + tripName + "」的揪團！";
+        int stat = 0;
+        int sendId = memberId ;
+        int recId = hostId ;
+        message = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+        SendMessage sendMessage = new SendMessage(activity, message);
+        sendMessage.sendMessage();
+    }
+
 }
 
