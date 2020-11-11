@@ -665,7 +665,6 @@
         android:label="fragment_group_mbr_list"
         tools:layout="@layout/fragment_group_mbr_list" />
     <fragment
-<<<<<<< HEAD
         android:id="@+id/exploreFragment1"
         android:name="com.example.tripper_android_app.explore.ExploreFragment1"
         android:label="fragment_explore1"
@@ -680,11 +679,10 @@
         android:name="com.example.tripper_android_app.explore.ExploreLocationDetailFragment"
         android:label="fragment_explore_location_detail"
         tools:layout="@layout/fragment_explore_location_detail" />
-
-=======
+    <fragment
         android:id="@+id/groupManageApplicationFragment"
         android:name="com.example.tripper_android_app.group.GroupManageApplicationFragment"
         android:label="fragment_group_manage_application"
         tools:layout="@layout/fragment_group_manage_application" />
->>>>>>> 會員註冊功能
+
 </navigation>
