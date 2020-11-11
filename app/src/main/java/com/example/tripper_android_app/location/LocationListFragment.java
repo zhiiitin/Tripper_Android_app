@@ -293,7 +293,7 @@ public class LocationListFragment extends Fragment {
             super(itemView);
             ivLocImage = itemView.findViewById(R.id.ivLocationPic);
             tvLocName = itemView.findViewById(R.id.tvLocName);
-            tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvAddress = itemView.findViewById(R.id.tvAddress1);
             ivMore = itemView.findViewById(R.id.ivMore);
         }
     }

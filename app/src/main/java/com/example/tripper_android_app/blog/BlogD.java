@@ -1,6 +1,8 @@
 package com.example.tripper_android_app.blog;
 
-public class BlogD {
+import java.io.Serializable;
+
+public class BlogD implements Serializable {
 
         private int dayCount;
         private String locationId;

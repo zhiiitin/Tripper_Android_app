@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".explore.ExploreFragment1">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <SearchView
+            android:id="@+id/svGroup"
+            android:layout_width="411dp"
+            android:layout_height="47dp"
+            android:background="@color/colorForWhite"
+            android:iconifiedByDefault="false"
+            android:queryHint="搜尋「 景點 」"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </SearchView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHot"
+            android:layout_width="389dp"
+            android:layout_height="254dp"
+            android:layout_marginEnd="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivText" />
+
+        <ImageView
+            android:id="@+id/ivText"
+            android:layout_width="399dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/svGroup" />
+
+        <TextView
+            android:id="@+id/tvHot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:text="熱門景點"
+            android:textColor="#FFFFFF"
+            android:textSize="28.5dp"
+            app:layout_constraintEnd_toEndOf="@+id/ivText"
+            app:layout_constraintStart_toStartOf="@+id/ivText"
+            app:layout_constraintTop_toTopOf="@+id/svGroup" />
+
+        <ImageView
+            android:id="@+id/ivText2"
+            android:layout_width="399dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="310dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/svGroup" />
+
+        <TextView
+            android:id="@+id/tvSpot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="360dp"
+            android:text="所有景點"
+            android:textColor="#FFFFFF"
+            android:textSize="28.5dp"
+            app:layout_constraintEnd_toEndOf="@+id/ivText"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="@+id/ivText"
+            app:layout_constraintTop_toTopOf="@+id/svGroup" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAllSpot"
+            android:layout_width="399dp"
+            android:layout_height="281dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.562"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSpot"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

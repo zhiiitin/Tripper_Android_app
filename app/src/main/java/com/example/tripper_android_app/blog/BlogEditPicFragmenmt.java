@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -31,6 +32,9 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -61,6 +65,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static androidx.navigation.Navigation.findNavController;
 import static com.example.tripper_android_app.util.Common.showToast;
 
 
@@ -74,7 +79,7 @@ public class BlogEditPicFragmenmt extends Fragment {
     private MainActivity activity;
     private ImageView ivPoint, ivnopic;
     private ImageButton ibAdd;
-    private TextView tvSpotName, tvnopic, tvTouch, tvUpdate,tvText;
+    private TextView tvSpotName, tvnopic, tvTouch, tvUpdate,tvText,btStart;
     private ImageButton ibUpdate;
     private CommonTask imageTask;
     private static final int REQ_TAKE_PICTURE = 0;
@@ -128,7 +133,8 @@ public class BlogEditPicFragmenmt extends Fragment {
         ivnopic = view.findViewById(R.id.ivnoPic);
         tvnopic = view.findViewById(R.id.tvnoPic);
         tvText = view.findViewById(R.id.tvText);
-
+        btStart = view.findViewById(R.id.btStart);
+        btStart.setText("TEST");
         ibAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +144,46 @@ public class BlogEditPicFragmenmt extends Fragment {
                 ivnopic.setVisibility(View.GONE);
             }
         });
+        btStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bmp = null;
+
+                Resources res = getResources();
+                bmp = BitmapFactory.decodeResource(res, R.drawable.taipei);
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                photo = out.toByteArray();
+                if (bmp != null) {
+                    bitmapList.add(bmp);
+                    showPhotos(bitmapList);
+                    if (bitmapList.size() == 1) {
+                        String pic1 = Base64.encodeToString(photo, Base64.DEFAULT);
+                        blogPic.setPic1(pic1);
+                    }
+
+                    if (bitmapList.size() == 2) {
+                        String pic2 = Base64.encodeToString(photo, Base64.DEFAULT);
+                        blogPic.setPic2(pic2);
+                    }
+
+                    if (bitmapList.size() == 3) {
+                        String pic3 = Base64.encodeToString(photo, Base64.DEFAULT);
+                        blogPic.setPic3(pic3);
+                    }
+
+                    if (bitmapList.size() == 4) {
+                        String pic4 = Base64.encodeToString(photo, Base64.DEFAULT);
+                        blogPic.setPic4(pic4);
+                        ibAdd.setVisibility(View.GONE);
+                        tvTouch.setVisibility(View.GONE);
+                    }
+                }
+
+
+            }
+        });
+
 
 
 //接收前頁bundle
@@ -148,6 +194,7 @@ public class BlogEditPicFragmenmt extends Fragment {
         tvSpotName.setText(spotName);
         blogPic.setLocId(locId);
         blogPic.setBlogId(blogID);
+
 
 //RecyclerView
         rvPhoto = view.findViewById(R.id.rvPhoto);
@@ -191,6 +238,26 @@ public class BlogEditPicFragmenmt extends Fragment {
 
             }
         });
+
+    }
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.blog_edit_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                activity.onBackPressed();
+                return true;
+
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

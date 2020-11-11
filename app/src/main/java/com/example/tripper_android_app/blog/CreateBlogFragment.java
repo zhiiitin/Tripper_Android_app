@@ -12,7 +12,6 @@ import android.graphics.ImageDecoder;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -28,7 +27,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -46,7 +44,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.explore.Explore;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.DateUtil;
@@ -451,7 +448,7 @@ public class CreateBlogFragment extends Fragment {
                         bundle.putString("spotName", spotName);
                         bundle.putString("locId", locId);
                         bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFinishFragment_to_blog_HomePage, bundle);
                     }
                 });
 //將選擇完且上傳的照片show出來
@@ -1088,7 +1085,7 @@ public class CreateBlogFragment extends Fragment {
                 tvLocationName = itemView.findViewById(R.id.tvLocationName);
                 tvInput = itemView.findViewById(R.id.tvInput);
                 etBlog = itemView.findViewById(R.id.etBlog);
-                ibInsertPic = itemView.findViewById(R.id.ibInsertPic);
+                ibInsertPic = itemView.findViewById(R.id.ibUpdatePic);
                 ivSpot1 = itemView.findViewById(R.id.ivSpot1);
                 ivSpot2 = itemView.findViewById(R.id.ivSpot2);
                 ivSpot3 = itemView.findViewById(R.id.ivSpot3);

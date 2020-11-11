@@ -49,7 +49,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -102,7 +104,6 @@ public class BlogTripListFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         blog_days = getDays();
         showDays(blog_days);
-
     }
 
     @Override
@@ -186,55 +187,8 @@ public class BlogTripListFragment extends Fragment {
             daysAdapter.notifyDataSetChanged();
         }
     }
-    private List<Blog_SpotInformation> getBlog_location() throws ParseException {
-        List<Blog_SpotInformation> blog_location = null;
-        String date,date1 ;
-        int number;
-        preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
-        String id = preferences.getString("TripListId", "");
-        date = preferences.getString("DATEE","");
-
-        for(number= 0 ; number <blog_days.size();number++ ){
 
 
-            date1 = DateUtil.date4day(date ,number);
-
-            if (Common.networkConnected(activity)) {
-                //Servlet
-//
-                String url = Common.URL_SERVER + "BlogServlet";
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "getSpotName");
-                jsonObject.addProperty("id", id);
-                jsonObject.addProperty("dateD", date1);
-                String jsonOut = jsonObject.toString();
-                CommonTask commonTask = new CommonTask(url, jsonOut);
-                Log.d("####1", "test");
-                try {
-                    String jsonIn = commonTask.execute().get();
-                    Type listType = new TypeToken<List<Blog_SpotInformation>>() {
-                    }.getType();
-
-                    blog_location = new Gson().fromJson(jsonIn, listType);
-                    System.out.println(blog_location);
-
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-            } else {
-                Common.showToast(activity, R.string.textNoNetwork);
-
-
-            }
-
-
-
-
-
-        }
-        return blog_location;
-
-    }
 
     public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.MyDaysViewHolder> {
         private Context context;
@@ -257,28 +211,65 @@ public class BlogTripListFragment extends Fragment {
             return new MyDaysViewHolder(itemView);
 
         }
+        private List<Blog_SpotInformation> getBlog_location() throws ParseException {
+            List<Blog_SpotInformation> blog_location= null;
+            String date,date1 ;
+            int number;
+            String date11 =blog_day.getDayTitle();
+            preferences = activity.getSharedPreferences(Common.PREF_FILE, Context.MODE_PRIVATE);
+            String id = preferences.getString("TripListId", "");
+            date = preferences.getString("DATEE","");
+
+//            for(number= 0 ; number < blog_days.size();number++ ){
+//                date1 = DateUtil.date4day(date ,number);
+
+                if (Common.networkConnected(activity)) {
+                    //Servlet
+                    String url = Common.URL_SERVER + "BlogServlet";
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "getSpotName");
+                    jsonObject.addProperty("id", id);
+                    jsonObject.addProperty("dateD", date11);
+                    String jsonOut = jsonObject.toString();
+                    CommonTask commonTask = new CommonTask(url, jsonOut);
+                    Log.d("####1", "test");
+                    try {
+                        String jsonIn = commonTask.execute().get();
+                        Type listType = new TypeToken<List<Blog_SpotInformation>>() {
+                        }.getType();
+                        blog_location = new Gson().fromJson(jsonIn, listType);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                } else {
+                    Common.showToast(activity, R.string.textNoNetwork);
+                }
+
+            return blog_location;
+        }
 
         @Override
         public void onBindViewHolder(@NonNull MyDaysViewHolder holder, int position) {
             blog_day= blog_days.get(position);
+
             if(position ==0){
                 holder.tvDays.setText("第一天");
-                holder.tvDate.setText(blog_day.getDayTitle());
+
             }else if(position==1 ){
                 holder.tvDays.setText("第二天");
-                holder.tvDate.setText(blog_day.getDayTitle());
+
             }else if(position == 2){
                 holder.tvDays.setText("第三天");
-                holder.tvDate.setText(blog_day.getDayTitle());
+
             }else if(position == 3) {
                 holder.tvDays.setText("第四天");
-                holder.tvDate.setText(blog_day.getDayTitle());
+
             }else if(position == 4) {
                 holder.tvDays.setText("第五天");
-                holder.tvDate.setText(blog_day.getDayTitle());
+
             }else if(position == 5) {
                 holder.tvDays.setText("第六天");
-                holder.tvDate.setText(blog_day.getDayTitle());
+
             }
 
             try {
@@ -314,7 +305,7 @@ public class BlogTripListFragment extends Fragment {
 //              private LocationAdapter locationAdapter;
 
 
-                private void showLocations( List<Blog_SpotInformation> blog_location) {
+                private void showLocations(List<Blog_SpotInformation> blog_location) {
                     if (blog_location == null || blog_location.isEmpty()) {
                         Common.showToast(activity, R.string.textNoSpotsFound);
                         return;
@@ -383,20 +374,23 @@ public class BlogTripListFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull MyLocationViewHolder holder, int position) {
-                   blog_spotInformation = blog_location.get(position);
+                    final  Blog_SpotInformation blog_spotInformation = blog_location.get(position);
 
                     holder.tvLocation.setText(blog_spotInformation.getSpotName());
-                    holder.tvStayTime.setText(blog_spotInformation.getStayTime());
+                    holder.tvStayTime.setText(blog_spotInformation.getStayTime()+ "(時/分)");
                     holder.ivMark.setImageResource(R.drawable.mark);
                     holder.ivLine.setImageResource(R.drawable.line);
-
-
-
-                lastPosition = getItemCount()-1 ;
-                if (position == lastPosition) {
+                    String url = Common.URL_SERVER+"FCMServlet";
+                    int imageSize = 500;
+                    String id = blog_spotInformation.getLocId();
+                    ImageTask imageTask = new ImageTask(url,id,imageSize,holder.ivSpot);
+                    imageTask.execute();
+                    lastPosition = getItemCount()-1 ;
+                    if (position == lastPosition) {
                     holder.tvStayTime.setVisibility(View.GONE);
                     holder.ivLine.setVisibility(View.GONE);
                 }
+
 
             }
 
@@ -423,7 +417,7 @@ public class BlogTripListFragment extends Fragment {
 
 
             public class MyLocationViewHolder extends RecyclerView.ViewHolder {
-                private ImageView ivMark, ivLine;
+                private ImageView ivMark, ivLine,ivSpot;
                 private TextView tvStayTime, tvLocation;
                 private LinearLayoutManager layoutManager;
 
@@ -434,6 +428,7 @@ public class BlogTripListFragment extends Fragment {
                     ivMark = itemView.findViewById(R.id.ivMark);
                     tvLocation = itemView.findViewById(R.id.tvLocation);
                     tvStayTime = itemView.findViewById(R.id.tvStayTime);
+                    ivSpot = itemView.findViewById(R.id.ivSpot);
 
 
                 }

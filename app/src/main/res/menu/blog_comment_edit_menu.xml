@@ -6,5 +6,7 @@
 
     <item
     android:id="@+id/blogCommentDelete"
-    android:title="Delete" />
+    android:title="Delete"
+
+        />
 </menu>

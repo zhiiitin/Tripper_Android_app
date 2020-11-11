@@ -52,6 +52,12 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_exploreFragment_to_location_Detail_Fragment"
+            app:destination="@id/location_Detail_Fragment" />
+        <action
+            android:id="@+id/action_exploreFragment_to_exploreLocationDetailFragment"
+            app:destination="@id/exploreLocationDetailFragment" />
     </fragment>
 
     <fragment
@@ -273,9 +279,7 @@
         <action
             android:id="@+id/action_blogMainFragment_to_blogEditFragment"
             app:destination="@id/blogEditFragment" />
-        <action
-            android:id="@+id/action_blogMainFragment_to_blogEditCommentFragment"
-            app:destination="@id/blogEditCommentFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/create_Trip_Fragment"
@@ -378,7 +382,11 @@
         android:id="@+id/blogTripListFragment"
         android:name="com.example.tripper_android_app.blog.BlogTripListFragment"
         android:label="fragment_blog_trip_list"
-        tools:layout="@layout/fragment_blog_trip_list" />
+        tools:layout="@layout/fragment_blog_trip_list" >
+        <action
+            android:id="@+id/action_blogTripListFragment_to_exploreLocationDetailFragment"
+            app:destination="@id/exploreLocationDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/blogEditFragment"
         android:name="com.example.tripper_android_app.blog.BlogEditFragment"
@@ -404,6 +412,9 @@
         <action
             android:id="@+id/action_blogEditFragment_to_blogEditPicFragmenmt"
             app:destination="@id/blogEditPicFragmenmt" />
+        <action
+            android:id="@+id/action_blogEditFragment_to_createBlogPicFragment2"
+            app:destination="@id/createBlogPicFragment" />
 
     </fragment>
     <fragment
@@ -613,7 +624,11 @@
         android:id="@+id/blogEditPicFragmenmt"
         android:name="com.example.tripper_android_app.blog.BlogEditPicFragmenmt"
         android:label="fragment_blog_edit_pic_fragmenmt"
-        tools:layout="@layout/fragment_blog_edit_pic_fragmenmt" />
+        tools:layout="@layout/fragment_blog_edit_pic_fragmenmt" >
+        <action
+            android:id="@+id/action_blogEditPicFragmenmt_to_blogEditFragment"
+            app:destination="@id/blogEditFragment" />
+    </fragment>
 
 
     <fragment
@@ -631,13 +646,8 @@
         android:name="com.example.tripper_android_app.setting.member.RegisterChangePwFragment"
         android:label="fragment_register_change_pw"
         tools:layout="@layout/fragment_register_change_pw" />
+
     <fragment
-<<<<<<< HEAD
-        android:id="@+id/blogEditCommentFragment"
-        android:name="com.example.tripper_android_app.blog.BlogEditCommentFragment"
-        android:label="fragment_blog_edit_comment"
-        tools:layout="@layout/fragment_blog_edit_comment" />
-=======
         android:id="@+id/group1Fragment"
         android:name="com.example.tripper_android_app.group.Group1Fragment"
         android:label="fragment_group1"
@@ -652,5 +662,20 @@
         android:name="com.example.tripper_android_app.group.GroupMbrListFragment"
         android:label="fragment_group_mbr_list"
         tools:layout="@layout/fragment_group_mbr_list" />
->>>>>>> e9f5b16c56cb9f53f53b179ac92902c80bcd9bd0
+    <fragment
+        android:id="@+id/exploreFragment1"
+        android:name="com.example.tripper_android_app.explore.ExploreFragment1"
+        android:label="fragment_explore1"
+        tools:layout="@layout/fragment_explore1" />
+    <fragment
+        android:id="@+id/exploreFragment2"
+        android:name="com.example.tripper_android_app.explore.ExploreFragment2"
+        android:label="fragment_explore2"
+        tools:layout="@layout/fragment_explore2" />
+    <fragment
+        android:id="@+id/exploreLocationDetailFragment"
+        android:name="com.example.tripper_android_app.explore.ExploreLocationDetailFragment"
+        android:label="fragment_explore_location_detail"
+        tools:layout="@layout/fragment_explore_location_detail" />
+
 </navigation>

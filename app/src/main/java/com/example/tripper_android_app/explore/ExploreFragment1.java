@@ -3,6 +3,15 @@ package com.example.tripper_android_app.explore;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,28 +19,12 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager2.widget.ViewPager2;
-
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.group.PagerAdapter;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -43,9 +36,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ExploreFragment extends Fragment {
 
-
+public class ExploreFragment1 extends Fragment {
     private MainActivity activity ;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -53,12 +45,6 @@ public class ExploreFragment extends Fragment {
     private CommonTask exploreGetAllTask, exploreDeleteTask;
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
-    private TabLayout tabLayout ;
-    private ViewPager2 viewPager ;
-
-
-
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,22 +56,13 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_explore, container, false);
-
-
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_explore1, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("探索");
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.exploreFragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
         SearchView searchView = view.findViewById(R.id.svGroup);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvExplore = view.findViewById(R.id.rvExplore);
@@ -96,28 +73,11 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
+                explores = getExplores();
                 showExplores(explores);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        tabLayout = view.findViewById(R.id.tablayout);
-        viewPager = view.findViewById(R.id.viewPager);
-        viewPager.setAdapter(new ExplorePagerAdapter(activity));
-        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                switch (position){
-                    case 0 :
-                        tab.setText("網誌");
-                        break;
-                    case 1:
-                        tab.setText("景點瀏覽");
-                        break;
-                }
-            }
-        });
-        tabLayoutMediator.attach();
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -145,9 +105,6 @@ public class ExploreFragment extends Fragment {
 
 
     }
-
-
-
     private void showExplores(List<Explore> explores) {
 
         if (explores == null|| explores.isEmpty()) {
@@ -191,34 +148,6 @@ public class ExploreFragment extends Fragment {
         }
         return explores;
     }
-
-
-//    private List<Member> getMemeber() {
-//        List<Member> members = null;
-//        if (Common.networkConnected(activity)) {
-//            //Servlet
-//            String urlM = Common.URL_SERVER + "ExploreServlet";
-//            JsonObject jsonObject1 = new JsonObject();
-//            jsonObject1.addProperty("action", "selectAll");
-//            String jsonOut1 = jsonObject1.toString();
-//            exploreGetAllTask = new CommonTask(urlM, jsonOut1);
-//            try {
-//                String josnIn1 = exploreGetAllTask.execute().get();
-//                Type listType1 = new TypeToken<List<Explore>>() {
-//                }.getType();
-//               members = new Gson().fromJson(josnIn1, listType1);
-//
-//            } catch (Exception e) {
-//                Log.e(TAG, e.toString());
-//            }
-//        } else {
-//            Common.showToast(activity, R.string.textNoNetwork);
-//        }
-//        return members;
-//    }
-
-
-
     private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         //這是serach view 的 List 為了留查詢後的資料
@@ -247,13 +176,13 @@ public class ExploreFragment extends Fragment {
 
         @NonNull
         @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
 
 
             View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
-            return  new MyViewHolder(itemView);
+            return  new ExploreAdapter.MyViewHolder(itemView);
         }
 
 
@@ -287,7 +216,7 @@ public class ExploreFragment extends Fragment {
 
         @SuppressLint("WrongConstant")
         @Override
-        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ExploreAdapter.MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
             String url = Common.URL_SERVER + "BlogServlet";
             String id = explore.getBlogId();
@@ -304,7 +233,16 @@ public class ExploreFragment extends Fragment {
             imageTasks.add(imageTask1);
             holder.tvUseName.setText(explore.getNickName());
             holder.tvBlogName.setText(explore.getTittleName());
-            holder.tvDate.setText(explore.getDateTime());
+            String str = explore.getDateTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = format.parse(str);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String date1 = format.format(date);
+            holder.tvDate.setText("網誌建立日期：" + date1);
             holder.tvThumbs.setText("203個讚");
             holder.ivThumbs.setImageResource(R.drawable.icnthumbs);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -346,7 +284,5 @@ public class ExploreFragment extends Fragment {
             exploreDeleteTask = null;
         }
     }
+
 }
-
-
-

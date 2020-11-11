@@ -1,4 +1,4 @@
-package com.example.tripper_android_app.location;
+package com.example.tripper_android_app.explore;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -18,10 +18,12 @@ import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.Common;
 
-public class LocationDetailFragment extends Fragment {
+
+public class ExploreLocationDetailFragment extends Fragment {
     private static final String TAG = "LocationDetailFragment";
     private MainActivity activity;
     private Location location;
@@ -30,7 +32,7 @@ public class LocationDetailFragment extends Fragment {
     private ImageButton ibBack;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         setHasOptionsMenu(true);
@@ -39,7 +41,8 @@ public class LocationDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_location_detail, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_explore_location_detail, container, false);
     }
 
     @Override
@@ -68,6 +71,7 @@ public class LocationDetailFragment extends Fragment {
                         .popBackStack();
             }
         });
+
     }
 
     private void showLocation() {

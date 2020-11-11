@@ -124,4 +124,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSpotName" />
 
+    <TextView
+        android:id="@+id/btStart"
+        android:layout_width="42dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

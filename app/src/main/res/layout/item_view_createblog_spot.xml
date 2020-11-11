@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/ibInsertPic"
+            android:id="@+id/ibUpdatePic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
@@ -98,7 +98,7 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/ivPoint"
-            app:layout_constraintTop_toBottomOf="@+id/ibInsertPic">
+            app:layout_constraintTop_toBottomOf="@+id/ibUpdatePic">
 
             <ImageView
                 android:id="@+id/ivSpot1"

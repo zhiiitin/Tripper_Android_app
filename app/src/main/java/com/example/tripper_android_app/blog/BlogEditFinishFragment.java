@@ -197,7 +197,7 @@ public class BlogEditFinishFragment extends Fragment {
                         if (count >= 1) {
                             Log.e(TAG, "Blog insert sucessful");
                             Common.showToast(activity, "修改成功");
-                            Navigation.findNavController(v).navigate(R.id.action_createBlogFinishFragment_to_blog_HomePage);
+                            Navigation.findNavController(v).navigate(R.id.action_blogEditFinishFragment_to_blog_HomePage);
                         } else {
                             Common.showToast(activity, "修改失敗");
                         }
