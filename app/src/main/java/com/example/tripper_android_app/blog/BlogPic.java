@@ -15,7 +15,7 @@ public class BlogPic implements Serializable {
     }
 
 
-    public BlogPic(String pic1, String pic2, String pic3, String pic4) {
+    public BlogPic(String pic1, String pic2, String pic3, String pic4,String blogId) {
         this.pic1 = pic1;
         this.pic2 = pic2;
         this.pic3 = pic3;

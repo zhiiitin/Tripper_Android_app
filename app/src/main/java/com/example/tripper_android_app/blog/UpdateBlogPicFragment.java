@@ -41,31 +41,30 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.blog.BlogPic;
+import com.example.tripper_android_app.blog.CreateBlogPicFragment;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static androidx.navigation.Navigation.findNavController;
 import static com.example.tripper_android_app.util.Common.showToast;
 
 
-public class CreateBlogPicFragment extends Fragment {
-    private static final String TAG = "TAG_C_BlogPicFragment";
+public class UpdateBlogPicFragment extends Fragment {
+    private static final String TAG = "TAG_U_BlogPicFragment";
     private RecyclerView rvPhoto;
     private MainActivity activity;
-    private ImageView ivPoint;
+    private ImageView ivPoint ;
     private CircleImageView ivnopic ;
     private ImageButton ibAdd;
     private TextView tvSpotName, tvnopic, tvTouch, tvUpdate;
@@ -76,9 +75,9 @@ public class CreateBlogPicFragment extends Fragment {
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri;
     private byte[] photo;
-    private List<Bitmap> bitmapList = new ArrayList<>();
+    private List<Bitmap> bitmapList = null;
     private String blogID, locId;
-    private BlogPic blogPic = new BlogPic();
+    private BlogPic blogPic = null ;
 
 
     @Override
@@ -129,21 +128,49 @@ public class CreateBlogPicFragment extends Fragment {
             }
         });
 
-
+        blogPic = new BlogPic();
 //接收前頁bundle
         final Bundle bundle = getArguments();
         String spotName = (String) bundle.get("spotName");
         blogID = (String) bundle.get("blogID");
         locId = (String) bundle.get("locId");
         tvSpotName.setText(spotName);
-        blogPic.setLocId(locId);
-        blogPic.setBlogId(blogID);
+        System.out.println(locId);
+        blogPic = (BlogPic) bundle.getSerializable("blogPic"+locId);
+        Log.d("$$$$$$$$$$$$$$$$$$$$$$$$$$","blogPic"+locId);
+
+        bitmapList = new ArrayList<>() ;
 
 //RecyclerView
         rvPhoto = view.findViewById(R.id.rvPhoto);
         rvPhoto.setLayoutManager(new GridLayoutManager(activity, 2));
         rvPhoto.setAdapter(new ImgAdpter(activity, bitmapList));
 
+        if(blogPic != null) {
+            rvPhoto.setVisibility(View.VISIBLE);
+            tvnopic.setVisibility(View.GONE);
+            ivnopic.setVisibility(View.GONE);
+            blogPic.setBlogId(blogID);
+            blogPic.setLocId(locId);
+        }
+
+        if(blogPic.getPic1() != null){
+            bitmapList.add(convertStringToIcon(blogPic.getPic1()));
+        }if(blogPic.getPic2() != null){
+            bitmapList.add(convertStringToIcon(blogPic.getPic2()));
+        }if(blogPic.getPic3() != null){
+            bitmapList.add(convertStringToIcon(blogPic.getPic3()));
+        }if(blogPic.getPic4() != null){
+            bitmapList.add(convertStringToIcon(blogPic.getPic4()));
+        }
+        if(bitmapList.size() == 4){
+            ibAdd.setVisibility(View.GONE);
+            tvTouch.setVisibility(View.GONE);
+        }
+
+        if(blogPic.getPic1()!= null){
+            showPhotos(bitmapList);
+        }
 
         ibUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +178,10 @@ public class CreateBlogPicFragment extends Fragment {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        blogPic.setPic1(null);
+                        blogPic.setPic2(null);
+                        blogPic.setPic3(null);
+                        blogPic.setPic4(null);
                         for(int i = 0 ; i < bitmapList.size() ; i++){
                             if(i == 0) {
                                 String pic1 = convertIconToString(bitmapList.get(i));
@@ -180,7 +211,7 @@ public class CreateBlogPicFragment extends Fragment {
                 if (Common.networkConnected(activity)) {
                     String url = Common.URL_SERVER + "BlogServlet";
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "imageUpdate");
+                    jsonObject.addProperty("action", "updateImage");
                     jsonObject.addProperty("blogPic", new Gson().toJson(blogPic));
                     int count = 0;
                     try {                               //呼叫execute()執行doInBackGround
@@ -310,6 +341,18 @@ public class CreateBlogPicFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+//
+//            if (holder instanceof PickViewHolder) {
+//
+//                PickViewHolder pickViewHolder = (PickViewHolder) holder; //要強轉！！
+//                pickViewHolder.ivArticleImagePick.setImageResource(R.drawable.ic_imageinsert);
+//                pickViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                       showTypeDialog();
+//                    }
+//                });
+
 
             MyViewHolder myViewHolder = (MyViewHolder) holder;
             // position -1 > 因為每增加一筆資料，onBindViewHolder的position會自動加1，(0被PickViewHolder綁住)
@@ -320,9 +363,13 @@ public class CreateBlogPicFragment extends Fragment {
             myViewHolder.ibDeletePic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    imgList.remove(position);
+                    bitmapList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position,imgList.size());
+                    if(bitmapList.size() < 4){
+                        ibAdd.setVisibility(View.VISIBLE);
+                        tvTouch.setVisibility(View.VISIBLE);
+                    }
                 }
             });
 
@@ -338,7 +385,7 @@ public class CreateBlogPicFragment extends Fragment {
 
                         Glide.with(activity).load(bitmapPosition).into(ivPhoto);
                         //將白色部分設為透明
-                        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.background_dark);
                         alertDialog.setCancelable(true);
                         alertDialog.show();
 
@@ -473,10 +520,9 @@ public class CreateBlogPicFragment extends Fragment {
 
     }
 
-
     private void showPhotos(List<Bitmap> PhotoList) {
         if (PhotoList == null || PhotoList.isEmpty()) {
-            showToast(activity, "搜尋不到行程");
+
         }
         ImgAdpter photoAdapter = (ImgAdpter) rvPhoto.getAdapter();
         if (photoAdapter == null) {
@@ -494,5 +540,26 @@ public class CreateBlogPicFragment extends Fragment {
         byte[] appicon = baos.toByteArray();// 轉為byte陣列
         return Base64.encodeToString(appicon, Base64.DEFAULT);
 
+    }
+
+    public static Bitmap convertStringToIcon(String st)
+    {
+        // OutputStream out;
+        Bitmap bitmap = null;
+        try
+        {
+            // out = new FileOutputStream("/sdcard/aa.jpg");
+            byte[] bitmapArray;
+            bitmapArray = Base64.decode(st, Base64.DEFAULT);
+            bitmap =
+                    BitmapFactory.decodeByteArray(bitmapArray, 0,
+                            bitmapArray.length);
+            // bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            return bitmap;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 }

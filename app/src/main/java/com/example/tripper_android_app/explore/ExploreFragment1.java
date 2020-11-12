@@ -38,10 +38,10 @@ import java.util.List;
 
 
 public class ExploreFragment1 extends Fragment {
-    private MainActivity activity ;
+    private MainActivity activity;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView rvExplore,rvLocation;
+    private RecyclerView rvExplore, rvLocation;
     private CommonTask exploreGetAllTask, exploreDeleteTask;
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
@@ -49,7 +49,7 @@ public class ExploreFragment1 extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity= (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
         imageTasks = new ArrayList<>();
     }
 
@@ -92,7 +92,7 @@ public class ExploreFragment1 extends Fragment {
                     List<Explore> searchExplores = new ArrayList<>();
                     // 搜尋原始資料內有無包含關鍵字(不區別大小寫)
                     for (Explore explore : explores) {
-                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase())|| explore.getNickName().toUpperCase().contains(newText.toUpperCase())) {
+                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase()) || explore.getNickName().toUpperCase().contains(newText.toUpperCase())) {
 
                             searchExplores.add(explore);
                         }
@@ -105,9 +105,10 @@ public class ExploreFragment1 extends Fragment {
 
 
     }
+
     private void showExplores(List<Explore> explores) {
 
-        if (explores == null|| explores.isEmpty()) {
+        if (explores == null || explores.isEmpty()) {
             Common.showToast(activity, R.string.textNoSpotsFound);
 
         }
@@ -148,11 +149,11 @@ public class ExploreFragment1 extends Fragment {
         }
         return explores;
     }
+
     private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         //這是serach view 的 List 為了留查詢後的資料
         private List<Explore> explores;
-
 
 
         private int imageSize;
@@ -179,12 +180,9 @@ public class ExploreFragment1 extends Fragment {
         public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-
-
-            View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
-            return  new ExploreAdapter.MyViewHolder(itemView);
+            View itemView = layoutInflater.inflate(R.layout.item_view_explore, parent, false);
+            return new ExploreAdapter.MyViewHolder(itemView);
         }
-
 
 
         @Override
@@ -193,11 +191,9 @@ public class ExploreFragment1 extends Fragment {
         }
 
 
-
-
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView ivBlogPic, ivUser,ivThumbs;
-            TextView tvUseName, tvBlogName,tvDate,tvThumbs;
+            ImageView ivBlogPic, ivUser, ivThumbs;
+            TextView tvUseName, tvBlogName, tvDate, tvThumbs;
             CircleImageView circleImageView;
 
 
@@ -221,7 +217,7 @@ public class ExploreFragment1 extends Fragment {
             String url = Common.URL_SERVER + "BlogServlet";
             String id = explore.getBlogId();
             String userId = explore.getUserId();
-            ImageTask imageTask = new ImageTask(url,id, imageSize, holder.ivBlogPic);
+            ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
             String icoUrl = Common.URL_SERVER + "MemberServlet";
@@ -234,6 +230,7 @@ public class ExploreFragment1 extends Fragment {
             holder.tvUseName.setText(explore.getNickName());
             holder.tvBlogName.setText(explore.getTittleName());
             String str = explore.getDateTime();
+            System.out.println(str);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
@@ -249,21 +246,22 @@ public class ExploreFragment1 extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putString( "UserId",explore.getUserId());
-                    bundle.putString("BlogId",explore.getBlogId());
-                    bundle.putString("BlogTitle",explore.getTittleName());
-                    bundle.putString("BlogDesc",explore.getBlogDesc());
-                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment,bundle);
+                    bundle.putString("UserId", explore.getUserId());
+                    bundle.putString("BlogId", explore.getBlogId());
+                    bundle.putString("BlogTitle", explore.getTittleName());
+                    bundle.putString("BlogDesc", explore.getBlogDesc());
+                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment, bundle);
 
                 }
-            });;
-
+            });
+            ;
 
 
         }
 
 
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -281,8 +279,6 @@ public class ExploreFragment1 extends Fragment {
 
         if (exploreDeleteTask != null) {
             exploreDeleteTask.cancel(true);
-            exploreDeleteTask = null;
         }
     }
-
 }

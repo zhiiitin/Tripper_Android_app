@@ -42,7 +42,6 @@ import java.util.List;
 
 public class Group1Fragment extends Fragment {
 
-
         private static final String TAG = "TAG_GroupListFragment";
         private SwipeRefreshLayout swipeRefreshLayout;
         private RecyclerView rvGroup;
@@ -51,7 +50,6 @@ public class Group1Fragment extends Fragment {
         private ImageTask groupImageTask;
         private List<Trip_M> groupList;
         private int mbrStatus = 0;
-
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
 package com.example.tripper_android_app.group;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -25,12 +26,14 @@ import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.trip.TripGroup;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -40,14 +43,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class GroupManageApplicationFragment extends Fragment {
     private final static String TAG = "TAG_GroupApplication";
     private MainActivity activity;
     private RecyclerView rvApplication;
     private List<Member> memberList;
-    private String tripId ;
+    private String tripId ,tripName;
     private CommonTask ApplicationMbrTask;
+    SharedPreferences pref = null;
 
 
 
@@ -71,7 +77,11 @@ public class GroupManageApplicationFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null) {
             tripId = bundle.getString("tripId");
+            tripName = bundle.getString("tripName");
         }
+
+        pref = activity.getSharedPreferences(Common.PREF_FILE,
+                MODE_PRIVATE);
 
 //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -205,6 +215,7 @@ public class GroupManageApplicationFragment extends Fragment {
                             applicationListViewHolder.ibAgree.setVisibility(View.GONE);
                             applicationListViewHolder.ibDisagree.setVisibility(View.GONE);
                             applicationListViewHolder.ibHasJoin.setVisibility(View.VISIBLE);
+                            sendAccessMsg(memberId);
                         }
                     } else {
                         Common.showToast(activity, "請檢查網路連線");
@@ -281,5 +292,20 @@ public class GroupManageApplicationFragment extends Fragment {
             ApplicationMbrTask = null;
         }
 
+    }
+//通知該成員已通過申請
+    private void sendAccessMsg(int recId){
+
+        AppMessage message = null;
+        String msgType = Common.GROUP_TYPE ;
+        String memberIdStr = pref.getString("memberId",null);
+        int memberId = Integer.parseInt(memberIdStr);
+        String title =  "揪團通知";
+        String body =  "你已成功加入「" + tripName + "」的揪團！";
+        int stat = 0;
+        int sendId = memberId ;
+        message = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+        SendMessage sendMessage = new SendMessage(activity, message);
+        sendMessage.sendMessage();
     }
 }

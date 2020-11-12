@@ -59,7 +59,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
 
 import static android.content.Context.MODE_PRIVATE;
 

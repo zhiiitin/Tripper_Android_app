@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.tripper_android_app.MainActivity;
+import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.chat.MessageDelegate;
 import com.example.tripper_android_app.notify.NotifyFragment;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -28,12 +29,18 @@ public class FCMService extends FirebaseMessagingService {
     private static final String TAG = "TAG_FCMService";
     private final static int CHAT_TYPE = 1;
     private Context context ;
+    private int recId = 0 ;
 
+
+    // 前景接收
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         String title = "";
         String body = "";
+        System.out.println("### remoteMessage.getMessageId()::"+remoteMessage.getMessageId());
+
         if (notification != null) {
+            System.out.println("notification != null");
             title = notification.getTitle();
             body = notification.getBody();
             MessageDelegate messageDelegate = MessageDelegate.getInstance();
@@ -42,6 +49,7 @@ public class FCMService extends FirebaseMessagingService {
         // 取得自訂資料
         Map<String, String> map = remoteMessage.getData();
         String data = map.get("data");
+
 //                    Intent intentGCM = new Intent(this,
 //                    NotifyFragment.class);
 //            startActivity(intentGCM);
@@ -50,7 +58,8 @@ public class FCMService extends FirebaseMessagingService {
 
 
 
-    private void sendNotification(String title, String body) {
+    private void sendNotification(String title, String body, String data) {
+        System.out.println("#### sendNotification:: " + title + " " + body + " data::" + data);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager == null) {
@@ -67,6 +76,7 @@ public class FCMService extends FirebaseMessagingService {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("message",CHAT_TYPE);
+        intent.putExtra("recId" , recId) ;
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -74,13 +84,15 @@ public class FCMService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Notification notification = new NotificationCompat.Builder(this, channelId)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(android.R.drawable.stat_notify_chat)
-                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),android.R.drawable.stat_notify_chat))
+                .setSmallIcon(R.drawable.trippericon)
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(),R.drawable.trippericon))
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
+                .setFullScreenIntent(pendingIntent,true)
                 .build();
         notificationManager.notify(0, notification);
     }

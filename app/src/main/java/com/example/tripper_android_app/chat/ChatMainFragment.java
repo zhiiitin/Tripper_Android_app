@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,7 +67,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static androidx.navigation.Navigation.findNavController;
 
 public class ChatMainFragment extends Fragment {
-    private String name;
+    private String revieverName;
     private static final String TAG = "TAG_ChatFragment";
     private EditText messageEdit;
     private RecyclerView recyclerView;
@@ -82,7 +83,7 @@ public class ChatMainFragment extends Fragment {
     private MessageDelegate.OnMessageReceiveListener listener;
     private FirebaseUser mUser;
     private FirebaseAuth auth;
-    private int recieverId = 0 ;
+    private Integer recieverId = 0 ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,9 +106,15 @@ public class ChatMainFragment extends Fragment {
 
         mUser = auth.getCurrentUser();
         Bundle bundle = getArguments();
-        recieverId = bundle.getInt("recieverId");
-        String revieverName = bundle.getString("recirverName");
-
+        if (bundle != null) {
+            recieverId = bundle.getInt("recieverId");
+            revieverName  = bundle.getString("recirverName");
+        } else {
+            recieverId = Common.sendId;
+            revieverName = Common.chatSenderName;
+        }
+//
+        Log.d("### Chatfragment :: ", "recieverId : " + recieverId +"\t recieverName : " + revieverName);
         //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(revieverName);

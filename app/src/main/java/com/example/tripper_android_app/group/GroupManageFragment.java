@@ -48,7 +48,7 @@ public class GroupManageFragment extends Fragment {
     private final static String TAG = "TAG_GroupManage";
     private MainActivity activity;
     private SharedPreferences preferences;
-    private String tripId ;
+    private String tripId ,tripName ;
     private TripGroup tripGroup;
     private List<Member> tripGroupMembers;
     private TripGroupMember tripGroupMember;
@@ -92,9 +92,11 @@ public class GroupManageFragment extends Fragment {
         //取得前頁bundle
         Bundle bundle = getArguments();
         tripId = bundle.getString("tripId");
+        tripName = bundle.getString("tripName");
 
 
         bundle2.putString("tripId",tripId);
+        bundle2.putString("tripName",tripName);
 
         rvTripGroupList = view.findViewById(R.id.rvTripGroupList);
         rvTripGroupList.setLayoutManager(new LinearLayoutManager(activity));
