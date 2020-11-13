@@ -30,6 +30,9 @@ import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.Serializable;
+import java.util.List;
+
 
 public class GoalListFragment extends Fragment {
     public static final String TAG = "TAG_GoalListFragment";
@@ -37,9 +40,10 @@ public class GoalListFragment extends Fragment {
     private ImageButton ibHiking, ibMountainBike, ibCar, ibFlight,
             ibRocket, ibPositiveVote, ibTrophy, ibFire, ibHands, dialog_ibDown;
     private ImageView dialog_ivBig;
-    private TextView tvHiking, tvMountainBike, tvCar, tvFlight,
-            tvRocket, tvPositiveVote, tvTrophy, tvFire, tvHands, dialog_tvGoal;
-    private int goalBundle;
+    private TextView tvHiking, tvMountainBike, tvCar, tvFlight, tvRocket,
+            tvPositiveVote, tvTrophy, tvFire, tvHands, dialog_tvGoalName, dialog_tvGoal;
+    private int goalCond1Bundle, goalCond2Bundle, goalCond3Bundle;
+    private List<Goal> goalListBundle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class GoalListFragment extends Fragment {
     }
 
     // 使用AlertDialog建立彈出的成就字卡
-    private void showDialog(int imageId, String articleText) {
+    private void showDialog(int imageId, String nameText, String articleText) {
         final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.show();
         // AlertDialog預設的顯示位置是window的位置
@@ -61,6 +65,9 @@ public class GoalListFragment extends Fragment {
         // 讓成就字卡show出的圖會依照不同的成就去顯示對應成就的圖示
         dialog_ivBig = view.findViewById(R.id.dialog_ivBig);
         dialog_ivBig.setImageResource(imageId);
+        // 讓成就字卡show出的文字會依照不同的成就去顯示對應成就的名稱
+        dialog_tvGoalName = view.findViewById(R.id.dialog_tvGoalName);
+        dialog_tvGoalName.setText(nameText);
         // 讓成就字卡show出的文字會依照不同的成就去顯示對應成就的條件
         dialog_tvGoal = view.findViewById(R.id.dialog_tvGoal);
         dialog_tvGoal.setText(articleText);
@@ -120,8 +127,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_hiking_big,
-                        "只要建立完成" + "1個行程" + "、1個網誌，" +
-                                "\n並參與1個揪團" + "，就可以解鎖該成就哦！");
+                        "旅行初心者",
+                        "只要建立完成" + "1個行程" + "、1篇網誌，\n" +
+                                "\t並參與1個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -130,8 +138,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_hiking_big,
-                        "只要建立完成" + "1個行程" + "、1個網誌，" +
-                                "\n並參與1個揪團" + "，就可以解鎖該成就哦！");
+                        "旅行初心者",
+                        "只要建立完成" + "1個行程" + "、1篇網誌，\n" +
+                                "\t並參與1個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -142,8 +151,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_mountain_bike_big,
-                        "只要建立完成" + "3個行程" + "、3個網誌，" +
-                                "\n並參與3個揪團" + "，就可以解鎖該成就哦！");
+                        "旅遊卡達恰",
+                        "只要建立完成" + "2個行程" + "、2篇網誌，\n" +
+                                "\t並參與2個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -153,8 +163,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_mountain_bike_big,
-                        "只要建立完成" + "3個行程" + "、3個網誌，" +
-                                "\n並參與3個揪團" + "，就可以解鎖該成就哦！");
+                        "旅遊卡達恰",
+                        "只要建立完成" + "2個行程" + "、2篇網誌，\n" +
+                                "\t並參與2個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -165,8 +176,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_car_big,
-                        "只要建立完成" + "5個行程" + "、5個網誌，" +
-                                "\n並參與5個揪團" + "，就可以解鎖該成就哦！");
+                        "旅遊特快車",
+                        "只要建立完成" + "3個行程" + "、3篇網誌，\n" +
+                                "\t並參與3個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -175,8 +187,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_car_big,
-                        "只要建立完成" + "5個行程" + "、5個網誌，" +
-                                "\n並參與5個揪團" + "，就可以解鎖該成就哦！");
+                        "旅遊特快車",
+                        "只要建立完成" + "3個行程" + "、3篇網誌，\n" +
+                                "\t並參與3個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -187,8 +200,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_flight_big,
-                        "只要建立完成" + "7個行程" + "、7個網誌，" +
-                                "\n並參與7個揪團" + "，就可以解鎖該成就哦！");
+                        "空軍一號",
+                        "只要建立完成" + "4個行程" + "、4篇網誌，\n" +
+                                "\t並參與4個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -197,8 +211,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_flight_big,
-                        "只要建立完成" + "7個行程" + "、7個網誌，" +
-                                "\n並參與7個揪團" + "，就可以解鎖該成就哦！");
+                        "空軍一號",
+                        "只要建立完成" + "4個行程" + "、4篇網誌，\n" +
+                                "\t並參與4個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -209,8 +224,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_rocket_big,
-                        "只要建立完成" + "10個行程" + "、10個網誌，" +
-                                "\n並參與10個揪團" + "，就可以解鎖該成就哦！");
+                        "火箭效率",
+                        "只要建立完成" + "5個行程" + "、5篇網誌，\n" +
+                                "\t並參與5個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -219,8 +235,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_rocket_big,
-                        "只要建立完成" + "10個行程" + "、10個網誌，" +
-                                "\n並參與10個揪團" + "，就可以解鎖該成就哦！");
+                        "火箭效率",
+                        "只要建立完成" + "5個行程" + "、5篇網誌，\n" +
+                                "\t並參與5個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -231,8 +248,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_positive_vote_big,
-                        "只要建立完成" + "15個行程" + "、15個網誌，" +
-                                "\n並參與15個揪團" + "，就可以解鎖該成就哦！");
+                        "網誌達人",
+                        "只要建立完成" + "6篇網誌\n" +
+                                "\t就可以解鎖該成就哦！");
             }
         });
 
@@ -241,8 +259,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_positive_vote_big,
-                        "只要建立完成" + "15個行程" + "、15個網誌，" +
-                                "\n並參與15個揪團" + "，就可以解鎖該成就哦！");
+                        "網誌達人",
+                        "只要建立完成" + "6篇網誌\n" +
+                                "\t就可以解鎖該成就哦！");
             }
         });
 
@@ -253,8 +272,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_trophy_big,
-                        "只要建立完成" + "18個行程" + "、18個網誌，" +
-                                "\n並參與18個揪團" + "，就可以解鎖該成就哦！");
+                        "瀏覽點閱王",
+                        "只要建立完成" + "7個行程" + "、7篇網誌，\n" +
+                                "\t並參與7個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -263,8 +283,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_trophy_big,
-                        "只要建立完成" + "18個行程" + "、18個網誌，" +
-                                "\n並參與18個揪團" + "，就可以解鎖該成就哦！");
+                        "瀏覽點閱王",
+                        "只要建立完成" + "7個行程" + "、7篇網誌，\n" +
+                                "\t並參與7個揪團，" + "就可以解鎖該成就哦！");
             }
         });
 
@@ -275,8 +296,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_fire_big,
-                        "只要建立完成" + "19個行程" + "、19個網誌，" +
-                                "\n並參與19個揪團" + "，就可以解鎖該成就哦！");
+                        "超人氣行程",
+                        "只要建立完成" + "10個行程\n" +
+                                "\t就可以解鎖該成就哦！");
             }
         });
 
@@ -285,8 +307,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_fire_big,
-                        "只要建立完成" + "19個行程" + "、19個網誌，" +
-                                "\n並參與19個揪團" + "，就可以解鎖該成就哦！");
+                        "超人氣行程",
+                        "只要建立完成" + "10個行程\n" +
+                                "\t就可以解鎖該成就哦！");
             }
         });
 
@@ -297,8 +320,9 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_hands_big,
-                        "只要建立完成" + "20個行程" + "、20個網誌，" +
-                                "\n並參與20個揪團" + "，就可以解鎖該成就哦！");
+                        "揪團高手",
+                        "只要成功參與" + "10個揪團\n" +
+                                "\t就可以解鎖該成就哦！");
             }
         });
 
@@ -307,45 +331,78 @@ public class GoalListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog(R.drawable.ic_goal_hands_big,
-                        "只要建立完成" + "20個行程" + "、20個網誌，" +
-                                "\n並參與20個揪團" + "，就可以解鎖該成就哦！");
+                        "揪團高手",
+                        "只要成功參與" + "10個揪團\n" +
+                                "\t就可以解鎖該成就哦！");
             }
         });
 
-        /* 依照成就DB的欄位，成就ID的數字與達成的成就個數意義相同(ID剛好等於成就個數)，
-           故將成就ID利用Bundle從"成就主頁"帶到"我的成就"頁面去判斷與顯示成就解鎖的圖示。 */
+        /* 利用Bundle將已建立的行程數、網誌數、揪團數各自分別
+           從"成就主頁"帶到"我的成就"頁面去判斷與顯示成就解鎖的圖示。 */
         Bundle bundle = getArguments();
         if(bundle == null){
             Navigation.findNavController(view).popBackStack();
             return;
         }
-        goalBundle = bundle.getInt("goalId");
-        if (goalBundle >= 1) {
-            ibHiking.setImageResource(R.drawable.ic_goal_hiking);
-        }
-        if (goalBundle >= 2) {
-            ibMountainBike.setImageResource(R.drawable.ic_goal_mountain_bike);
-        }
-        if (goalBundle >= 3) {
-            ibCar.setImageResource(R.drawable.ic_goal_car);
-        }
-        if (goalBundle >= 4) {
-            ibFlight.setImageResource(R.drawable.ic_goal_flight);
-        }
-        if (goalBundle >= 5) {
-            ibRocket.setImageResource(R.drawable.ic_goal_rocket);
-        }
-        if (goalBundle >= 6) {
-            ibPositiveVote.setImageResource(R.drawable.ic_goal_positive_vote);
-        }
-        if (goalBundle >= 7) {
-            ibTrophy.setImageResource(R.drawable.ic_goal_trophy);
-        }
-        if (goalBundle >= 8) {
-            ibFire.setImageResource(R.drawable.ic_goal_fire);
-        }
-        if (goalBundle >= 9) {
-            ibHands.setImageResource(R.drawable.ic_goal_hands);
+        goalCond1Bundle = bundle.getInt("goalCond1");
+        goalCond2Bundle = bundle.getInt("goalCond2");
+        goalCond3Bundle = bundle.getInt("goalCond3");
+        goalListBundle = (List<Goal>) bundle.getSerializable("goalList");
+        for (Goal g : goalListBundle) {
+            if (g.getGoalId() == 1 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibHiking.setImageResource(R.drawable.ic_goal_hiking);
+            }
+            if (g.getGoalId() == 2 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibMountainBike.setImageResource(R.drawable.ic_goal_mountain_bike);
+            }
+            if (g.getGoalId() == 3 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibCar.setImageResource(R.drawable.ic_goal_car);
+            }
+            if (g.getGoalId() == 4 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibFlight.setImageResource(R.drawable.ic_goal_flight);
+            }
+            if (g.getGoalId() == 5 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibRocket.setImageResource(R.drawable.ic_goal_rocket);
+            }
+            if (g.getGoalId() == 6 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibPositiveVote.setImageResource(R.drawable.ic_goal_positive_vote);
+            }
+            if (g.getGoalId() == 7 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibTrophy.setImageResource(R.drawable.ic_goal_trophy);
+            }
+            if (g.getGoalId() == 8 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibFire.setImageResource(R.drawable.ic_goal_fire);
+            }
+            if (g.getGoalId() == 9 &&
+                    (goalCond1Bundle >= g.getGoalCond1()
+                            && goalCond2Bundle >= g.getGoalCond2()
+                            && goalCond3Bundle >= g.getGoalCond3())) {
+                ibHands.setImageResource(R.drawable.ic_goal_hands);
+            }
         }
     }
 
