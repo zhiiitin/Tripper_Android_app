@@ -385,10 +385,9 @@ public class UpdateBlogPicFragment extends Fragment {
 
                         Glide.with(activity).load(bitmapPosition).into(ivPhoto);
                         //將白色部分設為透明
-                        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.background_dark);
+                        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                         alertDialog.setCancelable(true);
                         alertDialog.show();
-
                     }
                 }
             });

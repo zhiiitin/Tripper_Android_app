@@ -204,6 +204,8 @@ public class Group1Fragment extends Fragment {
                     myViewHolder.ivFill.setVisibility(View.VISIBLE);
                     //狀態等於1，表示成員已滿
                     mbrStatus = 1 ;
+                }else{
+                    mbrStatus = 0 ;
                 }
 
 
