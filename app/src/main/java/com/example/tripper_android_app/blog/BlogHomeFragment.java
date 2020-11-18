@@ -208,6 +208,8 @@ public class BlogHomeFragment extends Fragment {
                         bundle.putString("BlogId",blogFinish.getTrip_Id());
                         bundle.putString("BlogTitle",blogFinish.getBlog_title());
                         bundle.putString("BlogDesc",blogFinish.getBlog_Info());
+                        bundle.putString("UserName",blogFinish.getStartTime());
+
                         Navigation.findNavController(v).navigate(R.id.action_blog_HomePage_to_blogMainFragment,bundle);
                     }
                 });

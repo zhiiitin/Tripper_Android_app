@@ -24,7 +24,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
-import com.example.tripper_android_app.group.PagerAdapter;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
@@ -37,10 +36,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ExploreFragment extends Fragment {
@@ -276,7 +272,7 @@ public class ExploreFragment extends Fragment {
                 super(itemView);
                 ivBlogPic = itemView.findViewById(R.id.ivBlog);
                 tvBlogName = itemView.findViewById(R.id.tvTitle_Blog);
-                tvUseName = itemView.findViewById(R.id.tvUserName);
+                tvUseName = itemView.findViewById(R.id.tvAccount);
                 ivUser = itemView.findViewById(R.id.ivUser);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvThumbs = itemView.findViewById(R.id.tvThumbs);

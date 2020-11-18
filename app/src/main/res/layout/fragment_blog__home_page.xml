@@ -80,7 +80,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@+id/tvAccount"
             app:menu="@menu/tab_navi_menu">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>
@@ -96,7 +96,7 @@
             app:srcCompat="@drawable/greyscale" />
 
         <TextView
-            android:id="@+id/tvUserName"
+            android:id="@+id/tvAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"

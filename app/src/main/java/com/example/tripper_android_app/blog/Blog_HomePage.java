@@ -114,7 +114,7 @@ public class Blog_HomePage extends Fragment {
         itemMenu2.getItem(1).setChecked(true);
 
         ivUserPic = view.findViewById(R.id.ivUserPic);
-        tvUserName = view.findViewById(R.id.tvUserName);
+        tvUserName = view.findViewById(R.id.tvAccount);
         ivBGPic = view.findViewById(R.id.ivBGPic);
 //        ivUserPic.setOnClickListener(new View.OnClickListener() {
 //            @Override

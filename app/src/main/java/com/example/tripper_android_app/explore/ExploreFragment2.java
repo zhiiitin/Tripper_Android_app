@@ -10,7 +10,9 @@ import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
@@ -72,20 +74,21 @@ public class ExploreFragment2 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvAllSpot = view.findViewById(R.id.rvAllSpot);
         rvHot = view.findViewById(R.id.rvHot);
-        LinearLayoutManager ms = new LinearLayoutManager(activity);
-        ms.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvAllSpot.setLayoutManager(ms);
-        LinearLayoutManager ms1 = new LinearLayoutManager(activity);
-        ms1.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvHot.setLayoutManager(ms1);
+        rvHot.setLayoutManager( new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL));
+        rvAllSpot.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL));
         tvHot = view.findViewById(R.id.tvHot);
+        rvAllSpot.setOnFlingListener(null);
+        rvHot.setOnFlingListener(null);
         ivText = view.findViewById(R.id.ivText);
         // 圖片另外處理，此部份是未帶圖片
         locations = getLocations();
         showLocations(locations);
         locations2 = getHotLocations();
         showHotLocations(locations2);
-
+        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+        pagerSnapHelper.attachToRecyclerView(rvAllSpot);
+        PagerSnapHelper pagerSnapHelper1 = new PagerSnapHelper();
+        pagerSnapHelper1.attachToRecyclerView(rvHot);
 
         SearchView searchView =  view.findViewById(R.id.svGroup);
         // searchView監聽器
@@ -128,6 +131,7 @@ public class ExploreFragment2 extends Fragment {
 
 
     }
+
     @SuppressLint("LongLogTag")
     private List<Location> getHotLocations() {
         List<Location> locations = null;

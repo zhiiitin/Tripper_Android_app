@@ -11,6 +11,7 @@ public class BlogFinish implements Serializable {
     private String memberId ;
     private String startDate;
     private String startTime;
+    private String nickName;
     private int status ;
 
     public BlogFinish(String blog_title, String blog_desc) {
@@ -19,11 +20,20 @@ public class BlogFinish implements Serializable {
     }
 
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId ) {
         this.trip_Id = trip_Id;
         this.blog_title = blog_title;
         this.blog_Info = blog_Info;
         this.memberId = memberId;
+
     }
 
 

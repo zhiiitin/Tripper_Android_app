@@ -530,25 +530,48 @@ public class BlogEditFragment extends Fragment {
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
 
-                        String url = Common.URL_SERVER + "BlogServlet";
-                        Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("action", "getUpdateNote");
-                        jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
-                        InsertNoteTask = new CommonTask(url, jsonObject.toString());
-                        int count = 0;
-                        try {
-                            String jsonIn = InsertNoteTask.execute().get();
-                            count = Integer.parseInt(jsonIn);
-                            if (count == 1) {
-                                Log.e(TAG, "Note saved sucessful");
-                                Common.showToast(activity, "更改成功！");
-                                viewHolderSpot.etBlog.setText(blogNote);
-                            } else {
-                                Common.showToast(activity, "請檢查網路");
+                        if (blog_spot.getLoc_Note() != null) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getUpdateNote");
+                            jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
                             }
-                        } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+                        }else{
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "insertBlogNote");
+                            jsonObject.addProperty("blog_note", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
                         }
                     }
                 });
@@ -643,7 +666,29 @@ public class BlogEditFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        if (Common.networkConnected(activity)) {
+
+                        if (blog_spot.getLoc_Note() != null) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getUpdateNote");
+                            jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }else{
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
                             JsonObject jsonObject = new JsonObject();
@@ -656,9 +701,8 @@ public class BlogEditFragment extends Fragment {
                                 count = Integer.parseInt(jsonIn);
                                 if (count == 1) {
                                     Log.e(TAG, "Note saved sucessful");
-                                    Common.showToast(activity, "儲存成功！");
+                                    Common.showToast(activity, "更改成功！");
                                     viewHolderSpot.etBlog.setText(blogNote);
-
                                 } else {
                                     Common.showToast(activity, "請檢查網路");
                                 }
@@ -763,7 +807,28 @@ public class BlogEditFragment extends Fragment {
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
 
-                        if (Common.networkConnected(activity)) {
+                        if (blog_spot.getLoc_Note() != null) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getUpdateNote");
+                            jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }else{
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
                             JsonObject jsonObject = new JsonObject();
@@ -776,9 +841,8 @@ public class BlogEditFragment extends Fragment {
                                 count = Integer.parseInt(jsonIn);
                                 if (count == 1) {
                                     Log.e(TAG, "Note saved sucessful");
-                                    Common.showToast(activity, "儲存成功！");
+                                    Common.showToast(activity, "更改成功！");
                                     viewHolderSpot.etBlog.setText(blogNote);
-
                                 } else {
                                     Common.showToast(activity, "請檢查網路");
                                 }
@@ -884,7 +948,29 @@ public class BlogEditFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        if (Common.networkConnected(activity)) {
+
+                        if (blog_spot.getLoc_Note() != null) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getUpdateNote");
+                            jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }else{
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
                             JsonObject jsonObject = new JsonObject();
@@ -897,9 +983,8 @@ public class BlogEditFragment extends Fragment {
                                 count = Integer.parseInt(jsonIn);
                                 if (count == 1) {
                                     Log.e(TAG, "Note saved sucessful");
-                                    Common.showToast(activity, "儲存成功！");
+                                    Common.showToast(activity, "更改成功！");
                                     viewHolderSpot.etBlog.setText(blogNote);
-
                                 } else {
                                     Common.showToast(activity, "請檢查網路");
                                 }
@@ -1005,7 +1090,29 @@ public class BlogEditFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        if (Common.networkConnected(activity)) {
+
+                        if (blog_spot.getLoc_Note() != null) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getUpdateNote");
+                            jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        }else{
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
                             JsonObject jsonObject = new JsonObject();
@@ -1018,9 +1125,8 @@ public class BlogEditFragment extends Fragment {
                                 count = Integer.parseInt(jsonIn);
                                 if (count == 1) {
                                     Log.e(TAG, "Note saved sucessful");
-                                    Common.showToast(activity, "儲存成功！");
+                                    Common.showToast(activity, "更改成功！");
                                     viewHolderSpot.etBlog.setText(blogNote);
-
                                 } else {
                                     Common.showToast(activity, "請檢查網路");
                                 }
@@ -1083,33 +1189,36 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if(blogPic != null) {
+                if (blogPic != null) {
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
-                    }else if(blogPic.getPic1() == null) {
+                    } else if (blogPic.getPic1() == null) {
                         viewHolderSpot.ibInsertPic.setVisibility(View.VISIBLE);
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
-                    }if (blogPic.getPic2() != null) {
+                    }
+                    if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
-                    }else if(blogPic.getPic1() == null) {
+                    } else if (blogPic.getPic1() == null) {
                         viewHolderSpot.ibInsertPic.setVisibility(View.VISIBLE);
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
-                    }if (blogPic.getPic3() != null) {
+                    }
+                    if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
-                    }else if(blogPic.getPic1() == null) {
+                    } else if (blogPic.getPic1() == null) {
                         viewHolderSpot.ibInsertPic.setVisibility(View.VISIBLE);
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
-                    }if (blogPic.getPic4() != null) {
+                    }
+                    if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
-                    }else if(blogPic.getPic1() == null) {
+                    } else if (blogPic.getPic1() == null) {
                         viewHolderSpot.ibInsertPic.setVisibility(View.VISIBLE);
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
@@ -1127,7 +1236,29 @@ public class BlogEditFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String blogNote = viewHolderSpot.etBlog.getText().toString().trim();
-                        if (Common.networkConnected(activity)) {
+
+                        if (blog_spot.getLoc_Note() != null) {
+                            String url = Common.URL_SERVER + "BlogServlet";
+                            Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "getUpdateNote");
+                            jsonObject.addProperty("spotNoteUpadte", new Gson().toJson(blog_note));
+                            InsertNoteTask = new CommonTask(url, jsonObject.toString());
+                            int count = 0;
+                            try {
+                                String jsonIn = InsertNoteTask.execute().get();
+                                count = Integer.parseInt(jsonIn);
+                                if (count == 1) {
+                                    Log.e(TAG, "Note saved sucessful");
+                                    Common.showToast(activity, "更改成功！");
+                                    viewHolderSpot.etBlog.setText(blogNote);
+                                } else {
+                                    Common.showToast(activity, "請檢查網路");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                        } else {
                             String url = Common.URL_SERVER + "BlogServlet";
                             Blog_Note blog_note = new Blog_Note(blog_spot.getLoc_Id(), blog_spot.getTrip_Id(), blogNote);
                             JsonObject jsonObject = new JsonObject();
@@ -1140,9 +1271,8 @@ public class BlogEditFragment extends Fragment {
                                 count = Integer.parseInt(jsonIn);
                                 if (count == 1) {
                                     Log.e(TAG, "Note saved sucessful");
-                                    Common.showToast(activity, "儲存成功！");
+                                    Common.showToast(activity, "更改成功！");
                                     viewHolderSpot.etBlog.setText(blogNote);
-
                                 } else {
                                     Common.showToast(activity, "請檢查網路");
                                 }

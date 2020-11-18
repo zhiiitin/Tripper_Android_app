@@ -27,8 +27,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHot"
-            android:layout_width="389dp"
-            android:layout_height="254dp"
+            android:layout_width="match_parent"
+            android:layout_height="255dp"
             android:layout_marginEnd="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +86,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAllSpot"
-            android:layout_width="399dp"
+            android:layout_width="match_parent"
             android:layout_height="281dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="1dp"

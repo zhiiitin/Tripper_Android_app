@@ -4,19 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -54,34 +49,32 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
-
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class BlogMainFragment extends Fragment {
 
-    private ImageView ivBackground,ivThumbs,ivTripList,btSend;
+    private ImageView ivBackground, ivDetailGoodIcon, ivTripList, btSend;
     private MainActivity activity;
-    private TextView tvDescription, textDescription,detail_page_do_comment,txLike;
+    private TextView tvDescription, textDescription, detail_page_do_comment, tvDetailGoodCount, tvUser, tvTitle;
+    private CircleImageView ivUser;
+    private Article article;
     private static final String TAG = "TAG_Blog_Main_Fragment";
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView rvBlog,rvComment;
-    private CommonTask blogGetAllTask, blogDeleteTask,getImageTask,commentFinishTask;
+    private RecyclerView rvBlog, rvComment;
+    private CommonTask blogGetAllTask, blogDeleteTask, getImageTask, commentFinishTask, articleDeleteTask,articleGetAllTask;
     private List<ImageTask> imageTasks;
     private List<BlogD> blogList;
-    private List<Blog_Comment> commentList ;
+    private List<Blog_Comment> commentList;
     private SharedPreferences preferences;
     private CommentAdapter commentAdapter;
-    private BlogPic blogPic = null ;
-    private HorizontalScrollView horizontalScrollView;
-    private Blog_Comment blog_comment;
     private Dialog mDialog;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private BlogPic blogPic =null;
+    private HorizontalScrollView horizontalScrollView;
+
 
 
     @Override
@@ -89,8 +82,7 @@ public class BlogMainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         activity = (MainActivity) getActivity();
-        imageTasks =new ArrayList<>();
-
+        imageTasks = new ArrayList<>();
 
 
     }
@@ -108,36 +100,47 @@ public class BlogMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         final Bundle bundle = getArguments();
-        String blogTitle  = bundle.getString("BlogTitle");
+        String blogTitle = bundle.getString("BlogTitle");
         String blogDesc = bundle.getString("BlogDesc");
-        toolbar.setTitle(blogTitle);
+        String userId = bundle.getString("UserId");
+        String userName = bundle.getString("UserName");
+        toolbar.setTitle("");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
+        tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setText(" " + blogTitle);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ivBackground = view.findViewById(R.id.ivBackground);
-        ivBackground.setScaleType(ImageView.ScaleType.FIT_XY);
+//        ivBackground = view.findViewById(R.id.ivBackground);
+//        ivBackground.setScaleType(ImageView.ScaleType.FIT_XY);
         tvDescription = view.findViewById(R.id.tvDescription);
         textDescription = view.findViewById(R.id.textDescription);
-        ivThumbs = view.findViewById(R.id.ivThumbs);
+        ivDetailGoodIcon = view.findViewById(R.id.ivThumbs);
         ivTripList = view.findViewById(R.id.ivTripList);
-        ivThumbs.setImageResource(R.drawable.iconthumbss);
+
         ivTripList.setImageResource(R.drawable.icontriplist);
         tvDescription.setText("網誌描述：");
-        textDescription.setText(" "+" "+blogDesc);
+        textDescription.setText(" " + " " + blogDesc);
         rvBlog = view.findViewById(R.id.rvBlog);
         detail_page_do_comment = view.findViewById(R.id.detail_page_do_comment);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         rvBlog.setLayoutManager(new LinearLayoutManager(activity));
         blogList = getBlogs();
         showBlogs(blogList);
-        String url = Common.URL_SERVER+"BlogServlet";
-        String userId = bundle.getString("BlogId");
+        tvUser = view.findViewById(R.id.tvAccount);
+        ivUser = view.findViewById(R.id.ivUser);
+        String url = Common.URL_SERVER + "BlogServlet";
+        String blogId = bundle.getString("BlogId");
         int imageSize = 500;
-        ImageTask imageTask = new ImageTask(url,userId,imageSize,ivBackground);
+        ImageTask imageTask = new ImageTask(url, blogId, imageSize, ivBackground);
         imageTask.execute();
         imageTasks.add(imageTask);
-        txLike = view.findViewById(R.id.txLikeIcon);
-
+        String icoUrl = Common.URL_SERVER + "MemberServlet";
+        //從MEMBER資料表 娶回來的資料無法秀在上面
+        ImageTask imageTask1 = new ImageTask(icoUrl, userId, imageSize, ivUser);
+        imageTask1.execute();
+        imageTasks.add(imageTask1);
+        tvDetailGoodCount = view.findViewById(R.id.txLikeIcon);
+        tvUser.setText(userName);
         ivTripList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,28 +148,188 @@ public class BlogMainFragment extends Fragment {
             }
         });
 
-        ivThumbs.setOnClickListener(new View.OnClickListener() {
+        //向server端取得文章資料
+        preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        String userId1 = preferences.getString("memberId",null);
+        String url1 = Common.URL_SERVER + "ArticleServlet";
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("action", "findById");
+        jsonObject.addProperty("articleId", blogId); //articleIdBox > 前頁點擊List取得的文章ID
+        //登入狀態
+        jsonObject.addProperty("loginUserId", userId1);
+        String jsonOut = jsonObject.toString();
+        articleGetAllTask = new CommonTask(url1, jsonOut);
+        try {
+            String jsonIn = articleGetAllTask.execute().get();
+            Type listType = new TypeToken<Article>() {
+            }.getType();
+            article = new Gson().fromJson(jsonIn, listType);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+
+
+
+        //設定點讚功能，1.會員登入判斷
+        //2.先判斷使用者是否已點讚
+        ImageView goodIcon = ivDetailGoodIcon;
+        //否則就判斷是否有點讚
+
+
+
+    //3.設定監聽器
+        if (userId.equals(null)) {    //0 > 訪客，一律設為沒點讚
+            article.setArticleGoodStatus(false);
+            goodIcon.setColorFilter(Color.parseColor("#424242"));
+        }else{
+                if (article.isArticleGoodStatus()) {
+                    goodIcon.setColorFilter(Color.RED);
+                    article.setArticleGoodStatus(true);
+                } else {
+                    goodIcon.setColorFilter(Color.parseColor("#424242"));
+                    article.setArticleGoodStatus(false);
+                }
+            }
+        tvDetailGoodCount.setText((article.getArticleGoodCount()+""));
+        ivDetailGoodIcon.setImageResource(R.drawable.iconthumbss);
+        ivDetailGoodIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivThumbs.setColorFilter(Color.RED);
-                txLike.setText("1");
 
+//                    if (Common.networkConnected(activity)) {
+//                        preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+//                        String userId = preferences.getString("memberId",null);
+//                        String insertGoodUrl = Common.URL_SERVER + "ArticleServlet";
+//                        JsonObject jsonObject = new JsonObject();
+//                        jsonObject.addProperty("action", "articleGoodInsert");
+//                        jsonObject.addProperty("articleId", blogId);
+//                        jsonObject.addProperty("loginUserId", userId);
+//                        int count = 0;
+//                        try {
+//                            String result = new CommonTask(insertGoodUrl, jsonObject.toString()).execute().get();
+//                            count = Integer.parseInt(result);
+//                        } catch (Exception e) {
+//                            Log.e(TAG, e.toString());
+//                        }
+//                        if (count == 0) {
+//                            Common.showToast(activity, "您已點過讚");
+//                        } else {
+//
+//                            tvDetailGoodCount.setText("1");
+//                            goodIcon.setColorFilter(Color.parseColor("#1877F2"));
+//
+//                        }
+//                    } else {
+//                        Common.showToast(activity, "取得連線失敗");
 
-
+//                } else if( 0 == 0){
+//                    if (Common.networkConnected(activity)) {
+//                        String deleteGoodUrl = Common.URL_SERVER + "ArticleServlet";
+//                        JsonObject jsonObject = new JsonObject();
+//                        jsonObject.addProperty("action", "articleGoodDelete");
+//                        jsonObject.addProperty("articleId", articleIdBox);
+//                        jsonObject.addProperty("userId", userId);
+//                        int count = 0;
+//                        try {
+//                            articleDeleteTask = new CommonTask(deleteGoodUrl, jsonObject.toString());
+//                            String result = articleDeleteTask.execute().get();
+//                            count = Integer.parseInt(result);
+//                        } catch (Exception e) {
+//                            Log.e(TAG, e.toString());
+//                        }
+//                        if (count == 0) { //如果選擇的資料已經沒東西
+//                            Common.showToast(activity, "取消失敗");
+//                        } else {
+//                            article.setArticleGoodCount(article.getArticleGoodCount() - 1);
+//                            tvDetailGoodCount.setText(((article.getArticleGoodCount()) + ""));
+//                            goodIcon.setColorFilter(Color.parseColor("#424242"));
+//                            article.setArticleGoodStatus(false);
+//                        }
+//                    } else {
+//                        Common.showToast(activity, "取消讚連線失敗");
+//                    }
+//                }
+//            }
+//        });
+                if (!article.isArticleGoodStatus()) {
+                    if (Common.networkConnected(activity)) {
+                        preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                        String userId = preferences.getString("memberId",null);
+                        String insertGoodUrl = Common.URL_SERVER + "ArticleServlet";
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "articleGoodInsert");
+                        jsonObject.addProperty("articleId", blogId);
+                        jsonObject.addProperty("loginUserId", userId);
+                        int count = 0;
+                        try {
+                            String result = new CommonTask(insertGoodUrl, jsonObject.toString()).execute().get();
+                            count = Integer.parseInt(result);
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+                        if (count == 0) {
+                            Common.showToast(activity, "點讚失敗");
+                        } else {
+                            article.setArticleGoodCount(article.getArticleGoodCount() + 1);
+                            tvDetailGoodCount.setText((article.getArticleGoodCount() + ""));
+                            goodIcon.setColorFilter(Color.RED);
+                            article.setArticleGoodStatus(true);
+                        }
+                    } else {
+                        Common.showToast(activity, "取得連線失敗");
+                    }
+                } else {
+                    if (Common.networkConnected(activity)) {
+                        preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                        String userId = preferences.getString("memberId",null);
+                        String deleteGoodUrl = Common.URL_SERVER + "ArticleServlet";
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "articleGoodDelete");
+                        jsonObject.addProperty("articleId", blogId);
+                        jsonObject.addProperty("userId", userId);
+                        int count = 0;
+                        try {
+                            articleDeleteTask = new CommonTask(deleteGoodUrl, jsonObject.toString());
+                            String result = articleDeleteTask.execute().get();
+                            count = Integer.parseInt(result);
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+                        if (count == 0) { //如果選擇的資料已經沒東西
+                            Common.showToast(activity, "取消失敗");
+                        } else {
+                            article.setArticleGoodCount(article.getArticleGoodCount() - 1);
+                            tvDetailGoodCount.setText(((article.getArticleGoodCount()) + ""));
+                            goodIcon.setColorFilter(Color.parseColor("#424242"));
+                            article.setArticleGoodStatus(false);
+                        }
+                    } else {
+                        Common.showToast(activity, "取消讚連線失敗");
+                    }
+                }
             }
         });
 
-        detail_page_do_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showDialog();
-            }
-        });
 
 
 
+
+        detail_page_do_comment.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+
+        showDialog();
     }
+    });
+
+}
+
+
+
+
+
 
     private void showDialog() {
 
@@ -407,7 +570,7 @@ public class BlogMainFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull BlogAdapter.MyViewHolder holder, int position) {
             final BlogD blogD = blogList.get(position);
-            holder.tvLocation.setText(blogD.getLocationName());
+            holder.tvLocation.setText(""+ blogD.getLocationName());
             String str = blogD.getS_Date();
             SimpleDateFormat format = new SimpleDateFormat("MM-dd");
             Date date = null;
@@ -417,7 +580,12 @@ public class BlogMainFragment extends Fragment {
                 e.printStackTrace();
             }
             String date1 = format.format(date);
-            holder.tvBlogDescription.setText(blogD.getBlogNote());
+            if(blogD.getBlogNote() != null){
+                holder.tvBlogDescription.setText(blogD.getBlogNote());
+            }else {
+                holder.tvBlogDescription.setText("尚未新增描述");
+            }
+
             holder.tvDays.setText(blogD.getS_Date());
             holder.imDays.setImageResource(R.drawable.layout_box_line);
             holder.tvDate.setText("日期:");

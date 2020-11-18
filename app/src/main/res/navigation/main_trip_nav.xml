@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_exploreFragment_to_exploreLocationDetailFragment"
             app:destination="@id/exploreLocationDetailFragment" />
+        <action
+            android:id="@+id/action_exploreFragment_to_likeFragment"
+            app:destination="@id/likeFragment" />
     </fragment>
 
     <fragment
@@ -668,7 +671,11 @@
         android:id="@+id/exploreFragment1"
         android:name="com.example.tripper_android_app.explore.ExploreFragment1"
         android:label="fragment_explore1"
-        tools:layout="@layout/fragment_explore1" />
+        tools:layout="@layout/fragment_explore1" >
+        <action
+            android:id="@+id/action_exploreFragment1_to_likeFragment"
+            app:destination="@id/likeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/exploreFragment2"
         android:name="com.example.tripper_android_app.explore.ExploreFragment2"
@@ -684,5 +691,10 @@
         android:name="com.example.tripper_android_app.group.GroupManageApplicationFragment"
         android:label="fragment_group_manage_application"
         tools:layout="@layout/fragment_group_manage_application" />
+    <fragment
+        android:id="@+id/likeFragment"
+        android:name="com.example.tripper_android_app.explore.LikeFragment"
+        android:label="fragment_like"
+        tools:layout="@layout/fragment_like" />
 
 </navigation>

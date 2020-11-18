@@ -2,6 +2,8 @@ package com.example.tripper_android_app.explore;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,20 +39,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class ExploreFragment1 extends Fragment {
-    private MainActivity activity ;
+    private MainActivity activity;
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView rvExplore,rvLocation;
-    private CommonTask exploreGetAllTask, exploreDeleteTask;
+    private RecyclerView rvExplore, rvLocation;
+    private CommonTask exploreGetAllTask, exploreDeleteTask, articleDeleteTask;
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
+    private SharedPreferences preferences;
+    private ExploreAdapter exploreAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity= (MainActivity)getActivity();
+        activity = (MainActivity) getActivity();
         imageTasks = new ArrayList<>();
     }
 
@@ -92,7 +99,7 @@ public class ExploreFragment1 extends Fragment {
                     List<Explore> searchExplores = new ArrayList<>();
                     // 搜尋原始資料內有無包含關鍵字(不區別大小寫)
                     for (Explore explore : explores) {
-                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase())|| explore.getNickName().toUpperCase().contains(newText.toUpperCase())) {
+                        if (explore.getTittleName().toUpperCase().contains(newText.toUpperCase()) || explore.getNickName().toUpperCase().contains(newText.toUpperCase())) {
 
                             searchExplores.add(explore);
                         }
@@ -105,13 +112,15 @@ public class ExploreFragment1 extends Fragment {
 
 
     }
+
+
     private void showExplores(List<Explore> explores) {
 
-        if (explores == null|| explores.isEmpty()) {
+        if (explores == null || explores.isEmpty()) {
             Common.showToast(activity, R.string.textNoSpotsFound);
 
         }
-        ExploreAdapter exploreAdapter = (ExploreAdapter) rvExplore.getAdapter();
+         exploreAdapter = (ExploreAdapter) rvExplore.getAdapter();
         if (exploreAdapter == null) {
             rvExplore.setAdapter(new ExploreAdapter(activity, explores));
         } else {
@@ -125,12 +134,14 @@ public class ExploreFragment1 extends Fragment {
 
     private List<Explore> getExplores() {
         List<Explore> explores = null;
-
         if (Common.networkConnected(activity)) {
             //Servlet
+            preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            String userId = preferences.getString("memberId", null);
             String url = Common.URL_SERVER + "ExploreServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
+            jsonObject.addProperty("loginUserId", userId);
             String jsonOut = jsonObject.toString();
             exploreGetAllTask = new CommonTask(url, jsonOut);
 
@@ -148,11 +159,11 @@ public class ExploreFragment1 extends Fragment {
         }
         return explores;
     }
+
     private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         //這是serach view 的 List 為了留查詢後的資料
         private List<Explore> explores;
-
 
 
         private int imageSize;
@@ -179,12 +190,9 @@ public class ExploreFragment1 extends Fragment {
         public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-
-
-            View itemView = layoutInflater.inflate(R.layout.item_view_explore,parent,false);
-            return  new ExploreAdapter.MyViewHolder(itemView);
+            View itemView = layoutInflater.inflate(R.layout.item_view_explore, parent, false);
+            return new ExploreAdapter.MyViewHolder(itemView);
         }
-
 
 
         @Override
@@ -193,11 +201,9 @@ public class ExploreFragment1 extends Fragment {
         }
 
 
-
-
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView ivBlogPic, ivUser,ivThumbs;
-            TextView tvUseName, tvBlogName,tvDate,tvThumbs;
+            ImageView ivBlogPic, ivUser, ivThumbs;
+            TextView tvUseName, tvBlogName, tvDate, tvThumbs;
             CircleImageView circleImageView;
 
 
@@ -205,7 +211,7 @@ public class ExploreFragment1 extends Fragment {
                 super(itemView);
                 ivBlogPic = itemView.findViewById(R.id.ivBlog);
                 tvBlogName = itemView.findViewById(R.id.tvTitle_Blog);
-                tvUseName = itemView.findViewById(R.id.tvUserName);
+                tvUseName = itemView.findViewById(R.id.tvAccount);
                 ivUser = itemView.findViewById(R.id.ivUser);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvThumbs = itemView.findViewById(R.id.tvThumbs);
@@ -221,7 +227,7 @@ public class ExploreFragment1 extends Fragment {
             String url = Common.URL_SERVER + "BlogServlet";
             String id = explore.getBlogId();
             String userId = explore.getUserId();
-            ImageTask imageTask = new ImageTask(url,id, imageSize, holder.ivBlogPic);
+            ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
             String icoUrl = Common.URL_SERVER + "MemberServlet";
@@ -243,27 +249,118 @@ public class ExploreFragment1 extends Fragment {
             }
             String date1 = format.format(date);
             holder.tvDate.setText("網誌建立日期：" + date1);
-            holder.tvThumbs.setText("203個讚");
+            ImageView goodIcon = holder.ivThumbs;
+            if (userId == null) {
+                explore.setArticleGoodStatus(false);
+                goodIcon.setColorFilter(Color.parseColor("#424242"));
+            }else{
+                if (explore.isArticleGoodStatus()) {
+                    explore.setArticleGoodStatus(true);
+                    holder.ivThumbs.setColorFilter(Color.RED);
+                } else {
+                    goodIcon.setColorFilter(Color.parseColor("#424242"));
+                    explore.setArticleGoodStatus(false);
+                }
+            }
             holder.ivThumbs.setImageResource(R.drawable.icnthumbs);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.tvThumbs.setText((explore.getArticleGoodCount() + "個人按讚"));
+            holder.tvThumbs.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putString( "UserId",explore.getUserId());
-                    bundle.putString("BlogId",explore.getBlogId());
-                    bundle.putString("BlogTitle",explore.getTittleName());
-                    bundle.putString("BlogDesc",explore.getBlogDesc());
-                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment,bundle);
+                    bundle.putString("BlogID",explore.getBlogId());
+                    Navigation.findNavController(rvExplore).navigate(R.id.action_exploreFragment_to_likeFragment,bundle);
+                }
+            });
+            holder.ivThumbs.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!explore.isArticleGoodStatus()) {
+                        if (Common.networkConnected(activity)) {
+                            String insertGoodUrl = Common.URL_SERVER + "ArticleServlet";
+                            preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                            String userId1 = preferences.getString("memberId", null);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "articleGoodInsert");
+                            jsonObject.addProperty("articleId", explore.getBlogId());
+                            jsonObject.addProperty("loginUserId", userId1);
+//                        jsonObject.addProperty("articleGood", new Gson().toJson(articleGood));
+                            int count = 0;
+                            try {
+                                String result = new CommonTask(insertGoodUrl, jsonObject.toString()).execute().get();
+                                count = Integer.parseInt(result);
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            if (count == 0) {
+                                Common.showToast(activity, "點讚失敗");
+                            } else {
+                                explore.setArticleGoodCount((explore.getArticleGoodCount() + 1));
+                                holder.tvThumbs.setText((explore.getArticleGoodCount() + ""));
+                                goodIcon.setColorFilter(Color.RED);
+                                explore.setArticleGoodStatus(true);
+                            }
+                        } else {
+                            Common.showToast(activity, "取得連線失敗");
+                        }
+
+                    } else {
+                        if (Common.networkConnected(activity)) {
+                            String deleteGoodUrl = Common.URL_SERVER + "ArticleServlet";
+                            preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                            String userId2 = preferences.getString("memberId", null);
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("action", "articleGoodDelete");
+                            jsonObject.addProperty("articleId", explore.getBlogId());
+                            jsonObject.addProperty("userId", userId2);
+                            int count = 0;
+                            try {
+                                articleDeleteTask = new CommonTask(deleteGoodUrl, jsonObject.toString());
+                                String result = articleDeleteTask.execute().get();
+                                count = Integer.parseInt(result);
+                            } catch (Exception e) {
+                                Log.e(TAG, e.toString());
+                            }
+                            if (count == 0) { //如果選擇的資料已經沒東西
+                                Common.showToast(activity, "取消失敗");
+                            } else {
+                                explore.setArticleGoodCount(explore.getArticleGoodCount() - 1);
+                                holder.tvThumbs.setText(((explore.getArticleGoodCount()) + ""));
+
+                                goodIcon.setColorFilter(Color.parseColor("#424242"));
+                                explore.setArticleGoodStatus(false);
+                            }
+                        } else {
+                            Common.showToast(activity, "取消讚連線失敗");
+                        }
+
+                    }
 
                 }
-            });;
+            });
 
+            holder.ivBlogPic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("UserId", explore.getUserId());
+                    bundle.putString("BlogId", explore.getBlogId());
+                    bundle.putString("BlogTitle", explore.getTittleName());
+                    bundle.putString("BlogDesc", explore.getBlogDesc());
+                    bundle.putString("UserName", explore.getNickName());
+                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment, bundle);
+
+                }
+            });
+            ;
 
 
         }
 
 
     }
+
+
     @Override
     public void onStop() {
         super.onStop();
@@ -284,5 +381,5 @@ public class ExploreFragment1 extends Fragment {
             exploreDeleteTask = null;
         }
     }
-
 }
+

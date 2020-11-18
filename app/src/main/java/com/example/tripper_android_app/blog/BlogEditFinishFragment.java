@@ -133,7 +133,7 @@ public class BlogEditFinishFragment extends Fragment {
                 String title = etTitle.getText().toString().trim() ;
                 String info = etInfo.getText().toString().trim() ;
 
-                if(title.isEmpty() || title.length() > 10){
+                if(title.isEmpty() || title.length() > 20){
                     etTitle.setError("標題名稱不得空白或超過10個字元");
                     return;
                 }
@@ -174,7 +174,7 @@ public class BlogEditFinishFragment extends Fragment {
                 String title = etTitle.getText().toString().trim() ;
                 String info = etInfo.getText().toString().trim() ;
 
-                if(title.isEmpty() || title.length() > 10){
+                if(title.isEmpty() || title.length() > 20){
                     etTitle.setError("標題名稱不得空白或超過10個字元");
                     return;
                 }

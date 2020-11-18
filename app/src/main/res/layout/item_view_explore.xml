@@ -11,7 +11,7 @@
 
 
     <TextView
-        android:id="@+id/tvUserName"
+        android:id="@+id/tvAccount"
         android:layout_width="111dp"
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
@@ -60,7 +60,7 @@
         android:textStyle="bold|italic"
         android:typeface="normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAccount" />
 
     <com.example.tripper_android_app.util.CircleImageView
         android:id="@+id/ivUser"
