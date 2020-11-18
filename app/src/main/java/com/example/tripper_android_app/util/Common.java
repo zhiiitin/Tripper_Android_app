@@ -46,6 +46,8 @@ public class Common {
     public static String spinnerSelect2 = "";
     public static String tripId = "";
     public static int memberId;
+    public static Integer sendId;
+    public static String chatSenderName ;
     public static final String FRIEND_TYPE = "F"; // 朋友相關類型訊息
     public static final String TRIP_TYPE = "T"; // 行程相關類型訊息
     public static final String GROUP_TYPE = "G"; // 揪團相關類型訊息
@@ -54,6 +56,7 @@ public class Common {
     public static final String SEND_MESSEAGE_TYPE = "RIGHT"; //發送聊天訊息
     public static final String RECEIVE_MESSEAGE_TYPE = "LEFT"; //接收聊天訊息
     private  MainActivity activity ;
+
 
     /**
      * 檢查是否有網路連線

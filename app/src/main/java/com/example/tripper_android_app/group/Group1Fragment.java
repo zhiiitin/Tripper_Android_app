@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ import java.util.List;
 
 public class Group1Fragment extends Fragment {
 
-
         private static final String TAG = "TAG_GroupListFragment";
         private SwipeRefreshLayout swipeRefreshLayout;
         private RecyclerView rvGroup;
@@ -50,7 +50,6 @@ public class Group1Fragment extends Fragment {
         private CommonTask groupGetAllTask ,groupGetCountTask;
         private ImageTask groupImageTask;
         private List<Trip_M> groupList;
-        private int mbrStatus = 0;
 
 
         @Override
@@ -199,17 +198,31 @@ public class Group1Fragment extends Fragment {
 
                 if((group.getpMax() - count) == 2 || (group.getpMax() - count) == 1){
                     myViewHolder.ivWillFill.setVisibility(View.VISIBLE);
+                }else {
+                    myViewHolder.ivWillFill.setVisibility(View.GONE);
                 }
+
+                int mbrStatus = 0 ;
+
 //人數滿時顯示人數已滿
-                if(count == group.getpMax()){
+                if(count == group.getpMax() || count >= group.getpMax() ){
+                    mbrStatus = 1 ;
                     myViewHolder.tvCount.setVisibility(View.GONE);
                     myViewHolder.ivFill.setVisibility(View.VISIBLE);
+
                     //狀態等於1，表示成員已滿
-                    mbrStatus = 1 ;
+
+                }else{
+                    myViewHolder.tvCount.setVisibility(View.VISIBLE);
+                    myViewHolder.ivFill.setVisibility(View.GONE);
+                    mbrStatus = 0 ;
+
                 }
+
 
 
 //點擊頁面傳到行程頁面
+                int finalMbrStatus = mbrStatus;
                 myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -220,7 +233,8 @@ public class Group1Fragment extends Fragment {
                         bundle.putString("startDate",group.getStartDate());
                         bundle.putString("startTime", group.getStartTime());
                         bundle.putInt("status",group.getStatus());
-                        bundle.putInt("mbrStatus",mbrStatus);
+                        bundle.putInt("mbrStatus", finalMbrStatus);
+                        Log.e("mbrStatus", String.valueOf(finalMbrStatus));
                         Navigation.findNavController(v).navigate(R.id.action_groupFragment_to_groupTripPage, bundle);
                     }
                 });

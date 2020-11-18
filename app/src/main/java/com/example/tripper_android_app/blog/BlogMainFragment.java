@@ -51,6 +51,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.zip.Inflater;
+
+
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -484,10 +490,6 @@ public class BlogMainFragment extends Fragment {
             default:
                 break;
         }
-
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

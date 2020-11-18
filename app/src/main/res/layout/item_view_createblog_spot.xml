@@ -39,7 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
+
             android:background="#00000000"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLocationName"
@@ -49,8 +50,8 @@
             android:id="@+id/tvInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/noto_sans"
             android:text="輸入網誌內容："
             android:textColor="#4E4D4D"
@@ -60,19 +61,21 @@
 
         <ImageView
             android:id="@+id/ivTextForm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            app:layout_constraintStart_toStartOf="@+id/tvInput"
+            android:layout_width="411dp"
+            android:layout_height="148dp"
+            android:layout_marginTop="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvInput"
             app:srcCompat="@drawable/icon_text_form" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etBlog"
-            android:layout_width="369dp"
+            android:layout_width="383dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="4dp"
             android:backgroundTint="@color/colorForWhite"
             android:hint="輸入說明文字"
             android:textSize="15sp"
@@ -95,10 +98,10 @@
             android:id="@+id/linearLayout2"
             android:layout_width="398dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="44dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@+id/ivPoint"
-            app:layout_constraintTop_toBottomOf="@+id/ibUpdatePic">
+            app:layout_constraintTop_toBottomOf="@+id/tvLocationName">
 
             <ImageView
                 android:id="@+id/ivSpot1"
@@ -144,6 +147,18 @@
                 app:srcCompat="@drawable/ic_addbutton" />
 
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ibReUpdatePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="12dp"
+            android:background="#00000000"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocationName"
+            app:srcCompat="@drawable/ic_choose_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

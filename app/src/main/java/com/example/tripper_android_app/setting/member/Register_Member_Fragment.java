@@ -302,7 +302,7 @@ public class Register_Member_Fragment extends Fragment {
 
     private void showMember() {
      //判斷為三方登入與否
-        if(mUser != null){
+        if(member.getLoginType() == 1 || member.getLoginType() == 2){
             String Url = Common.URL_SERVER + "MemberServlet";
             int id = member.getId();
             int imageSize = getResources().getDisplayMetrics().widthPixels / 3;

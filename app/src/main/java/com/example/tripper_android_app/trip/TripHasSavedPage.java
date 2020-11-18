@@ -131,6 +131,7 @@ public class TripHasSavedPage extends Fragment {
 
         Bundle bundle2 = new Bundle();
         bundle2.putString("tripId",tripId);
+        bundle2.putString("tripName",TripName);
 
 
         //揪團人數按鈕

@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="165dp"
             android:shadowColor="#131313"
             android:shadowDx="1"
             android:shadowDy="0"
@@ -65,8 +65,8 @@
             android:textSize="25sp"
             android:textStyle="bold"
             android:typeface="normal"
-            app:layout_constraintBottom_toBottomOf="@+id/tvCount"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view_Blog" />
 
         <TextView
             android:id="@+id/tvCount"

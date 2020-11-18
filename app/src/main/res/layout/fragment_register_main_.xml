@@ -21,8 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="17dp"
+        android:layout_marginBottom="74dp"
         android:background="#00000000"
         android:src="@drawable/icloginfb"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btRegister_hand" />
 
@@ -32,8 +34,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="62dp"
+        android:layout_marginBottom="73dp"
         android:background="#00000000"
         android:src="@drawable/google"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btRegister_hand" />
 
@@ -90,7 +94,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="忘記密碼？"
         android:textColor="#FF0000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/cardView6"
@@ -101,7 +104,9 @@
         android:layout_width="300dp"
         android:layout_height="48dp"
         android:layout_marginTop="58dp"
+        android:layout_marginBottom="45dp"
         android:src="@drawable/ic_login"
+        app:layout_constraintBottom_toTopOf="@+id/btRegister_hand"
         app:layout_constraintEnd_toEndOf="@+id/cardView6"
         app:layout_constraintStart_toStartOf="@+id/cardView6"
         app:layout_constraintTop_toBottomOf="@+id/cardView6" />

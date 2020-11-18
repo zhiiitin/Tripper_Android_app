@@ -180,7 +180,7 @@ public class Blog_HomePage extends Fragment {
     }
 
     private void showMemberPic() {
-        if (mUser != null) {
+        if (member.getLoginType() == 1 || member.getLoginType() == 2) {
             String Url = Common.URL_SERVER + "MemberServlet";
             int id = member.getId();
             int imageSize = getResources().getDisplayMetrics().widthPixels / 3;

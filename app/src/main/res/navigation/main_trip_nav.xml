@@ -374,7 +374,6 @@
         <action
             android:id="@+id/action_create_Blog_Location_List_to_createBlogFragment"
             app:destination="@id/createBlogFragment"
-
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -505,6 +504,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_createBlogFragment_to_updateBlogPicFragment"
+            app:destination="@id/updateBlogPicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/friendsListFragment"
@@ -666,7 +672,15 @@
         android:id="@+id/groupMbrListFragment"
         android:name="com.example.tripper_android_app.group.GroupMbrListFragment"
         android:label="fragment_group_mbr_list"
-        tools:layout="@layout/fragment_group_mbr_list" />
+        tools:layout="@layout/fragment_group_mbr_list" >
+        <action
+            android:id="@+id/action_groupMbrListFragment_to_groupCommentFragment"
+            app:destination="@id/groupCommentFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/exploreFragment1"
         android:name="com.example.tripper_android_app.explore.ExploreFragment1"
@@ -692,9 +706,21 @@
         android:label="fragment_group_manage_application"
         tools:layout="@layout/fragment_group_manage_application" />
     <fragment
+<<<<<<< HEAD
         android:id="@+id/likeFragment"
         android:name="com.example.tripper_android_app.explore.LikeFragment"
         android:label="fragment_like"
         tools:layout="@layout/fragment_like" />
+=======
+        android:id="@+id/updateBlogPicFragment"
+        android:name="com.example.tripper_android_app.blog.UpdateBlogPicFragment"
+        android:label="fragment_update_blog_pic"
+        tools:layout="@layout/fragment_update_blog_pic" />
+    <fragment
+        android:id="@+id/groupCommentFragment"
+        android:name="com.example.tripper_android_app.group.GroupCommentFragment"
+        android:label="fragment_group_comment"
+        tools:layout="@layout/fragment_group_comment" />
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc
 
 </navigation>

@@ -107,8 +107,8 @@ public class CreateTripLocationDetail extends Fragment implements TimePickerDial
         textView11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textStayTime.setText("01:00");
-                etMemo.setText("1. 記得買門票\n" + "2. 要帶防曬\n" + "3. 買紀念品唷");
+                textStayTime.setText("2:00");
+                etMemo.setText("1. 記得帶防曬\n" + "2. 墨鏡\n" + "3. 買紀念品唷");
             }
         });
 

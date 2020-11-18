@@ -35,13 +35,17 @@ import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
 import com.example.tripper_android_app.util.SendMessage;
+import com.example.tripper_android_app.util.TimeCountUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -221,9 +225,18 @@ public class NotifyFragment extends Fragment {
                     Common.showToast(activity, "請確認網路連線狀態");
                 }
             }
+            TimeCountUtil timeCountUtil = new TimeCountUtil();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            try {
+                date = format.parse(notify.getNotifyDateTime());
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
             holder.tvMsgBody.setText(notify.getMsgBody());
-            holder.tvNotifyDateTime.setText(notify.getNotifyDateTime());
+            holder.tvNotifyDateTime.setText(timeCountUtil.timeCount(date));
 
             // 點擊同意or拒絕處理事件
             View.OnClickListener btClickListener = new View.OnClickListener() {

@@ -47,7 +47,11 @@ public class ExploreFragment1 extends Fragment {
     private static final String TAG = "TAG_ExploreListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvExplore, rvLocation;
+<<<<<<< HEAD
     private CommonTask exploreGetAllTask, exploreDeleteTask, articleDeleteTask;
+=======
+    private CommonTask exploreGetAllTask, exploreDeleteTask;
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc
     private List<ImageTask> imageTasks;
     private List<Explore> explores;
     private SharedPreferences preferences;
@@ -113,7 +117,10 @@ public class ExploreFragment1 extends Fragment {
 
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc
     private void showExplores(List<Explore> explores) {
 
         if (explores == null || explores.isEmpty()) {
@@ -240,6 +247,7 @@ public class ExploreFragment1 extends Fragment {
             holder.tvUseName.setText(explore.getNickName());
             holder.tvBlogName.setText(explore.getTittleName());
             String str = explore.getDateTime();
+            System.out.println(str);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
@@ -268,6 +276,7 @@ public class ExploreFragment1 extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
+<<<<<<< HEAD
                     bundle.putString("BlogID",explore.getBlogId());
                     Navigation.findNavController(rvExplore).navigate(R.id.action_exploreFragment_to_likeFragment,bundle);
                 }
@@ -352,6 +361,16 @@ public class ExploreFragment1 extends Fragment {
 
                 }
             });
+=======
+                    bundle.putString("UserId", explore.getUserId());
+                    bundle.putString("BlogId", explore.getBlogId());
+                    bundle.putString("BlogTitle", explore.getTittleName());
+                    bundle.putString("BlogDesc", explore.getBlogDesc());
+                    Navigation.findNavController(v).navigate(R.id.action_exploreFragment_to_blogMainFragment, bundle);
+
+                }
+            });
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc
             ;
 
 
@@ -360,7 +379,10 @@ public class ExploreFragment1 extends Fragment {
 
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc
     @Override
     public void onStop() {
         super.onStop();
@@ -378,8 +400,11 @@ public class ExploreFragment1 extends Fragment {
 
         if (exploreDeleteTask != null) {
             exploreDeleteTask.cancel(true);
-            exploreDeleteTask = null;
         }
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 073eb3239516139216509990bd56ee64524398fc

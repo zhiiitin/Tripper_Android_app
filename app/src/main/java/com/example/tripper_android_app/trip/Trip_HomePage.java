@@ -175,7 +175,7 @@ public class Trip_HomePage extends Fragment {
         if (tripMs == null || tripMs.isEmpty()) {
             tvHomeInfo.setVisibility(View.VISIBLE);
             tvHomeInfo2.setVisibility(View.VISIBLE);
-            Common.showToast(activity, "尚未建立任何行程");
+
         } else {
             tripMainLayout.setVisibility(View.VISIBLE);
             tvHomeInfo.setVisibility(View.GONE);
@@ -430,7 +430,7 @@ public class Trip_HomePage extends Fragment {
 
             }
         } else {
-            Common.showToast(activity, "no network connection found");
+
         }
         showMemberPic();
     }
@@ -444,7 +444,7 @@ public class Trip_HomePage extends Fragment {
             Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
         }else {
 
-            if (mUser != null) {
+            if ( member.getLoginType() == 1 || member.getLoginType() == 2 ) {
                 String Url = Common.URL_SERVER + "MemberServlet";
                 int id = member.getId();
                 int imageSize = getResources().getDisplayMetrics().widthPixels / 3;

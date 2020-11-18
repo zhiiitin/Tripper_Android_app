@@ -17,6 +17,8 @@ import com.example.tripper_android_app.util.Common;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TAG_MainActivity";
+    private Bundle bundle = null ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +34,16 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(new NotificationChannel(
                     channelId, channelName, NotificationManager.IMPORTANCE_HIGH
             ));
+            System.out.println("enter NotificationManager setting");
         }
 
         // 當notification被點擊時才會取得自訂資料
         // 點擊是呼叫activity
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
         if(bundle != null){
             String data = bundle.getString("data");
+            Common.sendId = bundle.getInt("recId");
+            Log.d(TAG, "##### recId::" + Common.sendId);
             Log.d(TAG, "dddddd DATA::" + data);
             Common.showToast(this, "DATA::" + data);
             if(data.equals("N")){
@@ -46,20 +51,38 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 Navigation.findNavController(this,R.id.chatMainFragment).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail);
             }
-
+        }else {
+            System.out.println("bundle == null");
         }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        bundle = intent.getExtras();
+//        System.out.println("#### onNewIntent::" + bundle.getString("data"));
         System.out.println("會不會執行這段語句");
         System.out.println("會不會執行這段語句");
         System.out.println("會不會執行這段語句");
+        String testString = intent.getStringExtra("sendId");
+        Integer test = null;
+        if (testString != null && !testString.isEmpty()){
+            test  = Integer.parseInt(testString);
+        }
+        String messageType = null ;
+        String senderName = null ;
+        if(bundle != null ) {
+            messageType = bundle.getString("data");
+            System.out.println("####### bundle data::" +  messageType);
+            senderName = bundle.getString("sendName");
+            System.out.println("####### bundle name::" +  senderName);
+        }
 
-        int messageType = getIntent().getIntExtra("message",1);
-        if(messageType == 1){
-            Navigation.findNavController(this,R.id.trip_HomePage).navigate(R.id.chatMainFragment);
+        Common.sendId = test ;
+        Common.chatSenderName = senderName ;
+
+        if(messageType.equals("CHAT_TYPE")){
+            Navigation.findNavController(this,R.id.nav_fragment).navigate(R.id.chatMainFragment);
 
         }else {
             Navigation.findNavController(this,R.id.trip_HomePage).navigate(R.id.notifyFragment);

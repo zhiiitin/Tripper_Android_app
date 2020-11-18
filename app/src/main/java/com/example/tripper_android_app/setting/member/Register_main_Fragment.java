@@ -215,9 +215,14 @@ public class Register_main_Fragment extends Fragment {
                 if (account != null) {
                     firebaseAuthWithGoogle(account);
 
-                        String accountDb = account.getGivenName();
+                        String accountDb = account.getEmail();
                         String password = "password" ;
                         String nickname = account.getDisplayName();
+
+
+                        Log.e("DisplayName", account.getDisplayName());
+                        Log.e("GivenName", account.getGivenName());
+
 
 
                         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,

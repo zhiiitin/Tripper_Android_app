@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".group.GroupCommentFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvGroupComment"
+        android:layout_width="match_parent"
+        android:layout_height="540dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="@color/colorSender"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginBottom="7dp"
+            app:cardBackgroundColor="#76CFDA"
+            app:cardCornerRadius="30dp">
+
+            <EditText
+                android:id="@+id/messageEdit"
+                android:layout_width="336dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="#76CFDA"
+                android:hint="  Message..."
+                android:padding="8dp"
+                android:textSize="16sp" />
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/sendBtn"
+            android:layout_width="46dp"
+            android:layout_height="51dp"
+            android:layout_marginLeft="360dp"
+            android:layout_marginTop="4dp"
+            android:background="@android:drawable/ic_menu_send"
+            android:padding="8dp" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

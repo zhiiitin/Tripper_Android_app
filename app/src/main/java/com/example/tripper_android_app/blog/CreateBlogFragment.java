@@ -84,7 +84,6 @@ public class CreateBlogFragment extends Fragment {
     private BlogPic blogPic = null;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -438,6 +437,8 @@ public class CreateBlogFragment extends Fragment {
                 final ViewHolderSpot viewHolderSpot = (ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
 //點擊新增照片進入到新增相片頁面
+
+
                 viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
                     @Override
                     public void onClick(View v) {
@@ -448,9 +449,11 @@ public class CreateBlogFragment extends Fragment {
                         bundle.putString("spotName", spotName);
                         bundle.putString("locId", locId);
                         bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFinishFragment_to_blog_HomePage, bundle);
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+
+
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
@@ -459,37 +462,129 @@ public class CreateBlogFragment extends Fragment {
                 jsonObject.addProperty("loc_Id", blog_spot.getLoc_Id());
                 getImageTask = new CommonTask(url, jsonObject.toString());
                 blogPic = new BlogPic();
+
                 try {
                     String jsonIn = getImageTask.execute().get();
                     Type listType = new TypeToken<BlogPic>() {
                     }.getType();
 
                     blogPic = new Gson().fromJson(jsonIn, listType);
+//判斷是否有照片
+                    if (blogPic.getPic1() != null || blogPic.getPic2() != null || blogPic.getPic3() != null || blogPic.getPic4() != null || blogPic.getLocId() != null ) {
+                        viewHolderSpot.ibInsertPic.setVisibility(View.GONE);
+                        viewHolderSpot.ibReUpdatePic.setVisibility(View.VISIBLE);
+                    }
+
+
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
+                    Log.d("CREAT################################", "blogPic" + blog_spot.getLoc_Id());
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                    Glide.with(activity).load(img1).into(ivPhoto);
+                                    //將白色部分設為透明
+                                    alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    alertDialog.setCancelable(true);
+                                    alertDialog.show();
+
+                                }
+
+                        });
                     }
                     if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
+
                     }
                     if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img4).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
+
                 }
+
+//已有照片時，按下會進入更新照片頁面
+                viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Log.d("CREAT##%^&#%#*&%#&^*#%^#&%#&*", "blogPic" + blog_spot.getLoc_Id());
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
@@ -572,31 +667,114 @@ public class CreateBlogFragment extends Fragment {
                     }.getType();
 
                     blogPic = new Gson().fromJson(jsonIn, listType);
+                    //判斷是否有照片
+                    if (blogPic.getPic1() != null || blogPic.getPic2() != null || blogPic.getPic3() != null || blogPic.getPic4() != null) {
+                        viewHolderSpot.ibInsertPic.setVisibility(View.GONE);
+                        viewHolderSpot.ibReUpdatePic.setVisibility(View.VISIBLE);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img1).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img4).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                 }
+                //已有照片時，按下會進入更新照片頁面
+                viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
@@ -604,6 +782,13 @@ public class CreateBlogFragment extends Fragment {
                 if (note != null && !note.isEmpty()) {
                     viewHolderSpot.etBlog.setText(note);
                 }
+
+                viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                    }
+                });
 //-------------------------
 //將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
@@ -672,31 +857,114 @@ public class CreateBlogFragment extends Fragment {
                     }.getType();
 
                     blogPic = new Gson().fromJson(jsonIn, listType);
+                    //判斷是否有照片
+                    if (blogPic.getPic1() != null || blogPic.getPic2() != null || blogPic.getPic3() != null || blogPic.getPic4() != null) {
+                        viewHolderSpot.ibInsertPic.setVisibility(View.GONE);
+                        viewHolderSpot.ibReUpdatePic.setVisibility(View.VISIBLE);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img1).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img4).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                 }
+                //已有照片時，按下會進入更新照片頁面
+                viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
@@ -779,31 +1047,113 @@ public class CreateBlogFragment extends Fragment {
                     }.getType();
 
                     blogPic = new Gson().fromJson(jsonIn, listType);
+                    //判斷是否有照片
+                    if (blogPic.getPic1() != null || blogPic.getPic2() != null || blogPic.getPic3() != null || blogPic.getPic4() != null) {
+                        viewHolderSpot.ibInsertPic.setVisibility(View.GONE);
+                        viewHolderSpot.ibReUpdatePic.setVisibility(View.VISIBLE);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img1).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img4).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                 }
+                //已有照片時，按下會進入更新照片頁面
+                viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
 
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
@@ -886,31 +1236,115 @@ public class CreateBlogFragment extends Fragment {
                     }.getType();
 
                     blogPic = new Gson().fromJson(jsonIn, listType);
+                    //判斷是否有照片
+                    if (blogPic.getPic1() != null || blogPic.getPic2() != null || blogPic.getPic3() != null || blogPic.getPic4() != null) {
+                        viewHolderSpot.ibInsertPic.setVisibility(View.GONE);
+                        viewHolderSpot.ibReUpdatePic.setVisibility(View.VISIBLE);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img1).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic4() != null) {
+
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img4).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                 }
+                //已有照片時，按下會進入更新照片頁面
+                viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
@@ -995,31 +1429,116 @@ public class CreateBlogFragment extends Fragment {
                     }.getType();
 
                     blogPic = new Gson().fromJson(jsonIn, listType);
+                    //判斷是否有照片
+                    if (blogPic.getPic1() != null || blogPic.getPic2() != null || blogPic.getPic3() != null || blogPic.getPic4() != null) {
+                        viewHolderSpot.ibInsertPic.setVisibility(View.GONE);
+                        viewHolderSpot.ibReUpdatePic.setVisibility(View.VISIBLE);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
                         viewHolderSpot.ivSpot1.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img1).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic2() != null) {
                         byte[] img2 = Base64.decode(blogPic.getPic2(), Base64.DEFAULT);
                         Glide.with(activity).load(img2).into(viewHolderSpot.ivSpot2);
                         viewHolderSpot.ivSpot2.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img2).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic3() != null) {
                         byte[] img3 = Base64.decode(blogPic.getPic3(), Base64.DEFAULT);
                         Glide.with(activity).load(img3).into(viewHolderSpot.ivSpot3);
                         viewHolderSpot.ivSpot3.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img3).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                     if (blogPic.getPic4() != null) {
                         byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
                         Glide.with(activity).load(img4).into(viewHolderSpot.ivSpot4);
                         viewHolderSpot.ivSpot4.setVisibility(View.VISIBLE);
+                        viewHolderSpot.ivSpot4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                alertDialog.setView(view);
+                                ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+
+                                Glide.with(activity).load(img4).into(ivPhoto);
+                                //將白色部分設為透明
+                                alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                alertDialog.setCancelable(true);
+                                alertDialog.show();
+                            }
+                        });
                     }
                 }
+                //已有照片時，按下會進入更新照片頁面
+                viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+
+                        Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
+
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                         MODE_PRIVATE);
@@ -1076,7 +1595,7 @@ public class CreateBlogFragment extends Fragment {
             ImageView ivPoint, ivTextForm, ivSpot1, ivSpot2, ivSpot3, ivSpot4;
             TextView tvLocationName, tvInput;
             TextInputEditText etBlog;
-            ImageButton ibInsertPic, ibSave, ibAdd;
+            ImageButton ibInsertPic, ibSave, ibAdd, ibReUpdatePic;
 
             ViewHolderSpot(View itemView) {
                 super(itemView);
@@ -1092,6 +1611,7 @@ public class CreateBlogFragment extends Fragment {
                 ivSpot4 = itemView.findViewById(R.id.ivSpot4);
                 ibAdd = itemView.findViewById(R.id.ibAdd);
                 ibSave = itemView.findViewById(R.id.ibSave);
+                ibReUpdatePic = itemView.findViewById(R.id.ibReUpdatePic);
             }
         }
 
@@ -1471,7 +1991,7 @@ public class CreateBlogFragment extends Fragment {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             photo = out.toByteArray();
-
+            
         } catch (IOException e) {
             Log.e("TAG", e.toString());
         }
@@ -1483,18 +2003,17 @@ public class CreateBlogFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(groupGet1Task!= null){
+        if (groupGet1Task != null) {
             groupGet1Task.cancel(true);
-            groupGet1Task = null ;
+            groupGet1Task = null;
         }
-        if(InsertNoteTask!= null){
+        if (InsertNoteTask != null) {
             InsertNoteTask.cancel(true);
-            InsertNoteTask = null ;
+            InsertNoteTask = null;
         }
-        if(getImageTask!= null){
+        if (getImageTask != null) {
             getImageTask.cancel(true);
-            getImageTask = null ;
+            getImageTask = null;
         }
-
     }
 }
