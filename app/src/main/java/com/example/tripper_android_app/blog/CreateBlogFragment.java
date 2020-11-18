@@ -267,7 +267,7 @@ public class CreateBlogFragment extends Fragment {
             case R.id.btNextStep:
                 Bundle bundle = new Bundle();
                 bundle.putString("tripId", tripId);
-                findNavController(tvBlogName).navigate(R.id.action_createBlogFragment_to_createBlogPicFragment, bundle);
+                findNavController(tvBlogName).navigate(R.id.action_createBlogFragment_to_createBlogFinishFragment, bundle);
                 return true;
 
             default:

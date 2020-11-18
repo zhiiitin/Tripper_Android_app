@@ -414,23 +414,18 @@ public class Trip_HomePage extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if (member == null) {
+                if (member == null ||member.getNickName() == null ) {
                     pref.edit().putBoolean("login", false).apply();
                     Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
 
                 } else {
                     String userName = member.getNickName();
                     textUserName.setText(userName);
-
+                    pref.edit().putString("memberId", member.getId() + "").apply();
                 }
-                String nickname = member.getNickName();
-                textUserName.setText(" " + nickname + " ");
-                pref.edit().putString("memberId", member.getId() + "").apply();
 
 
             }
-        } else {
-
         }
         showMemberPic();
     }
