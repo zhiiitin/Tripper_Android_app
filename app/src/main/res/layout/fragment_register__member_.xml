@@ -57,24 +57,13 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="11dp"
             android:text="登入方式："
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/textView5"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="40dp"
-            android:text="會員ID："
-            android:textSize="15sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNickname_member" />
+            app:layout_constraintTop_toBottomOf="@+id/tvId_member" />
 
         <com.example.tripper_android_app.util.CircleImageView
             android:id="@+id/ivPhoto"
@@ -103,12 +92,15 @@
             android:id="@+id/tvId_member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginTop="40dp"
             android:text="1234567"
+            android:textAlignment="center"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView5"
-            app:layout_constraintStart_toEndOf="@+id/textView5" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNickname_member" />
 
         <ImageButton
             android:id="@+id/btLogout"
