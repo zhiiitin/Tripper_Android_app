@@ -321,10 +321,6 @@ public class BlogMainFragment extends Fragment {
             default:
                 break;
         }
-
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

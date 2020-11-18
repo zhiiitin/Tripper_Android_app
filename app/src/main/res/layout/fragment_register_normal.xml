@@ -6,12 +6,76 @@
     android:layout_height="match_parent"
     tools:context=".setting.member.Register_Normal_Fragment">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btSendPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="358dp"
+        android:layout_marginEnd="5dp"
+        app:cardBackgroundColor="#00BCD4"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="發送簡訊"
+            android:textColor="#FFFFFF" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPhone"
+        android:layout_width="234dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="76dp"
+        android:hint=" 提供驗證用手機號碼"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNickname" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:text="手機號碼："
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etNickname"
+        android:layout_width="234dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="74dp"
+        android:hint=" 限定10字元"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword2" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="40dp"
+        android:text="驗證碼："
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etPassword2"
-        android:layout_width="260dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="43dp"
+        android:layout_width="234dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="74dp"
         android:hint=" 請再次輸入密碼"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +85,7 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="35dp"
         android:text="確認密碼："
         android:textSize="18sp"
@@ -45,45 +109,24 @@
             app:title="Test" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etEmail"
-        android:layout_width="260dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="43dp"
-        android:hint=" 輸入信箱（忘記密碼可使用）"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword2" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:text="信箱："
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="52dp"
         android:layout_marginTop="35dp"
         android:text="暱稱："
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="70dp"
         android:text="帳號："
         android:textSize="18sp"
         android:textStyle="bold"
@@ -103,58 +146,67 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etAccount"
-        android:layout_width="260dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="43dp"
+        android:layout_width="234dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="63dp"
+        android:layout_marginEnd="74dp"
         android:hint=" 請輸入帳號"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etPassword"
-        android:layout_width="260dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="43dp"
+        android:layout_width="234dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="74dp"
         android:hint=" 請輸入6~12位數"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAccount" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etNickname"
-        android:layout_width="260dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="43dp"
-        android:hint=" 限定10字元"
+        android:id="@+id/etCode"
+        android:layout_width="234dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="76dp"
+        android:hint=" 輸入簡訊驗證碼"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/etPhone" />
 
     <ImageButton
         android:id="@+id/btRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="70dp"
         android:background="#00000000"
         android:src="@drawable/ic_register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNickname" />
+        app:layout_constraintTop_toBottomOf="@+id/etCode" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomBar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        app:itemBackground="@color/GRAYYY"
-        app:itemIconTint="@color/bottom_bar_selected_color"
-        app:labelVisibilityMode="labeled"
-
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btVerification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="13dp"
+        app:cardBackgroundColor="#00BCD4"
+        app:cardCornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_bar_menu" />
+        app:layout_constraintTop_toTopOf="@+id/etCode">
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="5dp"
+            android:text="驗證"
+            android:textColor="#FFFFFF" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

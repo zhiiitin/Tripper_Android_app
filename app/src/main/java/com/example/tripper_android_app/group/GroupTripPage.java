@@ -136,6 +136,8 @@ public class GroupTripPage extends Fragment {
         mbrStatus = bundle.getInt("mbrStatus");
         final String startTime = bundle.getString("startTime");
 
+        Log.e("mbrStatus", String.valueOf(mbrStatus));
+
         bundle2.putString("tripId",tripId);
         bundle2.putInt("memberId",hostId);
 
@@ -177,6 +179,7 @@ public class GroupTripPage extends Fragment {
 
         if (mId.equals(mId2)) {
             btJoinGroup.setVisibility(View.GONE);
+            checkCount = 3 ;
         }
         else if(checkCount == 1){
             btJoinGroup.setVisibility(View.GONE);
@@ -189,7 +192,7 @@ public class GroupTripPage extends Fragment {
         }
 
          else {
-            if (mbrStatus == 0) {
+            if (mbrStatus != 1) {
                 btJoinGroup.setVisibility(View.VISIBLE);
                 btJoinGroup.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -230,6 +233,7 @@ public class GroupTripPage extends Fragment {
                     }
                 });
             }else {
+                btJoinGroup.setVisibility(View.GONE);
                 ibMbrFill.setVisibility(View.VISIBLE);
             }
         }
@@ -1138,7 +1142,7 @@ public class GroupTripPage extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        if (checkCount == 2) {
+        if (checkCount == 2 || checkCount == 3) {
             inflater.inflate(R.menu.app_bar_group_member, menu);
         }
     }

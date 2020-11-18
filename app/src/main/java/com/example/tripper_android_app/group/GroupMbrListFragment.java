@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +63,7 @@ public class GroupMbrListFragment extends Fragment {
     private FirebaseAuth auth;
     private ImageView ivHostPic ;
     private TextView tvHostName ;
+    private Bundle bundle2 = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class GroupMbrListFragment extends Fragment {
         if(bundle != null) {
             tripId = bundle.getString("tripId");
             memberId = bundle.getInt("memberId");
+            bundle2.putString("tripId",tripId);
         }
         //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -251,11 +255,19 @@ public class GroupMbrListFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.group_comment, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Navigation.findNavController(this.getView()).popBackStack();
                 return true;
+            case R.id.btGroupComment:
+                Navigation.findNavController(this.getView()).navigate(R.id.action_groupMbrListFragment_to_groupCommentFragment,bundle2);
             default:
                 break;
         }
