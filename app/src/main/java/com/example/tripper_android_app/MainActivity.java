@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 Navigation.findNavController(this,R.id.chatMainFragment).navigate(R.id.action_create_Trip_LocationList_to_createTripLocationDetail);
             }
-
         }else {
             System.out.println("bundle == null");
         }

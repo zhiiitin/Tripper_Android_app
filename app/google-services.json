@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "619854241393-ou6arjrl2gt3p48rtq9qesn1s7khr2dv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tripper_android_app",
+            "certificate_hash": "c5bf68b1ff438d5b508911be486bf9a741cebfde"
+          }
+        },
+        {
+          "client_id": "619854241393-0an12s1vaft7q2lcfvn9tbm922tcofe6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tripper_android_app",
+            "certificate_hash": "d6d6bb53973a5ea4dbc7badbc9fc26cae354d026"
+          }
+        },
+        {
           "client_id": "619854241393-qsjp4s5avotvgks7psqmvg3jek7ehj7q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

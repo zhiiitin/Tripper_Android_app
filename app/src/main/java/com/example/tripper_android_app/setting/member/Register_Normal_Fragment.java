@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -30,15 +31,22 @@ import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.util.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskExecutors;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,9 +55,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class Register_Normal_Fragment extends Fragment {
     private final static String TAG = "TAG_NormalFragment";
     private MainActivity activity;
-    private TextInputEditText etAccount, etPassword, etNickName, etPassword2, etEMail;
+    private TextInputEditText etAccount, etPassword, etNickName, etPassword2,etPhone ,etCode;
     private ImageButton ibRegister;
     private FirebaseAuth firebaseAuth;
+    private String verificationId;
+    private CardView btSendPhone , btVerification;
+    private int checkCode = 0 ;
+    private PhoneAuthProvider.ForceResendingToken resendToken;
 
 
 
@@ -83,19 +95,43 @@ public class Register_Normal_Fragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomBar);
-        NavController navController = Navigation.findNavController(activity, R.id.nav_fragment);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        Menu itemMenu = bottomNavigationView.getMenu();
-        itemMenu.getItem(4).setChecked(true);
 
         etAccount = view.findViewById(R.id.etAccount);
         etPassword = view.findViewById(R.id.etPassword);
         etPassword2 = view.findViewById(R.id.etPassword2);
         etNickName = view.findViewById(R.id.etNickname);
         ibRegister = view.findViewById(R.id.btRegister);
-        etEMail = view.findViewById(R.id.etEmail);
+        etPhone = view.findViewById(R.id.etPhone);
+        btSendPhone = view.findViewById(R.id.btSendPhone);
+        etCode = view.findViewById(R.id.etCode);
+        btVerification = view.findViewById(R.id.btVerification);
 
+        btSendPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phone = "+886"+etPhone.getText().toString().trim();
+
+                if (phone.isEmpty()){
+                    etPhone.setError("此欄位不能為空值");
+                    return;
+                }
+
+                sendVerificationCode(phone);
+            }
+        });
+
+        btVerification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String verificationCode = etCode.getText().toString().trim();
+                if (verificationCode.isEmpty()) {
+                    etCode.setError("驗證碼欄有誤");
+                    return;
+                }
+                verifyPhoneNumberWithCode(verificationId, verificationCode);
+            }
+        });
 
         ibRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +140,7 @@ public class Register_Normal_Fragment extends Fragment {
                 String password = etPassword.getText().toString().trim();
                 String password2 = etPassword2.getText().toString().trim();
                 String nickname = etNickName.getText().toString().trim();
-                String email = etEMail.getText().toString().trim();
+
 
                 if (account.isEmpty()) {
                     etAccount.setError("此欄位不能為空值");
@@ -141,21 +177,16 @@ public class Register_Normal_Fragment extends Fragment {
                     return;
                 }
 
-                if (!isEmail(email)){
-                    etEMail.setError("信箱格式不正確");
-                    return;
-                }
+//                register(nickname,email,password);
 
-                register(nickname,email,password);
-
+                if (checkCode == 1) {
                     if (Common.networkConnected(activity)) {
                         String Url = Common.URL_SERVER + "MemberServlet";
-                        Member member = null ;
-                        if(email.isEmpty()) {
-                            member = new Member(0, account, password, nickname);
-                        }else {
-                            member = new Member(0,account,password,email,nickname);
-                        }
+                        Member member = null;
+
+                        member = new Member(0, account, password, nickname);
+                        member.setLoginType(0);
+
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("action", "memberInsert");
                         jsonObject.addProperty("member", new Gson().toJson(member));
@@ -190,6 +221,10 @@ public class Register_Normal_Fragment extends Fragment {
                     } else {
                         Common.showToast(activity, "no network connection found");
                     }
+                } else {
+                    etCode.setError("驗證碼錯誤");
+                    return;
+                }
             }
         });
 
@@ -230,4 +265,127 @@ public class Register_Normal_Fragment extends Fragment {
                     }
                 });
     }
+
+    private void sendVerificationCode(String phone) {
+
+        // 設定簡訊語系為繁體中文
+        firebaseAuth.setLanguageCode("zh-Hant");
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phone, // 電話號碼，驗證碼寄送的電話號碼
+                60, // 驗證碼失效時間，設為60秒代表多次呼叫verifyPhoneNumber()，過了60秒才會發送第2次
+                TimeUnit.SECONDS, // 設定時間單位為秒
+                activity,
+                verifyCallbacks); // 監聽電話驗證的狀態
+    }
+
+    private void verifyPhoneNumberWithCode(String verificationId, String verificationCode) {
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, verificationCode);
+        firebaseAuthWithPhoneNumber(credential);
+    }
+    private void firebaseAuthWithPhoneNumber(PhoneAuthCredential credential) {
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            checkCode = 1 ;
+                            Common.showToast(activity,"認證成功！");
+                        } else {
+                            Exception exception = task.getException();
+                            String message = exception == null ? "Sign in fail." : exception.getMessage();
+                            Common.showToast(activity,message);
+                        }
+                    }
+                });
+    }
+
+
+//    private void sendVerificationCode(String phoneNum){
+//        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNum,60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD,mCallBack);
+//    }
+//
+//    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
+//            mCallBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//
+//        @Override
+//        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+//            super.onCodeSent(s, forceResendingToken);
+//            verificationId = s ;
+//        }
+//
+//        @Override
+//        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+//            String code = phoneAuthCredential.getSmsCode();
+//            if(code != null){
+//                verifyCode(code);
+//            }
+//        }
+//
+//        @Override
+//        public void onVerificationFailed(@NonNull FirebaseException e) {
+//            Common.showToast(activity,e.getMessage());
+//            Log.e("onVerificationFailed",e.getMessage());
+//
+//        }
+//    };
+
+//    private void verifyCode(String code){
+//        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId,code);
+//        signInWithCredential(credential);
+//    }
+//
+//    private void signInWithCredential(PhoneAuthCredential credential){
+//        firebaseAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if(task.isSuccessful()){
+//                                checkCode = 1 ;
+//                        }else {
+//                            Common.showToast(activity,task.getException().getMessage());
+//                            System.out.println(task.getException().getMessage());
+//                        }
+//                    }
+//                });
+//    }
+
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks verifyCallbacks
+            = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        /** This callback will be invoked in two situations:
+         1 - Instant verification. In some cases the phone number can be instantly
+         verified without needing to send or enter a verification code.
+         2 - Auto-retrieval. On some devices Google Play services can automatically
+         detect the incoming verification SMS and perform verification without
+         user action. */
+        @Override
+        public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
+            Log.d(TAG, "onVerificationCompleted: " + credential);
+            Common.showToast(activity,"已發送簡訊");
+        }
+
+        /**
+         * 發送驗證碼填入的電話號碼格式錯誤，或是使用模擬器發送都會產生發送錯誤，
+         * 使用模擬器發送會產生下列執行錯誤訊息：
+         * App validation failed. Is app running on a physical device?
+         */
+        @Override
+        public void onVerificationFailed(@NonNull FirebaseException e) {
+            Log.e(TAG, "onVerificationFailed: " + e.getMessage());
+        }
+        /**
+         * The SMS verification code has been sent to the provided phone number,
+         * we now need to ask the user to enter the code and then construct a credential
+         * by combining the code with a verification ID.
+         */
+        @Override
+        public void onCodeSent(@NonNull String id, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+            Log.d(TAG, "onCodeSent: " + id);
+            verificationId = id;
+            resendToken = token;
+            // 顯示填寫驗證碼版面
+
+        }
+    };
+
+
 }

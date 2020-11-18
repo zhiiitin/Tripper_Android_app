@@ -136,6 +136,8 @@ public class GroupTripPage extends Fragment {
         mbrStatus = bundle.getInt("mbrStatus");
         final String startTime = bundle.getString("startTime");
 
+        Log.e("mbrStatus", String.valueOf(mbrStatus));
+
         bundle2.putString("tripId",tripId);
         bundle2.putInt("memberId",hostId);
 
@@ -231,6 +233,7 @@ public class GroupTripPage extends Fragment {
                     }
                 });
             }else {
+                btJoinGroup.setVisibility(View.GONE);
                 ibMbrFill.setVisibility(View.VISIBLE);
             }
         }
