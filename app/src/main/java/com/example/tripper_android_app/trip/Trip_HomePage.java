@@ -421,16 +421,11 @@ public class Trip_HomePage extends Fragment {
                 } else {
                     String userName = member.getNickName();
                     textUserName.setText(userName);
-
+                    pref.edit().putString("memberId", member.getId() + "").apply();
                 }
-                String nickname = member.getNickName();
-                textUserName.setText(" " + nickname + " ");
-                pref.edit().putString("memberId", member.getId() + "").apply();
 
 
             }
-        } else {
-
         }
         showMemberPic();
     }
