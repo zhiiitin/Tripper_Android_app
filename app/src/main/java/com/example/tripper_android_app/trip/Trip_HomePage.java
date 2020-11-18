@@ -414,7 +414,7 @@ public class Trip_HomePage extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
-                if (member == null) {
+                if (member == null ||member.getNickName() == null ) {
                     pref.edit().putBoolean("login", false).apply();
                     Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
 

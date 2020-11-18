@@ -706,12 +706,12 @@
         android:label="fragment_group_manage_application"
         tools:layout="@layout/fragment_group_manage_application" />
     <fragment
-<<<<<<< HEAD
+
         android:id="@+id/likeFragment"
         android:name="com.example.tripper_android_app.explore.LikeFragment"
         android:label="fragment_like"
         tools:layout="@layout/fragment_like" />
-=======
+    <fragment
         android:id="@+id/updateBlogPicFragment"
         android:name="com.example.tripper_android_app.blog.UpdateBlogPicFragment"
         android:label="fragment_update_blog_pic"
@@ -721,6 +721,6 @@
         android:name="com.example.tripper_android_app.group.GroupCommentFragment"
         android:label="fragment_group_comment"
         tools:layout="@layout/fragment_group_comment" />
->>>>>>> 073eb3239516139216509990bd56ee64524398fc
+
 
 </navigation>
