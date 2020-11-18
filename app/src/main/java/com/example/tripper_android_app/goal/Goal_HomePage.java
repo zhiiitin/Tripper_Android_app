@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -41,7 +42,7 @@ import java.util.concurrent.ExecutionException;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class Goal_HomePage extends Fragment {
+public class Goal_HomePage extends Fragment implements Serializable {
     public static final String TAG = "TAG_GoalHomePage";
     private MainActivity activity;
     private ImageView ivUserPic, ivStar;
@@ -52,8 +53,8 @@ public class Goal_HomePage extends Fragment {
     private FirebaseUser mUser;
     // 成就使用
     private Goal goal;
-    private List<Goal> goals;
-    private int goalId, goalCond1, goalCond2;
+    private List<Goal> goals, goalList;
+    private int goalId, goalCond1, goalCond2, goalCond3;
 
 
     @Override
@@ -94,6 +95,22 @@ public class Goal_HomePage extends Fragment {
         // 檢查網路連線
         if(Common.networkConnected(activity)) {
             String url = Common.URL_SERVER + "GoalServlet";
+            JsonObject jsonObjectForGoalTable = new JsonObject();
+            jsonObjectForGoalTable.addProperty("action", "getGoalTable");
+            String jsonOutForGoalTable = jsonObjectForGoalTable.toString();
+            Log.d(TAG, "Goal_jsonOut:" + jsonOutForGoalTable);
+            CommonTask getDataTask = new CommonTask(url, jsonOutForGoalTable);
+            try {
+                String jsonInForGoalTable = getDataTask.execute().get();
+                Type listTypeForGoalTable = new TypeToken<List<Goal>>() {
+                }.getType();
+                goalList = new Gson().fromJson(jsonInForGoalTable, listTypeForGoalTable);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getGoalByMember");
             jsonObject.addProperty("memberId", memberId);
@@ -107,7 +124,7 @@ public class Goal_HomePage extends Fragment {
                 }.getType();
                 goals = new Gson().fromJson(jsonIn, listType);
                 goal = goals.get(0);
-                if(goal == null){
+                if(goal == null) {
                     Common.showToast(activity, "搜尋不到該帳號資訊");
                 } else {
                     // 於成就主頁載入時，計算並顯示建立的"行程數"
@@ -118,7 +135,9 @@ public class Goal_HomePage extends Fragment {
                     tvBlogCount = view.findViewById(R.id.tvBlogCount);
                     goalCond2 = goal.getGoalCond2();
                     tvBlogCount.setText(String.valueOf(goalCond2));
-                    // 於成就主頁載入時，計算並顯示解鎖的"成就數"
+                    // 於成就主頁載入時，計算建立的"揪團數"，但不會於畫面顯示，而是為了要帶到下一頁判斷成就解鎖用
+                    goalCond3 = goal.getGoalCond3();
+                    // 於成就主頁載入時，計算並顯示解鎖的"成就數"(借位goalId = 成就數)
                     tvGoalCount = view.findViewById(R.id.tvGoalCount);
                     goalId = goal.getGoalId();
                     tvGoalCount.setText(String.valueOf(goalId));
@@ -152,7 +171,10 @@ public class Goal_HomePage extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("goalId", goalId);
+                bundle.putInt("goalCond1", goalCond1);
+                bundle.putInt("goalCond2", goalCond2);
+                bundle.putInt("goalCond3", goalCond3);
+                bundle.putSerializable("goalList", (Serializable) goalList);
                 Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
@@ -162,7 +184,10 @@ public class Goal_HomePage extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("goalId", goalId);
+                bundle.putInt("goalCond1", goalCond1);
+                bundle.putInt("goalCond2", goalCond2);
+                bundle.putInt("goalCond3", goalCond3);
+                bundle.putSerializable("goalList", (Serializable) goalList);
                 Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
@@ -172,7 +197,10 @@ public class Goal_HomePage extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("goalId", goalId);
+                bundle.putInt("goalCond1", goalCond1);
+                bundle.putInt("goalCond2", goalCond2);
+                bundle.putInt("goalCond3", goalCond3);
+                bundle.putSerializable("goalList", (Serializable) goalList);
                 Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
@@ -182,7 +210,10 @@ public class Goal_HomePage extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("goalId", goalId);
+                bundle.putInt("goalCond1", goalCond1);
+                bundle.putInt("goalCond2", goalCond2);
+                bundle.putInt("goalCond3", goalCond3);
+                bundle.putSerializable("goalList", (Serializable) goalList);
                 Navigation.findNavController(v).navigate(R.id.action_goal_HomePage_to_goalListFragment, bundle);
             }
         });
