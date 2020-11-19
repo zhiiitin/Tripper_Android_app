@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -420,11 +421,11 @@ public class TripHasSavedPage extends Fragment {
         //秀第幾天的Adapter
         class ViewHolderDay extends RecyclerView.ViewHolder {
             TextView tvDay;
-
+            CardView cvDay;
             ViewHolderDay(View itemView) {
                 super(itemView);
                 tvDay = itemView.findViewById(R.id.tvDay);
-
+                cvDay = itemView.findViewById(R.id.cvDay);
             }
         }
 
@@ -481,6 +482,11 @@ public class TripHasSavedPage extends Fragment {
 
                 ViewHolderDay viewHolderDay = (ViewHolderDay) holder;
                 viewHolderDay.tvDay.setText(trip_day);
+                if(trip_day.length() < 1){
+                    viewHolderDay.cvDay.setVisibility(View.GONE);
+                }else{
+                    viewHolderDay.cvDay.setVisibility(View.VISIBLE);
+                }
             }
 
             if (position > 0 && position < day1count) {

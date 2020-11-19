@@ -418,7 +418,7 @@ public class Trip_HomePage extends Fragment {
                 }
                 if (member == null ||member.getNickName() == null ) {
                     pref.edit().putBoolean("login", false).apply();
-                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
 
                 } else {
                     String userName = member.getNickName();
@@ -440,7 +440,7 @@ public class Trip_HomePage extends Fragment {
         if (member == null) {
             SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
             pref.edit().putBoolean("login", false).apply();
-            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
         }else {
             if ( member.getLoginType() == 2 ) {
                 String Url = Common.URL_SERVER + "MemberServlet";

@@ -332,9 +332,7 @@
         <action
             android:id="@+id/action_trip_HomePage_to_notifyFragment"
             app:destination="@id/notifyFragment" />
-        <action
-            android:id="@+id/action_trip_HomePage_to_register_main_Fragment2"
-            app:destination="@id/register_main_Fragment" />
+
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"

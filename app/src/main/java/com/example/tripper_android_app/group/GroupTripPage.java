@@ -624,6 +624,8 @@ public class GroupTripPage extends Fragment {
                 viewHolderDay.tvDay.setText(trip_day);
                 if(trip_day.length() < 1){
                     viewHolderDay.cvDay.setVisibility(View.GONE);
+                }else{
+                    viewHolderDay.cvDay.setVisibility(View.VISIBLE);
                 }
             }
 
