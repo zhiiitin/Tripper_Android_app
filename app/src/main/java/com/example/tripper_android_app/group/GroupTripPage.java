@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,7 @@ import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.location.Location;
 import com.example.tripper_android_app.setting.member.Member;
 import com.example.tripper_android_app.task.CommonTask;
+import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.trip.TripGroup;
 import com.example.tripper_android_app.trip.TripHasSavedPage;
 import com.example.tripper_android_app.trip.Trip_LocInfo;
@@ -84,6 +86,8 @@ public class GroupTripPage extends Fragment {
     private CommonTask tripGet1Task;
     private int checkCount = 0 , mbrStatus = 0 ;
     private Bundle bundle2 = new Bundle();
+    private ImageTask groupImageTask;
+    private ImageView ivBackImage ;
     SharedPreferences pref = null;
 
 
@@ -120,6 +124,9 @@ public class GroupTripPage extends Fragment {
         textSavedShowTitle = view.findViewById(R.id.textSavedShowTitle);
         textShowSDate = view.findViewById(R.id.textShowSDate);
         textShowSTime = view.findViewById(R.id.textShowSTime);
+        ivBackImage = view.findViewById(R.id.ivBackImage);
+
+
 
 
         //recyclerview
@@ -135,6 +142,10 @@ public class GroupTripPage extends Fragment {
         hostId = bundle.getInt("memberId");
         mbrStatus = bundle.getInt("mbrStatus");
         final String startTime = bundle.getString("startTime");
+        int imageSize = getResources().getDisplayMetrics().widthPixels / 2;
+        String Url = Common.URL_SERVER + "Trip_M_Servlet";
+        groupImageTask = new ImageTask(Url, tripId, imageSize,ivBackImage);
+        groupImageTask.execute();
 
         Log.e("mbrStatus", String.valueOf(mbrStatus));
 
@@ -548,10 +559,12 @@ public class GroupTripPage extends Fragment {
         //秀第幾天的Adapter
         class ViewHolderDay extends RecyclerView.ViewHolder {
             TextView tvDay;
+            CardView cvDay;
 
             ViewHolderDay(View itemView) {
                 super(itemView);
                 tvDay = itemView.findViewById(R.id.tvDay);
+                cvDay = itemView.findViewById(R.id.cvDay);
 
             }
         }
@@ -609,6 +622,9 @@ public class GroupTripPage extends Fragment {
 
                 GroupTripPage.GroupLocAdapter.ViewHolderDay viewHolderDay = (GroupTripPage.GroupLocAdapter.ViewHolderDay) holder;
                 viewHolderDay.tvDay.setText(trip_day);
+                if(trip_day.length() < 1){
+                    viewHolderDay.cvDay.setVisibility(View.GONE);
+                }
             }
 
             if (position > 0 && position < day1count) {

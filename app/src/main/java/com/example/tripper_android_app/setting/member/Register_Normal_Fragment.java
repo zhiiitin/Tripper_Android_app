@@ -11,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +57,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class Register_Normal_Fragment extends Fragment {
     private final static String TAG = "TAG_NormalFragment";
     private MainActivity activity;
-    private TextInputEditText etAccount, etPassword, etNickName, etPassword2,etPhone ,etCode;
+    private EditText etAccount, etPassword, etNickName, etPassword2,etPhone ,etCode;
     private ImageButton ibRegister;
+    private ImageView ivCheck ;
     private FirebaseAuth firebaseAuth;
     private String verificationId;
     private CardView btSendPhone , btVerification;
+    private TextView textView3 ;
     private int checkCode = 0 ;
     private PhoneAuthProvider.ForceResendingToken resendToken;
 
@@ -105,6 +109,19 @@ public class Register_Normal_Fragment extends Fragment {
         btSendPhone = view.findViewById(R.id.btSendPhone);
         etCode = view.findViewById(R.id.etCode);
         btVerification = view.findViewById(R.id.btVerification);
+        ivCheck = view.findViewById(R.id.ivCheck);
+        textView3 = view.findViewById(R.id.textView3);
+
+        //神奇小按鈕
+        textView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etAccount.setText("azsxv8541");
+                etPassword.setText("password");
+                etPassword2.setText("password");
+                etNickName.setText("小明");
+            }
+        });
 
         btSendPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,6 +306,8 @@ public class Register_Normal_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             checkCode = 1 ;
+                            btVerification.setVisibility(View.GONE);
+                            ivCheck.setVisibility(View.VISIBLE);
                             Common.showToast(activity,"認證成功！");
                         } else {
                             Exception exception = task.getException();
