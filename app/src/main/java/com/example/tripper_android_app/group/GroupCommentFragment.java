@@ -182,8 +182,6 @@ public class GroupCommentFragment extends Fragment {
 
     private void showComments(List<Blog_Comment> commentList) {
         if (commentList == null|| commentList.isEmpty()) {
-            Common.showToast(activity, R.string.textNoSpotsFound);
-
         }
         commentAdapter = (CommentAdapter)rvGroupComment.getAdapter();
         if (commentAdapter == null) {
@@ -223,7 +221,7 @@ public class GroupCommentFragment extends Fragment {
             holder.tvName.setText(blog_comment.getName());
             holder.ivPic.setImageResource(blog_comment.getIvImage());
             String icoUrl = Common.URL_SERVER + "MemberServlet";
-            //從MEMBER資料表 娶回來的資料無法秀在上面
+ //從MEMBER資料表 娶回來的資料無法秀在上面
             String member_Id = blog_comment.getMember_ID();
             ImageTask imageTask1 = new ImageTask(icoUrl,member_Id, imageSize, holder.ivPic);
             imageTask1.execute();
@@ -325,8 +323,6 @@ public class GroupCommentFragment extends Fragment {
                                                 }
                                             }
 
-
-
                                         }
                                     });
 
@@ -357,13 +353,10 @@ public class GroupCommentFragment extends Fragment {
                                     } else {
                                         Common.showToast(activity, R.string.textNoNetwork);
                                     }
-
                             }
                             return true;
 
-
                         }
-
 
                     });
                     popupMenu.show();

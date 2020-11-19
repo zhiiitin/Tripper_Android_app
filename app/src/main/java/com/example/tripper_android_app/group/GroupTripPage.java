@@ -1181,9 +1181,9 @@ public class GroupTripPage extends Fragment {
 
         AppMessage message = null;
         String msgType = Common.GROUP_TYPE ;
-        String account = pref.getString("account","");
+        String nickName = pref.getString("nickName","");
         String title =  "申請揪團通知";
-        String body = account + "申請加入「" + tripName + "」的揪團！";
+        String body = nickName + "申請加入「" + tripName + "」的揪團！";
         int stat = 0;
         int sendId = memberId ;
         int recId = hostId ;

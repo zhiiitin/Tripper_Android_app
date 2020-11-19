@@ -160,14 +160,7 @@ public class GroupManageFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    //顯示申請名單按鈕
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-            inflater.inflate(R.menu.group_application_list, menu);
-    }
-
-
+ 
     // 呈現在管理揪團人員的資料
     private void showGroupList(List<Member> tripGroupMembers) {
         if(tripGroupMembers == null || tripGroupMembers.isEmpty()){
