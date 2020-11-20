@@ -1169,7 +1169,7 @@ public class GroupTripPage extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Navigation.findNavController(textSavedShowTitle).popBackStack(R.id.groupFragment, false);
+                Navigation.findNavController(textSavedShowTitle).navigate(R.id.action_groupTripPage_to_groupFragment);
                 break;
 
             case R.id.btMemberList:

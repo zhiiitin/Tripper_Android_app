@@ -238,8 +238,10 @@ public class Register_Member_Fragment extends Fragment {
                     }
                     if (count == 0) {
                         Common.showToast(activity, "修改失敗");
+
                     } else {
                         Common.showToast(activity, "修改成功");
+                        cvUpdate.setVisibility(View.GONE);
                     }
                 } else {
                     Common.showToast(activity, "no network connection found");
