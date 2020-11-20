@@ -175,8 +175,6 @@ public class ExploreFragment1 extends Fragment {
             layoutInflater = LayoutInflater.from(context);
             this.explores = explores;
             this.context = context;
-
-
             /* 螢幕寬度除以4當作將圖的尺寸 */
             imageSize = 500;
         }
@@ -222,7 +220,7 @@ public class ExploreFragment1 extends Fragment {
             }
         }
 
-        @SuppressLint("WrongConstant")
+
         @Override
         public void onBindViewHolder(@NonNull final ExploreAdapter.MyViewHolder holder, int position) {
             final Explore explore = explores.get(position);
