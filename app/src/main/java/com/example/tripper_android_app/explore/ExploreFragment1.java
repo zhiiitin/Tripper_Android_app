@@ -24,10 +24,12 @@ import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -227,6 +229,7 @@ public class ExploreFragment1 extends Fragment {
             String url = Common.URL_SERVER + "BlogServlet";
             String id = explore.getBlogId();
             String userId = explore.getUserId();
+            preferences.edit().putString("userId",userId).apply();
             ImageTask imageTask = new ImageTask(url, id, imageSize, holder.ivBlogPic);
             imageTask.execute();
             holder.ivBlogPic.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -297,9 +300,17 @@ public class ExploreFragment1 extends Fragment {
                                 Common.showToast(activity, "點讚失敗");
                             } else {
                                 explore.setArticleGoodCount((explore.getArticleGoodCount() + 1));
-                                holder.tvThumbs.setText((explore.getArticleGoodCount() + ""));
+                                holder.tvThumbs.setText((explore.getArticleGoodCount() + "個人按讚"));
                                 goodIcon.setColorFilter(Color.RED);
                                 explore.setArticleGoodStatus(true);
+
+                                String logingId= preferences.getString("memberId",null);
+                                String blogId = preferences.getString("userId",null);
+                                if(logingId.equals(blogId)){
+                                    return;
+                                }else {
+                                    sendLikeMessage();
+                                }
                             }
                         } else {
                             Common.showToast(activity, "取得連線失敗");
@@ -326,7 +337,7 @@ public class ExploreFragment1 extends Fragment {
                                 Common.showToast(activity, "取消失敗");
                             } else {
                                 explore.setArticleGoodCount(explore.getArticleGoodCount() - 1);
-                                holder.tvThumbs.setText(((explore.getArticleGoodCount()) + ""));
+                                holder.tvThumbs.setText(((explore.getArticleGoodCount()) + "個人按讚"));
 
                                 goodIcon.setColorFilter(Color.parseColor("#424242"));
                                 explore.setArticleGoodStatus(false);
@@ -354,9 +365,26 @@ public class ExploreFragment1 extends Fragment {
                 }
             });
 
+
         }
 
+        private void sendLikeMessage(){
+            AppMessage appMessage = null;
+            String msgType = Common.BLOG_TYPE;
+            String logingId= preferences.getString("memberId",null);
+            String blogId = preferences.getString("userId",null);
+            String nickName = preferences.getString("nickName",null);
+            int recId = Integer.parseInt(blogId);
+            int memberId = Integer.parseInt(logingId);
+            String title =  "";
+            String body =  nickName +"已對你的網誌按讚";
+            int stat = 0;
+            int sendId = memberId ;
+            appMessage = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+            SendMessage sendMessage = new SendMessage(activity, appMessage);
+            sendMessage.sendMessage();
 
+        }
     }
 
 

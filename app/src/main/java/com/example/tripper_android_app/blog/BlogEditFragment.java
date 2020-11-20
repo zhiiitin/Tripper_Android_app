@@ -83,6 +83,7 @@ public class BlogEditFragment extends Fragment {
     private BlogPic blogPic = null ;
 
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -442,34 +443,6 @@ public class BlogEditFragment extends Fragment {
                 final BlogSpotAdapter.ViewHolderSpot viewHolderSpot = (BlogSpotAdapter.ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
                 viewHolderSpot.etBlog.setText(blog_spot.getLoc_Note());
-//點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
-                    }
-                });
-
-                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_blogEditPicFragmenmt, bundle);
-                    }
-                });
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
@@ -487,7 +460,9 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                 Bundle bundle2 = new Bundle();
                 if(blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
@@ -516,6 +491,39 @@ public class BlogEditFragment extends Fragment {
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
                 }
+
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
+                    }
+                });
+
+                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+
+
+
+                    }
+                });
+
 //------------------------------
 
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -584,33 +592,7 @@ public class BlogEditFragment extends Fragment {
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
                 viewHolderSpot.etBlog.setText(blog_spot.getLoc_Note());
 
-//點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
-                    }
-                });
-                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_blogEditPicFragmenmt, bundle);
-                    }
-                });
+
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
@@ -628,7 +610,10 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if(blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
+
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
@@ -660,6 +645,32 @@ public class BlogEditFragment extends Fragment {
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
                 }
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
+                    }
+                });
+                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
 //-------------------------
 //將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
@@ -719,33 +730,6 @@ public class BlogEditFragment extends Fragment {
                 final BlogSpotAdapter.ViewHolderSpot viewHolderSpot = (BlogSpotAdapter.ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
                 viewHolderSpot.etBlog.setText(blog_spot.getLoc_Note());
-//點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
-                    }
-                });
-                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_blogEditPicFragmenmt, bundle);
-                    }
-                });
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
@@ -763,7 +747,9 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if(blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
@@ -794,6 +780,33 @@ public class BlogEditFragment extends Fragment {
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
                 }
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
+                    }
+                });
+                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
 //--------------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -859,34 +872,7 @@ public class BlogEditFragment extends Fragment {
                 final BlogSpotAdapter.ViewHolderSpot viewHolderSpot = (BlogSpotAdapter.ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
                 viewHolderSpot.etBlog.setText(blog_spot.getLoc_Note());
-//點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_blogEditPicFragmenmt, bundle);
-                    }
-                });
-                //點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
-                    }
-                });
+
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
@@ -904,7 +890,10 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if(blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
+
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
@@ -935,6 +924,33 @@ public class BlogEditFragment extends Fragment {
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
                 }
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
+                    }
+                });
 
 //--------------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -1001,33 +1017,6 @@ public class BlogEditFragment extends Fragment {
                 final BlogSpotAdapter.ViewHolderSpot viewHolderSpot = (BlogSpotAdapter.ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
                 viewHolderSpot.etBlog.setText(blog_spot.getLoc_Note());
-                //點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
-                    }
-                });
-                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_blogEditPicFragmenmt, bundle);
-                    }
-                });
 
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
@@ -1046,7 +1035,9 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if(blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
@@ -1077,6 +1068,34 @@ public class BlogEditFragment extends Fragment {
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
                 }
+
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
+                    }
+                });
+                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
 
 //-------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -1144,33 +1163,7 @@ public class BlogEditFragment extends Fragment {
                 final BlogSpotAdapter.ViewHolderSpot viewHolderSpot = (BlogSpotAdapter.ViewHolderSpot) holder;
                 viewHolderSpot.tvLocationName.setText(blog_spot.getName());
                 viewHolderSpot.etBlog.setText(blog_spot.getLoc_Note());
-                //點擊新增照片進入到新增相片頁面
-                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
-                    }
-                });
-                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
-                    @Override
-                    public void onClick(View v) {
-                        String spotName = blog_spot.getName();
-                        String locId = blog_spot.getLoc_Id();
-                        String blogID = blog_spot.getTrip_Id();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("spotName", spotName);
-                        bundle.putString("locId", locId);
-                        bundle.putString("blogID", blogID);
-                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_blogEditPicFragmenmt, bundle);
-                    }
-                });
+
 
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
@@ -1189,7 +1182,9 @@ public class BlogEditFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
+                Bundle bundle2 = new Bundle();
                 if (blogPic != null) {
+                    bundle2.putSerializable("blogPic" + blog_spot.getLoc_Id(), blogPic);
                     if (blogPic.getPic1() != null) {
                         byte[] img1 = Base64.decode(blogPic.getPic1(), Base64.DEFAULT);
                         Glide.with(activity).load(img1).into(viewHolderSpot.ivSpot1);
@@ -1223,6 +1218,33 @@ public class BlogEditFragment extends Fragment {
                         viewHolderSpot.ibUpdatePic.setVisibility(View.GONE);
                     }
                 }
+
+                //點擊新增照片進入到新增相片頁面
+                viewHolderSpot.ibInsertPic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("spotName", spotName);
+                        bundle.putString("locId", locId);
+                        bundle.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
+                    }
+                });
+                viewHolderSpot.ibUpdatePic.setOnClickListener(new View.OnClickListener() {  //點擊顯示照片recyclerView
+                    @Override
+                    public void onClick(View v) {
+                        String spotName = blog_spot.getName();
+                        String locId = blog_spot.getLoc_Id();
+                        String blogID = blog_spot.getTrip_Id();
+                        bundle2.putString("spotName", spotName);
+                        bundle2.putString("locId", locId);
+                        bundle2.putString("blogID", blogID);
+                        Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
 
 //----------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {

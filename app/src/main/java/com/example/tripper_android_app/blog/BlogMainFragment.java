@@ -37,10 +37,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 import com.example.tripper_android_app.util.TimeCountUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -278,6 +280,16 @@ public class BlogMainFragment extends Fragment {
                             tvDetailGoodCount.setText((article.getArticleGoodCount() + ""));
                             goodIcon.setColorFilter(Color.RED);
                             article.setArticleGoodStatus(true);
+                            Bundle bundle = getArguments();
+                            String logingId= preferences.getString("memberId",null);
+                            String blogId = bundle.getString("UserId");
+                            if(logingId.equals(blogId)){
+                                return;
+                            }else {
+                                sendLikeMessage();
+                            }
+
+
                         }
                     } else {
                         Common.showToast(activity, "取得連線失敗");
@@ -403,23 +415,34 @@ public class BlogMainFragment extends Fragment {
                         detail_page_do_comment.setText("");
 
 
-
-
                     }
                 } else {
                     Common.showToast(activity, R.string.textNoNetwork);
                 }
+
             }
 
 
         });
 
-
-
-
-
-
-
+    }
+    private void sendCommentMessage(){
+        AppMessage appMessage = null;
+        Bundle bundle = getArguments();
+        String msgType = Common.BLOG_TYPE;
+        String logingId= preferences.getString("memberId",null);
+        String blogId = bundle.getString("UserId");
+        String nickName = preferences.getString("nickName",null);
+        String comment = preferences.getString("comment",null);
+        int recId = Integer.parseInt(blogId);
+        int memberId = Integer.parseInt(logingId);
+        String title = "";
+        String body =   nickName +"已對你的網誌留言 :"+ comment;
+        int stat = 0;
+        int sendId = memberId ;
+        appMessage = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+        SendMessage sendMessage = new SendMessage(activity, appMessage);
+        sendMessage.sendMessage();
     }
 
 
@@ -878,10 +901,10 @@ public class BlogMainFragment extends Fragment {
             TimeCountUtil timeCountUtil = new TimeCountUtil();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
+            String commentDate = blog_comment.getDate();
             try {
-                date = format.parse(blog_comment.getDate());
+                date = format.parse(commentDate);
             } catch (ParseException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             holder.tvDate.setText(timeCountUtil.timeCount(date));
@@ -1049,6 +1072,24 @@ public class BlogMainFragment extends Fragment {
             editComment = itemView.findViewById(R.id.editComment);
 
         }
+    }
+    private void sendLikeMessage(){
+        AppMessage appMessage = null;
+        Bundle bundle = getArguments();
+        String msgType = Common.BLOG_TYPE;
+        String logingId= preferences.getString("memberId",null);
+        String blogId = bundle.getString("UserId");
+        String nickName = preferences.getString("nickName",null);
+        int recId = Integer.parseInt(blogId);
+        int memberId = Integer.parseInt(logingId);
+        String title =  "";
+        String body =  nickName +"已對你的網誌按讚";
+        int stat = 0;
+        int sendId = memberId ;
+        appMessage = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+        SendMessage sendMessage = new SendMessage(activity, appMessage);
+        sendMessage.sendMessage();
+
     }
 
 
