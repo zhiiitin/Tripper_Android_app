@@ -327,11 +327,11 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
-            app:destination="@id/register_main_Fragment" />
-        <action
             android:id="@+id/action_trip_HomePage_to_notifyFragment"
             app:destination="@id/notifyFragment" />
+        <action
+            android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
+            app:destination="@id/register_main_Fragment" />
 
     </fragment>
     <fragment
