@@ -197,21 +197,26 @@ public class Trip_HomePage extends Fragment {
         List<Trip_M> tripMs = new ArrayList<>();
         if (Common.networkConnected(activity)) {
             String url = Common.URL_SERVER + "TripServlet";
-            String id = pref.getString("memberId", Common.PREF_FILE + "");
+            String id = pref.getString("memberId", "");
+            if(id.isEmpty()){
+                Navigation.findNavController(this.getView()).navigate(R.id.register_main_Fragment);
+            }
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
             // 抓取會員ID
             jsonObject.addProperty("memberId", id);
             String jsonOut = jsonObject.toString();
             tripGetAllTask = new CommonTask(url, jsonOut);
+            String jsonIn = "";
             try {
-                String jsonIn = tripGetAllTask.execute().get();
+                jsonIn = tripGetAllTask.execute().get();
                 Type type = new TypeToken<List<Trip_M>>() {
                 }.getType();
                 tripMs = new Gson().fromJson(jsonIn, type);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
+
         } else {
             Common.showToast(activity, "請確認網路連線");
         }
@@ -430,6 +435,9 @@ public class Trip_HomePage extends Fragment {
 
 
             }
+        }else{
+            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+
         }
         showMemberPic();
     }
@@ -440,7 +448,7 @@ public class Trip_HomePage extends Fragment {
         if (member == null) {
             SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
             pref.edit().putBoolean("login", false).apply();
-            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+            Navigation.findNavController(this.getView()).navigate(R.id.register_main_Fragment);
         }else {
             if ( member.getLoginType() == 2 ) {
                 String Url = Common.URL_SERVER + "MemberServlet";
