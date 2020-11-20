@@ -77,7 +77,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBlog"
         android:layout_width="405dp"
-        android:layout_height="wrap_content"
+        android:layout_height="470dp"
         android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
