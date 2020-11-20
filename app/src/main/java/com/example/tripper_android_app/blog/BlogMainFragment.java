@@ -759,11 +759,8 @@ public class BlogMainFragment extends Fragment {
                                 alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 alertDialog.setCancelable(true);
                                 alertDialog.show();
-
                             }
-
                         }
-
                     });
                 }if (blogPic.getPic4() != null) {
                     byte[] img4 = Base64.decode(blogPic.getPic4(), Base64.DEFAULT);
@@ -801,16 +798,10 @@ public class BlogMainFragment extends Fragment {
                                 alertDialog.show();
 
                             }
-
                         }
                     });
                 }
-
             }
-
-
-
-
 
         }
 
@@ -839,8 +830,6 @@ public class BlogMainFragment extends Fragment {
                 tvSpotName= itemView.findViewById(R.id.tvSpotName);
                 horizontalScrollView = itemView.findViewById(R.id.horizontalScrollView);
                 tvDate = itemView.findViewById(R.id.tvDate);
-
-
             }
         }
     }

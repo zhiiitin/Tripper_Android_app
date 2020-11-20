@@ -165,7 +165,7 @@ public class Register_Member_Fragment extends Fragment {
                     Log.e(TAG, e.toString());
                 }if(member.getId()!=0) {
                     String id = member.getId() + "";
-                    tvId.setText(account);
+                    tvId.setText("會員ID："+account);
                     pref.edit()
                             .putString("memberId", id)
                             .putString("memberPw" , member.getPassword())
@@ -238,8 +238,10 @@ public class Register_Member_Fragment extends Fragment {
                     }
                     if (count == 0) {
                         Common.showToast(activity, "修改失敗");
+
                     } else {
                         Common.showToast(activity, "修改成功");
+                        cvUpdate.setVisibility(View.GONE);
                     }
                 } else {
                     Common.showToast(activity, "no network connection found");

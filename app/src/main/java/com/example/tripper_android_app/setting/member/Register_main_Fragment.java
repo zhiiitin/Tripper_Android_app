@@ -218,12 +218,12 @@ public class Register_main_Fragment extends Fragment {
                         String accountDb = account.getEmail();
                         String password = "password" ;
                         String nickname = account.getDisplayName();
-
+                        String photoStr = account.getPhotoUrl().toString();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("photoUrl",photoStr);
 
                         Log.e("DisplayName", account.getDisplayName());
                         Log.e("GivenName", account.getGivenName());
-
-
 
                         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
                                 MODE_PRIVATE);
@@ -249,7 +249,7 @@ public class Register_main_Fragment extends Fragment {
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
                         }
-                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_trip_HomePage);
+                     Navigation.findNavController(ivRegister_Google).navigate(R.id.action_register_main_Fragment_to_trip_HomePage,bundle);
 
                 } else {
                     Log.e(TAG, "GoogleSignInAccount is null");

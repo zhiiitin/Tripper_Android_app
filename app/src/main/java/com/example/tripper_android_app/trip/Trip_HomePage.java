@@ -94,6 +94,8 @@ public class Trip_HomePage extends Fragment {
     private Member member ;
     private FirebaseAuth auth;
     private FirebaseUser mUser;
+    private Bundle bundle ;
+    private String urlStr ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -416,7 +418,7 @@ public class Trip_HomePage extends Fragment {
                 }
                 if (member == null ||member.getNickName() == null ) {
                     pref.edit().putBoolean("login", false).apply();
-                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
 
                 } else {
                     String userName = member.getNickName();
@@ -438,10 +440,9 @@ public class Trip_HomePage extends Fragment {
         if (member == null) {
             SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
             pref.edit().putBoolean("login", false).apply();
-            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
         }else {
-
-            if ( member.getLoginType() == 1 || member.getLoginType() == 2 ) {
+            if ( member.getLoginType() == 2 ) {
                 String Url = Common.URL_SERVER + "MemberServlet";
                 int id = member.getId();
                 int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
@@ -456,6 +457,7 @@ public class Trip_HomePage extends Fragment {
                     ivUserPic.setImageBitmap(bitmap);
                 } else {
                     //否則連接到第三方大頭照
+                    System.out.println(mUser.getPhotoUrl().toString());
                     String fbPhotoURL = mUser.getPhotoUrl().toString();
                     Glide.with(this).load(fbPhotoURL).into(ivUserPic);
 
@@ -486,11 +488,60 @@ public class Trip_HomePage extends Fragment {
                         }
                     });
                     thread.start();
-
-
                 }
 
-            } else {
+            }else if (member.getLoginType() == 1 ) {
+                    bundle = getArguments();
+                    if(bundle != null) {
+                        urlStr = bundle.getString("photoUrl");
+                    }
+                    String Url = Common.URL_SERVER + "MemberServlet";
+                    int id = member.getId();
+                    int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = new ImageTask(Url, id, imageSize).execute().get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //若此帳號之資料庫有照片，便使用資料庫的照
+                    if (bitmap != null) {
+                        ivUserPic.setImageBitmap(bitmap);
+                    } else {
+                        //否則連接到第三方大頭照
+
+                        String googlePhotoURL = urlStr ;
+                        Glide.with(this).load(googlePhotoURL).into(ivUserPic);
+
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bitmap bitmap = null;
+                                try {
+                                    bitmap = Glide.with(activity).asBitmap().load(googlePhotoURL).submit().get();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                byte[] image = getBytesByBitmap(bitmap) ;
+                                String url = Common.URL_SERVER + "MemberServlet";
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("action", "memberUpdate");
+                                jsonObject.addProperty("member", new Gson().toJson(member));
+                                jsonObject.addProperty("imageBase64", Base64.encodeToString(image, Base64.DEFAULT));
+                                int count = 0;
+                                try {
+                                    String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                    count = Integer.parseInt(result);
+                                } catch (Exception e) {
+                                    Log.e(TAG, e.toString());
+                                }
+                            }
+                        });
+                        thread.start();
+                    }
+            }else {
 
                 String Url = Common.URL_SERVER + "MemberServlet";
                 int id = member.getId();

@@ -138,7 +138,6 @@ public class UpdateBlogPicFragment extends Fragment {
         System.out.println(locId);
         blogPic = (BlogPic) bundle.getSerializable("blogPic"+locId);
         Log.d("$$$$$$$$$$$$$$$$$$$$$$$$$$","blogPic"+locId);
-
         bitmapList = new ArrayList<>() ;
 
 //RecyclerView

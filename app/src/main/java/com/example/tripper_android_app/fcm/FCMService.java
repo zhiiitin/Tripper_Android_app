@@ -45,6 +45,7 @@ public class FCMService extends FirebaseMessagingService {
             body = notification.getBody();
             MessageDelegate messageDelegate = MessageDelegate.getInstance();
             messageDelegate.onMessage(body);
+
         }
         // 取得自訂資料
         Map<String, String> map = remoteMessage.getData();

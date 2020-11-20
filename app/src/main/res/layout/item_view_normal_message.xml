@@ -23,9 +23,10 @@
 
         <TextView
             android:id="@+id/tvMsgBody"
-            android:layout_width="wrap_content"
+            android:layout_width="310dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
             android:maxLines="3"
             android:text="message"
             android:textSize="18sp"
@@ -39,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:layout_marginBottom="2dp"
             android:text="2020-10-10 15:30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/civPic" />

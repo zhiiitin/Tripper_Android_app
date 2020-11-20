@@ -17,6 +17,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -433,6 +434,12 @@ public class BlogEditFragment extends Fragment {
 
                 BlogSpotAdapter.ViewHolderDay viewHolderDay = (BlogSpotAdapter.ViewHolderDay) holder;
                 viewHolderDay.tvDay.setText(blog_day);
+
+                if(blog_day.length() < 1){
+                    viewHolderDay.cvDay.setVisibility(View.GONE);
+                }else{
+                    viewHolderDay.cvDay.setVisibility(View.VISIBLE);
+                }
 
             }
 
@@ -1335,11 +1342,12 @@ public class BlogEditFragment extends Fragment {
         //秀第幾天的ViewHolder
         class ViewHolderDay extends RecyclerView.ViewHolder {
             TextView tvDay;
+            CardView cvDay;
 
             ViewHolderDay(View itemView) {
                 super(itemView);
                 tvDay = itemView.findViewById(R.id.tvDay);
-
+                cvDay = itemView.findViewById(R.id.cvDay);
             }
         }
 
