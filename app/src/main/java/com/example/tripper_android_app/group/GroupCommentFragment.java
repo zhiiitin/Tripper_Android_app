@@ -57,6 +57,7 @@ public class GroupCommentFragment extends Fragment {
     private RecyclerView rvGroupComment ;
     private CommonTask blogDeleteTask,blogGetAllTask,commentFinishTask ;
     private EditText messageEdit ;
+    private TextView tvMagic ;
     private ImageView sendBtn ;
     private List<Blog_Comment> commentList ;
     private SharedPreferences preferences;
@@ -105,10 +106,19 @@ public class GroupCommentFragment extends Fragment {
         rvGroupComment = view.findViewById(R.id.rvGroupComment);
         messageEdit = view.findViewById(R.id.messageEdit);
         sendBtn = view.findViewById(R.id.sendBtn);
+        tvMagic = view.findViewById(R.id.textView5);
 
         rvGroupComment.setLayoutManager(new LinearLayoutManager(activity));
         commentList = getComment();
         showComments(commentList);
+
+        //神奇小按鈕
+        tvMagic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageEdit.setText("大家抱歉，我臨時有事不能參加，要先行告退了");
+            }
+        });
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
