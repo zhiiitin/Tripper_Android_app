@@ -143,6 +143,14 @@ public class CreateBlogFinishFragment extends Fragment {
             }
         });
 
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etTitle.setText("東海岸的跨年札記");
+                etInfo.setText("以往跨年幾乎都是在人擠人的跨年晚會度過，但今年下定決心，逃離擁擠的都市，來到了台東，享受東岸的愜意，迎接新年的第一道曙光！");
+            }
+        });
+
 
 //按下發佈網誌按鈕，送出標題及描述
         ibBlogUpdate.setOnClickListener(new View.OnClickListener() {

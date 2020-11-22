@@ -116,10 +116,10 @@ public class Register_Normal_Fragment extends Fragment {
         textView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etAccount.setText("azsxv8541");
+                etAccount.setText("tibame2020");
                 etPassword.setText("password");
                 etPassword2.setText("password");
-                etNickName.setText("小明");
+                etNickName.setText("小潘");
             }
         });
 
@@ -190,7 +190,7 @@ public class Register_Normal_Fragment extends Fragment {
                 }
 
                 if (nickname.length() > 10) {
-                    etPassword.setError("暱稱限定10字元");
+                    etNickName.setError("暱稱限定10字元");
                     return;
                 }
 

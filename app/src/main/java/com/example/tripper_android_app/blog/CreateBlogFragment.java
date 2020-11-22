@@ -461,6 +461,7 @@ public class CreateBlogFragment extends Fragment {
                 });
 
 
+
 //將選擇完且上傳的照片show出來
                 String url = Common.URL_SERVER + "BlogServlet";
                 JsonObject jsonObject = new JsonObject();
@@ -587,6 +588,15 @@ public class CreateBlogFragment extends Fragment {
                         bundle2.putString("blogID", blogID);
                         Log.d("CREAT##%^&#%#*&%#&^*#%^#&%#&*", "blogPic" + blog_spot.getLoc_Id());
                         Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+
+                //神奇小按鈕
+                viewHolderSpot.tvInput.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+                        viewHolderSpot.etBlog.setText("三仙台一直是來台東旅遊時，必訪的景點之一！一踏進這裏，便會看到非常著名的跨海拱橋，連接著本島與三仙島，還有波濤洶湧的太平洋海浪伴隨著，這裡的沙灘充滿了鵝卵石，當然也不免俗的，要拍上一張堆積鵝卵石的照片當作紀念呢，也算是有跟上潮流吧！");
                     }
                 });
 
@@ -764,6 +774,8 @@ public class CreateBlogFragment extends Fragment {
                         });
                     }
                 }
+
+
                 //已有照片時，按下會進入更新照片頁面
                 viewHolderSpot.ibReUpdatePic.setOnClickListener(new View.OnClickListener() { //重新選擇相片
                     @Override
@@ -779,6 +791,8 @@ public class CreateBlogFragment extends Fragment {
                         Navigation.findNavController(v).navigate(R.id.action_createBlogFragment_to_updateBlogPicFragment, bundle2);
                     }
                 });
+
+
 
 //進到挑選照片頁面前，先將note存偏好設定
                 SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE,
