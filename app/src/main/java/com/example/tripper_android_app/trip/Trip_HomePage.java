@@ -405,6 +405,11 @@ public class Trip_HomePage extends Fragment {
     //show 使用者資訊
     private void showMember() throws ExecutionException, InterruptedException {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        if (pref == null || pref.equals("")) {
+            System.out.println("#### back to logint");
+            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+        }
+
         boolean login = pref.getBoolean("login", false);
         if (login) {
             if (Common.networkConnected(activity)) {
