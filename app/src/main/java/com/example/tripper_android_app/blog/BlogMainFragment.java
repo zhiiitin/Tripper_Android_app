@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -640,23 +641,20 @@ public class BlogMainFragment extends Fragment {
             jsonObject.addProperty("blog_Id", blogD.getBlogId());
             jsonObject.addProperty("loc_Id", blogD.getLocationId());
             getImageTask = new CommonTask(url, jsonObject.toString());
-//            horizontalScrollView.post(new Runnable() {
-//                public void run() {
-//                    horizontalScrollView.scrollTo(0, horizontalScrollView.getBottom());
-//                }
-//            });
-             Runnable runnable = new Runnable() {
+           horizontalScrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
-                public void run() {
-                    horizontalScrollView.scrollTo(0, 300);// 改變滾動條的位置
+                public void onGlobalLayout() {
+                    horizontalScrollView.post(new Runnable() {
+                        public void run() {
+                          horizontalScrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
                 }
-            };
-            Handler handler = new Handler();
-            handler.postDelayed(runnable, 200);
-            horizontalScrollView.scrollTo(0, holder.linear.getMeasuredHeight() - horizontalScrollView.getHeight());
+            });
 
 
-            
+
+
 
 
             blogPic = new BlogPic();
