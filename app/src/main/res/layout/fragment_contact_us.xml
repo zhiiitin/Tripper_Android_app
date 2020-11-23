@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewBB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
@@ -84,7 +84,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewBB" />
 
     <ImageButton
         android:id="@+id/ibSubmit"
