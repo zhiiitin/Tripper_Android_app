@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -82,6 +84,8 @@ public class BlogMainFragment extends Fragment {
     private BlogPic blogPic =null;
     private HorizontalScrollView horizontalScrollView;
     private LinearLayout backGround;
+    private int offset = 0;
+    private int scrollViewWidth = 0;
 
 
 
@@ -152,7 +156,7 @@ public class BlogMainFragment extends Fragment {
         ivTripList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(rvBlog).navigate(R.id.action_blogMainFragment_to_blogTripListFragment);
+                Navigation.findNavController(rvBlog).navigate(R.id.blogTripListFragment);
             }
         });
 
@@ -375,6 +379,12 @@ public class BlogMainFragment extends Fragment {
         commentList = getComment();
         showComments(commentList);
         EditText detail_page_do_comment = view.findViewById(R.id.detail_page_do_comment);
+        tvComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_page_do_comment.setText("這個行程安排得太棒了");
+            }
+        });
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -630,11 +640,25 @@ public class BlogMainFragment extends Fragment {
             jsonObject.addProperty("blog_Id", blogD.getBlogId());
             jsonObject.addProperty("loc_Id", blogD.getLocationId());
             getImageTask = new CommonTask(url, jsonObject.toString());
-            horizontalScrollView.post(new Runnable() {
+//            horizontalScrollView.post(new Runnable() {
+//                public void run() {
+//                    horizontalScrollView.scrollTo(0, horizontalScrollView.getBottom());
+//                }
+//            });
+             Runnable runnable = new Runnable() {
+                @Override
                 public void run() {
-                    horizontalScrollView.scrollTo(0, horizontalScrollView.getBottom());
+                    horizontalScrollView.scrollTo(0, 300);// 改變滾動條的位置
                 }
-            });
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 200);
+            horizontalScrollView.scrollTo(0, holder.linear.getMeasuredHeight() - horizontalScrollView.getHeight());
+
+
+            
+
+
             blogPic = new BlogPic();
             try {
                 String jsonIn = getImageTask.execute().get();
@@ -817,6 +841,7 @@ public class BlogMainFragment extends Fragment {
             private ImageView ivPic1,ivPic2,ivPic3,ivPic;
             private TextView tvLocation,tvDays,tvBlogDescription,tvSpotName,tvPic,tvDate;
             private ImageButton imDays;
+            private LinearLayout linear;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
@@ -832,6 +857,7 @@ public class BlogMainFragment extends Fragment {
                 tvSpotName= itemView.findViewById(R.id.tvSpotName);
                 horizontalScrollView = itemView.findViewById(R.id.horizontalScrollView);
                 tvDate = itemView.findViewById(R.id.tvDate);
+                linear = itemView.findViewById(R.id.linear);
             }
         }
     }
@@ -922,6 +948,12 @@ public class BlogMainFragment extends Fragment {
                                      holder.editComment.setText(blog_comment.getContent());
                                      holder.ivSave.setVisibility(View.VISIBLE);
                                      holder.ivBack.setVisibility(View.VISIBLE);
+                                     holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             holder.editComment.setText("It's amazing");
+                                         }
+                                     });
                                      holder.ivBack.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {

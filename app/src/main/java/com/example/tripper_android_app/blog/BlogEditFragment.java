@@ -531,12 +531,19 @@ public class BlogEditFragment extends Fragment {
                     }
                 });
 
+                viewHolderSpot.tvLocationName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.etBlog.setText("我是第一次來這個景點！！！");
+                    }
+                });
 //------------------------------
 
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         viewHolderSpot.ibSave.setVisibility(View.VISIBLE);
+
                     }
                 });
 //將備註心得傳回資料庫
@@ -678,6 +685,12 @@ public class BlogEditFragment extends Fragment {
                         Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
                     }
                 });
+                viewHolderSpot.tvLocationName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.etBlog.setText("我是第一次來這個景點！！！");
+                    }
+                });
 //-------------------------
 //將備註心得傳回資料庫
                 viewHolderSpot.ibSave.setOnClickListener(new View.OnClickListener() {
@@ -811,6 +824,12 @@ public class BlogEditFragment extends Fragment {
                         bundle2.putString("locId", locId);
                         bundle2.putString("blogID", blogID);
                         Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+                viewHolderSpot.tvLocationName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.etBlog.setText("我是第一次來這個景點！！！");
                     }
                 });
 
@@ -958,6 +977,12 @@ public class BlogEditFragment extends Fragment {
                         Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_createBlogPicFragment, bundle);
                     }
                 });
+                viewHolderSpot.tvLocationName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.etBlog.setText("我是第一次來這個景點！！！");
+                    }
+                });
 
 //--------------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -1103,6 +1128,12 @@ public class BlogEditFragment extends Fragment {
                     }
                 });
 
+                viewHolderSpot.tvLocationName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.etBlog.setText("我是第一次來這個景點！！！");
+                    }
+                });
 
 //-------------------
                 viewHolderSpot.etBlog.setOnClickListener(new View.OnClickListener() {
@@ -1250,6 +1281,12 @@ public class BlogEditFragment extends Fragment {
                         bundle2.putString("locId", locId);
                         bundle2.putString("blogID", blogID);
                         Navigation.findNavController(v).navigate(R.id.action_blogEditFragment_to_updateBlogPicFragment, bundle2);
+                    }
+                });
+                viewHolderSpot.tvLocationName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolderSpot.etBlog.setText("我是第一次來這個景點！！！");
                     }
                 });
 
