@@ -407,7 +407,7 @@ public class Trip_HomePage extends Fragment {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         if (pref == null || pref.equals("")) {
             System.out.println("#### back to logint");
-            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment2);
+            Navigation.findNavController(ivUserPic).navigate(R.id.register_main_Fragment);
         }
 
         boolean login = pref.getBoolean("login", false);
@@ -428,7 +428,7 @@ public class Trip_HomePage extends Fragment {
                 }
                 if (member == null ||member.getNickName() == null ) {
                     pref.edit().putBoolean("login", false).apply();
-                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+                    Navigation.findNavController(ivUserPic).navigate(R.id.register_main_Fragment);
 
                 } else {
                     String userName = member.getNickName();
@@ -441,7 +441,7 @@ public class Trip_HomePage extends Fragment {
 
             }
         }else{
-            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+            Navigation.findNavController(ivUserPic).navigate(R.id.register_main_Fragment);
 
         }
         showMemberPic();
