@@ -4,6 +4,6 @@
 
     <item
         android:id="@+id/btGroupComment"
-        android:title="布告欄"
+        android:title="佈告欄"
         app:showAsAction="always" />
 </menu>
