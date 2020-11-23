@@ -153,7 +153,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
         textTripTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etTripTitle.setText("跨年三天兩夜 Fun");
+                etTripTitle.setText("跨年兩天一夜 Fun");
                 textDate.setText("2020-12-30");
                 textTime.setText("10:00");
 

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
@@ -35,6 +36,7 @@ public class RegisterChangePwFragment extends Fragment {
     private MainActivity activity;
     private EditText etoldPassword,etNewPassword1,etNewPassword2 ;
     private ImageButton ibSaved ;
+    private TextView tvMagicc ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,16 @@ public class RegisterChangePwFragment extends Fragment {
         etNewPassword1 = view.findViewById(R.id.etNewPassword1);
         etNewPassword2 = view.findViewById(R.id.etNewPassword2);
         ibSaved = view.findViewById(R.id.ibSaved);
+        tvMagicc = view.findViewById(R.id.tvMagicc);
+
+        tvMagicc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etoldPassword.setText("password");
+                etNewPassword1.setText("Password");
+                etNewPassword2.setText("Password");
+            }
+        });
 
 
 
