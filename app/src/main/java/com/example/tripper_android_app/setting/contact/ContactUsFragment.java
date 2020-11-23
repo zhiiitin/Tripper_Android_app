@@ -87,7 +87,7 @@ public class ContactUsFragment extends Fragment {
                 String inputText = etMessage.getText().toString();
                 Intent sendMail = new Intent(Intent.ACTION_SENDTO);
                 sendMail.setType("message/rfc822");
-                sendMail.setData(Uri.parse("mailto:?subject=" + "意見反饋" +"&body=" + inputText + "&to=" + "k156178955@gmail.com"));
+                sendMail.setData(Uri.parse("mailto:?subject=" + "意見反饋" +"&body=" + inputText + "&to=" + "tripper20201125@gmail.com"));
                 try {
                     startActivity(Intent.createChooser(sendMail, "Send mail..."));
                     mailStatus = 1;
