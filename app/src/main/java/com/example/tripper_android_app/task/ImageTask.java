@@ -55,6 +55,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }
 
+
     @Override
     protected Bitmap doInBackground(Object... params) {
         JsonObject jsonObject = new JsonObject();

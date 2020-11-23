@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -80,6 +81,7 @@ public class BlogMainFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private BlogPic blogPic =null;
     private HorizontalScrollView horizontalScrollView;
+    private LinearLayout backGround;
 
 
 
@@ -122,7 +124,7 @@ public class BlogMainFragment extends Fragment {
         textDescription = view.findViewById(R.id.textDescription);
         ivDetailGoodIcon = view.findViewById(R.id.ivThumbs);
         ivTripList = view.findViewById(R.id.ivTripList);
-
+        backGround = view.findViewById(R.id.backGround);
         ivTripList.setImageResource(R.drawable.icontriplist);
         tvDescription.setText("網誌描述：");
         textDescription.setText(" " + " " + blogDesc);
@@ -606,7 +608,7 @@ public class BlogMainFragment extends Fragment {
             if(blogD.getBlogNote() != null){
                 holder.tvBlogDescription.setText(blogD.getBlogNote());
             }else {
-                holder.tvBlogDescription.setText("尚未新增描述");
+                holder.tvBlogDescription.setText("九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！");
             }
 
             holder.tvDays.setText(blogD.getS_Date());
