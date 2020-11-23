@@ -48,6 +48,7 @@ public class FriendsAddFragment extends Fragment {
     private Friends friend = null;
     private CardView cardView;
     private Button btAddFriend;
+    private Button btAutoEnter;
     SharedPreferences pref = null;
 
     @Override
@@ -73,6 +74,7 @@ public class FriendsAddFragment extends Fragment {
         tvNickname = view.findViewById(R.id.tvNickname);
         civPic = view.findViewById(R.id.civPic);
         btAddFriend = view.findViewById(R.id.btAddFriend);
+        btAutoEnter = view.findViewById(R.id.autoButton);
         //toolbar設定
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("新增好友");
@@ -156,6 +158,12 @@ public class FriendsAddFragment extends Fragment {
         };
         ibSearch.setOnClickListener(buttonClick);
         btAddFriend.setOnClickListener(buttonClick);
+        btAutoEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etSearch.setText("a0981948642@gmail.com");
+            }
+        });
 
     }
 
