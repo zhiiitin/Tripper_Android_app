@@ -44,7 +44,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:fontFamily="@font/noto_sans"
-        android:hint="新密碼"
+        android:hint="新密碼 (6~12字元)"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -76,5 +76,13 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNewPassword2" />
+
+    <TextView
+        android:id="@+id/tvMagicc"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etoldPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
