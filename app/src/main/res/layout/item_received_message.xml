@@ -34,7 +34,6 @@
             android:background="#FFFFFF"
             android:maxWidth="300dp"
             android:padding="7dp"
-            android:text="Hello my name is yancehn"
             android:textColor="#00BCD4"
             android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
