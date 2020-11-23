@@ -156,7 +156,6 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 etTripTitle.setText("跨年兩天一夜 Fun");
                 textDate.setText("2020-12-30");
                 textTime.setText("10:00");
-
             }
         });
 
