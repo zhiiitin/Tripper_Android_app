@@ -68,6 +68,11 @@
             android:background="@android:drawable/ic_menu_send"
             android:padding="8dp" />
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="34dp"
+            android:layout_height="34dp" />
+
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

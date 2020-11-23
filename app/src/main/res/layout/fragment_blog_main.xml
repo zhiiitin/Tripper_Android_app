@@ -18,103 +18,89 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:theme="@style/ToolBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-             >
+            android:theme="@style/ToolBarStyle"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-        <com.example.tripper_android_app.util.CircleImageView
-            android:id="@+id/ivUser"
-            android:layout_width="60dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="120dp"
-            android:layout_marginTop="11dp"
-            android:layout_marginBottom="4dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_user_pic"
-            app:layout_constraintBottom_toTopOf="@+id/ivBlog"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.example.tripper_android_app.util.CircleImageView
+                android:id="@+id/ivUser"
+                android:layout_width="60dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_user_pic"
+                app:layout_constraintBottom_toTopOf="@+id/ivBlog"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tvAccount"
-                android:theme="@style/ToolBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:textSize="20dp"
                 android:text="Yuna"
-                />
+                android:textSize="20dp"
+                android:theme="@style/ToolBarStyle" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="857dp"
+        android:id="@+id/nestedScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0B7D7575"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="651dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="3dp"
+            android:id="@+id/backGround"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-
-
-
 
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/GRAYYY"
                 android:text="澎湖自由行"
-                android:textSize="30dp"
-                android:textStyle="italic" />
+                android:textColor="@color/colorSender"
+                android:textSize="40dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="86dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="350dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="2dp"
                 android:lineSpacingExtra="6sp"
-                android:textColor="#000000"
+                android:textColor="@color/colorForNormalText"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textDescription"
+                android:layout_width="383dp"
                 android:layout_height="wrap_content"
-
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp">
-
-
-                <TextView
-                    android:id="@+id/textDescription"
-                    android:layout_width="383dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:lineSpacingExtra="6sp"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="241dp"
-                    tools:text="九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！" />
-
-            </androidx.cardview.widget.CardView>
+                android:layout_margin="10dp"
+                android:lineSpacingExtra="6sp"
+                android:textColor="@color/colorForText"
+                android:textSize="16sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="241dp"
+                tools:text="九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBlog"
-                android:layout_width="match_parent"
-                android:layout_height="469dp"
+                android:layout_width="415dp"
+                android:layout_height="467dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="6dp"
                 android:background="@color/colorForWhite"

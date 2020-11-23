@@ -83,7 +83,7 @@ public class ChatMainFragment extends Fragment {
     private MessageDelegate.OnMessageReceiveListener listener;
     private FirebaseUser mUser;
     private FirebaseAuth auth;
-    private Integer recieverId = 0 ;
+    private Integer recieverId = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,13 +108,13 @@ public class ChatMainFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             recieverId = bundle.getInt("recieverId");
-            revieverName  = bundle.getString("recirverName");
+            revieverName = bundle.getString("recirverName");
         } else {
             recieverId = Common.sendId;
             revieverName = Common.chatSenderName;
         }
 //
-        Log.d("### Chatfragment :: ", "recieverId : " + recieverId +"\t recieverName : " + revieverName);
+        Log.d("### Chatfragment :: ", "recieverId : " + recieverId + "\t recieverName : " + revieverName);
         //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(revieverName);
@@ -142,7 +142,7 @@ public class ChatMainFragment extends Fragment {
         messagess = getAllMessagess(memberId, recieverId);
         showChat(messagess);
 
-        if(messagess.size() != 0){
+        if (messagess.size() != 0) {
             recyclerView.scrollToPosition(messagess.size() - 1);
         }
 
@@ -209,7 +209,7 @@ public class ChatMainFragment extends Fragment {
         //發送訊息的ViewHolder
         private class SentMessageHolder extends RecyclerView.ViewHolder {
 
-            TextView messageTxt , tvUptime;
+            TextView messageTxt, tvUptime;
 
             public SentMessageHolder(@NonNull View itemView) {
                 super(itemView);
@@ -221,7 +221,7 @@ public class ChatMainFragment extends Fragment {
         //接收訊息的ViewHolder
         private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
-            TextView messageTxt , tvUptime ;
+            TextView messageTxt, tvUptime;
             CircleImageView revievePhoto;
 
             public ReceivedMessageHolder(@NonNull View itemView) {

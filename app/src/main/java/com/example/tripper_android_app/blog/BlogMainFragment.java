@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,20 +28,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
+import com.example.tripper_android_app.fcm.AppMessage;
 import com.example.tripper_android_app.task.CommonTask;
 import com.example.tripper_android_app.task.ImageTask;
 import com.example.tripper_android_app.util.CircleImageView;
 import com.example.tripper_android_app.util.Common;
+import com.example.tripper_android_app.util.SendMessage;
 import com.example.tripper_android_app.util.TimeCountUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -78,6 +83,9 @@ public class BlogMainFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private BlogPic blogPic =null;
     private HorizontalScrollView horizontalScrollView;
+    private LinearLayout backGround;
+    private int offset = 0;
+    private int scrollViewWidth = 0;
 
 
 
@@ -120,7 +128,7 @@ public class BlogMainFragment extends Fragment {
         textDescription = view.findViewById(R.id.textDescription);
         ivDetailGoodIcon = view.findViewById(R.id.ivThumbs);
         ivTripList = view.findViewById(R.id.ivTripList);
-
+        backGround = view.findViewById(R.id.backGround);
         ivTripList.setImageResource(R.drawable.icontriplist);
         tvDescription.setText("網誌描述：");
         textDescription.setText(" " + " " + blogDesc);
@@ -148,7 +156,7 @@ public class BlogMainFragment extends Fragment {
         ivTripList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(rvBlog).navigate(R.id.action_blogMainFragment_to_blogTripListFragment);
+                Navigation.findNavController(rvBlog).navigate(R.id.blogTripListFragment);
             }
         });
 
@@ -278,6 +286,16 @@ public class BlogMainFragment extends Fragment {
                             tvDetailGoodCount.setText((article.getArticleGoodCount() + ""));
                             goodIcon.setColorFilter(Color.RED);
                             article.setArticleGoodStatus(true);
+                            Bundle bundle = getArguments();
+                            String logingId= preferences.getString("memberId",null);
+                            String blogId = bundle.getString("UserId");
+                            if(logingId.equals(blogId)){
+                                return;
+                            }else {
+                                sendLikeMessage();
+                            }
+
+
                         }
                     } else {
                         Common.showToast(activity, "取得連線失敗");
@@ -361,6 +379,12 @@ public class BlogMainFragment extends Fragment {
         commentList = getComment();
         showComments(commentList);
         EditText detail_page_do_comment = view.findViewById(R.id.detail_page_do_comment);
+        tvComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_page_do_comment.setText("這個行程安排得太棒了");
+            }
+        });
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -403,23 +427,34 @@ public class BlogMainFragment extends Fragment {
                         detail_page_do_comment.setText("");
 
 
-
-
                     }
                 } else {
                     Common.showToast(activity, R.string.textNoNetwork);
                 }
+
             }
 
 
         });
 
-
-
-
-
-
-
+    }
+    private void sendCommentMessage(){
+        AppMessage appMessage = null;
+        Bundle bundle = getArguments();
+        String msgType = Common.BLOG_TYPE;
+        String logingId= preferences.getString("memberId",null);
+        String blogId = bundle.getString("UserId");
+        String nickName = preferences.getString("nickName",null);
+        String comment = preferences.getString("comment",null);
+        int recId = Integer.parseInt(blogId);
+        int memberId = Integer.parseInt(logingId);
+        String title = "";
+        String body =   nickName +"已對你的網誌留言 :"+ comment;
+        int stat = 0;
+        int sendId = memberId ;
+        appMessage = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+        SendMessage sendMessage = new SendMessage(activity, appMessage);
+        sendMessage.sendMessage();
     }
 
 
@@ -583,7 +618,7 @@ public class BlogMainFragment extends Fragment {
             if(blogD.getBlogNote() != null){
                 holder.tvBlogDescription.setText(blogD.getBlogNote());
             }else {
-                holder.tvBlogDescription.setText("尚未新增描述");
+                holder.tvBlogDescription.setText("九份是一個紓壓的好地方！不管是和朋友、情人來，都可以體驗好吃的芋圓、看到很美的風景唷！");
             }
 
             holder.tvDays.setText(blogD.getS_Date());
@@ -605,11 +640,25 @@ public class BlogMainFragment extends Fragment {
             jsonObject.addProperty("blog_Id", blogD.getBlogId());
             jsonObject.addProperty("loc_Id", blogD.getLocationId());
             getImageTask = new CommonTask(url, jsonObject.toString());
-            horizontalScrollView.post(new Runnable() {
+//            horizontalScrollView.post(new Runnable() {
+//                public void run() {
+//                    horizontalScrollView.scrollTo(0, horizontalScrollView.getBottom());
+//                }
+//            });
+             Runnable runnable = new Runnable() {
+                @Override
                 public void run() {
-                    horizontalScrollView.scrollTo(0, horizontalScrollView.getBottom());
+                    horizontalScrollView.scrollTo(0, 300);// 改變滾動條的位置
                 }
-            });
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 200);
+            horizontalScrollView.scrollTo(0, holder.linear.getMeasuredHeight() - horizontalScrollView.getHeight());
+
+
+            
+
+
             blogPic = new BlogPic();
             try {
                 String jsonIn = getImageTask.execute().get();
@@ -792,6 +841,7 @@ public class BlogMainFragment extends Fragment {
             private ImageView ivPic1,ivPic2,ivPic3,ivPic;
             private TextView tvLocation,tvDays,tvBlogDescription,tvSpotName,tvPic,tvDate;
             private ImageButton imDays;
+            private LinearLayout linear;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
@@ -807,6 +857,7 @@ public class BlogMainFragment extends Fragment {
                 tvSpotName= itemView.findViewById(R.id.tvSpotName);
                 horizontalScrollView = itemView.findViewById(R.id.horizontalScrollView);
                 tvDate = itemView.findViewById(R.id.tvDate);
+                linear = itemView.findViewById(R.id.linear);
             }
         }
     }
@@ -867,10 +918,10 @@ public class BlogMainFragment extends Fragment {
             TimeCountUtil timeCountUtil = new TimeCountUtil();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
+            String commentDate = blog_comment.getDate();
             try {
-                date = format.parse(blog_comment.getDate());
+                date = format.parse(commentDate);
             } catch (ParseException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             holder.tvDate.setText(timeCountUtil.timeCount(date));
@@ -897,6 +948,12 @@ public class BlogMainFragment extends Fragment {
                                      holder.editComment.setText(blog_comment.getContent());
                                      holder.ivSave.setVisibility(View.VISIBLE);
                                      holder.ivBack.setVisibility(View.VISIBLE);
+                                     holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             holder.editComment.setText("It's amazing");
+                                         }
+                                     });
                                      holder.ivBack.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
@@ -1038,6 +1095,24 @@ public class BlogMainFragment extends Fragment {
             editComment = itemView.findViewById(R.id.editComment);
 
         }
+    }
+    private void sendLikeMessage(){
+        AppMessage appMessage = null;
+        Bundle bundle = getArguments();
+        String msgType = Common.BLOG_TYPE;
+        String logingId= preferences.getString("memberId",null);
+        String blogId = bundle.getString("UserId");
+        String nickName = preferences.getString("nickName",null);
+        int recId = Integer.parseInt(blogId);
+        int memberId = Integer.parseInt(logingId);
+        String title =  "";
+        String body =  nickName +"已對你的網誌按讚";
+        int stat = 0;
+        int sendId = memberId ;
+        appMessage = new AppMessage(msgType , memberId , title , body ,stat , sendId , recId);
+        SendMessage sendMessage = new SendMessage(activity, appMessage);
+        sendMessage.sendMessage();
+
     }
 
 

@@ -5,13 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/ivBackImage"
+        android:layout_width="413dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="480dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/die" />
+
     <TextView
         android:id="@+id/textSavedShowTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="4dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,9 +33,10 @@
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="6dp"
         android:text="@string/TripStartDate"
-        android:textColor="@color/colorForText"
+        android:textColor="@color/colorForWhite"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textSavedShowTitle"
         app:layout_constraintTop_toBottomOf="@+id/textSavedShowTitle" />
@@ -34,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView18"
@@ -43,24 +57,23 @@
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="6dp"
         android:text="@string/TripStartTime"
-        android:textColor="@color/colorForText"
+        android:textColor="@color/colorForWhite"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/textShowSDate"
-        app:layout_constraintTop_toBottomOf="@+id/textSavedShowTitle" />
+        app:layout_constraintBottom_toBottomOf="@+id/textShowSDate"
+        app:layout_constraintEnd_toStartOf="@+id/textShowSTime" />
 
     <TextView
         android:id="@+id/textShowSTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textSavedShowTitle" />
+        app:layout_constraintBottom_toBottomOf="@+id/textShowSDate"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -68,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="132dp"
         android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
@@ -133,26 +147,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvShowTripD"
-        android:layout_width="match_parent"
-        android:layout_height="434dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="410dp"
+        android:layout_height="472dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <ImageButton
-        android:id="@+id/btJoinGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_joingroup"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvShowTripD" />
 
     <!--    <ImageButton-->
     <!--        android:id="@+id/btJoinGroup"-->
@@ -164,6 +165,17 @@
     <!--        app:layout_constraintBottom_toBottomOf="parent"-->
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <ImageButton
+        android:id="@+id/btJoinGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_joingroup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -185,47 +197,40 @@
         android:id="@+id/ibExiGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="3dp"
         android:visibility="gone"
         android:background="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvShowTripD"
         app:srcCompat="@drawable/ic_exit_group" />
 
     <ImageButton
         android:id="@+id/ibMbrFill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="3dp"
         android:visibility="gone"
         android:background="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvShowTripD"
         app:srcCompat="@drawable/ic_mbrfill" />
 
     <ImageButton
         android:id="@+id/ibCheckGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="3dp"
         android:background="#ffffff"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvShowTripD"
-        app:srcCompat="@drawable/ic_groupcheck"
-        tools:layout_editor_absoluteX="16dp" />
+        app:srcCompat="@drawable/ic_groupcheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

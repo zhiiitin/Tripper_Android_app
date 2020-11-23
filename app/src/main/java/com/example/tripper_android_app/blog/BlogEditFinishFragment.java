@@ -116,6 +116,13 @@ public class BlogEditFinishFragment extends Fragment {
         blogFinish = getEditBlog();
         etTitle.setText(blogFinish.getBlog_title());
         etInfo.setText(blogFinish.getBlog_Info());
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etTitle.setText("鬼滅之刃");
+                etInfo.setText("尋找讓妹妹變回人的方法");
+            }
+        });
 
 
 //取得tripId

@@ -57,6 +57,7 @@ public class GroupCommentFragment extends Fragment {
     private RecyclerView rvGroupComment ;
     private CommonTask blogDeleteTask,blogGetAllTask,commentFinishTask ;
     private EditText messageEdit ;
+    private TextView tvMagic ;
     private ImageView sendBtn ;
     private List<Blog_Comment> commentList ;
     private SharedPreferences preferences;
@@ -105,10 +106,19 @@ public class GroupCommentFragment extends Fragment {
         rvGroupComment = view.findViewById(R.id.rvGroupComment);
         messageEdit = view.findViewById(R.id.messageEdit);
         sendBtn = view.findViewById(R.id.sendBtn);
+        tvMagic = view.findViewById(R.id.textView5);
 
         rvGroupComment.setLayoutManager(new LinearLayoutManager(activity));
         commentList = getComment();
         showComments(commentList);
+
+        //神奇小按鈕
+        tvMagic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageEdit.setText("大家抱歉，我臨時有事不能參加，要先行告退了");
+            }
+        });
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,8 +192,6 @@ public class GroupCommentFragment extends Fragment {
 
     private void showComments(List<Blog_Comment> commentList) {
         if (commentList == null|| commentList.isEmpty()) {
-            Common.showToast(activity, R.string.textNoSpotsFound);
-
         }
         commentAdapter = (CommentAdapter)rvGroupComment.getAdapter();
         if (commentAdapter == null) {
@@ -223,7 +231,7 @@ public class GroupCommentFragment extends Fragment {
             holder.tvName.setText(blog_comment.getName());
             holder.ivPic.setImageResource(blog_comment.getIvImage());
             String icoUrl = Common.URL_SERVER + "MemberServlet";
-            //從MEMBER資料表 娶回來的資料無法秀在上面
+ //從MEMBER資料表 娶回來的資料無法秀在上面
             String member_Id = blog_comment.getMember_ID();
             ImageTask imageTask1 = new ImageTask(icoUrl,member_Id, imageSize, holder.ivPic);
             imageTask1.execute();
@@ -325,8 +333,6 @@ public class GroupCommentFragment extends Fragment {
                                                 }
                                             }
 
-
-
                                         }
                                     });
 
@@ -357,13 +363,10 @@ public class GroupCommentFragment extends Fragment {
                                     } else {
                                         Common.showToast(activity, R.string.textNoNetwork);
                                     }
-
                             }
                             return true;
 
-
                         }
-
 
                     });
                     popupMenu.show();

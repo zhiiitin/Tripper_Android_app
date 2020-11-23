@@ -37,13 +37,14 @@ public class BlogFinish implements Serializable {
     }
 
 
-    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, String startDate, String startTime) {
+    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, String startDate, String startTime,String nickName) {
         this.trip_Id = trip_Id;
         this.blog_title = blog_title;
         this.blog_Info = blog_Info;
         this.memberId = memberId;
         this.startDate = startDate;
         this.startTime = startTime;
+        this.nickName = nickName;
     }
 
     public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, int status ) {

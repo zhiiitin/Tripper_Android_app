@@ -327,14 +327,12 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
         <action
-            android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
-            app:destination="@id/register_main_Fragment" />
-        <action
             android:id="@+id/action_trip_HomePage_to_notifyFragment"
             app:destination="@id/notifyFragment" />
         <action
-            android:id="@+id/action_trip_HomePage_to_register_main_Fragment2"
+            android:id="@+id/action_trip_HomePage_to_register_main_Fragment"
             app:destination="@id/register_main_Fragment" />
+
     </fragment>
     <fragment
         android:id="@+id/create_Trip_LocationList"
@@ -410,13 +408,33 @@
             app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogEditFragment_to_blog_HomePage"
-            app:destination="@id/blog_HomePage" />
+            app:destination="@id/blog_HomePage"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogEditFragment_to_blogEditPicFragmenmt"
-            app:destination="@id/blogEditPicFragmenmt" />
+            app:destination="@id/blogEditPicFragmenmt"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_blogEditFragment_to_createBlogPicFragment2"
-            app:destination="@id/createBlogPicFragment" />
+            app:destination="@id/createBlogPicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_blogEditFragment_to_updateBlogPicFragment"
+            app:destination="@+id/updateBlogPicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
 
     </fragment>
     <fragment
@@ -617,6 +635,13 @@
         <action
             android:id="@+id/action_groupTripPage_to_groupMbrListFragment"
             app:destination="@id/groupMbrListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_groupTripPage_to_groupFragment"
+            app:destination="@id/groupFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"

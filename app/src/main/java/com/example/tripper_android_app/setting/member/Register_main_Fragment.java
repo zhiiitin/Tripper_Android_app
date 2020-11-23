@@ -116,7 +116,7 @@ public class Register_main_Fragment extends Fragment {
         btToFill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etAccount.setText("regina");
+                etAccount.setText("peter");
                 etPassword.setText("password");
             }
         });
