@@ -204,7 +204,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
         //暫存檔資料
         preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        //loadPreferences();
+        loadPreferences();
 
         // 挑選景點
         Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
@@ -304,10 +304,10 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                     }
                     if (count == 0) {
                         Common.showToast(activity, "建立行程成功");
-                        deletePreferences();
                         Common.map.clear();
                         Navigation.findNavController(v)
                                 .popBackStack(R.id.trip_HomePage, false);
+                        deletePreferences();
                     } else {
                         Common.showToast(activity, "建立行程失敗");
                         Log.d(TAG, "Trip Fail: " + count);
@@ -509,6 +509,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
                 .remove("tripTitle")
                 .remove("tripDate")
                 .remove("tripTime")
+                .remove(Common.spinnerSelect)
                 .apply();
     }
 
@@ -665,7 +666,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
     @Override
     public void onStart() {
         super.onStart();
-//        deletePreferences();
+        deletePreferences();
     }
 
     //    @Override
