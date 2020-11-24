@@ -80,6 +80,15 @@ public class ContactUsFragment extends Fragment {
         Menu itemMenu = bottomNavigationView.getMenu();
         itemMenu.getItem(4).setChecked(true);
 
+        // 神奇小按鈕
+        textView = view.findViewById(R.id.textViewBB);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etMessage.setText("謝謝你們做出這麼棒的APP，期待以後有更多更新的功能");
+            }
+        });
+
         ibSubmit = view.findViewById(R.id.ibSubmit);
         ibSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -93,7 +93,7 @@ public class GroupCommentFragment extends Fragment {
 
         //ToolBar
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("布告欄");
+        toolbar.setTitle("佈告欄");
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorForWhite));
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);

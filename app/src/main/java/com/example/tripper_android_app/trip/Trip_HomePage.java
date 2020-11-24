@@ -405,7 +405,14 @@ public class Trip_HomePage extends Fragment {
     //show 使用者資訊
     private void showMember() throws ExecutionException, InterruptedException {
         SharedPreferences pref = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+<<<<<<< HEAD
 
+=======
+        if (pref == null || pref.equals("")) {
+            System.out.println("#### back to logint");
+            Navigation.findNavController(ivUserPic).navigate(R.id.register_main_Fragment);
+        }
+>>>>>>> 957fe298290bc13bb7496ebe64b4b93daca4bb59
 
         boolean login = pref.getBoolean("login", false);
         if (login) {
@@ -425,7 +432,7 @@ public class Trip_HomePage extends Fragment {
                 }
                 if (member == null ||member.getNickName() == null ) {
                     pref.edit().putBoolean("login", false).apply();
-                    Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+                    Navigation.findNavController(ivUserPic).navigate(R.id.register_main_Fragment);
 
                 } else {
                     String userName = member.getNickName();
@@ -438,7 +445,7 @@ public class Trip_HomePage extends Fragment {
 
             }
         }else{
-            Navigation.findNavController(ivUserPic).navigate(R.id.action_trip_HomePage_to_register_main_Fragment);
+            Navigation.findNavController(ivUserPic).navigate(R.id.register_main_Fragment);
 
         }
         showMemberPic();
