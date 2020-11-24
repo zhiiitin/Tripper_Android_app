@@ -154,7 +154,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
                 etTripTitle.setText("跨年兩天一夜 Fun");
-                textDate.setText("2020-12-30");
+                textDate.setText("2020-12-31");
                 textTime.setText("10:00");
             }
         });
@@ -204,7 +204,7 @@ public class Create_Trip_Fragment extends Fragment implements DatePickerDialog.O
 
         //暫存檔資料
         preference = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        loadPreferences();
+        //loadPreferences();
 
         // 挑選景點
         Button btSelectLoc = view.findViewById(R.id.btAddNewLoc);
