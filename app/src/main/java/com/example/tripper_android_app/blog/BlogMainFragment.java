@@ -924,10 +924,16 @@ public class BlogMainFragment extends Fragment {
             }
             holder.tvDate.setText(timeCountUtil.timeCount(date));
             preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            //登入的會員
             String userId = preferences.getString("memberId",null);
+            String userID = preferences.getString("userId",null);
             String memberId = blog_comment.getMember_ID();
             if(userId.equals(memberId)){
                 holder.ivEdit.setVisibility(View.VISIBLE);
+            }
+            else if(userId.equals(userID)){
+                holder.ivEdit.setVisibility(View.VISIBLE);
+
             }
 
             holder.ivEdit.setOnClickListener(new View.OnClickListener() {
