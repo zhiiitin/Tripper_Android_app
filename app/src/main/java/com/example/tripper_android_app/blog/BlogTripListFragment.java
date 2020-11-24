@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
 import com.example.tripper_android_app.MainActivity;
 import com.example.tripper_android_app.R;
 import com.example.tripper_android_app.task.CommonTask;
@@ -367,9 +369,27 @@ public class BlogTripListFragment extends Fragment {
                     holder.tvStayTime.setVisibility(View.GONE);
                     holder.ivLine.setVisibility(View.GONE);
                 }
+                holder.ivSpot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                            View view = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                            alertDialog.setView(view);
+                            ImageView ivPhoto = view.findViewById(R.id.ivPhoto);
+                            String url = Common.URL_SERVER+"FCMServlet";
+                            int imageSize = 500;
 
+                            ImageTask imageTask = new ImageTask(url,id,imageSize,ivPhoto);
+                            imageTask.execute();
+                            alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            alertDialog.setCancelable(true);
+                            alertDialog.show();
 
-            }
+                        }
+                    });
+
+                }
+
 
 
 
