@@ -23,6 +23,7 @@ public class AppMessage implements Serializable{
 	private int sendId;
 	private int reciverId;
 	private String upTime ;
+	private String photo ;
 
 	public AppMessage(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId) {
 		super();
@@ -44,6 +45,18 @@ public class AppMessage implements Serializable{
 		this.sendId = sendId;
 		this.reciverId = reciverId;
 		this.upTime = upTime;
+	}
+
+	public AppMessage(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId, String upTime,String photo) {
+		this.msgType = msgType;
+		this.memberId = memberId;
+		this.msgTitle = msgTitle;
+		this.msgBody = msgBody;
+		this.msgStat = msgStat;
+		this.sendId = sendId;
+		this.reciverId = reciverId;
+		this.upTime = upTime;
+		this.photo = photo;
 	}
 
 	public String getMsgType() {
@@ -93,5 +106,11 @@ public class AppMessage implements Serializable{
 	}
 	public void setUpTime(String upTime) {
 		this.upTime = upTime;
+	}
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 }

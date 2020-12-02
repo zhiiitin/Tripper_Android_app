@@ -40,7 +40,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="340dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="11dp"
@@ -50,7 +50,7 @@
 
             <EditText
                 android:id="@+id/messageEdit"
-                android:layout_width="336dp"
+                android:layout_width="285dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="#76CFDA"
@@ -63,10 +63,18 @@
             android:id="@+id/sendBtn"
             android:layout_width="46dp"
             android:layout_height="51dp"
-            android:layout_marginLeft="360dp"
+            android:layout_marginLeft="365dp"
             android:layout_marginTop="4dp"
             android:background="@android:drawable/ic_menu_send"
             android:padding="8dp" />
+
+        <ImageView
+            android:id="@+id/photoBtn"
+            android:layout_width="43dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="320dp"
+            android:layout_marginTop="6dp"
+            android:src="@android:drawable/ic_menu_gallery" />
 
     </androidx.cardview.widget.CardView>
 

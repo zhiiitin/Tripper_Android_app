@@ -7,11 +7,19 @@ import java.io.Serializable;
 public class Notify extends AppMessage implements Serializable {
     private String nickname;
     private String notifyDateTime;
+    private String photoStr ;
 
-    public Notify(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId, String nickname, String notifyDateTime) {
+    public Notify(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId, String nickname, String notifyDateTime ) {
         super(msgType, memberId, msgTitle, msgBody, msgStat, sendId, reciverId);
         this.nickname = nickname;
         this.notifyDateTime = notifyDateTime;
+    }
+
+    public Notify(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId, String nickname, String notifyDateTime,String photoStr) {
+        super(msgType, memberId, msgTitle, msgBody, msgStat, sendId, reciverId);
+        this.nickname = nickname;
+        this.notifyDateTime = notifyDateTime;
+        this.photoStr = photoStr ;
     }
 
     public String getNickname() {
@@ -28,5 +36,13 @@ public class Notify extends AppMessage implements Serializable {
 
     public void setNotifyDateTime(String notifyDateTime) {
         this.notifyDateTime = notifyDateTime;
+    }
+
+    public String getPhoto() {
+        return photoStr;
+    }
+
+    public void setPhoto(String photo) {
+        this.photoStr = photo;
     }
 }
